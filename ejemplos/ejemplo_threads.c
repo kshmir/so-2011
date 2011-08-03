@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define NUM_THREADS     5
+#define NUM_THREADS     400
 
 void *TaskCode(void *argument)
 {
