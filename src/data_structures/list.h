@@ -20,7 +20,7 @@ list * list_init();
 
 void list_free();
 
-int list_add(list * p, void * obj, int (*comparator)(void*, void*));
+int list_add(list * p, void * obj);
 
 int list_add_with_comparator(list * p, void * obj, int (*comparator)(void*, void*));
 

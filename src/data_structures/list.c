@@ -17,11 +17,11 @@ struct node {
 };
 
 
-list * init(int (*comparator)(void*, void*)) {
+list * list_init(int (*comparator)(void*, void*)) {
 	list * ret = (list *) malloc(sizeof(list));
 	ret->size = 0;
 	ret->header = NULL;
-	ret->comp = comparator;
+	ret->comparator = comparator;
 	return ret;
 }
 
@@ -53,9 +53,13 @@ void * list_get(list * p, int index) {
 	int i = 0;
 	while(current) {
 		if (i == index) {
-			return current->object;
+			return current->data;
 		}
 		current = current->next;
 	}
 	return NULL;
+}
+
+void list_free(list * p) {
+
 }

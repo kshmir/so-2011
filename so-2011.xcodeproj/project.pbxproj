@@ -7,29 +7,19 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		4019C0AB13EAF54D005DD5B5 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
+		4019C0FD13EB0377005DD5B5 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
 		4085BCA013E86AC200978D93 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		4085BCA513E86AD500978D93 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
-		4085BCA613E86AD500978D93 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		4085BCC413E8704800978D93 /* ejemplo_threads.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ejemplo_threads.c; path = ejemplos/ejemplo_threads.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		4085BC9213E86AAE00978D93 = {
 			isa = PBXGroup;
 			children = (
-				4085BCC213E8701A00978D93 /* ejemplos */,
-				4085BCA513E86AD500978D93 /* main.h */,
-				4085BCA613E86AD500978D93 /* main.c */,
+				4019C0AB13EAF54D005DD5B5 /* makefile */,
 				4085BCA013E86AC200978D93 /* README */,
+				4019C0FD13EB0377005DD5B5 /* src */,
 			);
-			sourceTree = "<group>";
-		};
-		4085BCC213E8701A00978D93 /* ejemplos */ = {
-			isa = PBXGroup;
-			children = (
-				4085BCC413E8704800978D93 /* ejemplo_threads.c */,
-			);
-			name = ejemplos;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

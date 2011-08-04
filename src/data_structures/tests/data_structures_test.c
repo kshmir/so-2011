@@ -8,12 +8,13 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 #include "../list.h"
 
-void main(void)	{
+int main(void)	{
 
-	printf("Testing list without repeated elements");
+	printf("Testing list without repeated elements\n");
 	
 	list * lista = list_init(NULL);
 	
@@ -28,16 +29,16 @@ void main(void)	{
 
 	printf("Adding an element should return 1\n");
 	for (i=0; i < 10; i++) {
-		assert(list_add(lista, p + i) == 1);
+		assert(list_add(lista, array + i) == 1);
 	}
 	
 	printf("It should increase the size of the list\n");
-	assert(p->size == 10);
+	assert(lista->size == 10);
 	
 	printf("I should get the value with an index from 0 to n-1\n");
-	assert(list_get(lista, 4) == 4);		
-	assert(list_get(lista, 0) == 0);		
-	assert(list_get(lista, 9) == 9);		
+	assert(*((int*)list_get(lista, 4)) == 4);		
+	assert(*((int*)list_get(lista, 0)) == 0);		
+	assert(*((int*)list_get(lista, 9)) == 9);		
 	
 	printf("I should get null if the index is not between 0 to n-1\n");
 	assert(list_get(lista, -1) == NULL);		
@@ -48,5 +49,5 @@ void main(void)	{
 	
 	list_free(lista);
 	free(array);
-	
+	return 0;
 }
