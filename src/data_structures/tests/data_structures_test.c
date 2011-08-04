@@ -29,7 +29,7 @@ int main(void)	{
 
 	printf("Adding an element should return 1\n");
 	for (i=0; i < 10; i++) {
-		assert(list_add(lista, array + i) == 1);
+		assert(list_add(lista, array + i) == 1); 
 	}
 	
 	printf("It should increase the size of the list\n");

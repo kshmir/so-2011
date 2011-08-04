@@ -65,7 +65,7 @@ data_structures_test : data_structures_graph data_structures_list \
 
 ### Generates tp1
 tp1: 
-	gcc -o tp1 $(tp1) $(Front)  $(Flags)
+	gcc -o tp1.o $(tp1)
 
 # END Declaration of targets
 

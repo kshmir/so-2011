@@ -10,6 +10,7 @@
 #include "list.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 
 struct node {
 	void *			data;
@@ -26,22 +27,30 @@ list * list_init(int (*comparator)(void*, void*)) {
 }
 
 int list_add(list * p, void * obj) {
-	
+
 	node * last = NULL;
 	node * current = p->header;
 	
+	
 	node * n = (node *) malloc(sizeof(node));
 	n->data = obj;
-	
-	if (!current) {
+
+
+	if (current == NULL) {
 		p->header = n;
 	}
 	else {
-		while (current->next) {
+		while (current) {
 			last = current;
 			current = current->next;
 		}
-		last->next = n;
+		if (last) {
+			last->next = n;
+		}
+		else {
+			p->header->next = n;
+		}
+
 	}
 	p->size++;
 	
@@ -51,12 +60,15 @@ int list_add(list * p, void * obj) {
 void * list_get(list * p, int index) {
 	node * current = p->header;
 	int i = 0;
+
 	while(current) {
 		if (i == index) {
 			return current->data;
 		}
 		current = current->next;
+		i++;
 	}
+
 	return NULL;
 }
 
