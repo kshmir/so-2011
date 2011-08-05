@@ -3,42 +3,62 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 45;
 	objects = {
 
 /* Begin PBXFileReference section */
+		4019C0AB13EAF54D005DD5B5 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
+		4019C0FD13EB0377005DD5B5 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
 		4085BCA013E86AC200978D93 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		4085BCA513E86AD500978D93 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
-		4085BCA613E86AD500978D93 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		4085BCC413E8704800978D93 /* ejemplo_threads.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ejemplo_threads.c; path = ejemplos/ejemplo_threads.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		4085BC9213E86AAE00978D93 = {
 			isa = PBXGroup;
 			children = (
-				4085BCC213E8701A00978D93 /* ejemplos */,
-				4085BCA513E86AD500978D93 /* main.h */,
-				4085BCA613E86AD500978D93 /* main.c */,
+				4019C0AB13EAF54D005DD5B5 /* makefile */,
 				4085BCA013E86AC200978D93 /* README */,
+				4019C0FD13EB0377005DD5B5 /* src */,
 			);
-			sourceTree = "<group>";
-		};
-		4085BCC213E8701A00978D93 /* ejemplos */ = {
-			isa = PBXGroup;
-			children = (
-				4085BCC413E8704800978D93 /* ejemplo_threads.c */,
-			);
-			name = ejemplos;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		4019C2D813EB928E005DD5B5 /* data_structures_test */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = data_structures_test;
+			buildConfigurationList = 4019C2E013EB929D005DD5B5 /* Build configuration list for PBXLegacyTarget "data_structures_test" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			name = data_structures_test;
+			passBuildSettingsInEnvironment = 1;
+			productName = gcc;
+		};
+		40DBFA0B13EBA00700A2E892 /* tp1 */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 40DBFA1613EBA01900A2E892 /* Build configuration list for PBXLegacyTarget "tp1" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			dependencies = (
+			);
+			name = tp1;
+			passBuildSettingsInEnvironment = 1;
+			productName = tp1;
+		};
+/* End PBXLegacyTarget section */
 
 /* Begin PBXProject section */
 		4085BC9413E86AAE00978D93 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4085BC9713E86AAE00978D93 /* Build configuration list for PBXProject "so-2011" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -48,14 +68,38 @@
 				German,
 			);
 			mainGroup = 4085BC9213E86AAE00978D93;
+			productRefGroup = 4085BC9213E86AAE00978D93;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				4019C2D813EB928E005DD5B5 /* data_structures_test */,
+				40DBFA0B13EBA00700A2E892 /* tp1 */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin XCBuildConfiguration section */
+		4019C2D913EB928E005DD5B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "data structures test";
+			};
+			name = Debug;
+		};
+		4019C2DA13EB928E005DD5B5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "data structures test";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		4085BC9513E86AAE00978D93 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -70,14 +114,53 @@
 			};
 			name = Release;
 		};
+		40DBFA0C13EBA00700A2E892 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = tp1;
+			};
+			name = Debug;
+		};
+		40DBFA0D13EBA00700A2E892 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = tp1;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4019C2E013EB929D005DD5B5 /* Build configuration list for PBXLegacyTarget "data_structures_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4019C2D913EB928E005DD5B5 /* Debug */,
+				4019C2DA13EB928E005DD5B5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4085BC9713E86AAE00978D93 /* Build configuration list for PBXProject "so-2011" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4085BC9513E86AAE00978D93 /* Debug */,
 				4085BC9613E86AAE00978D93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		40DBFA1613EBA01900A2E892 /* Build configuration list for PBXLegacyTarget "tp1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40DBFA0C13EBA00700A2E892 /* Debug */,
+				40DBFA0D13EBA00700A2E892 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
