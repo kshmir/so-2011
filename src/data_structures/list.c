@@ -12,9 +12,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
+
 struct node {
 	void *			data;
-	struct node *	next;
+	node *	next;
+};
+
+struct list {
+	node *	header;
+	int		size;
+	int		(*comparator)(void*, void*);
 };
 
 

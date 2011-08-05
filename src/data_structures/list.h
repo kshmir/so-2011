@@ -11,11 +11,7 @@
 
 typedef struct node node;
 
-struct list {
-	node *	header;
-	int		size;
-	int		(*comparator)(void*, void*);
-} typedef list;
+typedef struct list list;
 
 
 list * list_init();
@@ -23,6 +19,8 @@ list * list_init();
 void list_free();
 
 int list_add(list * p, void * obj);
+
+int list_size(list * p);
 
 void * list_get(list * p, int index);
 
