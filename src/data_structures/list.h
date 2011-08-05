@@ -7,6 +7,8 @@
  *
  */
 
+
+
 typedef struct node node;
 
 struct list {
