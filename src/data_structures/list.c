@@ -73,5 +73,13 @@ void * list_get(list * p, int index) {
 }
 
 void list_free(list * p) {
-
+	if (p == NULL) {
+		return;
+	}
+	node * actual = p->header;
+	free(p);
+	while (actual != NULL) {
+		node * aux = actual->next;
+		free(actual);
+	}
 }
