@@ -24,6 +24,6 @@ void list_free();
 
 int list_add(list * p, void * obj);
 
-int list_add_with_comparator(list * p, void * obj, int (*comparator)(void*, void*));
-
 void * list_get(list * p, int index);
+
+int list_insert(list * p, int index, void * ptr);

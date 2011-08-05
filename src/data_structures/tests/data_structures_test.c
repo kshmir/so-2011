@@ -12,11 +12,14 @@
 #include <assert.h>
 #include "../list.h"
 
-int main(void)	{
-
+int main(int argc, char ** argv) {
 	printf("Testing list without repeated elements\n");
 	
 	list * lista = list_init(NULL);
+	
+	if (lista == NULL) {
+		return 0;
+	}
 	
 	printf("It should start the list\n");
 	assert(lista != NULL);
@@ -26,7 +29,7 @@ int main(void)	{
 	for (; i < 10; i++) {
 		array[i] = i;
 	}
-
+	
 	printf("Adding an element should return 1\n");
 	for (i=0; i < 10; i++) {
 		assert(list_add(lista, array + i) == 1); 
@@ -45,8 +48,14 @@ int main(void)	{
 	assert(list_get(lista, 11) == NULL);		
 	
 	printf("I should be able to insert between 0 to n\n");
-	//assert(list_insert(lista, 11, algunvalor) == NULL);		
-	
+	int * pointer = &i;
+	assert(list_insert(lista, 11, pointer) == -1);		
+	assert(list_insert(lista, 10, pointer) == 10);		
+	assert(list_insert(lista, -5, pointer) == -1);
+	assert(list_insert(lista, -1, pointer) == -1);		
+	assert(list_insert(lista, 4, pointer) == 4);
+	assert(list_insert(lista, 0, pointer) == 0);
+	assert(list_insert(lista, 1, pointer) == 1);
 	list_free(lista);
 	free(array);
 	return 0;

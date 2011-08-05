@@ -19,7 +19,7 @@ tp1 = \
 	
 	
 ### Flags and declarations	
-cc = gcc -g
+cc = gcc -g -arch i386
 
 
 # END of Declaration of requirements for each target
@@ -61,7 +61,6 @@ clear_data_structures_test :
 data_structures_test : data_structures_graph data_structures_list \
 	data_structures_tests_data_structures_test 
 	$(cc) -o data_structures_test $(data_structures_test)
-	
 
 ### Generates tp1
 tp1: 
