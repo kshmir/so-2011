@@ -7,21 +7,23 @@
  *
  */
 
+#include "../includes.h"
 
-
-typedef struct node node;
+#ifndef _LIST_H_
+#define _LIST_H_
 
 typedef struct list list;
-
 
 list * list_init();
 
 void list_free();
 
-int list_add(list * p, void * obj);
+int list_add(list * p, void_p obj);
 
 int list_size(list * p);
 
-void * list_get(list * p, int index);
+void_p list_get(list * p, int index);
 
-int list_insert(list * p, int index, void * ptr);
+int list_insert(list * p, int index, void_p ptr);
+
+#endif

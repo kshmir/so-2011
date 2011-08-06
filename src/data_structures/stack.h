@@ -7,9 +7,11 @@
  *
  */
 
+#include "../includes.h"
 #include <stdlib.h>
 
-
+#ifndef _STACK_H_ 
+#define _STACK_H_
 
 typedef struct stack stack;
 
@@ -19,8 +21,10 @@ int stack_count(stack * pila);
 
 int stack_is_empty(stack * pila);
 
-int stack_push(stack * pila, void * object);
+int stack_push(stack * pila, void_p object);
 
-void * stack_pop(stack * pila);
+void_p stack_pop(stack * pila);
 
 stack * stack_free(stack * pila);
+
+#endif

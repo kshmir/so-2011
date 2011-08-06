@@ -13,7 +13,7 @@
 
 #define NUM_THREADS     400
 
-void *TaskCode(void *argument)
+void_p TaskCode(void_p argument)
 {
 	int tid;
 	
@@ -35,7 +35,7 @@ int main (int argc, char *argv[])
 	for (i=0; i<NUM_THREADS; ++i) {
 		thread_args[i] = i;
 		printf("In main: creating thread %d\n", i);
-		rc = pthread_create(&threads[i], NULL, TaskCode, (void *) &thread_args[i]);
+		rc = pthread_create(&threads[i], NULL, TaskCode, (void_p ) &thread_args[i]);
 		assert(0 == rc);
 	}
 	

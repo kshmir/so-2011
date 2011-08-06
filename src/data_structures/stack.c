@@ -10,7 +10,7 @@
 #include "stack.h"
 
 struct stack {
-	void *  data;
+	void_p  data;
 	int		size;
 	int		index;
 };
@@ -21,7 +21,7 @@ stack * stack_init(size_t start_size) {
 	stack * pila = (stack *) malloc(sizeof(stack));
 	pila->size = start_size;
 	pila->index = 0;
-	pila->data = malloc(start_size * sizeof(void*));
+	pila->data = malloc(start_size * sizeof(void_p));
 	
 	return pila;
 }
@@ -29,14 +29,14 @@ stack * stack_init(size_t start_size) {
 static void stack_expand(stack * pila) {
 	int i = 0;
 	
-	char * space = malloc(pila->size * 2 * sizeof(void*));
+	char * space = malloc(pila->size * 2 * sizeof(void_p));
 	
-	for (i = 0; i < pila->size * sizeof(void*); i++) {
+	for (i = 0; i < pila->size * sizeof(void_p); i++) {
 		space[i] = ((char*)pila->data)[i];
 	}
 	
 	free(pila->data);
-	pila->data = (void *)space;
+	pila->data = (void_p)space;
 	pila->size *= 2;
 }
 
@@ -48,7 +48,7 @@ int stack_is_empty(stack * pila) {
 	return !stack_count(pila);
 }
 
-int stack_push(stack * pila, void * object) {
+int stack_push(stack * pila, void_p object) {
 	if (pila->index == pila->size) {
 		stack_expand(pila);
 	}
@@ -57,9 +57,9 @@ int stack_push(stack * pila, void * object) {
 	return 1;
 }
 
-void * stack_pop(stack * pila) {
+void_p stack_pop(stack * pila) {
 	pila->index--;
-	return (void*)((int*)pila->data)[pila->index];
+	return (void_p)((int*)pila->data)[pila->index];
 }
 
 

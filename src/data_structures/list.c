@@ -12,21 +12,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
+typedef struct node node;
 
 struct node {
-	void *			data;
+	void_p 			data;
 	node *	next;
 };
 
 struct list {
 	node *	header;
 	int		size;
-	int		(*comparator)(void*, void*);
+	int		(*comparator)(void_p, void_p);
 };
 
 
-list * list_init(int (*comparator)(void*, void*)) {
+list * list_init(comparer comp) {
 	list * ret = (list *) malloc(sizeof(list));
 	ret->size = 0;
 	ret->header = NULL;
@@ -34,7 +34,7 @@ list * list_init(int (*comparator)(void*, void*)) {
 	return ret;
 }
 
-int list_add(list * p, void * obj) {
+int list_add(list * p, void_p  obj) {
 	if (p == NULL) {
 		return -1;
 	}
@@ -77,7 +77,7 @@ int list_add(list * p, void * obj) {
 	return 1;
 }
 
-void * list_get(list * p, int index) {
+void_p  list_get(list * p, int index) {
 	if (p == NULL) {
 		return NULL;
 	}
@@ -108,7 +108,7 @@ void list_free(list * p) {
 	}
 }
 
-int list_insert(list * p, int index, void * ptr) {
+int list_insert(list * p, int index, void_p  ptr) {
 	if (p == NULL || ptr == NULL || index < 0 || index > p->size) {
 		return -1;
 	}
