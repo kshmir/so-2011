@@ -34,6 +34,7 @@ list * list_init(comparer comp) {
 	return ret;
 }
 
+
 int list_add(list * p, void_p  obj) {
 	if (p == NULL) {
 		return -1;
@@ -136,8 +137,6 @@ int list_insert(list * p, int index, void_p  ptr) {
 			cursor = cursor->next;
 			i++;
 		}
-		
-
 		aux = cursor->next;
 		ptr_node->next = aux;
 		cursor->next = ptr_node;

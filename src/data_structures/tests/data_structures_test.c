@@ -75,6 +75,7 @@ void list_test() {
 void stack_test() {
 	
 	separator();
+
 	printf("Testing stack\n");
 	stack * pila = stack_init(1);
 	int arreglo[] = {1,2,3,4,5,6,7,8,9,10};
@@ -102,7 +103,6 @@ void stack_test() {
 
 int main(int argc, char ** argv) {
 
-	
 	stack_test();
 	list_test();
 	return 0;
