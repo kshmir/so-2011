@@ -12,29 +12,23 @@
 #ifndef	_TREE_H_
 #define _TREE_H_
 
-#define NegInfinity (-10000)
 
 struct tree;
+
 typedef struct tree * tree;
 
-RedBlackTree MakeEmpty(tree T);
-Position Find(ElementType X, RedBlackTree T);
-Position FindMin(RedBlackTree T);
-Position FindMax(RedBlackTree T);
-RedBlackTree Initialize(comparator );
-RedBlackTree Insert(ElementType X, RedBlackTree T);
-RedBlackTree Remove(ElementType X, RedBlackTree T);
-ElementType Retrieve(Position P);
-void PrintTree(RedBlackTree T);
+void_p tree_delete(tree t, void_p e);
 
+int tree_add(tree t, void_p e);
 
+void tree_print(tree t, printer p);
 
+void_p tree_get(tree t, void_p e);
 
+int tree_size(tree t);
 
+tree tree_init(comparer comp);
 
-
-
-
-
+void tree_free(tree t);
 
 #endif 

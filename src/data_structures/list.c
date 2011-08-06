@@ -12,40 +12,40 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct node node;
+typedef struct node * node;
 
+// List node
 struct node {
 	void_p 			data;
-	node *	next;
+	node	next;
 };
 
+// Base list structure
 struct list {
-	node *	header;
+	node    header;
 	int		size;
-	int		(*comparator)(void_p, void_p);
 };
 
 
-list * list_init(comparer comp) {
-	list * ret = (list *) malloc(sizeof(list));
+// Inits the list
+list list_init() {
+	list ret = (list) malloc(sizeof(struct list));
 	ret->size = 0;
 	ret->header = NULL;
-	ret->comparator = NULL;
 	return ret;
 }
 
-
-int list_add(list * p, void_p  obj) {
+// Adds the pointer to the list.
+int list_add(list p, void_p  obj) {
 	if (p == NULL) {
 		return -1;
 	}
 	
-	node * last = NULL;
-	node * current = p->header;
+	node last = NULL;
+	node current = p->header;
+	node n = NULL;
 	
-
-	node * n = NULL;
-	n = (node *) malloc(sizeof(node));
+	n = (node) malloc(sizeof(struct node));
 	
 	if (n != NULL) {
 		n->data = obj;
@@ -54,8 +54,6 @@ int list_add(list * p, void_p  obj) {
 	else {
 		return -1;
 	}
-
-
 
 	if (current == NULL) {
 		p->header = n;
@@ -71,18 +69,18 @@ int list_add(list * p, void_p  obj) {
 		else {
 			p->header->next = n;
 		}
-
 	}
 	p->size++;
 	
 	return 1;
 }
 
-void_p  list_get(list * p, int index) {
+// Gets the pointer from a given index
+void_p  list_get(list p, int index) {
 	if (p == NULL) {
 		return NULL;
 	}
-	node * current = p->header;
+	node current = p->header;
 	int i = 0;
 
 	while(current) {
@@ -96,26 +94,29 @@ void_p  list_get(list * p, int index) {
 	return NULL;
 }
 
-void list_free(list * p) {
+// Free's up the list
+void list_free(list p) {
 	if (p == NULL) {
 		return;
 	}
-	node * actual = p->header;
+	node actual = p->header;
 	free(p);
 	while (actual != NULL) {
-		node * aux = actual->next;
+		node aux = actual->next;
 		free(actual);
 		actual = aux;
 	}
 }
 
-int list_insert(list * p, int index, void_p  ptr) {
+// Inserts data to the list.
+// Returns -1 if it's a in invalid operation, or the index if it's valid.
+int list_insert(list p, int index, void_p  ptr) {
 	if (p == NULL || ptr == NULL || index < 0 || index > p->size) {
 		return -1;
 	}
 	if (index == 0) {
-		node * old_ref = p->header;
-		node * ptr_node = (node *) malloc(sizeof(node));
+		node old_ref = p->header;
+		node ptr_node = (node) malloc(sizeof(struct node));
 		ptr_node->data = ptr;
 		ptr_node->next = old_ref;
 		p->header = ptr_node;
@@ -128,9 +129,9 @@ int list_insert(list * p, int index, void_p  ptr) {
 		return index;
 	}
 	else {
-		node * aux = NULL;
-		node * ptr_node = (node *) malloc(sizeof(node));
-		node * cursor = p->header;
+		node aux = NULL;
+		node ptr_node = (node) malloc(sizeof(struct node));
+		node cursor = p->header;
 	
 		int i = 0;
 		while(cursor->next && i != index) {
@@ -146,4 +147,30 @@ int list_insert(list * p, int index, void_p  ptr) {
 		return index;
 	}
 	return -1;
+}
+
+int list_remove(list l, int index) {
+	if (index < 0 || l == NULL || index >= l->size) {
+		return -1;
+	}
+	if (index == 0)
+	{
+		node n = l->header;
+		l->header = n->next;
+		free(n);
+	}
+	else {
+		int i = 0;
+		node last = NULL;
+		node n = l->header;
+		while(i != index) {
+			last = n;
+			n = n->next;
+			i++;
+		}
+		last->next = n->next;
+		free(n);
+	}
+	
+	return index;
 }

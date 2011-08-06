@@ -1,257 +1,459 @@
-/*
- *  tree.c
- *  so-2011
- *
- *  Created by Cristian Pereyra on 05/08/11.
- *  Copyright 2011 My Own. All rights reserved.
- *
- */
-
-#include "tree.h"
+# include<stdio.h>
 #include <stdlib.h>
-#include <stdio.h>
+
+#include "../includes.h"
+#include "tree.h"
+
+# define F 0
+# define T 1
 
 
-typedef enum ColorType {
-    Red, Black
-} ColorType;
+typedef struct NODE * node;
 
-struct node {
-    void_p Element;
-    struct node * Left;
-    struct node * Right;
-    ColorType Color;
-} typedef node;
-
-struct tree {
-	int size;
-	comparer comp;
-	node * head;
+struct NODE
+{
+	void_p Info;
+	int Flag;
+	node Left_Child;
+	node Right_Child;
 };
 
-node * NullNode = NULL; /* Needs initialization */
 
-/* Initialization procedure */
-tree
-tree_init(comparer comp) {
-	tree t;
-    node * head;
+
+
+struct tree
+{
+	int size;
+	comparer comp;
+	node  header;
+	int *H;
+};
+
+
+
+static node Binary_Tree (tree,void_p, node, int *, int*);
+static node Balance_Right_Heavy(node, int *);
+static node Balance_Left_Heavy(node, int *);
+static void Output(node, int, printer);
+static node DELETE(node, node, int *);
+static node Delete_Element(tree, node, void_p, int *, int*, void_p);
+
+/* Function to insert an element into tree */
+
+node Binary_Tree(tree t, void_p Info, node Parent, int *H, int * found)
+{
+	node Node1;
+	node Node2;
+	if(!Parent)
+	{
+		Parent = (node) malloc(sizeof(struct NODE));
+		Parent->Info = Info;
+		Parent->Left_Child = NULL;
+		Parent->Right_Child = NULL;
+		Parent->Flag = 0;
+		*H = T;
+		return (Parent);
+	}
 	
-    if (NullNode == NULL) {
-        NullNode = malloc(sizeof(node));
-        if (NullNode == NULL)
-            FatalError("Out of space!!!");
-        NullNode->Left = NullNode->Right = NullNode;
-        NullNode->Color = Black;
-        NullNode->Element = 12345;
-    }
+	if(t->comp(Info, Parent->Info) < 0)
+	{
+		Parent->Left_Child = Binary_Tree(t, Info, Parent->Left_Child, H, found);
+		if(*H)
+		/* Left branch has grown higher */
+		{
+			switch(Parent->Flag)
+			{
+				case 1: /* Right heavy */
+					Parent->Flag = 0;
+					*H = F;
+					break;
+				case 0: /* Balanced tree */
+					Parent->Flag = -1;
+					break;
+				case -1: /* Left heavy */
+					Node1 = Parent->Left_Child;
+					if(Node1->Flag == -1)
+					{
+						Parent->Left_Child= Node1->Right_Child;
+						Node1->Right_Child = Parent;
+						Parent->Flag = 0;
+						Parent = Node1;
+					}
+					else
+					{
+						Node2 = Node1->Right_Child;
+						Node1->Right_Child = Node2->Left_Child;
+						Node2->Left_Child = Node1;
+						Parent->Left_Child = Node2->Right_Child;
+						Node2->Right_Child = Parent;
+						if(Node2->Flag == -1)
+							Parent->Flag = 1;
+						else
+							Parent->Flag = 0;
+						if(Node2->Flag == 1)
+							Node1->Flag = -1;
+						else
+							Node1->Flag = 0;
+						Parent = Node2;
+					}
+					
+					Parent->Flag = 0;
+					*H = F;
+			}
+		}
+	}
+	else
+	if(t->comp(Info, Parent->Info) > 0)
+	{
+		Parent->Right_Child = Binary_Tree(t,Info, Parent->Right_Child, H, found);
+		if(*H)
+		/* Right branch has grown higher */
+		{
+			switch(Parent->Flag)
+			{
+				case -1: /* Left heavy */
+					Parent->Flag = 0;
+					*H = F;
+					break;
+				case 0: /* Balanced tree */
+					Parent->Flag = 1;
+					break;
+					
+				case 1: /* Right heavy */
+					Node1 = Parent->Right_Child;
+					if(Node1->Flag == 1)
+					{
+						Parent->Right_Child= Node1->Left_Child;
+						Node1->Left_Child = Parent;
+						Parent->Flag = 0;
+						Parent = Node1;
+					}
+					else
+					{
+						Node2 = Node1->Left_Child;
+						Node1->Left_Child = Node2->Right_Child;
+						Node2->Right_Child = Node1;
+						Parent->Right_Child = Node2->Left_Child;
+						Node2->Left_Child = Parent;
+						
+						if(Node2->Flag == 1)
+							Parent->Flag = -1;
+						else
+							Parent->Flag = 0;
+						if(Node2->Flag == -1)
+							Node1->Flag = 1;
+						else
+							Node1->Flag = 0;
+						Parent = Node2;
+					}
+					
+					Parent->Flag = 0;
+					*H = F;
+			}
+		}
+	}
+	else {
+		*found = 1;
+	}
+	return(Parent);
+}
+
+/* Output function */
+
+void Output(node Tree,int Level, printer p)
+{
+	int i;
+	if (Tree)
+	{
+		Output(Tree->Right_Child, Level+1, p);
+		printf("\n");
+		for (i = 0; i < Level; i++)
+			printf("   ");
+		p(Tree->Info);
+		Output(Tree->Left_Child, Level+1,p);
+	}
+}
+
+/* Balancing Right Heavy */
+
+node  Balance_Right_Heavy(node Parent, int *H)
+{
+	node Node1, Node2;
 	
-    /* Create the header node */
-    head = malloc(sizeof(node));
-    if (head == NULL)
-        FatalError("Out of space!!!");
-    head->Element = NegInfinity;
-    head->Left = head->Right = NullNode;
-    head->Color = Black;
+	switch(Parent->Flag)
+	{
+		case -1: 
+			Parent->Flag = 0;
+			break;
+			
+		case 0: 
+			Parent->Flag = 1;
+			*H= F;
+			break;
+			
+		case 1: /* Rebalance */
+			Node1 = Parent->Right_Child;
+			if(Node1->Flag >= 0)
+			{
+				Parent->Right_Child= Node1->Left_Child;
+				Node1->Left_Child = Parent;
+				if(Node1->Flag == 0)
+				{
+					Parent->Flag = 1;
+					Node1->Flag = -1;
+					*H = F;
+				}
+				else
+				{
+					Parent->Flag = Node1->Flag = 0;
+				}
+				Parent = Node1;
+			}
+			else
+			{
+				Node2 = Node1->Left_Child;
+				Node1->Left_Child = Node2->Right_Child;
+				Node2->Right_Child = Node1;
+				Parent->Right_Child = Node2->Left_Child;
+				Node2->Left_Child = Parent;
+				
+				if(Node2->Flag == 1)
+					Parent->Flag = -1;
+				else
+					Parent->Flag = 0;
+				if(Node2->Flag == -1)
+					Node1->Flag = 1;
+				else
+					Node1->Flag = 0;
+				Parent = Node2;
+				Node2->Flag = 0;
+			}
+	}
+	return(Parent);
+}
+
+/* Balancing Left Heavy */
+
+node  Balance_Left_Heavy(node Parent, int *H)
+{
+	node Node1, Node2;
 	
-	t = malloc(sizeof(struct tree));
-	t->head = head;
-	t->size = size;
-	t->comparer = comp;
-	
-    return t;
+	switch(Parent->Flag)
+	{
+		case 1: 
+			Parent->Flag = 0;
+			break;
+			
+		case 0: 
+			Parent->Flag = -1;
+			*H= F;
+			break;
+			
+		case -1: /*  Rebalance */
+			Node1 = Parent->Left_Child;
+			if(Node1->Flag <= 0)
+			{
+				Parent->Left_Child= Node1->Right_Child;
+				Node1->Right_Child = Parent;
+				if(Node1->Flag == 0)
+				{
+					Parent->Flag = -1;
+					Node1->Flag = 1;
+					*H = F;
+				}
+				else
+				{
+					Parent->Flag = Node1->Flag = 0;
+				}
+				Parent = Node1;
+			}
+			else
+			{
+				Node2 = Node1->Right_Child;
+				Node1->Right_Child = Node2->Left_Child;
+				Node2->Left_Child = Node1;
+				Parent->Left_Child = Node2->Right_Child;
+				Node2->Right_Child = Parent;
+				
+				if(Node2->Flag == -1)
+					Parent->Flag = 1;
+				else
+					Parent->Flag = 0;
+				
+				if(Node2->Flag == 1)
+					Node1->Flag = -1;
+				else
+					Node1->Flag = 0;
+				Parent = Node2;
+				Node2->Flag = 0;
+			}
+	}
+	return(Parent);
 }
 
-/* END */
+/* Replace the node at which key is found with last right key of a left child */
 
-void
-Output(ElementType Element) {
-    printf("%d\n", Element);
+node  DELETE(node R, node Temp, int *H)
+{
+	node Dnode = R;
+	if( R->Right_Child != NULL)
+	{
+		R->Right_Child = DELETE(R->Right_Child, Temp, H);
+		if(*H)
+			R = Balance_Left_Heavy(R, H);
+	}
+	else
+	{
+		Dnode = R;
+		Temp->Info = R->Info;
+		R = R->Left_Child;
+		free(Dnode);
+		*H = T;
+	}
+	return(R);
 }
+/* Delete the key element from the tree */
 
-
-/* Print the tree, watch out for NullNode, */
-
-/* and skip header */
-
-static void
-DoPrint(RedBlackTree T) {
-    if (T != NullNode) {
-        DoPrint(T->Left);
-        Output(T->Element);
-        DoPrint(T->Right);
-    }
-}
-
-void
-PrintTree(RedBlackTree T) {
-    DoPrint(T->Right);
-}
-
-/* END */
-
-static RedBlackTree
-MakeEmptyRec(RedBlackTree T) {
-    if (T != NullNode) {
-        MakeEmptyRec(T->Left);
-        MakeEmptyRec(T->Right);
-        free(T);
-    }
-    return NullNode;
-}
-
-RedBlackTree
-MakeEmpty(RedBlackTree T) {
-    T->Right = MakeEmptyRec(T->Right);
-    return T;
-}
-
-Position
-Find(ElementType X, RedBlackTree T) {
-    if (T == NullNode)
-        return NullNode;
-    if (X < T->Element)
-        return Find(X, T->Left);
-    else
-        if (X > T->Element)
-			return Find(X, T->Right);
+node  Delete_Element(tree t, node Parent, void_p Info, int *H, int * found, void_p found_data)
+{
+	node Temp;
+	if(!Parent)
+	{
+		printf("\n Information does not exist");
+		return(Parent);
+	}
+	else
+	{
+		if (t->comp(Info, Parent->Info) < 0)
+		{
+			Parent->Left_Child = Delete_Element(t, Parent->Left_Child, Info, H, found, found_data);
+			if(*H)
+				Parent = Balance_Right_Heavy(Parent, H);
+		}
 		else
-			return T;
+			if(t->comp(Info, Parent->Info) > 0)
+			{
+				Parent->Right_Child = Delete_Element(t, Parent->Right_Child, Info, H, found, found_data);
+				if(*H)
+					Parent = Balance_Left_Heavy(Parent, H);
+			}
+			else
+			{
+				*found = 1;
+				*((int*)found_data) = (int) Parent->Info;
+				Temp= Parent;
+				
+				if(Temp->Right_Child == NULL)
+				{
+					Parent = Temp->Left_Child;
+					*H = T;
+					free(Temp);
+				}
+				else
+					if(Temp->Left_Child == NULL)
+					{
+						Parent = Temp->Right_Child;
+						*H = T;
+						free(Temp);
+					}
+					else
+					{
+						Temp->Left_Child = DELETE(Temp->Left_Child, Temp, H);
+						if(*H)
+							Parent = Balance_Right_Heavy(Parent, H);
+					}
+			}
+	}
+	return(Parent);
 }
 
-Position
-FindMin(RedBlackTree T) {
-    T = T->Right;
-    while (T->Left != NullNode)
-        T = T->Left;
-	
-    return T;
+void_p tree_delete(tree t, void_p e)
+{
+	int boolean = 0;
+	void_p data = (void_p) malloc(sizeof(void_p));
+	t->header = Delete_Element(t, t->header, e, t->H, &boolean, (void_p)data);
+	if (boolean) {
+		t->size--;
+		int ret = (int)(*((int*)data));
+		free(data);
+		return (void_p)ret;
+	}
+	else {
+		free(data);
+		return NULL;
+	}
+
 }
 
-Position
-FindMax(RedBlackTree T) {
-    while (T->Right != NullNode)
-        T = T->Right;
-	
-    return T;
+int tree_add(tree t, void_p e)
+{
+	int boolean = 0;
+	t->header = Binary_Tree(t, e, t->header, t->H, &boolean);
+	if (!boolean)
+		t->size++;
+	return !boolean;
 }
 
-/* This function can be called only if K2 has a left child */
-/* Perform a rotate between a node (K2) and its left child */
-
-/* Update heights, then return new root */
-
-static Position
-SingleRotateWithLeft(Position K2) {
-    Position K1;
-	
-    K1 = K2->Left;
-    K2->Left = K1->Right;
-    K1->Right = K2;
-	
-    return K1; /* New root */
+static void_p node_contains(comparer c, node n, void_p e){
+	if (n == NULL)
+		return NULL;
+	else if (c(e, n->Info) < 0)
+		return node_contains(c,n->Left_Child,e);
+	else if (c(e, n->Info) > 0) {
+		return node_contains(c,n->Right_Child,e);
+	} else {
+		return n->Info;
+	}
 }
 
-/* This function can be called only if K1 has a right child */
-/* Perform a rotate between a node (K1) and its right child */
-
-/* Update heights, then return new root */
-
-static Position
-SingleRotateWithRight(Position K1) {
-    Position K2;
-	
-    K2 = K1->Right;
-    K1->Right = K2->Left;
-    K2->Left = K1;
-	
-    return K2; /* New root */
+void_p tree_get(tree t, void_p e)
+{
+	return node_contains(t->comp, t->header, e);
 }
 
+void tree_print(tree t, printer p)
+{
+	Output(t->header, 0, p);
+}
 
-/* Perform a rotation at node X */
-/* (whose parent is passed as a parameter) */
+int tree_size(tree t)
+{
+	return t->size;
+}
 
-/* The child is deduced by examining Item */
-
-static Position
-Rotate(ElementType Item, Position Parent) {
+void explore(comparer c, node n, void_p * array, int * index) {
+	if (n == NULL)
+		return;
+	explore(c,n->Left_Child,array,index);
 	
-    if (Item < Parent->Element)
-        return Parent->Left = Item < Parent->Left->Element ?
-		SingleRotateWithLeft(Parent->Left) :
-        SingleRotateWithRight(Parent->Left);
-    else
-        return Parent->Right = Item < Parent->Right->Element ?
-		SingleRotateWithLeft(Parent->Right) :
-        SingleRotateWithRight(Parent->Right);
+	((int*)array)[(*index)++] = (int) n->Info;
+	
+	explore(c,n->Right_Child,array,index);
 }
 
 
-
-static Position X, P, GP, GGP;
-
-static
-void HandleReorient(ElementType Item, RedBlackTree T) {
-    X->Color = Red; /* Do the color flip */
-    X->Left->Color = Black;
-    X->Right->Color = Black;
+void_p * tree_to_a(tree t)
+{
+	int * array = (int *)malloc(sizeof(void_p));
+	int i = 0;
+	explore(t->comp, t->header,(void_p) array, &i);
 	
-    if (P->Color == Red) /* Have to rotate */ {
-        GP->Color = Red;
-        if ((Item < GP->Element) != (Item < P->Element))
-            P = Rotate(Item, GP); /* Start double rotate */
-        X = Rotate(Item, GGP);
-        X->Color = Black;
-    }
-    T->Right->Color = Black; /* Make root black */
+	return (void_p *) array;
 }
 
-RedBlackTree
-Insert(ElementType Item, RedBlackTree T) {
-    X = P = GP = T;
-    NullNode->Element = Item;
-    while (X->Element != Item) /* Descend down the tree */ {
-        GGP = GP;
-        GP = P;
-        P = X;
-        if (Item < X->Element)
-            X = X->Left;
-        else
-            X = X->Right;
-        if (X->Left->Color == Red && X->Right->Color == Red)
-            HandleReorient(Item, T);
-    }
-	
-    if (X != NullNode)
-        return NullNode; /* Duplicate */
-	
-    X = malloc(sizeof ( struct RedBlackNode));
-    if (X == NULL)
-        FatalError("Out of space!!!");
-    X->Element = Item;
-    X->Left = X->Right = NullNode;
-	
-    if (Item < P->Element) /* Attach to its parent */
-        P->Left = X;
-    else
-        P->Right = X;
-    HandleReorient(Item, T); /* Color it red; maybe rotate */
-	
-    return T;
+tree tree_init(comparer comp)
+{
+	tree t = (tree) malloc(sizeof(struct tree));
+	t->header = NULL;
+	t->H = (int*)malloc(sizeof(int));
+	t->size = 0;
+	t->comp = comp;
+	return t;
 }
 
-RedBlackTree
-Remove(ElementType Item, RedBlackTree T) {
-    printf("Remove is unimplemented\n");
-    if (Item)
-        return T;
-    return T;
-}
-
-ElementType
-Retrieve(Position P) {
-    return P->Element;
+void tree_free(tree t) {
+	free(t->H);
+	free(t);
 }
 
 

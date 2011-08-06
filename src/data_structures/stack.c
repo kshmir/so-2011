@@ -9,16 +9,19 @@
 
 #include "stack.h"
 
+
+// Data structure
 struct stack {
 	void_p  data;
 	int		size;
 	int		index;
 };
 
-stack * stack_init(size_t start_size) {
+// Inits the stack
+stack stack_init(size_t start_size) {
 	if (!start_size)
 		return NULL;
-	stack * pila = (stack *) malloc(sizeof(stack));
+	stack pila = (stack) malloc(sizeof(struct stack));
 	pila->size = start_size;
 	pila->index = 0;
 	pila->data = malloc(start_size * sizeof(void_p));
@@ -26,7 +29,10 @@ stack * stack_init(size_t start_size) {
 	return pila;
 }
 
-static void stack_expand(stack * pila) {
+
+// Expands the stack if needed
+// It makes it the double of size.
+static void stack_expand(stack pila) {
 	int i = 0;
 	
 	char * space = malloc(pila->size * 2 * sizeof(void_p));
@@ -40,15 +46,18 @@ static void stack_expand(stack * pila) {
 	pila->size *= 2;
 }
 
-int stack_count(stack * pila) {
+// Tells the amount of data stored in the stack
+int stack_count(stack pila) {
 	return pila->index;
 }
 
-int stack_is_empty(stack * pila) {
+// Tells wether the stack is empty or not
+int stack_is_empty(stack pila) {
 	return !stack_count(pila);
 }
 
-int stack_push(stack * pila, void_p object) {
+// Pushes a pointer to the stack
+int stack_push(stack pila, void_p object) {
 	if (pila->index == pila->size) {
 		stack_expand(pila);
 	}
@@ -57,15 +66,14 @@ int stack_push(stack * pila, void_p object) {
 	return 1;
 }
 
-void_p stack_pop(stack * pila) {
+// Pops the pointer from the stack
+void_p stack_pop(stack pila) {
 	pila->index--;
 	return (void_p)((int*)pila->data)[pila->index];
 }
 
-
-
-
-stack * stack_free(stack * pila){
+// Frees up the stack
+stack stack_free(stack pila){
 	free(pila->data);
 	free(pila);
 }	

@@ -12,18 +12,29 @@
 #ifndef _LIST_H_
 #define _LIST_H_
 
-typedef struct list list;
+// This makes all calls to list equal to "struct list *"
+// So BEWARE that any call to list is a pointer by itself.
+typedef struct list * list;
 
-list * list_init();
+// Inits the list
+list list_init();
 
+// Free's up the list
 void list_free();
 
-int list_add(list * p, void_p obj);
+// Adds an element to the list.
+int list_add(list p, void_p obj);
 
-int list_size(list * p);
+// Size of the given list
+int list_size(list p);
 
-void_p list_get(list * p, int index);
+// Retreives an element in the given index of the list
+void_p list_get(list p, int index);
 
-int list_insert(list * p, int index, void_p ptr);
+// Inserts an element in the given index of the list
+int list_insert(list p, int index, void_p ptr);
+
+// Removes an element in the given index of the list
+int list_remove(list p, int index);
 
 #endif

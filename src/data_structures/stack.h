@@ -14,20 +14,29 @@
 #ifndef _STACK_H_ 
 #define _STACK_H_
 
+// TODO: Make it shrinkable 
 
-typedef struct stack stack;
+// This makes all calls to stack equal to "struct stack *"
+// So BEWARE that any call to stack is a pointer by itself.
+typedef struct stack * stack;
 
-stack * stack_init(size_t start_size);
+// Starts the stack with a given size
+stack stack_init(size_t start_size);
 
-int stack_count(stack * pila);
+// Tells the amount of elements in the stack
+int stack_count(stack pila);
 
-int stack_is_empty(stack * pila);
+// Tells whether the stack is empty or not
+int stack_is_empty(stack pila);
+
+// Pushes an element to the stack
+int stack_push(stack pila, void_p object);
+
+// Pops an element from the stack
+void_p stack_pop(stack pila);
 
 
-int stack_push(stack * pila, void_p object);
-
-void_p stack_pop(stack * pila);
-
-stack * stack_free(stack * pila);
+// Free's up the stack
+stack stack_free(stack pila);
 
 #endif

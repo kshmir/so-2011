@@ -11,8 +11,11 @@
 #include <stdio.h>
 #include <assert.h>
 
+#include "../../includes.h"
 #include "../stack.h"
 #include "../list.h"
+#include "../tree.h"
+#include "../map.h"
 
 void separator() {
 	printf("------------------------------------\n");	
@@ -22,7 +25,7 @@ void list_test() {
 	separator();
 	printf("Testing list repeated elements\n");
 	
-	list * lista = list_init(NULL);
+	list lista = list_init();
 	
 	if (lista == NULL) {
 		return;
@@ -66,6 +69,13 @@ void list_test() {
 	assert(list_insert(lista, 0, pointer) == 0);
 	assert(list_insert(lista, 1, pointer) == 1);
 	printf("DONE!\n");
+	
+	printf("I should be able to remove elements\n");
+	for (i=0; i < 3; i++) {
+		assert(list_add(lista, array + i) > 0); 
+	}
+	printf("DONE!\n");
+	
 	list_free(lista);
 	free(array);
 	separator();
@@ -73,13 +83,12 @@ void list_test() {
 }
 
 void stack_test() {
-	
 	separator();
-
+	
 	printf("Testing stack\n");
-	stack * pila = stack_init(1);
+	stack pila = stack_init(1);
 	int arreglo[] = {1,2,3,4,5,6,7,8,9,10};
-
+	
 	printf("It should push data to the stack\n");
 	assert(stack_push(pila, arreglo) == 1);
 	assert(stack_push(pila, (arreglo + 9)) == 1);
@@ -95,15 +104,132 @@ void stack_test() {
 	printf("It should return null when empty\n");
 	assert((int*)stack_pop(pila) == NULL);
 	printf("DONE!\n");
-
+	
 	stack_free(pila);
 	separator();
 	return;
 }
 
-int main(int argc, char ** argv) {
+void tree_test() {
+	separator();
+	printf("Testing AVL Tree ADT\n");
+	tree t = tree_init(int_comparer);
+	
+	printf("Should start with no elements\n");
+	assert(tree_size(t) == 0);
+	printf("DONE!\n");
+	
+	printf("Should be able to insert a lot of data\n");
+	int i = 0;
+	for (; i < 1024; i++) {
+		int * data = (int*) malloc(sizeof(int));
+		*data = i;
+		assert(tree_add(t, data) == 1);
+	}
+	printf("DONE!\n");
+	
+	int a = -1;
+	
+	printf("It should find data\n");
+	assert(tree_get(t,&a) == NULL);
+	a = 10;
+	assert(*(int*)tree_get(t,&a) == a);
+	printf("DONE!\n");
+	
+	printf("Should be able to delete a lot of data and get it back\n");
+	for (i = 0; i < 1024; i++) {
+		int * ptr = (int *) tree_delete(t, &i);
+		assert(ptr != NULL);
+		free(ptr);
+	}
+	printf("DONE!\n");
+	
+	printf("Should end with no elements\n");
+	assert(tree_size(t) == 0);
+	printf("DONE!\n");
+	
+	tree_free(t);
+	separator();
+}
 
-	stack_test();
-	list_test();
+void map_test() {
+	separator();
+	
+	printf("Testing Map ADT\n");
+	
+	printf("It should init two maps\n");
+	// This is because of the internals, testing two is better :)
+	map m = map_init(int_comparer, int_cloner);
+	map m2 = map_init(int_comparer, int_cloner);
+	printf("DONE!\n");
+	
+	printf("TODO: This should work with threads\n");
+	printf("It should be able to add to both\n");
+	int i = 0;
+	for(i = 0; i < 1024; i++)
+	{
+		int *key = (int*)malloc(sizeof(int));
+		int *val = (int*)malloc(sizeof(int));
+		*key = i;
+		*val = i * i;
+		map_set(m,  key, val);
+		map_set(m2, val, key);
+	}
+	printf("DONE!\n");
+
+	printf("It should be able to get elements\n");
+	for(i = 0; i < 1024; i++)
+	{
+		int *val = map_get(m,&i);
+		assert(*val == i * i);
+	}
+	
+	for(i = 0; i < 1024; i++)
+	{
+		int *val = map_get(m, &i);
+		int *val2 = map_get(m2, val);
+		assert(*val2 == i);
+	}
+	printf("DONE!\n");
+	
+	
+	printf("It should be able to print values and keys of the map\n");
+	int ** values = (int **) map_values(m);
+	for (i = 0; i < 1024; i++) {
+		assert(*values[i] == i * i);
+	}
+	free(values);
+	
+	int ** keys = (int **) map_keys(m);
+	for (i = 0; i < 1024; i++) {
+		assert(*keys[i] == i);
+	}
+	free(keys);
+	printf("DONE!\n");
+	
+
+	printf("It should be able to remove all keys\n");
+	// This should be the way to clean the map if you won't use the values 
+	// any longer !!!!!!!!!
+	for(i = 0; i < 1024; i++)
+	{
+		int *val = map_remove(m, &i);
+		int *val2 = map_remove(m2, val);
+		free(val);
+		free(val2);
+	}
+	printf("DONE!\n");
+	
+	map_free(m);
+	separator();
+}
+
+int main(int argc, char ** argv) {
+	
+	tree_test();		// AVL Tree, for general storage.
+	stack_test();		// Stack,	 for algorithms.
+	list_test();		// List,	 for manipulating data.
+	map_test();			// Map,		 for storing data. (uses tree!)
+	//heap_test();		// Heap,     for algorithms / queuing data (proccesses)
 	return 0;
 }
