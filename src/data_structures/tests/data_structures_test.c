@@ -202,7 +202,7 @@ void map_test() {
 	
 	int x = -100;
 	
-	printf("It should return NULL if the key is not inside the map\n");
+	printf("It should return NULL if the key is not inside the mapº\n");
 	assert(map_get(m, &x) == NULL);
 	printf("DONE!\n");
 	
