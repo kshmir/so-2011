@@ -62,8 +62,8 @@ int graph_add_node(graph g, void_p key, void_p value){
 int graph_add_arc(graph g, void_p from, void_p to, int weight){
 	arc a = arc_init(map_get(g->nodes, to), weight);
 	arc b = arc_init(map_get(g->nodes, from), weight);
-	if(list_contains(map_get(g->nodes, from), a) || 
-	   list_contains(map_get(g->nodes, to), b)){
+	if(list_indexOf(map_get(g->nodes, from), a, NULL)!= -1 || 
+	   list_indexOf(map_get(g->nodes, to), b, NULL) != -1){
 		free(a);
 		free(b);
 		return FALSE;
@@ -132,7 +132,7 @@ void_p * graph_keys(graph g){
 }
 
 // Devuelve los punteros a los nodos almacenados en el grafo.
-list 	graph_nodes(graph g){
+list graph_nodes(graph g){
 	return map_values(g->nodes);
 }
 

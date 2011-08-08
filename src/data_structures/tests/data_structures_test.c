@@ -16,9 +16,7 @@
 #include "../list.h"
 #include "../tree.h"
 #include "../map.h"
-<<<<<<< HEAD
 #include "../graph.h"
-=======
 #include "../heap.h"
 
 void separator() {
