@@ -16,6 +16,7 @@
 #include "../list.h"
 #include "../tree.h"
 #include "../map.h"
+#include "../heap.h"
 
 void separator() {
 	printf("------------------------------------\n");	
@@ -68,6 +69,13 @@ void list_test() {
 	assert(list_insert(lista, 4, pointer) == 4);
 	assert(list_insert(lista, 0, pointer) == 0);
 	assert(list_insert(lista, 1, pointer) == 1);
+	printf("DONE!\n");
+	
+	int ob = 0;
+	printf("I should be able to get elements between 0 to n\n");
+	assert(list_indexOf(lista, &ob, int_comparer) != -1);		
+	ob = -10;
+	assert(list_indexOf(lista, &ob, int_comparer) == -1);		
 	printf("DONE!\n");
 	
 	printf("I should be able to remove elements\n");
@@ -224,12 +232,42 @@ void map_test() {
 	separator();
 }
 
+void heap_test() {
+	separator();
+	printf("Testing heap structure\n");
+	
+	heap h = heap_init(1024,int_comparer);
+	
+	int datos[1024*1024];
+	int i = 0;
+	for (; i < 1024*1024; i++) {
+		datos[i] = 1024*1024 - 1 - i;
+		if (heap_full(h))
+		{
+			h = heap_expand(h);
+		}
+		
+		heap_insert(&(datos[i]), h);
+	}
+	i = 0;
+	
+	for (; i < 1024*1024; i++) {
+		int a = *((int*)heap_remove_min(h));
+		assert(a == i);
+	}
+	
+	
+	heap_free(h);
+	
+	separator();
+}
+
 int main(int argc, char ** argv) {
 	
 	tree_test();		// AVL Tree, for general storage.
 	stack_test();		// Stack,	 for algorithms.
 	list_test();		// List,	 for manipulating data.
 	map_test();			// Map,		 for storing data. (uses tree!)
-	//heap_test();		// Heap,     for algorithms / queuing data (proccesses)
+	heap_test();		// Heap,     for algorithms / queuing data (proccesses)
 	return 0;
 }

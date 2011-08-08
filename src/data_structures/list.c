@@ -174,3 +174,22 @@ int list_remove(list l, int index) {
 	
 	return index;
 }
+
+int list_indexOf(list p, void_p ptr, comparer comp) {
+	if (ptr == NULL)
+		return -1;
+	
+	node n = p->header;
+	
+	int i = 0;
+	while(n != NULL)
+	{
+		if (comp(n->data,ptr) == 0)
+			return i;
+		
+		i++;
+		n = n->next;
+	}
+	
+	return -1;
+}

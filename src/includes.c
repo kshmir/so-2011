@@ -13,7 +13,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+int pointer_comparer(void_p int1, void_p int2) {
+	return (int*)int1 - (int*)int2;
+}
+
 int int_comparer(void_p int1, void_p int2) {
+
+	if ((int)int2 == 0)
+		return 1;
+
+	if ((int)int1 == 0)
+		return -1;
 	return *(int*)int1 - *(int*)int2;
 }
 
@@ -43,6 +53,10 @@ void double_printer(void_p double1){
 
 void string_printer(void_p s1) {
 	printf("%s",(char*)s1);
+}
+
+void_p pointer_cloner(void_p p1) {
+	return int_cloner(p1); //x86 only!
 }
 
 void_p int_cloner(void_p int1) {
