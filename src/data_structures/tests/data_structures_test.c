@@ -20,7 +20,6 @@
 #include "../graph.h"
 =======
 #include "../heap.h"
->>>>>>> b49449430194692a016db520d5732c49c1713b22
 
 void separator() {
 	printf("------------------------------------\n");	
@@ -241,7 +240,6 @@ void map_test() {
 	separator();
 }
 
-<<<<<<< HEAD
 void graph_test(){
 	separator();
 	
@@ -291,7 +289,8 @@ void graph_test(){
 	
 	printf("Testing access functions.");
 	printf("DONE!/n");
-=======
+}
+
 void heap_test() {
 	separator();
 	printf("Testing heap structure\n");
@@ -324,7 +323,6 @@ void heap_test() {
 	heap_free(h);
 	
 	separator();
->>>>>>> b49449430194692a016db520d5732c49c1713b22
 }
 
 int main(int argc, char ** argv) {
