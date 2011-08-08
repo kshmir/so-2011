@@ -14,6 +14,9 @@
 #ifndef _INCLUDE_H_
 #define _INCLUDE_H_
 
+#define TRUE 1
+#define FALSE 0
+
 // void pointer for all our solutions
 typedef void * void_p;
 
