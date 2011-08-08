@@ -8,6 +8,7 @@
  */
 
 #include "../includes.h"
+#include "list.h"
 
 #ifndef _MAP_H_ 
 #define _MAP_H_
@@ -29,10 +30,10 @@ void_p map_remove(map m, void_p key);
 void_p map_get(map m, void_p key);
 
 // Gets all the keys of the map
-void_p * map_keys(map m);
+list map_keys(map m);
 
 // Gets all the values of the map
-void_p * map_values(map m);
+list map_values(map m);
 
 // Gets the size of the map
 int map_size(map m);

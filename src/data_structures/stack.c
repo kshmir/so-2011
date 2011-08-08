@@ -68,6 +68,9 @@ int stack_push(stack pila, void_p object) {
 
 // Pops the pointer from the stack
 void_p stack_pop(stack pila) {
+	
+	if (pila->index == 0)
+		return NULL;
 	pila->index--;
 	return (void_p)((int*)pila->data)[pila->index];
 }

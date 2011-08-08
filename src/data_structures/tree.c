@@ -9,19 +9,19 @@
 
 #include "../includes.h"
 #include "tree.h"
+#include "list.h"
 
 # define F 0
 # define T 1
 
 
-typedef struct NODE * node;
-
-struct NODE
-{
-	void_p Info;
-	int Flag;
-	node Left_Child;
-	node Right_Child;
+typedef struct node * node
+;
+struct node {
+	void_p data;
+	int flag;
+	node left;
+	node right;
 };
 
 
@@ -46,114 +46,114 @@ static node Delete_Element(tree, node, void_p, int *, int*, void_p);
 
 /* Function to insert an element into tree */
 
-node Binary_Tree(tree t, void_p Info, node Parent, int *H, int * found)
+node Binary_Tree(tree t, void_p data, node Parent, int *H, int * found)
 {
 	node Node1;
 	node Node2;
 	if(!Parent)
 	{
-		Parent = (node) malloc(sizeof(struct NODE));
-		Parent->Info = Info;
-		Parent->Left_Child = NULL;
-		Parent->Right_Child = NULL;
-		Parent->Flag = 0;
+		Parent = (node) malloc(sizeof(struct node));
+		Parent->data = data;
+		Parent->left = NULL;
+		Parent->right = NULL;
+		Parent->flag = 0;
 		*H = T;
 		return (Parent);
 	}
 	
-	if(t->comp(Info, Parent->Info) < 0)
+	if(t->comp(data, Parent->data) < 0)
 	{
-		Parent->Left_Child = Binary_Tree(t, Info, Parent->Left_Child, H, found);
+		Parent->left = Binary_Tree(t, data, Parent->left, H, found);
 		if(*H)
 		/* Left branch has grown higher */
 		{
-			switch(Parent->Flag)
+			switch(Parent->flag)
 			{
 				case 1: /* Right heavy */
-					Parent->Flag = 0;
+					Parent->flag = 0;
 					*H = F;
 					break;
 				case 0: /* Balanced tree */
-					Parent->Flag = -1;
+					Parent->flag = -1;
 					break;
 				case -1: /* Left heavy */
-					Node1 = Parent->Left_Child;
-					if(Node1->Flag == -1)
+					Node1 = Parent->left;
+					if(Node1->flag == -1)
 					{
-						Parent->Left_Child= Node1->Right_Child;
-						Node1->Right_Child = Parent;
-						Parent->Flag = 0;
+						Parent->left= Node1->right;
+						Node1->right = Parent;
+						Parent->flag = 0;
 						Parent = Node1;
 					}
 					else
 					{
-						Node2 = Node1->Right_Child;
-						Node1->Right_Child = Node2->Left_Child;
-						Node2->Left_Child = Node1;
-						Parent->Left_Child = Node2->Right_Child;
-						Node2->Right_Child = Parent;
-						if(Node2->Flag == -1)
-							Parent->Flag = 1;
+						Node2 = Node1->right;
+						Node1->right = Node2->left;
+						Node2->left = Node1;
+						Parent->left = Node2->right;
+						Node2->right = Parent;
+						if(Node2->flag == -1)
+							Parent->flag = 1;
 						else
-							Parent->Flag = 0;
-						if(Node2->Flag == 1)
-							Node1->Flag = -1;
+							Parent->flag = 0;
+						if(Node2->flag == 1)
+							Node1->flag = -1;
 						else
-							Node1->Flag = 0;
+							Node1->flag = 0;
 						Parent = Node2;
 					}
 					
-					Parent->Flag = 0;
+					Parent->flag = 0;
 					*H = F;
 			}
 		}
 	}
 	else
-	if(t->comp(Info, Parent->Info) > 0)
+	if(t->comp(data, Parent->data) > 0)
 	{
-		Parent->Right_Child = Binary_Tree(t,Info, Parent->Right_Child, H, found);
+		Parent->right = Binary_Tree(t,data, Parent->right, H, found);
 		if(*H)
 		/* Right branch has grown higher */
 		{
-			switch(Parent->Flag)
+			switch(Parent->flag)
 			{
 				case -1: /* Left heavy */
-					Parent->Flag = 0;
+					Parent->flag = 0;
 					*H = F;
 					break;
 				case 0: /* Balanced tree */
-					Parent->Flag = 1;
+					Parent->flag = 1;
 					break;
 					
 				case 1: /* Right heavy */
-					Node1 = Parent->Right_Child;
-					if(Node1->Flag == 1)
+					Node1 = Parent->right;
+					if(Node1->flag == 1)
 					{
-						Parent->Right_Child= Node1->Left_Child;
-						Node1->Left_Child = Parent;
-						Parent->Flag = 0;
+						Parent->right= Node1->left;
+						Node1->left = Parent;
+						Parent->flag = 0;
 						Parent = Node1;
 					}
 					else
 					{
-						Node2 = Node1->Left_Child;
-						Node1->Left_Child = Node2->Right_Child;
-						Node2->Right_Child = Node1;
-						Parent->Right_Child = Node2->Left_Child;
-						Node2->Left_Child = Parent;
+						Node2 = Node1->left;
+						Node1->left = Node2->right;
+						Node2->right = Node1;
+						Parent->right = Node2->left;
+						Node2->left = Parent;
 						
-						if(Node2->Flag == 1)
-							Parent->Flag = -1;
+						if(Node2->flag == 1)
+							Parent->flag = -1;
 						else
-							Parent->Flag = 0;
-						if(Node2->Flag == -1)
-							Node1->Flag = 1;
+							Parent->flag = 0;
+						if(Node2->flag == -1)
+							Node1->flag = 1;
 						else
-							Node1->Flag = 0;
+							Node1->flag = 0;
 						Parent = Node2;
 					}
 					
-					Parent->Flag = 0;
+					Parent->flag = 0;
 					*H = F;
 			}
 		}
@@ -171,12 +171,12 @@ void Output(node Tree,int Level, printer p)
 	int i;
 	if (Tree)
 	{
-		Output(Tree->Right_Child, Level+1, p);
+		Output(Tree->right, Level+1, p);
 		printf("\n");
 		for (i = 0; i < Level; i++)
 			printf("   ");
-		p(Tree->Info);
-		Output(Tree->Left_Child, Level+1,p);
+		p(Tree->data);
+		Output(Tree->left, Level+1,p);
 	}
 }
 
@@ -186,53 +186,53 @@ node  Balance_Right_Heavy(node Parent, int *H)
 {
 	node Node1, Node2;
 	
-	switch(Parent->Flag)
+	switch(Parent->flag)
 	{
 		case -1: 
-			Parent->Flag = 0;
+			Parent->flag = 0;
 			break;
 			
 		case 0: 
-			Parent->Flag = 1;
+			Parent->flag = 1;
 			*H= F;
 			break;
 			
 		case 1: /* Rebalance */
-			Node1 = Parent->Right_Child;
-			if(Node1->Flag >= 0)
+			Node1 = Parent->right;
+			if(Node1->flag >= 0)
 			{
-				Parent->Right_Child= Node1->Left_Child;
-				Node1->Left_Child = Parent;
-				if(Node1->Flag == 0)
+				Parent->right= Node1->left;
+				Node1->left = Parent;
+				if(Node1->flag == 0)
 				{
-					Parent->Flag = 1;
-					Node1->Flag = -1;
+					Parent->flag = 1;
+					Node1->flag = -1;
 					*H = F;
 				}
 				else
 				{
-					Parent->Flag = Node1->Flag = 0;
+					Parent->flag = Node1->flag = 0;
 				}
 				Parent = Node1;
 			}
 			else
 			{
-				Node2 = Node1->Left_Child;
-				Node1->Left_Child = Node2->Right_Child;
-				Node2->Right_Child = Node1;
-				Parent->Right_Child = Node2->Left_Child;
-				Node2->Left_Child = Parent;
+				Node2 = Node1->left;
+				Node1->left = Node2->right;
+				Node2->right = Node1;
+				Parent->right = Node2->left;
+				Node2->left = Parent;
 				
-				if(Node2->Flag == 1)
-					Parent->Flag = -1;
+				if(Node2->flag == 1)
+					Parent->flag = -1;
 				else
-					Parent->Flag = 0;
-				if(Node2->Flag == -1)
-					Node1->Flag = 1;
+					Parent->flag = 0;
+				if(Node2->flag == -1)
+					Node1->flag = 1;
 				else
-					Node1->Flag = 0;
+					Node1->flag = 0;
 				Parent = Node2;
-				Node2->Flag = 0;
+				Node2->flag = 0;
 			}
 	}
 	return(Parent);
@@ -244,54 +244,54 @@ node  Balance_Left_Heavy(node Parent, int *H)
 {
 	node Node1, Node2;
 	
-	switch(Parent->Flag)
+	switch(Parent->flag)
 	{
 		case 1: 
-			Parent->Flag = 0;
+			Parent->flag = 0;
 			break;
 			
 		case 0: 
-			Parent->Flag = -1;
+			Parent->flag = -1;
 			*H= F;
 			break;
 			
 		case -1: /*  Rebalance */
-			Node1 = Parent->Left_Child;
-			if(Node1->Flag <= 0)
+			Node1 = Parent->left;
+			if(Node1->flag <= 0)
 			{
-				Parent->Left_Child= Node1->Right_Child;
-				Node1->Right_Child = Parent;
-				if(Node1->Flag == 0)
+				Parent->left= Node1->right;
+				Node1->right = Parent;
+				if(Node1->flag == 0)
 				{
-					Parent->Flag = -1;
-					Node1->Flag = 1;
+					Parent->flag = -1;
+					Node1->flag = 1;
 					*H = F;
 				}
 				else
 				{
-					Parent->Flag = Node1->Flag = 0;
+					Parent->flag = Node1->flag = 0;
 				}
 				Parent = Node1;
 			}
 			else
 			{
-				Node2 = Node1->Right_Child;
-				Node1->Right_Child = Node2->Left_Child;
-				Node2->Left_Child = Node1;
-				Parent->Left_Child = Node2->Right_Child;
-				Node2->Right_Child = Parent;
+				Node2 = Node1->right;
+				Node1->right = Node2->left;
+				Node2->left = Node1;
+				Parent->left = Node2->right;
+				Node2->right = Parent;
 				
-				if(Node2->Flag == -1)
-					Parent->Flag = 1;
+				if(Node2->flag == -1)
+					Parent->flag = 1;
 				else
-					Parent->Flag = 0;
+					Parent->flag = 0;
 				
-				if(Node2->Flag == 1)
-					Node1->Flag = -1;
+				if(Node2->flag == 1)
+					Node1->flag = -1;
 				else
-					Node1->Flag = 0;
+					Node1->flag = 0;
 				Parent = Node2;
-				Node2->Flag = 0;
+				Node2->flag = 0;
 			}
 	}
 	return(Parent);
@@ -302,17 +302,17 @@ node  Balance_Left_Heavy(node Parent, int *H)
 node  DELETE(node R, node Temp, int *H)
 {
 	node Dnode = R;
-	if( R->Right_Child != NULL)
+	if( R->right != NULL)
 	{
-		R->Right_Child = DELETE(R->Right_Child, Temp, H);
+		R->right = DELETE(R->right, Temp, H);
 		if(*H)
 			R = Balance_Left_Heavy(R, H);
 	}
 	else
 	{
 		Dnode = R;
-		Temp->Info = R->Info;
-		R = R->Left_Child;
+		Temp->data = R->data;
+		R = R->left;
 		free(Dnode);
 		*H = T;
 	}
@@ -320,51 +320,51 @@ node  DELETE(node R, node Temp, int *H)
 }
 /* Delete the key element from the tree */
 
-node  Delete_Element(tree t, node Parent, void_p Info, int *H, int * found, void_p found_data)
+node  Delete_Element(tree t, node Parent, void_p data, int *H, int * found, void_p found_data)
 {
 	node Temp;
 	if(!Parent)
 	{
-		printf("\n Information does not exist");
+		printf("\n datarmation does not exist");
 		return(Parent);
 	}
 	else
 	{
-		if (t->comp(Info, Parent->Info) < 0)
+		if (t->comp(data, Parent->data) < 0)
 		{
-			Parent->Left_Child = Delete_Element(t, Parent->Left_Child, Info, H, found, found_data);
+			Parent->left = Delete_Element(t, Parent->left, data, H, found, found_data);
 			if(*H)
 				Parent = Balance_Right_Heavy(Parent, H);
 		}
 		else
-			if(t->comp(Info, Parent->Info) > 0)
+			if(t->comp(data, Parent->data) > 0)
 			{
-				Parent->Right_Child = Delete_Element(t, Parent->Right_Child, Info, H, found, found_data);
+				Parent->right = Delete_Element(t, Parent->right, data, H, found, found_data);
 				if(*H)
 					Parent = Balance_Left_Heavy(Parent, H);
 			}
 			else
 			{
 				*found = 1;
-				*((int*)found_data) = (int) Parent->Info;
+				*((int*)found_data) = (int) Parent->data;
 				Temp= Parent;
 				
-				if(Temp->Right_Child == NULL)
+				if(Temp->right == NULL)
 				{
-					Parent = Temp->Left_Child;
+					Parent = Temp->left;
 					*H = T;
 					free(Temp);
 				}
 				else
-					if(Temp->Left_Child == NULL)
+					if(Temp->left == NULL)
 					{
-						Parent = Temp->Right_Child;
+						Parent = Temp->right;
 						*H = T;
 						free(Temp);
 					}
 					else
 					{
-						Temp->Left_Child = DELETE(Temp->Left_Child, Temp, H);
+						Temp->left = DELETE(Temp->left, Temp, H);
 						if(*H)
 							Parent = Balance_Right_Heavy(Parent, H);
 					}
@@ -403,12 +403,12 @@ int tree_add(tree t, void_p e)
 static void_p node_contains(comparer c, node n, void_p e){
 	if (n == NULL)
 		return NULL;
-	else if (c(e, n->Info) < 0)
-		return node_contains(c,n->Left_Child,e);
-	else if (c(e, n->Info) > 0) {
-		return node_contains(c,n->Right_Child,e);
+	else if (c(e, n->data) < 0)
+		return node_contains(c,n->left,e);
+	else if (c(e, n->data) > 0) {
+		return node_contains(c,n->right,e);
 	} else {
-		return n->Info;
+		return n->data;
 	}
 }
 
@@ -427,24 +427,24 @@ int tree_size(tree t)
 	return t->size;
 }
 
-void explore(comparer c, node n, void_p * array, int * index) {
+
+void explore_list(comparer c, node n, list l) {
 	if (n == NULL)
 		return;
-	explore(c,n->Left_Child,array,index);
+	explore_list(c,n->left,l);
 	
-	((int*)array)[(*index)++] = (int) n->Info;
+	list_add(l, n->data);
 	
-	explore(c,n->Right_Child,array,index);
+	explore_list(c,n->right,l);
 }
 
 
-void_p * tree_to_a(tree t)
+list tree_to_list(tree t)
 {
-	int * array = (int *)malloc(sizeof(void_p));
-	int i = 0;
-	explore(t->comp, t->header,(void_p) array, &i);
+	list l = list_init();
+	explore_list(t->comp, t->header, l);
 	
-	return (void_p *) array;
+	return l;
 }
 
 tree tree_init(comparer comp)

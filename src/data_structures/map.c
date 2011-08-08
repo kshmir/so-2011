@@ -9,6 +9,7 @@
 
 #include "../includes.h"
 #include "tree.h"
+#include "list.h"
 #include "map.h"
 
 // This map works as a treemap, it's implementation uses a tree from behind
@@ -106,8 +107,9 @@ void_p map_remove(map m, void_p key) {
 	c_index = m->comparer_index;
 	data * d = (data *)tree_delete(m->t, key);	
 	void_p ret = d->value;
-	if (m->clon_function)
+	if (m->clon_function) {
 		free(d->key);
+	}
 	free(d);
 	return ret;
 }
@@ -115,27 +117,27 @@ void_p map_remove(map m, void_p key) {
 // This method shuould be locked
 // It makes an array pointing to all the keys in the map.
 // You really shouldn't modify it's values...
-void_p* map_keys(map m) {
+list map_keys(map m) {
 	int i = 0;
-	data ** datas = (data **) tree_to_a(m->t);
-	int * data_return = (int*)malloc(sizeof(void_p) * tree_size(m->t));
+	list datas = tree_to_list(m->t);
+	list l = list_init();
 	for (i=0; i < tree_size(m->t); i++) {
-		data_return[i] = (int) datas[i]->key;
+		list_add(l, ((data*)list_get(datas, i))->key);
 	}
-	return (void_p *) data_return;
+	return l;
 }
 
 // This method shuould be locked
 // It makes an array pointing to all the values in the map.
 // You can modify the values of this map.
-void_p* map_values(map m) {
+list map_values(map m) {
 	int i = 0;
-	data ** datas = (data **) tree_to_a(m->t);
-	int * data_return = (int*)malloc(sizeof(void_p) * tree_size(m->t));
+	list datas = tree_to_list(m->t);
+	list l = list_init();
 	for (i=0; i < tree_size(m->t); i++) {
-		data_return[i] = (int) datas[i]->value;
+		list_add(l, ((data*)list_get(datas, i))->value);
 	}
-	return (void_p *) data_return;
+	return l;
 }
 
 // Tells the size of the map

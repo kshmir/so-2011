@@ -84,6 +84,8 @@ void list_test() {
 		assert(list_add(lista, array + i) > 0); 
 	}
 	printf("DONE!\n");
+
+	
 	
 	list_free(lista);
 	free(array);
@@ -137,12 +139,26 @@ void tree_test() {
 	}
 	printf("DONE!\n");
 	
+
 	int a = -1;
 	
 	printf("It should find data\n");
 	assert(tree_get(t,&a) == NULL);
 	a = 10;
 	assert(*(int*)tree_get(t,&a) == a);
+	printf("DONE!\n");
+	
+
+	
+	printf("It be able to make lists of its values\n");
+	list values = (list) tree_to_list(t);
+	i = 0;
+	for (; i < list_size(values); i++) {
+		int *value = tree_get(t,&i);
+		assert(int_comparer(value,list_get(values, i)) == 0);
+	}
+	
+	
 	printf("DONE!\n");
 	
 	printf("Should be able to delete a lot of data and get it back\n");
@@ -152,6 +168,9 @@ void tree_test() {
 		free(ptr);
 	}
 	printf("DONE!\n");
+	
+	
+
 	
 	printf("Should end with no elements\n");
 	assert(tree_size(t) == 0);
@@ -208,15 +227,15 @@ void map_test() {
 	printf("DONE!\n");
 	
 	printf("It should be able to print values and keys of the map\n");
-	int ** values = (int **) map_values(m);
+	list values = map_values(m);
 	for (i = 0; i < 1024; i++) {
-		assert(*values[i] == i * i);
+		assert(*(int*)list_get(values, i) == i * i);
 	}
 	free(values);
 	
-	int ** keys = (int **) map_keys(m);
+	list keys = map_keys(m);
 	for (i = 0; i < 1024; i++) {
-		assert(*keys[i] == i);
+		assert(*(int*)list_get(keys, i) == i);
 	}
 	free(keys);
 	printf("DONE!\n");

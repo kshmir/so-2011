@@ -127,7 +127,7 @@ int graph_remove_arc(graph g, void_p from, void_p to){
 }
 
 // Devuelve los punteros a las claves del grafo
-void_p * graph_keys(graph g){
+list graph_keys(graph g){
 	return map_keys(g->nodes);
 }
 

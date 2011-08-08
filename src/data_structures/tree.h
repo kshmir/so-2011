@@ -8,6 +8,7 @@
  */
 
 #include "../includes.h"
+#include "list.h"
 #include <stdlib.h>
 
 #ifndef	_TREE_H_
@@ -29,6 +30,8 @@ void_p tree_get(tree t, void_p e);
 int tree_size(tree t);
 
 tree tree_init(comparer comp);
+
+list tree_to_list(tree t);
 
 void tree_free(tree t);
 
