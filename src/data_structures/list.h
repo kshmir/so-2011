@@ -20,7 +20,7 @@ typedef struct list * list;
 list list_init();
 
 // Free's up the list
-void list_free();
+void list_free(list l);
 
 // Adds an element to the list.
 int list_add(list p, void_p obj);
