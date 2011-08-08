@@ -16,6 +16,7 @@
 #include "../list.h"
 #include "../tree.h"
 #include "../map.h"
+#include "../graph.h"
 #include "../heap.h"
 
 void separator() {
@@ -235,6 +236,57 @@ void map_test() {
 	
 	map_free(m);
 	separator();
+}
+
+void graph_test(){
+	separator();
+	
+	printf("Testing Graph ADT/n");
+	
+	printf("Initializing 2 graphs.............");
+	graph g1 = graph_init(NULL, NULL);
+	graph g2 = graph_init(NULL, NULL);
+	printf("DONE!/n");
+	
+	printf("Adding nodes.............");
+	int i = 0;
+	for (i = 0; i<10; i++) {
+		int *key = malloc(sizeof(int));
+		int *value = malloc(sizeof(int));
+		*key = i;
+		*value = i+10;
+		assert(graph_add_node(g1, key, value));
+		assert(graph_add_node(g2, value, key));
+	}
+	int * key = malloc(sizeof(int));
+	int * value = malloc(sizeof(int));
+	*key = 0;
+	*value = 10;
+	assert(!graph_add_node(g1, key, value));
+	printf("DONE!/n");
+	
+	printf("Adding arcs.............");
+	for (i = 0; i<10; i++) {
+		int *key = malloc(sizeof(int));
+		int *value = malloc(sizeof(int));
+		*key = i;
+		*value = i+10;
+		assert(graph_add_arc(g1, key, value, i));
+		assert(graph_add_arc(g2, value, key, i+100));
+	}
+	*key = 100;
+	*value = 101;
+	assert(!graph_add_arc(g1, key, value, 100));
+	printf("DONE!/n");
+	
+	printf("Removing nodes...........");
+	printf("DONE!/n");
+	
+	printf("Removing arcs............");
+	printf("DONE!/n");
+	
+	printf("Testing access functions.");
+	printf("DONE!/n");
 }
 
 void heap_test() {
