@@ -4,10 +4,17 @@ default : show_usage
 # START Declaration of requirements for each target
 
 ### Data Structures
+includes = \
+	bin/includes.o
+
 data_structures_test = \
 	bin/graph.o \
 	bin/list.o \
 	bin/stack.o \
+	bin/tree.o \
+	bin/map.o \
+	bin/heap.o \
+	bin/includes.o \
 	bin/data_structures_test.o
 	
 ### Examples	
@@ -20,7 +27,7 @@ tp1 = \
 	
 	
 ### Flags and declarations	
-cc = gcc -g -arch i386
+cc = gcc -g -m32
 
 
 # END of Declaration of requirements for each target
@@ -40,9 +47,15 @@ data_structures_list:
 #### Stack
 data_structures_stack: 
 		$(cc) -o bin/stack.o -c src/data_structures/stack.c		
-#### Stack
+#### Tree
 data_structures_tree: 
 		$(cc) -o bin/tree.o -c src/data_structures/tree.c		
+#### Map
+data_structures_map: 
+		$(cc) -o bin/map.o -c src/data_structures/map.c		
+#### Map
+data_structures_heap: 
+		$(cc) -o bin/heap.o -c src/data_structures/heap.c		
 		
 		
 #### Global Test File for Data Structures
@@ -50,7 +63,9 @@ data_structures_tests_data_structures_test:
 		$(cc) -o bin/data_structures_test.o \
 			  -c src/data_structures/tests/data_structures_test.c
 		
-		
+### Includes
+includes: 
+		$(cc) -o bin/includes.o -c src/includes.c		
 		
 # END Declaration of object files creation
 		
@@ -66,8 +81,8 @@ clear_data_structures_test :
 	rm data_structures_test;
 
 ### Data structures tests
-data_structures_test : data_structures_graph data_structures_list \
-	data_structures_stack data_structures_tree \
+data_structures_test : data_structures_graph data_structures_list data_structures_heap \
+	data_structures_stack data_structures_tree data_structures_map includes \
 	data_structures_tests_data_structures_test 
 	$(cc) -o data_structures_test $(data_structures_test)
 
