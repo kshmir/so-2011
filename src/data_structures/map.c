@@ -93,7 +93,12 @@ int map_set(map m, void_p key, void_p value) {
 void_p map_get(map m, void_p key) {
 	c_index = m->comparer_index;
 	data * d = (data *)tree_get(m->t, key);
-	return d->value;
+	if (d != NULL)
+		return d->value;
+	else {
+		return NULL;
+	}
+
 }
 
 // This method should be locked

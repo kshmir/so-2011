@@ -20,7 +20,7 @@ typedef struct list * list;
 list list_init();
 
 // Free's up the list
-void list_free();
+void list_free(list l);
 
 // Adds an element to the list.
 int list_add(list p, void_p obj);
@@ -31,8 +31,11 @@ int list_size(list p);
 // Retreives an element in the given index of the list
 void_p list_get(list p, int index);
 
+// Retreives an element in the given index of the list
+void_p list_get(list p, int index);
+
 // Inserts an element in the given index of the list
-int list_insert(list p, int index, void_p ptr);
+int list_indexOf(list p, void_p ptr, comparer comp);
 
 // Removes an element in the given index of the list
 int list_remove(list p, int index);

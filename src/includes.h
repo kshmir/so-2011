@@ -16,6 +16,8 @@
 
 #define TRUE 1
 #define FALSE 0
+#include <stdio.h>
+#include <stdlib.h>
 
 // void pointer for all our solutions
 typedef void * void_p;
@@ -30,6 +32,8 @@ typedef void_p (*cloner)(void_p);
 #define Error( Str )        FatalError( Str )
 #define FatalError( Str )   fprintf( stderr, "%s\n", Str ), exit( 1 )
 
+int pointer_comparer(void_p int1, void_p int2);
+
 int int_comparer(void_p int1, void_p int2);
 
 int double_comparer(void_p double1, void_p double2);
@@ -41,6 +45,8 @@ void int_printer(void_p int1);
 void double_printer(void_p double1);
 
 void string_printer(void_p s1);
+
+void_p pointer_cloner(void_p);
 
 void_p int_cloner(void_p int1);
 

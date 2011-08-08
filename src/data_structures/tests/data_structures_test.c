@@ -16,7 +16,11 @@
 #include "../list.h"
 #include "../tree.h"
 #include "../map.h"
+<<<<<<< HEAD
 #include "../graph.h"
+=======
+#include "../heap.h"
+>>>>>>> b49449430194692a016db520d5732c49c1713b22
 
 void separator() {
 	printf("------------------------------------\n");	
@@ -69,6 +73,13 @@ void list_test() {
 	assert(list_insert(lista, 4, pointer) == 4);
 	assert(list_insert(lista, 0, pointer) == 0);
 	assert(list_insert(lista, 1, pointer) == 1);
+	printf("DONE!\n");
+	
+	int ob = 0;
+	printf("I should be able to get elements between 0 to n\n");
+	assert(list_indexOf(lista, &ob, int_comparer) != -1);		
+	ob = -10;
+	assert(list_indexOf(lista, &ob, int_comparer) == -1);		
 	printf("DONE!\n");
 	
 	printf("I should be able to remove elements\n");
@@ -193,6 +204,11 @@ void map_test() {
 	}
 	printf("DONE!\n");
 	
+	int x = -100;
+	
+	printf("It should return NULL if the key is not inside the map\n");
+	assert(map_get(m, &x) == NULL);
+	printf("DONE!\n");
 	
 	printf("It should be able to print values and keys of the map\n");
 	int ** values = (int **) map_values(m);
@@ -225,6 +241,7 @@ void map_test() {
 	separator();
 }
 
+<<<<<<< HEAD
 void graph_test(){
 	separator();
 	
@@ -274,6 +291,40 @@ void graph_test(){
 	
 	printf("Testing access functions.");
 	printf("DONE!/n");
+=======
+void heap_test() {
+	separator();
+	printf("Testing heap structure\n");
+	
+	heap h = heap_init(1024,int_comparer);
+	
+	int datos[1024*1024];
+	int i = 0;
+	printf("Inserting 1M records and resizing on the go \n");
+	for (; i < 1024*1024; i++) {
+		datos[i] = 1024*1024 - 1 - i;
+		if (heap_full(h))
+		{
+			h = heap_expand(h);
+		}
+		
+		heap_insert(&(datos[i]), h);
+	}
+	printf("DONE!\n");
+	
+	printf("Removing 1M records \n");
+	i = 0;
+	
+	for (; i < 1024*1024; i++) {
+		int a = *((int*)heap_remove_min(h));
+		assert(a == i);
+	}
+	printf("DONE!\n");
+	
+	heap_free(h);
+	
+	separator();
+>>>>>>> b49449430194692a016db520d5732c49c1713b22
 }
 
 int main(int argc, char ** argv) {
@@ -282,6 +333,6 @@ int main(int argc, char ** argv) {
 	stack_test();		// Stack,	 for algorithms.
 	list_test();		// List,	 for manipulating data.
 	map_test();			// Map,		 for storing data. (uses tree!)
-	//heap_test();		// Heap,     for algorithms / queuing data (proccesses)
+	heap_test();		// Heap,     for algorithms / queuing data (proccesses)
 	return 0;
 }
