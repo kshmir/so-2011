@@ -108,6 +108,10 @@ void list_free(list p) {
 	}
 }
 
+int list_size(list l) {
+	return l->size;
+}
+
 // Inserts data to the list.
 // Returns -1 if it's a in invalid operation, or the index if it's valid.
 int list_insert(list p, int index, void_p  ptr) {
