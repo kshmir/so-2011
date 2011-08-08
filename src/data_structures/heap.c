@@ -1,10 +1,9 @@
 /*
- *  heap.c
- *  so-2011
+ *  The code of this heap is based on this implementation
+ *  http://cprogramminglanguage.net/binary-heap-c-code.aspx
  *
  *  Created by Cristian Pereyra on 07/08/11.
  *  Copyright 2011 My Own. All rights reserved.
- *
  */
 
 #include "../includes.h"

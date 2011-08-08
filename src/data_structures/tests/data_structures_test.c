@@ -200,6 +200,11 @@ void map_test() {
 	}
 	printf("DONE!\n");
 	
+	int x = -100;
+	
+	printf("It should return NULL if the key is not inside the map\n");
+	assert(map_get(m, &x) == NULL);
+	printf("DONE!\n");
 	
 	printf("It should be able to print values and keys of the map\n");
 	int ** values = (int **) map_values(m);
@@ -240,6 +245,7 @@ void heap_test() {
 	
 	int datos[1024*1024];
 	int i = 0;
+	printf("Inserting 1M records and resizing on the go \n");
 	for (; i < 1024*1024; i++) {
 		datos[i] = 1024*1024 - 1 - i;
 		if (heap_full(h))
@@ -249,13 +255,16 @@ void heap_test() {
 		
 		heap_insert(&(datos[i]), h);
 	}
+	printf("DONE!\n");
+	
+	printf("Removing 1M records \n");
 	i = 0;
 	
 	for (; i < 1024*1024; i++) {
 		int a = *((int*)heap_remove_min(h));
 		assert(a == i);
 	}
-	
+	printf("DONE!\n");
 	
 	heap_free(h);
 	

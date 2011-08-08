@@ -1,5 +1,11 @@
-# include<stdio.h>
+/**
+	Code of the implementation: 
+	http://www.daniweb.com/software-development/c/code/216526
+ **/
+
+#include <stdio.h>
 #include <stdlib.h>
+
 
 #include "../includes.h"
 #include "tree.h"

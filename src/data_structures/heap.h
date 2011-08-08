@@ -1,10 +1,9 @@
 /*
- *  heap.h
- *  so-2011
+ *  The code of this heap is based on this implementation
+ *  http://cprogramminglanguage.net/binary-heap-c-code.aspx
  *
  *  Created by Cristian Pereyra on 07/08/11.
  *  Copyright 2011 My Own. All rights reserved.
- *
  */
 
 #ifndef _HEAP_H_
@@ -12,8 +11,6 @@
 
 struct HeapStruct;
 typedef struct HeapStruct * heap;
-
-
 
 
 heap heap_init(int max_elements, comparer comp);
