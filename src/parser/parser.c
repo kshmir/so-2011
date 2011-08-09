@@ -11,8 +11,8 @@ CityMap* readMap(char *filename)
         {
 	m->size = readSize(m->f);
 	
-	m->map = map_init(NULL, NULL); //TODO: estandarizar nombres: map_init o init_map, etc.
-	m->graph = init_graph(NULL, NULL);
+	m->map = map_init(string_comparer, string_cloner);
+	m->graph = graph_init(string_comparer, string_cloner);
 
 	j=0;
 	City city;	
@@ -31,7 +31,6 @@ CityMap* readMap(char *filename)
 		if(graph_get_node(m->graph, arc->from)==NULL || graph_get_node(m->graph, arc->to)==NULL)
 		return NULL;
 		graph_add_arc(m->graph, arc->from, arc->to, arc->weight);
-	
         }
 }
 
@@ -66,10 +65,32 @@ City readCity(FILE *f){
 		free(city);
 		return NULL;
 	}
-        while ((c = fgetc(f)) != EOF && !error && c!=13)
-        { 
-		name[j++]=c;	
+	city->needs = map_init(string_comparer, string_cloner);
+	int aux;
+	char* med=malloc(40);
+	int ammount;
+        while (aux=fscanf(f, "$40s $d\n",med,ammount) != EOF && aux != 2)
+        { 	
+		char*a=malloc(40);
+		strcpy(a,med);
+		map_set(city->needs,med,ammount);
 	}
-	return atoi(cadena);
+	return city;
+}
+
+Arc readDistance(FILE *f)
+{
+	Arc arc=calloc(1,sizeof(Arc));
+	char* name = malloc(100);
+        int aux = 0;
+	char* from=malloc(40);
+	char* to=malloc(40);	        
+        aux=fscanf(f, "$40s $40s $d\n",from,to,dist);
+	if(aux==EOF)
+		return EOF;
+	if(aux==0)
+		return NULL;
+	//continue
+	return city;
 }
 
