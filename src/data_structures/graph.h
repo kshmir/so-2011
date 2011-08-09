@@ -64,6 +64,9 @@ int 		graph_arc_weight(arc a);
 // Devuelve el puntero al nodo del arco asociaco.
 graph_node 		graph_arc_to(arc a);
 
+int graph_arc_comparer(void_p a1, void_p a2);
+
+
 // Libera el grafo.
 void graph_free(graph g);
 

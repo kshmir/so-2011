@@ -6,15 +6,13 @@
  *  Copyright 2011 My Own. All rights reserved.
  *
  */
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "graph.h"
 #include "list.h"
 #include "map.h"
 
-struct graph{
+struct graph {
 	map nodes;
 	int	comparer_index;
 };
@@ -30,6 +28,9 @@ struct arc {
 	int weight;
 };
 
+int graph_arc_comparer(void_p a1, void_p a2) {
+	return ((arc)a1)->to - ((arc)a2)->to;
+}
 // This data is used to store the comparers of each map.
 // It would be cool to change this for something better...
 // Or at least shrink this array!!! #TODO
@@ -40,9 +41,10 @@ static comparer * comparer_storage = NULL;
 // Since it uses c_index, this should be locked.
 // Compares by the given key.
 static int compare_data(void_p id, void_p data_struct) {
-	void_p id1 = ((graph_node) id)->key;
 	return comparer_storage[c_index](id,data_struct);
 }
+
+
 
 graph_node node_init(void_p key, void_p value){
 	graph_node ret = malloc(sizeof(struct graph_node));
@@ -115,14 +117,21 @@ int graph_add_arc(graph g, void_p from, void_p to, int weight){
 	
 	arc a = arc_init(_to, weight);
 	arc b = arc_init(_from, weight);
-	if(list_indexOf(_from->arcs, a, int_comparer)!= -1 || 
-	   list_indexOf(_to->arcs, b, int_comparer) != -1){
+	if(list_indexOf(_from->arcs, a, graph_arc_comparer)!= -1 || 
+	   list_indexOf(_to->arcs, b, graph_arc_comparer) != -1){
 		free(a);
 		free(b);
 		return FALSE;
 	}
+
+	
 	list_add(_from->arcs, a);
-	list_add(_to->arcs, b);
+	if (compare_data(to, from)) {
+		list_add(_to->arcs, b); // Avoids adding twice an arc
+	} else {
+		free(b);
+	}
+
 	return TRUE;
 }
 
@@ -131,6 +140,8 @@ void_p graph_remove_node(graph g, void_p key){
 	
 	// TODO: Make this MUCH clearer. #IDEA: Make a list with comparator insertion and make free's that way.
 	// IDEA: Clean up everything
+	// This might leak!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//!!!!!!!!!!!!!!!!!!!!!
 	c_index = g->comparer_index;
 	graph_node n = map_get(g->nodes, key);
 	list arcs = n->arcs;
@@ -147,7 +158,6 @@ void_p graph_remove_node(graph g, void_p key){
 			graph_node aux = ((arc)list_get(newList, j))->to;
 			if (aux == n) {
 				list_remove(newList, j);
-				free(aux);
 				dont_clear = TRUE;
 			}
 		}
@@ -218,25 +228,25 @@ graph_node graph_get_node(graph g, void_p key){
 // + el puntero a lo que almacena + la lista de arcos.
 
 // Devuelve la clave del nodo
-void_p		graph_node_key(graph_node n){
+void_p graph_node_key(graph_node n){
 	return n->key;
 }
 // Devuelve el valor del nodo
-void_p		graph_node_value(graph_node n){
+void_p graph_node_value(graph_node n){
 	return n->value;
 }
 // Devuelve los arcos del nodo
-list		graph_node_arcs(graph_node n){
+list graph_node_arcs(graph_node n){
 	return n->arcs;
 }
 
 // Arc debería contener un int y un puntero a un nodo.
 // Devuelve el peso del arco asociado
-int 		graph_arc_weight(arc a){
+int graph_arc_weight(arc a){
 	return a->weight;
 }
 // Devuelve el puntero al nodo del arco asociaco.
-graph_node 		graph_arc_to(arc a){
+graph_node graph_arc_to(arc a){
 	return a->to;
 }
 

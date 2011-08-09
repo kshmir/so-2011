@@ -261,6 +261,8 @@ void map_test() {
 	separator();
 }
 
+
+
 void graph_test(){
 	separator();
 	
@@ -292,16 +294,31 @@ void graph_test(){
 	printf("Adding arcs.............\n");
 	for (i = 0; i<100; i++) {
 		int *key = malloc(sizeof(int));
-		int *value = malloc(sizeof(int));
 		int x = 1001;
+		int j = 0;
 		*key = i;
-		*value = i;
-		assert(graph_add_arc(g1, key, &x, i) == FALSE);
+		for (j = 0; j < 100; j++) {
+			int *value = malloc(sizeof(int));
+			*value = j;
+			assert(graph_add_arc(g1, key, &x, i) == FALSE);
+			
+			graph_node n = graph_get_node(g1, key);
+			list arcs = graph_node_arcs(n);
+			arc a = arc_init(graph_get_node(g1, value), 0);
+			if (list_indexOf(arcs, a, graph_arc_comparer) == -1) {
+				assert(graph_add_arc(g1, key, value, i) == TRUE);
+			}
+			else {
+				assert(graph_add_arc(g1, key, value, i) == FALSE);
+			}
+			free(a);
+		}
+
 		if(graph_get_node(g2, value)) {
-			assert(graph_add_arc(g2, value, key, i+100) == TRUE);
+			graph_add_arc(g2, value, &j, i+100);
 		}
 		else {
-			assert(graph_add_arc(g2, value, key, i+100) == FALSE);
+			graph_add_arc(g2, value, key, i+100);
 		}
 	}
 	*key = 100;
@@ -311,23 +328,41 @@ void graph_test(){
 	
 	printf("Removing nodes...........\n");
 
+
 	for (i = 0; i<100; i+=2) {
 		int *key = malloc(sizeof(int));
 		int *value = malloc(sizeof(int));
 		int x = 1001;
 		*key = i;
 		*value = i;
+
 		graph_remove_node(g1, key);
 		graph_remove_node(g2, key);
 	}
 	
 	assert(graph_size(g1) == 50);
 	assert(graph_size(g2) == 50);
-	
+
 	printf("DONE!\n");
 	
 	printf("Removing arcs............\n");
-	printf("NOT DONE!\n");
+	for (i = 0; i<100; i++) {
+		int *key = malloc(sizeof(int));
+		int *value = malloc(sizeof(int));
+		int x = 1001;
+		*key = i;
+		*value = i;
+		if(graph_get_node(g1, key) != NULL) {
+			graph_node n = graph_get_node(g1, key);
+			assert(list_size(graph_node_arcs(n)) == 51); // No sé si este assert debería ser 50 o no...
+			graph_remove_arc(g1, key, value);
+			assert(list_size(graph_node_arcs(n)) == 50);
+		}
+
+	}
+
+	
+	printf("DONE!\n");
 	
 	printf("Testing access functions.\n");
 	printf("NOT DONE!\n");
@@ -368,11 +403,11 @@ void heap_test() {
 
 int main(int argc, char ** argv) {
 	
-	//tree_test();		// AVL Tree, for general storage.
-	//stack_test();		// Stack,	 for algorithms.
-	//list_test();		// List,	 for manipulating data.
-	//map_test();			// Map,		 for storing data. (uses tree!)
-	//heap_test();		// Heap,     for algorithms / queuing data (proccesses)
+	tree_test();		// AVL Tree, for general storage.
+	stack_test();		// Stack,	 for algorithms.
+	list_test();		// List,	 for manipulating data.
+	map_test();			// Map,		 for storing data. (uses tree!)
+	heap_test();		// Heap,     for algorithms / queuing data (proccesses)
 	graph_test();
 	return 0;
 }
