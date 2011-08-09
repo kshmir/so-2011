@@ -91,9 +91,10 @@ int map_set(map m, void_p key, void_p value) {
 	d->value = value;
 	c_index = m->comparer_index;
 	if (tree_add(m->t, d)){
-		tree_print(m->t,struct_data_int_printer); // This should be lockable or won't handle 
+		// This should be lockable or won't handle 
+		// multiple threads!!!!!!!!!!
 		return 1;			
-	}	// multiple threads!!!!!!!!!!
+	}	
 	else {
 		free(d);
 		return 0;

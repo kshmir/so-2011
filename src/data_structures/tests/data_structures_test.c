@@ -273,14 +273,12 @@ void graph_test(){
 	
 	printf("Adding nodes.............\n");
 	int i = 0;
-	for (i = 0; i<10; i++) {
+	for (i = 0; i<100; i++) {
 		int *key = malloc(sizeof(int));
 		int *value = malloc(sizeof(int));
 		*key = i;
-		*value = 9 - i;
+		*value = i;
 
-		
-		separator();
 		assert(graph_add_node(g1, key, value) == TRUE);
 		assert(graph_add_node(g2, value, key) == TRUE);
 	}
@@ -292,14 +290,19 @@ void graph_test(){
 	printf("DONE!\n");
 	
 	printf("Adding arcs.............\n");
-	for (i = 0; i<9; i++) {
+	for (i = 0; i<100; i++) {
 		int *key = malloc(sizeof(int));
 		int *value = malloc(sizeof(int));
-		int x = 15;
+		int x = 1001;
 		*key = i;
-		*value = 8;
+		*value = i;
 		assert(graph_add_arc(g1, key, &x, i) == FALSE);
-		assert(graph_add_arc(g2, value, key, i+100) == TRUE);
+		if(graph_get_node(g2, value)) {
+			assert(graph_add_arc(g2, value, key, i+100) == TRUE);
+		}
+		else {
+			assert(graph_add_arc(g2, value, key, i+100) == FALSE);
+		}
 	}
 	*key = 100;
 	*value = 101;
@@ -307,7 +310,21 @@ void graph_test(){
 	printf("DONE!\n");
 	
 	printf("Removing nodes...........\n");
-	printf("NOT DONE!\n");
+
+	for (i = 0; i<100; i+=2) {
+		int *key = malloc(sizeof(int));
+		int *value = malloc(sizeof(int));
+		int x = 1001;
+		*key = i;
+		*value = i;
+		graph_remove_node(g1, key);
+		graph_remove_node(g2, key);
+	}
+	
+	assert(graph_size(g1) == 50);
+	assert(graph_size(g2) == 50);
+	
+	printf("DONE!\n");
 	
 	printf("Removing arcs............\n");
 	printf("NOT DONE!\n");

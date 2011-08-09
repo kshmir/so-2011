@@ -31,9 +31,6 @@ int list_size(list p);
 // Retreives an element in the given index of the list
 void_p list_get(list p, int index);
 
-// Retreives an element in the given index of the list
-void_p list_get(list p, int index);
-
 // Inserts an element in the given index of the list
 int list_indexOf(list p, void_p ptr, comparer comp);
 

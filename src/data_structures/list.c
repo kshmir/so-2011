@@ -36,7 +36,7 @@ list list_init() {
 }
 
 // Adds the pointer to the list.
-int list_add(list p, void_p  obj) {
+int list_add(list p, void_p obj) {
 	if (p == NULL) {
 		return -1;
 	}
@@ -162,6 +162,7 @@ int list_remove(list l, int index) {
 		node n = l->header;
 		l->header = n->next;
 		free(n);
+		l->size--;
 	}
 	else {
 		int i = 0;
@@ -174,6 +175,7 @@ int list_remove(list l, int index) {
 		}
 		last->next = n->next;
 		free(n);
+		l->size--;
 	}
 	
 	return index;
