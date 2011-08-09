@@ -136,6 +136,7 @@ void tree_test() {
 		int * data = (int*) malloc(sizeof(int));
 		*data = i;
 		assert(tree_add(t, data) == 1);
+		assert(tree_add(t, data) == 0);
 	}
 	printf("DONE!\n");
 	
@@ -202,8 +203,11 @@ void map_test() {
 		*val = i * i;
 		map_set(m,  key, val);
 		map_set(m2, val, key);
+		assert(map_set(m,key,val) == 0);
+		assert(map_set(m2,val,key) == 0);
 	}
 	printf("DONE!\n");
+
 
 	printf("It should be able to get elements\n");
 	for(i = 0; i < 1024; i++)
@@ -260,52 +264,56 @@ void map_test() {
 void graph_test(){
 	separator();
 	
-	printf("Testing Graph ADT/n");
+	printf("Testing Graph ADT\n");
 	
-	printf("Initializing 2 graphs.............");
-	graph g1 = graph_init(NULL, NULL);
-	graph g2 = graph_init(NULL, NULL);
-	printf("DONE!/n");
+	printf("Initializing 2 graphs.............\n");
+	graph g1 = graph_init(int_comparer, int_cloner);
+	graph g2 = graph_init(int_comparer, int_cloner);
+	printf("DONE!\n");
 	
-	printf("Adding nodes.............");
+	printf("Adding nodes.............\n");
 	int i = 0;
 	for (i = 0; i<10; i++) {
 		int *key = malloc(sizeof(int));
 		int *value = malloc(sizeof(int));
 		*key = i;
-		*value = i+10;
-		assert(graph_add_node(g1, key, value));
-		assert(graph_add_node(g2, value, key));
+		*value = 9 - i;
+
+		
+		separator();
+		assert(graph_add_node(g1, key, value) == TRUE);
+		assert(graph_add_node(g2, value, key) == TRUE);
 	}
 	int * key = malloc(sizeof(int));
 	int * value = malloc(sizeof(int));
 	*key = 0;
 	*value = 10;
 	assert(!graph_add_node(g1, key, value));
-	printf("DONE!/n");
+	printf("DONE!\n");
 	
-	printf("Adding arcs.............");
-	for (i = 0; i<10; i++) {
+	printf("Adding arcs.............\n");
+	for (i = 0; i<9; i++) {
 		int *key = malloc(sizeof(int));
 		int *value = malloc(sizeof(int));
+		int x = 15;
 		*key = i;
-		*value = i+10;
-		assert(graph_add_arc(g1, key, value, i));
-		assert(graph_add_arc(g2, value, key, i+100));
+		*value = 8;
+		assert(graph_add_arc(g1, key, &x, i) == FALSE);
+		assert(graph_add_arc(g2, value, key, i+100) == TRUE);
 	}
 	*key = 100;
 	*value = 101;
 	assert(!graph_add_arc(g1, key, value, 100));
-	printf("DONE!/n");
+	printf("DONE!\n");
 	
-	printf("Removing nodes...........");
-	printf("DONE!/n");
+	printf("Removing nodes...........\n");
+	printf("NOT DONE!\n");
 	
-	printf("Removing arcs............");
-	printf("DONE!/n");
+	printf("Removing arcs............\n");
+	printf("NOT DONE!\n");
 	
-	printf("Testing access functions.");
-	printf("DONE!/n");
+	printf("Testing access functions.\n");
+	printf("NOT DONE!\n");
 }
 
 void heap_test() {
@@ -319,8 +327,7 @@ void heap_test() {
 	printf("Inserting 1M records and resizing on the go \n");
 	for (; i < 1024*1024; i++) {
 		datos[i] = 1024*1024 - 1 - i;
-		if (heap_full(h))
-		{
+		if (heap_full(h)) {
 			h = heap_expand(h);
 		}
 		
@@ -344,10 +351,11 @@ void heap_test() {
 
 int main(int argc, char ** argv) {
 	
-	tree_test();		// AVL Tree, for general storage.
-	stack_test();		// Stack,	 for algorithms.
-	list_test();		// List,	 for manipulating data.
-	map_test();			// Map,		 for storing data. (uses tree!)
-	heap_test();		// Heap,     for algorithms / queuing data (proccesses)
+	//tree_test();		// AVL Tree, for general storage.
+	//stack_test();		// Stack,	 for algorithms.
+	//list_test();		// List,	 for manipulating data.
+	//map_test();			// Map,		 for storing data. (uses tree!)
+	//heap_test();		// Heap,     for algorithms / queuing data (proccesses)
+	graph_test();
 	return 0;
 }

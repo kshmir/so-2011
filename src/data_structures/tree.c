@@ -394,9 +394,11 @@ void_p tree_delete(tree t, void_p e)
 int tree_add(tree t, void_p e)
 {
 	int boolean = 0;
-	t->header = Binary_Tree(t, e, t->header, t->H, &boolean);
-	if (!boolean)
+	boolean = tree_get(t,e) != NULL;
+	if (!boolean) {
+		t->header = Binary_Tree(t, e, t->header, t->H, &boolean);
 		t->size++;
+	}
 	return !boolean;
 }
 
@@ -420,6 +422,7 @@ void_p tree_get(tree t, void_p e)
 void tree_print(tree t, printer p)
 {
 	Output(t->header, 0, p);
+	printf("\n");
 }
 
 int tree_size(tree t)

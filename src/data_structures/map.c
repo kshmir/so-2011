@@ -16,6 +16,9 @@
 // in order to make fast insertions and deletions of data.
 // And at the same time it can retrieve the data sorted in O(n)
 
+void struct_data_int_printer(void_p int1) {
+	printf("%d",**((int**)int1));
+}
 
 // This is the data container which is sent to the tree
 struct data {
@@ -41,7 +44,8 @@ static comparer * comparer_storage = NULL;
 // Compares by the given key.
 int compare_data(void_p id, void_p data_struct) {
 	void_p id2 = (void_p)((data*) data_struct)->key;
-	return comparer_storage[c_index](id,id2);
+	void_p id1 = (void_p)((data*) id)->key;
+	return comparer_storage[c_index](id1,id2);
 }
 
 // Starts the map and stores the cloner and comparer
@@ -86,14 +90,24 @@ int map_set(map m, void_p key, void_p value) {
 	}
 	d->value = value;
 	c_index = m->comparer_index;
-	return tree_add(m->t, d); // This should be lockable or won't handle 
-							  // multiple threads!!!!!!!!!!
+	if (tree_add(m->t, d)){
+		tree_print(m->t,struct_data_int_printer); // This should be lockable or won't handle 
+		return 1;			
+	}	// multiple threads!!!!!!!!!!
+	else {
+		free(d);
+		return 0;
+	}
+
 }
 
 // This method should be locked
 void_p map_get(map m, void_p key) {
+	data * finder = (data*) malloc(sizeof(data));
+	finder->key = key;
 	c_index = m->comparer_index;
-	data * d = (data *)tree_get(m->t, key);
+	data * d = (data *)tree_get(m->t, finder);
+	free(finder);
 	if (d != NULL)
 		return d->value;
 	else {
@@ -104,8 +118,11 @@ void_p map_get(map m, void_p key) {
 
 // This method should be locked
 void_p map_remove(map m, void_p key) {
+	data * finder = (data*) malloc(sizeof(data));
+	finder->key = key;
 	c_index = m->comparer_index;
-	data * d = (data *)tree_delete(m->t, key);	
+	data * d = (data *)tree_delete(m->t, finder);	
+	free(finder);	
 	void_p ret = d->value;
 	if (m->clon_function) {
 		free(d->key);

@@ -17,6 +17,7 @@
 
 struct graph{
 	map nodes;
+	int	comparer_index;
 };
 
 struct graph_node{
@@ -29,6 +30,20 @@ struct arc{
 	node to;
 	int weight;
 };
+
+// This data is used to store the comparers of each map.
+// It would be cool to change this for something better...
+// Or at least shrink this array!!! #TODO
+static int comparers = 0;
+static int c_index = -1;
+static comparer * comparer_storage = NULL;
+
+// Since it uses c_index, this should be locked.
+// Compares by the given key.
+static int compare_data(void_p id, void_p data_struct) {
+	void_p id1 = ((node) id)->key;
+	return comparer_storage[c_index](id,data_struct);
+}
 
 node node_init(void_p key, void_p value){
 	node ret = malloc(sizeof(struct graph_node));
@@ -47,34 +62,62 @@ arc arc_init(node to, int weight){
 
 graph graph_init(comparer comp, cloner clon){
 	graph ret = malloc(sizeof(struct graph));
-	ret->nodes = map_init(comp, clon);
+	ret->nodes = map_init(compare_data, clon);
+	ret->comparer_index = comparers;
+	// Builds the comparer array for each new map.
+	// It could have a threshold...
+	if (comparer_storage == NULL) {
+		comparer_storage = (comparer*)malloc(sizeof(comparer));
+		*comparer_storage = comp;
+	} else {
+		comparer * old = comparer_storage;
+		comparer_storage = (comparer*) malloc(sizeof(comparer) * (comparers + 1));
+		int i = 0;
+		for (; i < comparers; i++) {
+			comparer_storage[i] = old[i];
+		}
+		comparer_storage[i] = comp;
+	}
+	
+	comparers++;
 	return ret;
 }
 
 // Agrega un nodo al grafo con la clave dada.
 int graph_add_node(graph g, void_p key, void_p value){
+	c_index = g->comparer_index;
 	node n = node_init(key, value);
-	return map_set(g->nodes, key, n);
+	map_set(g->nodes, key, n);
 }
 
 // Agrega un arco al grafo desde la primera clave hacia la segunda
 // Marcando el peso dado.
 int graph_add_arc(graph g, void_p from, void_p to, int weight){
-	arc a = arc_init(map_get(g->nodes, to), weight);
-	arc b = arc_init(map_get(g->nodes, from), weight);
-	if(list_indexOf(map_get(g->nodes, from), a, NULL)!= -1 || 
-	   list_indexOf(map_get(g->nodes, to), b, NULL) != -1){
+	c_index = g->comparer_index;
+	node _to = (node) map_get(g->nodes, to);
+	node _from = (node) map_get(g->nodes, from);
+	
+	if (_to == NULL || _from == NULL) {
+		return FALSE;
+	}
+	
+	
+	arc a = arc_init(_to, weight);
+	arc b = arc_init(_from, weight);
+	if(list_indexOf(_from->arcs, a, int_comparer)!= -1 || 
+	   list_indexOf(_to->arcs, b, int_comparer) != -1){
 		free(a);
 		free(b);
 		return FALSE;
 	}
-	list_add(((node)(map_get(g->nodes, from)))->arcs, a);
-	list_add(((node)(map_get(g->nodes, to)))->arcs, b);
+	list_add(_from->arcs, a);
+	list_add(_to->arcs, b);
 	return TRUE;
 }
 
 // Saca un nodo del grafo, sacando todos los arcos también!!! y freeing!
 void_p graph_remove_node(graph g, void_p key){
+	c_index = g->comparer_index;
 	node n = map_get(g->nodes, key);
 	list arcs = n->arcs;
 	int i = 0;
@@ -98,6 +141,7 @@ void_p graph_remove_node(graph g, void_p key){
 
 // Saca un arco del grafo. Hace free de la estructura interna
 int graph_remove_arc(graph g, void_p from, void_p to){
+	c_index = g->comparer_index;
 	node nFrom = map_get(g->nodes, from);
 	node nTo = map_get(g->nodes, to);
 	if(nFrom == NULL || nTo == NULL)
@@ -128,16 +172,19 @@ int graph_remove_arc(graph g, void_p from, void_p to){
 
 // Devuelve los punteros a las claves del grafo
 list graph_keys(graph g){
+	c_index = g->comparer_index;
 	return map_keys(g->nodes);
 }
 
 // Devuelve los punteros a los nodos almacenados en el grafo.
 list graph_nodes(graph g){
+	c_index = g->comparer_index;
 	return map_values(g->nodes);
 }
 
 // Devuelve el nodo de la clave dada
 node graph_get_node(graph g, void_p key){
+	c_index = g->comparer_index;
 	return map_get(g->nodes, key);
 }
 
@@ -170,6 +217,7 @@ node 		graph_arc_to(arc a){
 
 // Libera el grafo.
 void graph_free(graph g){//TODO ver si map_keys devuelve una lista
+	c_index = g->comparer_index;
 	list nodes = graph_keys(g);
 	int i = 0;
 	for (i = 0; i < list_size(nodes); i++) {
