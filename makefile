@@ -16,10 +16,16 @@ data_structures_test = \
 	bin/heap.o \
 	bin/includes.o \
 	bin/data_structures_test.o
+
 	
-### Examples	
+### Examples
 example_1 = \
 	bin/ejemplo_1.o
+	
+### Utils	
+utils = \
+	bin/cstring.o \
+	bin/utils_test.o
 
 ### TP1
 tp1 = \
@@ -27,7 +33,7 @@ tp1 = \
 	
 	
 ### Flags and declarations	
-cc = gcc -g -m32
+cc = gcc -m32 -g 
 
 
 # END of Declaration of requirements for each target
@@ -53,15 +59,21 @@ data_structures_tree:
 #### Map
 data_structures_map: 
 		$(cc) -o bin/map.o -c src/data_structures/map.c		
-#### Map
+#### Heap
 data_structures_heap: 
-		$(cc) -o bin/heap.o -c src/data_structures/heap.c		
+		$(cc) -o bin/heap.o -c src/data_structures/heap.c		                    
 		
 		
 #### Global Test File for Data Structures
 data_structures_tests_data_structures_test: 
 		$(cc) -o bin/data_structures_test.o \
 			  -c src/data_structures/tests/data_structures_test.c
+			  
+utils_cstring: 
+		$(cc) -o bin/cstring.o -c src/utils/cstring.c		                    
+		
+utils_test_build: 
+	$(cc) -o bin/utils_test.o -c src/utils/utils_test.c		                    
 		
 ### Includes
 includes: 
@@ -79,12 +91,19 @@ includes:
 clear_data_structures_test :
 	rm bin/*.o;
 	rm data_structures_test;
+	
+clear_utils_test:
+	rm bin/*.o;
+	rm utils_test;	
 
 ### Data structures tests
 data_structures_test : data_structures_graph data_structures_list data_structures_heap \
 	data_structures_stack data_structures_tree data_structures_map includes \
 	data_structures_tests_data_structures_test 
 	$(cc) -o data_structures_test $(data_structures_test)
+	
+utils_test :  utils_cstring utils_test_build
+	$(cc) -o utils_test $(utils)
 
 ### Generates tp1
 tp1: 
@@ -111,10 +130,14 @@ show_usage:
 	@echo "Usage: \"make {action}\"\n"
 	
 	@echo "\taction:"
-	@echo "\t\ttp{number}(_test)"
-	@echo "\t\tdata_structures_test"
-	@echo "\t\texample{number}"
-	@echo "\t\tclean_{target}"
+	@echo "\t\tfinal binaries:"
+	@echo "\t\t\ttp{number}(_test)"
+	@echo "\t\t\texample{number}"
+	@echo "\t\ttests:"
+	@echo "\t\t\tdata_structures_test"
+	@echo "\t\t\tutils_test"
+	@echo "\t\tcleaning:"
+	@echo "\t\t\tclean_{target}"
 	
 	
 	@echo "--------------------------------------------"

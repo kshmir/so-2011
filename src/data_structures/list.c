@@ -199,3 +199,15 @@ int list_indexOf(list p, void_p ptr, comparer comp) {
 	
 	return -1;
 }
+
+void_p list_header(list p) {
+	return p->header;
+}
+
+void_p list_node_next(void_p n) {
+	return ((node)n)->next;
+}
+
+void_p list_node_value(void_p n) { 
+	return ((node)n)->data;
+}

@@ -38,13 +38,13 @@ int int_comparer(void_p int1, void_p int2);
 
 int double_comparer(void_p double1, void_p double2);
 
-int string_comparer(void_p s1, void_p s2);
+int cstring_comparer(void_p s1, void_p s2);
 
 void int_printer(void_p int1);
 
 void double_printer(void_p double1);
 
-void string_printer(void_p s1);
+void cstring_printer(void_p s1);
 
 void_p pointer_cloner(void_p);
 
@@ -52,6 +52,6 @@ void_p int_cloner(void_p int1);
 
 void_p double_cloner(void_p double1);
 
-void_p string_cloner(void_p s1);
+void_p cstring_cloner(void_p s1);
 
 #endif

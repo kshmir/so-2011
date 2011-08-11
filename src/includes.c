@@ -39,7 +39,7 @@ int double_comparer(void_p double1, void_p double2) {
 	}
 }
 
-int string_comparer(void_p s1, void_p s2) {
+int cstring_comparer(void_p s1, void_p s2) {
 	return strcmp(*(char**)s1, *(char**)s2);
 }
 
@@ -51,7 +51,7 @@ void double_printer(void_p double1){
 	printf("%g",*((double*)double1));
 }
 
-void string_printer(void_p s1) {
+void cstring_printer(void_p s1) {
 	printf("%s",(char*)s1);
 }
 
@@ -70,7 +70,7 @@ void_p double_cloner(void_p double1){
 	return nuevo;
 }
 
-void_p string_cloner(void_p s1) {
+void_p cstring_cloner(void_p s1) {
 	char * _s1 = * (char **) s1;
 	int len = strlen(_s1);
 	char ** nuevo = (char **)malloc(sizeof(char*) * (len+1));

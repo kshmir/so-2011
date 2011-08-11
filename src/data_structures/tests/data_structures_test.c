@@ -304,7 +304,7 @@ void graph_test(){
 			
 			graph_node n = graph_get_node(g1, key);
 			list arcs = graph_node_arcs(n);
-			arc a = arc_init(graph_get_node(g1, value), 0);
+			graph_arc a = (graph_arc) arc_init((graph_node)graph_get_node(g1, value), 0);
 			if (list_indexOf(arcs, a, graph_arc_comparer) == -1) {
 				assert(graph_add_arc(g1, key, value, i) == TRUE);
 			}
@@ -360,8 +360,6 @@ void graph_test(){
 		}
 
 	}
-
-	
 	printf("DONE!\n");
 	
 	printf("Testing access functions.\n");
