@@ -8,8 +8,8 @@ includes = \
 	bin/includes.o
 
 data_structures_test = \
-	bin/graph.o \
 	bin/list.o \
+	bin/graph.o \
 	bin/stack.o \
 	bin/tree.o \
 	bin/map.o \
@@ -81,7 +81,7 @@ clear_data_structures_test :
 	rm data_structures_test;
 
 ### Data structures tests
-data_structures_test : data_structures_graph data_structures_list data_structures_heap \
+data_structures_test : data_structures_list data_structures_graph data_structures_heap \
 	data_structures_stack data_structures_tree data_structures_map includes \
 	data_structures_tests_data_structures_test 
 	$(cc) -o data_structures_test $(data_structures_test)
