@@ -12,15 +12,12 @@ void core_test() {
 
 void networking_test() {
 	sim_transporter t = sim_transporter_fork(C_PIPE, P_TESTER, 0, 1);
-	cstring ans = sim_transporter_listen(t);
-	printf("%s", ans);
+	sim_transporter_write(t, "MAXI GAY\n");
+	printf("end server");
 }
 
 int main(int argc, char ** params) {
 	
 	networking_test();
-	core_test();
-	
-	printf("I get started!!! :D");
 	return 0;
 }

@@ -40,6 +40,7 @@ int main (int argc, char *argv[])
 		assert(0 == rc);
 	}
 	
+	pthread
 	/* wait for all threads to complete */
 	for (i=0; i<NUM_THREADS; ++i) {
 		rc = pthread_join(threads[i], NULL);

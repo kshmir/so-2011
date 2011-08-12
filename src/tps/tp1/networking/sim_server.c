@@ -19,12 +19,9 @@ sim_server sim_server_init(connection_type con) {
 	return s;
 }
 
-// Starts a new client, sending the process type as an arg and the connection type.
-int	sim_server_fork(process_type proc) {
-	// Opens a transporter between processes
-	// Transporter handles the way to switch between processes.
-	// Also opens a thread which listens to the transporter.
-	// When it receives a message from the transporter with a valid message, it sends it to it's receiver.
+
+void sim_server_listen() {
+	
 }
 
 int sim_server_add_receiver(sim_server s, cstring sequence, sim_receiver function) {
