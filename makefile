@@ -60,6 +60,7 @@ tp1_test = \
 	bin/sim_pipe_transporter.o \
 	bin/sim_smem_transporter.o \
 	bin/sim_socket_transporter.o \
+	bin/sim_local_memory_transporter.o \
 	bin/tp1_test_child.o 
 
 #//MARK: ----- TP1 Test	Child Process
@@ -76,6 +77,7 @@ tp1_test_child = \
 	bin/sim_pipe_transporter.o \
 	bin/sim_smem_transporter.o \
 	bin/sim_socket_transporter.o \
+	bin/sim_local_memory_transporter.o \
 	bin/tp1_test_child.o 
 
 #//MARK: ----- Examples declarations
@@ -183,6 +185,9 @@ sim_smem_transporter:
 sim_socket_transporter: 
 	$(cc) -o bin/sim_socket_transporter.o -c src/tps/tp1/networking/transporters/sim_socket_transporter.c
 	
+sim_local_memory_transporter: 
+	$(cc) -o bin/sim_local_memory_transporter.o -c src/tps/tp1/networking/transporters/sim_local_memory_transporter.c
+	
 sim_frontend: 
 	$(cc) -o bin/sim_frontend.o -c src/tps/tp1/sim_frontend.c
 
@@ -234,6 +239,7 @@ build_tp1: data_structures_graph \
 	sim_msg_q_transporter \
 	sim_pipe_transporter \
 	sim_smem_transporter \
+	sim_local_memory_transporter \
 	sim_socket_transporter \
 	sim_frontend \
 
