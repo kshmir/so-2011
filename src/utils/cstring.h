@@ -31,6 +31,8 @@ int cstring_len(cstring s);
 
 cstring cstring_write_c(cstring s,char c);
 
+int cstring_matches(cstring string, cstring substr);
+
 cstring cstring_join(cstring * cstrings, cstring s);
 
 cstring * cstring_split(cstring _sub, cstring s);

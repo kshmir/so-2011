@@ -9,3 +9,7 @@
 
 #include "sim_frontend.h"
 
+
+int sim_frontend_main(list params) {
+	
+}

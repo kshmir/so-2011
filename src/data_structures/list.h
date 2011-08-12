@@ -13,7 +13,8 @@
 #define _LIST_H_
 
 #define foreach(item, list) \
-	for(void_p item = list_header(list); item != NULL; item = list_node_next(item))
+	void_p item = NULL; \
+	for(item = (void_p)list_header(list); item != NULL; item = (void_p)list_node_next(item))
 
 // This makes all calls to list equal to "struct list *"
 // So BEWARE that any call to list is a pointer by itself.

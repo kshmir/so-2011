@@ -1,11 +1,11 @@
-#include "../sim_common_reqs.h"
+#include "sim_plane.h"
 
 struct sim_plane {
 	int		id;
 	cstring start_city;
 	list	medicines_keys;
 	map		medicines;
-}
+};
 
 int sim_plane_comparer(void_p a1, void_p a2) {
 	sim_plane _a1 = (sim_plane) a1;
@@ -24,7 +24,7 @@ cstring sim_plane_serialize(sim_plane p) {
 	foreach(n, p->medicines_keys) {
 		cstring key = (cstring) list_node_value(n);
 		int * value = map_get(p->medicines, key);
-		sim_keypair kp = sim_keypair_init(key, *value);
+		sim_keypair kp = (sim_keypair) sim_keypair_init(key, *value);
 		s = sim_keypair_serialize(kp);
 		s = cstring_write(s,"\n");
 		sim_keypair_free(kp);

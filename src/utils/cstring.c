@@ -186,6 +186,20 @@ cstring cstring_add_line(cstring s) {
 	return cstring_write(s, "\n");
 }
 
+int cstring_matches(cstring str, cstring s) {
+	cstring * splitted = cstring_split(str,s);
+	int result = 0, index = 0;
+	while (splitted[index] != NULL) {
+		free(splitted[index]);
+		index++;
+	}
+	if (index == 1) {
+		result = 1;
+	}
+	free(splitted);
+	return result;
+}
+
 
 void cstring_free(cstring s) {
 	free(s);

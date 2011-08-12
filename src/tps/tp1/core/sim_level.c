@@ -1,4 +1,4 @@
-#include "../sim_common_reqs.h"
+#include "sim_level.h"
 
 struct sim_level {
 	// level_distances
@@ -12,7 +12,7 @@ struct sim_level {
 		
 	sim_client frontend_client;
 	sim_server airlines_server;
-}
+};
 
 cstring sim_level_serialize(sim_level level) {		
 	// TODO: Serializes the map of the level.

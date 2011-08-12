@@ -10,7 +10,7 @@
 struct sim_keypair {
 	cstring	name;
 	int		amount;
-}
+};
 
 typedef struct sim_keypair * sim_keypair;
 
@@ -29,7 +29,7 @@ struct sim_map_relation {
 	cstring	from;
 	cstring	to;
 	int		weight;
-}
+};
 
 typedef struct sim_map_relation * sim_map_relation;
 
