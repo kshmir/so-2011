@@ -47,7 +47,7 @@ tp1 = \
 
 
 #//MARK: ----- TP1 Test
-tp1_test = \
+tp1_test_files = \
 	bin/sim_airline.o \
 	bin/sim_extra.o \
 	bin/sim_level.o \
@@ -61,10 +61,10 @@ tp1_test = \
 	bin/sim_smem_transporter.o \
 	bin/sim_socket_transporter.o \
 	bin/sim_local_memory_transporter.o \
-	bin/tp1_test_child.o 
+	bin/tp1_test.o 
 
 #//MARK: ----- TP1 Test	Child Process
-tp1_test_child = \
+tp1_test_child_files = \
 	bin/sim_airline.o \
 	bin/sim_extra.o \
 	bin/sim_level.o \
@@ -214,7 +214,6 @@ clear_utils_test:
 	rm utils_test;	
 
 ### Data structures tests
-data_structures_test : data_structures_list data_structures_graph data_structures_heap \
 data_structures_test: data_structures_graph data_structures_list data_structures_heap \
 	data_structures_stack data_structures_tree data_structures_map includes \
 	data_structures_tests_data_structures_test 
@@ -254,8 +253,8 @@ tp1_test: build_tp1 \
 	sim_tp1_test \
 	sim_tp1_test_child \
 	utils_cstring
-	$(cc) -o tp1_test_child $(tp1_test_child) $(data_structures) $(utils)
-	$(cc) -o tp1_test $(tp1_test) $(data_structures) $(utils)
+	$(cc) -o tp1_test_child $(tp1_test_child_files) $(data_structures) $(utils)
+	$(cc) -o tp1_test $(tp1_test_files) $(data_structures) $(utils)
 
 
 
