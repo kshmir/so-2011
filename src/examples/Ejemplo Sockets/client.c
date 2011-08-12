@@ -24,6 +24,9 @@ int main()
 	/* convert and store the server's IP address */
 	server.sin_addr.s_addr = inet_addr("127.0.0.1");
 
+	while(1)
+	{
+
 	/* Set up the transport end point */
 
 	if((sockfd=socket(AF_INET,SOCK_STREAM,0))==-1)
@@ -41,17 +44,18 @@ int main()
 
 	/* send and recieve information with the server */
 
-	for(rc='\n';;)
-	{
+
 		printf("Input a string\n");
-		scanf("%49s",s);
+//		scanf("%49s",s);
+		gets(s);
 
 		if(sendMsg(sockfd,s)>0)
 		{
 			printf("enviado",rc);
 			s[0]=0;
-			int a=recieveMsg(sockfd,s);
-			printf("%s  \n",s);
+			recv(sockfd,s,18,0);
+//			int a=recieveMsg(sockfd,s);
+//			printf("%s  \n",s);
 		}
 		else
 		{

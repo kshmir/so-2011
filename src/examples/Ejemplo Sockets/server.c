@@ -11,7 +11,7 @@
 #define SOCKETNUMBER 5115
 #define DEF_RSV_SIZE 51
 
-
+void doprocessing (int sock);
 void catcher(int sig);
 int newsockfd;
 
@@ -21,6 +21,7 @@ int main()
 	char* c;
 	int open=1;
 	/* The local server port */
+	struct sockaddr_in cli_addr;
 	struct sockaddr_in server = {AF_INET,SOCKETNUMBER,INADDR_ANY};
 	static struct sigaction act;
 
@@ -51,50 +52,35 @@ int main()
 		exit(1);
 	}
 
-	for(;open;)
+	int clilen = sizeof(cli_addr);
+	while (1)
 	{
-		printf("hola");
-		/* accept a connection */
-		if((newsockfd = accept(sockfd,NULL,NULL))==-1)
+		newsockfd = accept(sockfd,
+				(struct sockaddr *) &cli_addr, &clilen);
+		if (newsockfd < 0)
 		{
-			perror("accept call failed");
+			perror("ERROR on accept");
 			exit(1);
 		}
-
-		/* spawn a child to deal with the connection */
-		if(fork()!=0)
+		/* Create child process */
+		int pid = fork();
+		if (pid < 0)
 		{
-			int i=0,l=DEF_RSV_SIZE;
-			char ch;
-			c=calloc(l,sizeof(char));
-			while(recv(newsockfd,&ch,1,0)>0)
-			{
-				if(i>l)
-				{
-					l=1.2*l;
-					c=realloc(c,l);
-				}
-				if(ch=='\0')
-				{
-					c[i++]=ch;
-					c=realloc(c,i);
-					printf("Se recibio: %s",c);
-					send(newsockfd,c,i,0);
-					i=0;
-					l=DEF_RSV_SIZE;
-					c=calloc(l,sizeof(char));
-				}else
-					c[i++]=ch;
-			}
-			//				send(newsockfd,&ch,1,0);
-			/* when client is no longer sending information the socket
-			 * can be closed and the child process terminated */
-			close(newsockfd);
+			perror("ERROR on fork");
+			exit(1);
+		}
+		if (pid == 0)
+		{
+			/* This is the client process */
+//			close(sockfd);
+			doprocessing(newsockfd);
 			exit(0);
 		}
-		/* parent doen't need the newsockfd */
-		close(newsockfd);
-	}
+		else
+		{
+			close(newsockfd);
+		}
+	} /* end of while */
 }
 
 void msgRecieved(){}
@@ -104,3 +90,26 @@ void catcher(int sig)
 	close(newsockfd);
 	exit(0);
 }
+
+void doprocessing (int sock)
+{
+    int n;
+    char buffer[256];
+
+    bzero(buffer,256);
+
+    n = read(sock,buffer,255);
+    if (n < 0)
+    {
+        perror("ERROR reading from socket");
+        exit(1);
+    }
+    printf("Here is the message: %s\n",buffer);
+    n = write(sock,"I got your message",18);
+    if (n < 0)
+    {
+        perror("ERROR writing to socket");
+        exit(1);
+    }
+}
+

@@ -16,6 +16,7 @@ data_structures_test = \
 	bin/tree.o \
 	bin/map.o \
 	bin/heap.o \
+	bin/queue.o \
 	bin/includes.o \
 	bin/data_structures_test.o
 
@@ -121,7 +122,10 @@ data_structures_map:
 		$(cc) -o bin/map.o -c src/data_structures/map.c		
 #### Heap
 data_structures_heap: 
-		$(cc) -o bin/heap.o -c src/data_structures/heap.c		                    
+		$(cc) -o bin/heap.o -c src/data_structures/heap.c	
+#### Heap
+data_structures_queue: 
+		$(cc) -o bin/queue.o -c src/data_structures/queue.c		                    
 		
 		
 #### Global Test File for Data Structures
@@ -216,6 +220,7 @@ clear_utils_test:
 ### Data structures tests
 data_structures_test: data_structures_graph data_structures_list data_structures_heap \
 	data_structures_stack data_structures_tree data_structures_map includes \
+	data_structures_queue \
 	data_structures_tests_data_structures_test 
 	$(cc) -o data_structures_test $(data_structures_test)
 	
@@ -227,6 +232,7 @@ build_tp1: data_structures_graph \
 	data_structures_heap \
 	data_structures_stack \
 	data_structures_tree \
+	data_structures_queue \
 	data_structures_map includes \
 	sim_airline \
 	sim_extra \
