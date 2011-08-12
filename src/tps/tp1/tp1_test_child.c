@@ -6,10 +6,8 @@
 
 void networking_test(connection_type n, process_type p) {
 	sim_transporter t = sim_transporter_fork(n, p, 1, 0);
-	sim_message m = sim_message_init(t, "HOLA!!!");
-	sim_message r = sim_message_send(m);
-	
-	printf("%s", sim_message_read(r));
+	sim_transporter_write(t, "Hola");
+	printf("%s", ans);
 }
 
 int main(int argc, char ** params) {
