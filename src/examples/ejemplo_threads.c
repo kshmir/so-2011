@@ -18,6 +18,7 @@ void_p TaskCode(void_p argument)
 	int tid;
 	
 	tid = *((int *) argument);
+	
 	printf("Hello World! It's me, thread %d!\n", tid);
 	
 	/* optionally: insert more useful stuff here */

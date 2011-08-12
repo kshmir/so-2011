@@ -11,8 +11,8 @@
 #include "../includes.h"
 #include <stdlib.h>
 
-#ifndef _STACK_H_ 
-#define _STACK_H_
+#ifndef _CSTACK_H_ 
+#define _CSTACK_H_
 
 // TODO: Make it shrinkable 
 
@@ -34,7 +34,6 @@ int stack_push(stack pila, void_p object);
 
 // Pops an element from the stack
 void_p stack_pop(stack pila);
-
 
 // Free's up the stack
 stack stack_free(stack pila);

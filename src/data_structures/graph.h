@@ -15,7 +15,7 @@
 
 typedef struct graph_node * graph_node;
 
-typedef struct arc * arc;
+typedef struct arc * graph_arc;
 
 typedef struct graph * graph;
 
@@ -60,9 +60,9 @@ list		graph_node_arcs(graph_node n);
 
 // Arc debería contener un int y un puntero a un nodo.
 // Devuelve el peso del arco asociado
-int 		graph_arc_weight(arc a);
+int 		graph_arc_weight(graph_arc a);
 // Devuelve el puntero al nodo del arco asociaco.
-graph_node 		graph_arc_to(arc a);
+graph_node 		graph_arc_to(graph_arc a);
 
 int graph_arc_comparer(void_p a1, void_p a2);
 

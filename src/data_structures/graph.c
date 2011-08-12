@@ -29,7 +29,7 @@ struct arc {
 };
 
 int graph_arc_comparer(void_p a1, void_p a2) {
-	return ((arc)a1)->to - ((arc)a2)->to;
+	return ((graph_arc)a1)->to - ((graph_arc)a2)->to;
 }
 // This data is used to store the comparers of each map.
 // It would be cool to change this for something better...
@@ -54,8 +54,8 @@ graph_node node_init(void_p key, void_p value){
 	return ret;
 }
 
-arc arc_init(graph_node to, int weight){
-	arc ret = malloc(sizeof(struct arc));
+graph_arc arc_init(graph_node to, int weight){
+	graph_arc ret = malloc(sizeof(struct arc));
 	ret->to = to;
 	ret->weight = weight;
 	return ret;
@@ -115,8 +115,8 @@ int graph_add_arc(graph g, void_p from, void_p to, int weight){
 	}
 	
 	
-	arc a = arc_init(_to, weight);
-	arc b = arc_init(_from, weight);
+	graph_arc a = arc_init(_to, weight);
+	graph_arc b = arc_init(_from, weight);
 	if(list_indexOf(_from->arcs, a, graph_arc_comparer)!= -1 || 
 	   list_indexOf(_to->arcs, b, graph_arc_comparer) != -1){
 		free(a);
@@ -148,14 +148,14 @@ void_p graph_remove_node(graph g, void_p key){
 	int i = 0;
 	int dont_clear = 0;
 	for (i = 0; i<list_size(arcs); i++) {
-		graph_node _n = ((graph_node)((arc)list_get(arcs, i))->to);
+		graph_node _n = ((graph_node)((graph_arc)list_get(arcs, i))->to);
 		list newList = _n->arcs;
 		c_index = g->comparer_index;
 		if (compare_data(key,_n->key) == 0)
 			dont_clear = TRUE;
 		int j = 0;
 		for (j = 0; j<list_size(newList); j++) {
-			graph_node aux = ((arc)list_get(newList, j))->to;
+			graph_node aux = ((graph_arc)list_get(newList, j))->to;
 			if (aux == n) {
 				list_remove(newList, j);
 				dont_clear = TRUE;
@@ -184,9 +184,9 @@ int graph_remove_arc(graph g, void_p from, void_p to){
 	int i = 0;
 	list arcs = nFrom->arcs;
 	for (i = 0; i < list_size(arcs); i++) {
-		graph_node aux = ((arc)list_get(arcs, i))->to;
+		graph_node aux = ((graph_arc)list_get(arcs, i))->to;
 		if (aux == nTo) {
-			arc save = list_get(arcs, i);
+			graph_arc save = list_get(arcs, i);
 			list_remove(arcs, i);
 			free(save);
 			arcs = nTo->arcs;
@@ -242,11 +242,11 @@ list graph_node_arcs(graph_node n){
 
 // Arc debería contener un int y un puntero a un nodo.
 // Devuelve el peso del arco asociado
-int graph_arc_weight(arc a){
+int graph_arc_weight(graph_arc a){
 	return a->weight;
 }
 // Devuelve el puntero al nodo del arco asociaco.
-graph_node graph_arc_to(arc a){
+graph_node graph_arc_to(graph_arc a){
 	return a->to;
 }
 
