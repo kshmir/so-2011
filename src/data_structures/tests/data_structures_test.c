@@ -430,5 +430,6 @@ int main(int argc, char ** argv) {
 	heap_test();		// Heap,     for algorithms / queuing data (proccesses)
 	queue_test();
 	graph_test();
+	queue_test();		// Queue,	for queue usage.
 	return 0;
 }

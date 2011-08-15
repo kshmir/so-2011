@@ -12,6 +12,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <fcntl.h>
+
+#define BUFF_SIZE 256
 
 cstring cstring_copy(cstring s){
 	cstring ret = cstring_init(strlen(s));
@@ -203,4 +206,23 @@ int cstring_matches(cstring str, cstring s) {
 
 void cstring_free(cstring s) {
 	free(s);
+}
+
+cstring cstring_from_file(cstring path){
+	int fd = open(path, O_RDONLY);
+	if( fd < 0 ){
+		close(fd);
+		return NULL;
+	}
+	cstring buffer = cstring_init(BUFF_SIZE);
+	cstring string = cstring_init(0); // Oooo, be careful ;)
+	int i = 0;
+	while(read(fd, buffer, BUFF_SIZE)>0){
+		cstring old = string;
+		string = cstring_write(string, buffer); // This fixes it.
+	}
+	
+	close(fd);
+	
+	return string;
 }

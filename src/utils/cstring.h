@@ -41,6 +41,8 @@ cstring cstring_replace(cstring original, cstring substr);
 
 cstring cstring_add_line(cstring s);
 
+cstring cstring_from_file(cstring path);
+
 
 int cstring_parseInt(cstring s, int * return_code);
 
