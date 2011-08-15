@@ -54,12 +54,15 @@ sim_pipe_transporter sim_pipe_transporter_init_server(int client_id, int server_
 
 
 void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data) {
+	printf("about to write on %s\n",t->write_fifo);
 	write(t->write_ptr, data, cstring_len(data) + 1);
 }
 
-cstring sim_pipe_transporter_listen(sim_pipe_transporter t, void_p extra_data) {
+cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * extra_data) {
 	cstring str = cstring_init(64);
+	printf("about to read on %s\n",t->read_fifo);
 	read(t->read_ptr, str, 64);
+	* extra_data = 64;
 	return str;
 }
 
