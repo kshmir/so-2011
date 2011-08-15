@@ -7,7 +7,8 @@
 void networking_test(connection_type conn, int from_id, int to_id) {
 	sim_transporter t = sim_transporter_init(conn, from_id, to_id);
 	cstring data = sim_transporter_listen(t);
-	printf("DATA: %s", data);
+	printf("Server: %s", data);
+	sim_transporter_write(t, "Transporter working\n");
 }
 
 int main(int argc, char ** params) {
