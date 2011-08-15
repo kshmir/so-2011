@@ -18,6 +18,7 @@
 #include "../map.h"
 #include "../graph.h"
 #include "../heap.h"
+#include "../queue.h"
 
 void separator() {
 	printf("------------------------------------\n");	
@@ -399,6 +400,27 @@ void heap_test() {
 	separator();
 }
 
+void queue_test() {
+	separator();
+
+	printf("Testing Queue\n");
+	queue q = queue_init();
+	int a, b ,c;
+	a = 0;
+	b = 1;
+	c = 2;
+	queue_poll(q, &c);
+	queue_poll(q, &b);
+	queue_poll(q, &a);
+	assert(*(int*)queue_pull(q) == 2);
+	assert(*(int*)queue_pull(q) == 1);
+	assert(*(int*)queue_pull(q) == 0);
+	assert(queue_empty(q));
+	printf("DONE!\n");
+	
+	separator();
+}
+
 int main(int argc, char ** argv) {
 	
 	tree_test();		// AVL Tree, for general storage.
@@ -406,6 +428,7 @@ int main(int argc, char ** argv) {
 	list_test();		// List,	 for manipulating data.
 	map_test();			// Map,		 for storing data. (uses tree!)
 	heap_test();		// Heap,     for algorithms / queuing data (proccesses)
+	queue_test();
 	graph_test();
 	return 0;
 }

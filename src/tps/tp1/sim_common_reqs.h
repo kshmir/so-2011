@@ -11,6 +11,7 @@
 #include "../../data_structures/map.h"
 #include "../../data_structures/stack.h"
 #include "../../data_structures/tree.h"
+#include "../../data_structures/queue.h"
 #include "../../includes.h"
 #include "../../utils/cstring.h"
 
