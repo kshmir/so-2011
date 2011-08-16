@@ -9,52 +9,47 @@
 
 
 struct sim_transporter {
-	connection_type type;  
-	void_p			data;
+	connection_type		type;  
+	void_p				data;
 	
-	pthread_mutex_t	listener_mutex;
-	pthread_cond_t	listeners_received;
-	pthread_cond_t	listener_received;
-	pthread_cond_t	listener_read;
+	pthread_mutex_t	*	listener_mutex;
+	pthread_cond_t	*	listener_received;
 	
-	list			messages;
+	pthread_t		*	listener;
 	
-	function		open;  
-	function		write;
-	function		listen;
-	function		free; 
+	queue				messages;
 	
-
+	function			open;  
+	function			write;
+	function			listen;
+	function			free; 
 };	
 
 
 
-void sim_transpoter_listener(sim_transporter t) {
+void_p sim_transporter_listener(sim_transporter t) {
 	int len, i, offset;
 	cstring builder = cstring_init(0);
 	while(1) {
-		pthread_mutex_lock(&t->listener_mutex);
+		pthread_mutex_lock(t->listener_mutex);
 		len = 0;
-		char * data = t->listen(t->data, &len);
+		char * data = (char *) t->listen(t->data, &len);
 		i = cstring_len(builder);
 		cstring_expand(builder, len);
 		for (; i < len; i++) {
 			builder[i] = data[i + offset];
 			if (builder[i] == 0) {
-				//// store in queue
-				pthread_cond_broadcast(&t->listener_received);
-
-				pthread_cond_wait(&t->listeners_received, &t->listener_mutex);
-				// expect signals
-				free(builder);
+				queue_poll(t->messages, builder);
+				pthread_cond_broadcast(t->listener_received);
 				offset = i;
 				i = 0;
 				builder = cstring_init(len - offset);
 			}
 		}
 		free(data);
-		pthread_mutex_unlock(&t->listener_mutex);
+		pthread_mutex_unlock(t->listener_mutex);
 	}
+	return NULL;
 }
 
 cstring sim_transporter_listen_request(sim_transporter sim, cstring request_match) {
@@ -62,28 +57,37 @@ cstring sim_transporter_listen_request(sim_transporter sim, cstring request_matc
 }
 
 cstring sim_transporter_listen(sim_transporter t) {
-	pthread_mutex_lock(&t->listener_mutex);
-	pthread_cond_wait(&t->listener_received, &t->listener_mutex);
-	
-	pthread_cond_wait(&t->listener_received, &t->listener_mutex);
-	
-	pthread_mutex_unlock(&t->listener_mutex);
+	int value_found = 0;
+	cstring data = NULL;
+	while(!value_found) {
+		pthread_mutex_lock(t->listener_mutex);
+		pthread_cond_wait(t->listener_received, t->listener_mutex);
+		data = queue_pull(t->messages);
+		if (data != NULL)
+			value_found = 1;	
+		pthread_mutex_unlock(t->listener_mutex);
+	}
+	return data;
 }
 
 static sim_transporter sim_transporter_start() {
 	sim_transporter tr = (sim_transporter) malloc(sizeof(struct sim_transporter));
 	
 	pthread_mutex_t * mutex		= (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
-	pthread_cond_t * received	= (pthread_mutex_t *) malloc(sizeof(pthread_cond_t));
-	pthread_cond_t * read		= (pthread_mutex_t *) malloc(sizeof(pthread_cond_t));
+	pthread_cond_t * received	= (pthread_cond_t *) malloc(sizeof(pthread_cond_t));
+	pthread_t	*	thread = (pthread_t *) malloc(sizeof(pthread_t));
+	queue messages = queue_init();
 	
 	pthread_mutex_init(mutex, NULL);
 	pthread_cond_init(received, NULL);
-	pthread_cond_init(read, NULL);
 	
+
+	tr->listener = thread;
+	tr->messages = messages;
 	tr->listener_mutex = mutex;
 	tr->listener_received = received;
-	tr->listener_read = read;
+	
+	pthread_create(thread, NULL, (void_p) sim_transporter_listener, (void_p) tr);
 }
 
 // Used by the client process to build a transporter to connect to it's server.
@@ -92,8 +96,8 @@ sim_transporter sim_transporter_init(connection_type type, int from_id, int to_i
 	switch (type) {
 		case C_PIPE:
 			t->data = sim_pipe_transporter_init_client(from_id, to_id);
-			t->write = sim_pipe_transporter_write;
-			t->listen = sim_pipe_transporter_listen;
+			t->write = (function)	sim_pipe_transporter_write;
+			t->listen = (function)	sim_pipe_transporter_listen;
 			break;
 		case C_SHARED_MEMORY:
 			// bind functions to C_SHARED_MEMORY implementation.
@@ -130,7 +134,7 @@ static void exec_process(process_type proc, connection_type type, int from_id, i
 
 // Used by the server process to build a process and open a connection to it.
 sim_transporter sim_transporter_fork(connection_type type, process_type proc, int from_id, int to_id) {
-
+	
 	sim_transporter t = sim_transporter_start();
 	
 	// Make fork/exec of the connection type given, and pass the parameters to start the connection.
@@ -138,8 +142,8 @@ sim_transporter sim_transporter_fork(connection_type type, process_type proc, in
 		case C_PIPE:
 			exec_process(proc, type, from_id, to_id);
 			t->data = sim_pipe_transporter_init_server(from_id, to_id);
-			t->write = sim_pipe_transporter_write;
-			t->listen = sim_pipe_transporter_listen;
+			t->write = (function)  sim_pipe_transporter_write;
+			t->listen = (function) sim_pipe_transporter_listen;
 			break;
 		case C_SHARED_MEMORY:
 			// bind functions to C_SHARED_MEMORY implementation.
@@ -165,6 +169,6 @@ void sim_transporter_write(sim_transporter sim, cstring message) {
 }
 
 void sim_transporter_free(sim_transporter sim) {
-	sim->close(sim->data);
+	sim->free(sim->data);
 	free(sim);
 }

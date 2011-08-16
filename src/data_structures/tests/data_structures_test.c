@@ -400,21 +400,25 @@ void heap_test() {
 	separator();
 }
 
-void queue_test(){
-	printf("Testing queue\n");
+void queue_test() {
+	separator();
+
+	printf("Testing Queue\n");
 	queue q = queue_init();
-	printf("Queue Initialized...\n");
-	int i = 0;
-	int *v[10];
-	for (i=0; i<10; i++) {
-		v[i] = malloc(sizeof(int));
-		*v[i] = i;
-		queue_poll(q, v[i]);
-	}
-	for (i=0; i<10; i++) {
-		printf("%d\t",((int*)queue_peek(q))[0]);
-		printf("%d\n",((int*)queue_pull(q))[0]);
-	}
+	int a, b ,c;
+	a = 0;
+	b = 1;
+	c = 2;
+	queue_poll(q, &c);
+	queue_poll(q, &b);
+	queue_poll(q, &a);
+	assert(*(int*)queue_pull(q) == 2);
+	assert(*(int*)queue_pull(q) == 1);
+	assert(*(int*)queue_pull(q) == 0);
+	assert(queue_empty(q));
+	printf("DONE!\n");
+	
+	separator();
 }
 
 int main(int argc, char ** argv) {
@@ -424,6 +428,7 @@ int main(int argc, char ** argv) {
 	list_test();		// List,	 for manipulating data.
 	map_test();			// Map,		 for storing data. (uses tree!)
 	heap_test();		// Heap,     for algorithms / queuing data (proccesses)
+	queue_test();
 	graph_test();
 	queue_test();		// Queue,	for queue usage.
 	return 0;

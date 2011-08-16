@@ -22,6 +22,8 @@ void_p	queue_pull(queue q);
 
 void_p	queue_peek(queue q);
 
+int		queue_empty(queue q);
+
 void	queue_free(queue q);
 
 #endif
