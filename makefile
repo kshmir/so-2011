@@ -27,6 +27,7 @@ data_structures = \
 	bin/tree.o \
 	bin/map.o \
 	bin/heap.o \
+	bin/queue.o \
 	bin/includes.o
 
 #//MARK: ----- TP1
@@ -247,7 +248,7 @@ build_tp1: data_structures_graph \
 	sim_smem_transporter \
 	sim_local_memory_transporter \
 	sim_socket_transporter \
-	sim_frontend \
+	sim_frontend
 
 ### Generates tp1
 tp1: build_tp1 \
