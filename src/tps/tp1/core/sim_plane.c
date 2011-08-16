@@ -14,8 +14,15 @@ int sim_plane_comparer(void_p a1, void_p a2) {
 }
 
 sim_plane sim_plane_deserialize(cstring s, int plane_id) {
-	// Todo: Deserialize this
-	
+	sim_plane p = malloc(sizeof(struct sim_plane));
+	p->id = id;
+	p->start_city = cstring_copy_line(s);
+	while (*(s++) != '\n');
+	p->medicines_keys = list_init();
+	p->medicines = map_init(<#comparer comp#>, <#cloner c#>);
+	for(;;){
+		//deserializar las medicinas;
+	}
 }
 
 cstring sim_plane_serialize(sim_plane p) {
