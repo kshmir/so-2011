@@ -2,12 +2,16 @@
 
 #include "networking/sim_server.h"
 #include "networking/sim_transporter.h"
-
+#include "sim_common_reqs.h"
 
 void core_test() {
 	
 	
 	
+}
+
+void file_test(){
+	printf("%s/n", cstring_from_file("/testFile"));
 }
 
 void networking_test() {
@@ -18,6 +22,7 @@ void networking_test() {
 
 int main(int argc, char ** params) {
 	
-	networking_test();
+	file_test();
+	//networking_test();
 	return 0;
 }

@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <fcntl.h>
 
 cstring cstring_copy(cstring s){
 	cstring ret = cstring_init(strlen(s));
@@ -203,4 +204,16 @@ int cstring_matches(cstring str, cstring s) {
 
 void cstring_free(cstring s) {
 	free(s);
+}
+
+cstring cstring_from_file(cstring path){
+	int fd = open(path, O_RDONLY);
+	char buffer[BUFF_SIZE];
+	cstring string = cstring_init(0);
+	
+	while(read(fd, buffer, BUFF_SIZE)){
+		cstring_write(string, buffer);
+	}
+	
+	close(fd);
 }
