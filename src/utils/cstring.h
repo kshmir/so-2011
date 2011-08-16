@@ -43,6 +43,10 @@ cstring cstring_add_line(cstring s);
 
 cstring cstring_from_file(cstring path);
 
+cstring cstring_sub(cstring s, int len);
+
+cstring cstring_copy_line(cstring s);
+
 
 int cstring_parseInt(cstring s, int * return_code);
 

@@ -225,3 +225,24 @@ cstring cstring_from_file(cstring path){
 	
 	return string;
 }
+
+
+
+cstring cstring_sub(cstring s, int len){
+	cstring ret = cstring_init(len);
+	int i = 0;
+	
+	for (i = 0; i<len; i++) {
+		ret[i] = s[i];
+	}
+	
+	return ret;
+}
+
+cstring cstring_copy_line(cstring s){
+	int i = 0;
+	while (s[i] != '\n' && s[i] != EOF){
+		i++;
+	}
+	return cstring_sub(s, i);
+}
