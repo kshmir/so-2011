@@ -34,6 +34,7 @@ void_p sim_transporter_listener(sim_transporter t) {
 		pthread_mutex_lock(t->listener_mutex);
 		len = 0;
 		char * data = (char *) t->listen(t->data, &len);
+		printf("data received: %s", data);
 		i = cstring_len(builder);
 		cstring_expand(builder, len);
 		for (; i < len; i++) {
@@ -87,7 +88,7 @@ static sim_transporter sim_transporter_start() {
 	tr->listener_mutex = mutex;
 	tr->listener_received = received;
 	
-	pthread_create(thread, NULL, (void_p) sim_transporter_listener, (void_p) tr);
+	return tr;
 }
 
 // Used by the client process to build a transporter to connect to it's server.
@@ -111,12 +112,14 @@ sim_transporter sim_transporter_init(connection_type type, int from_id, int to_i
 		default:
 			break;
 	}
+	pthread_create(t->listener, NULL, (void_p) sim_transporter_listener, (void_p) t);
 	return t;
 }
 
 
 static void exec_process(process_type proc, connection_type type, int from_id, int to_id) {
 	int id = 0;
+
 	switch (proc) {
 		case P_TESTER:		
 			id = fork();

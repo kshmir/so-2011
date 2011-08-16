@@ -215,10 +215,11 @@ cstring cstring_from_file(cstring path){
 		return NULL;
 	}
 	cstring buffer = cstring_init(BUFF_SIZE);
-	cstring string = cstring_init(BUFF_SIZE);
+	cstring string = cstring_init(0); // Oooo, be careful ;)
 	int i = 0;
 	while(read(fd, buffer, BUFF_SIZE)>0){
-		cstring_write(string, buffer);
+		cstring old = string;
+		string = cstring_write(string, buffer); // This fixes it.
 	}
 	
 	close(fd);

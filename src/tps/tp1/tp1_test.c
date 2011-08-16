@@ -16,7 +16,10 @@ void file_test(){
 
 void networking_test() {
 	sim_transporter t = sim_transporter_fork(C_PIPE, P_TESTER, 0, 1);
-	sim_transporter_write(t, "MAXI GAY\n");
+	sleep(1);
+	sim_transporter_write(t, "WOW\n");
+	cstring data = sim_transporter_listen(t);
+	printf("Client: %s", data);
 }
 
 int main(int argc, char ** params) {
