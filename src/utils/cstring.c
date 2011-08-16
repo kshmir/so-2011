@@ -14,6 +14,8 @@
 #include <string.h>
 #include <fcntl.h>
 
+#define BUFF_SIZE 256
+
 cstring cstring_copy(cstring s){
 	cstring ret = cstring_init(strlen(s));
 	ret = strcpy(ret,s);
@@ -208,12 +210,18 @@ void cstring_free(cstring s) {
 
 cstring cstring_from_file(cstring path){
 	int fd = open(path, O_RDONLY);
-	char buffer[BUFF_SIZE];
-	cstring string = cstring_init(0);
-	
-	while(read(fd, buffer, BUFF_SIZE)){
+	if( fd < 0 ){
+		close(fd);
+		return NULL;
+	}
+	cstring buffer = cstring_init(BUFF_SIZE);
+	cstring string = cstring_init(BUFF_SIZE);
+	int i = 0;
+	while(read(fd, buffer, BUFF_SIZE)>0){
 		cstring_write(string, buffer);
 	}
 	
 	close(fd);
+	
+	return string;
 }

@@ -36,6 +36,7 @@ void cstring_test() {
 	cstring s = cstring_copy("HOLA!");
 	assert(cstring_compare(cstring_write(s," CHAU!"), "HOLA! CHAU!") == 0);
 	assert(cstring_compare(cstring_write_c(s,'f'), "HOLA! CHAU!f") == 0);
+	cstring_write(s, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	free(s);
 	printf("DONE!\n");
 	
