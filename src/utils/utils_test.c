@@ -36,11 +36,6 @@ void cstring_test() {
 	cstring s = cstring_copy("HOLA!");
 	assert(cstring_compare(cstring_write(s," CHAU!"), "HOLA! CHAU!") == 0);
 	assert(cstring_compare(cstring_write_c(s,'f'), "HOLA! CHAU!f") == 0);
-<<<<<<< HEAD
-	s = cstring_write(s, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-=======
-	cstring_write(s, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
->>>>>>> 131d32155dbe885446ecc425b02122a286510a71
 	free(s);
 	printf("DONE!\n");
 	
@@ -115,10 +110,6 @@ int main(int argc, char ** argv) {
 	cstring_test();
 	
 	function f = build_string;
-	
-	cstring hola = f(cstring_copy("HOLA "), cstring_copy("ABUELA"));
-	
-	printf("%s",hola);
 	
 	return 0;
 }

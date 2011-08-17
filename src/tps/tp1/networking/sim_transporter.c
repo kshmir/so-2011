@@ -28,28 +28,27 @@ struct sim_transporter {
 
 
 void_p sim_transporter_listener(sim_transporter t) {
-	int len, i, offset;
+	int len, i;
 	cstring builder = cstring_init(0);
-	while(1) {
-		pthread_mutex_lock(t->listener_mutex);
+
+	while(TRUE) {
 		len = 0;
 		char * data = (char *) t->listen(t->data, &len);
-		printf("data received: %s", data);
-		i = cstring_len(builder);
-		cstring_expand(builder, len);
+		i = 0;
 		for (; i < len; i++) {
-			builder[i] = data[i + offset];
-			if (builder[i] == 0) {
-				queue_poll(t->messages, builder);
-				pthread_cond_broadcast(t->listener_received);
-				offset = i;
-				i = 0;
-				builder = cstring_init(len - offset);
+			builder = cstring_write_c(builder, data[i]);
+			if (data[i] == 0) {
+				if (cstring_len(builder) > 0) {
+					queue_poll(t->messages, builder);
+					pthread_cond_broadcast(t->listener_received);
+					builder = cstring_init(0);
+				}
 			}
 		}
-		free(data);
-		pthread_mutex_unlock(t->listener_mutex);
+		
 	}
+
+	
 	return NULL;
 }
 
@@ -57,15 +56,23 @@ cstring sim_transporter_listen_request(sim_transporter sim, cstring request_matc
 	
 }
 
+int mentira = 0;
+
 cstring sim_transporter_listen(sim_transporter t) {
 	int value_found = 0;
 	cstring data = NULL;
 	while(!value_found) {
 		pthread_mutex_lock(t->listener_mutex);
-		pthread_cond_wait(t->listener_received, t->listener_mutex);
-		data = queue_pull(t->messages);
+		while (queue_empty(t->messages)) {
+			pthread_cond_wait(t->listener_received, t->listener_mutex);
+		}
+		data = queue_peek(t->messages);
+		mentira++;
+		if (mentira % 200 == 0)
+			queue_pull(t->messages);
 		if (data != NULL)
 			value_found = 1;	
+
 		pthread_mutex_unlock(t->listener_mutex);
 	}
 	return data;
@@ -76,12 +83,13 @@ static sim_transporter sim_transporter_start() {
 	
 	pthread_mutex_t * mutex		= (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
 	pthread_cond_t * received	= (pthread_cond_t *) malloc(sizeof(pthread_cond_t));
-	pthread_t	*	thread = (pthread_t *) malloc(sizeof(pthread_t));
+	pthread_t	*	thread		= (pthread_t *) malloc(sizeof(pthread_t));
+
 	queue messages = queue_init();
 	
 	pthread_mutex_init(mutex, NULL);
 	pthread_cond_init(received, NULL);
-	
+
 
 	tr->listener = thread;
 	tr->messages = messages;
@@ -126,7 +134,11 @@ static void exec_process(process_type proc, connection_type type, int from_id, i
 			if (id == 0) {
 				execl("tp1_test_child", "tp1_test_child", cstring_fromInt(type),
 					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
+			} else {
+				//int stat = 0;
+//				waitpid(id,&stat,NULL);
 			}
+
 			break;
 		default:
 			break;
@@ -160,6 +172,7 @@ sim_transporter sim_transporter_fork(connection_type type, process_type proc, in
 		default:
 			break;
 	}
+	pthread_create(t->listener, NULL, (void_p) sim_transporter_listener, (void_p) t);
 	return t;
 }
 

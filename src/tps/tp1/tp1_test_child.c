@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 
 #include "networking/sim_server.h"
 #include "networking/sim_transporter.h"
@@ -6,9 +7,18 @@
 
 void networking_test(connection_type conn, int from_id, int to_id) {
 	sim_transporter t = sim_transporter_init(conn, from_id, to_id);
+	int i = 0;
+
+	
+	printf("Client sending data\n");
+	for (; i < 200; i++) {
+		sim_transporter_write(t,"cliente");
+	}
 	cstring data = sim_transporter_listen(t);
-	printf("Server: %s", data);
-	sim_transporter_write(t, "Transporter working\n");
+	
+	assert(cstring_compare(data,"server") == 0);
+	printf("Client got the correct information");
+	
 }
 
 int main(int argc, char ** params) {

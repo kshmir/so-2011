@@ -18,7 +18,10 @@
 
 cstring cstring_copy(cstring s){
 	cstring ret = cstring_init(strlen(s));
-	ret = strcpy(ret,s);
+	int i = 0;
+	for (i = 0; s[i]; i++) {
+		ret[i] = s[i];
+	}
 	return ret;
 }
 
@@ -43,7 +46,11 @@ cstring cstring_fromInt(int number) {
 
 
 cstring cstring_init(int size){
-	cstring s = (cstring) calloc(sizeof(char), (size + 1));
+	cstring s = (cstring) malloc(sizeof(char) * (size + 1));
+	int i = 0;
+	for (; i < size + 1; i++) {
+		s[i] = 0;
+	}
 	return s;
 }
 
@@ -218,10 +225,9 @@ cstring cstring_from_file(cstring path){
 	cstring string = cstring_init(0); // Oooo, be careful ;)
 	int i = 0;
 	while(read(fd, buffer, BUFF_SIZE)>0){
-		cstring old = string;
 		string = cstring_write(string, buffer); // This fixes it.
 	}
-	
+	free(buffer);
 	close(fd);
 	
 	return string;
