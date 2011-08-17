@@ -409,9 +409,13 @@ void queue_test() {
 	a = 0;
 	b = 1;
 	c = 2;
+	char * s = "HOLA";
+	queue_poll(q, s);
 	queue_poll(q, &c);
 	queue_poll(q, &b);
 	queue_poll(q, &a);
+	assert((char *)queue_peek(q) == s);
+	assert((char *)queue_pull(q) == s);
 	assert(*(int*)queue_pull(q) == 2);
 	assert(*(int*)queue_pull(q) == 1);
 	assert(*(int*)queue_pull(q) == 0);
@@ -430,6 +434,5 @@ int main(int argc, char ** argv) {
 	heap_test();		// Heap,     for algorithms / queuing data (proccesses)
 	queue_test();
 	graph_test();
-	queue_test();		// Queue,	for queue usage.
 	return 0;
 }

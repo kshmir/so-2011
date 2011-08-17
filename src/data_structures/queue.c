@@ -32,10 +32,12 @@ void_p	queue_pull(queue q){
 }
 
 void_p	queue_peek(queue q){
-	return list_get(q->l, 0);
+	void_p ret = list_get(q->l, 0);
+	return ret;
 }
 
 int		queue_empty(queue q) {
+	
 	return list_size(q->l) == 0;
 }
 

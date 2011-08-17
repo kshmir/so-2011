@@ -1,22 +1,26 @@
 #include "sim_message.h"
+#include "sim_transporter.h"
 
 #include <time.h>
+#include <pthread.h>
 
 struct sim_message {
-	cstring message;
-	time_t timestamp;
+	cstring			message;
 	sim_transporter t;
+	pthread_t		thread;
+	pthread_attr_t	attr;
 };
 
 sim_message sim_message_init(sim_transporter t, cstring string) {
 	sim_message m = (sim_message) malloc(sizeof(struct sim_message));
-	m->timestamp = time(0);
 	m->t = t;
 	if (string == NULL)
 		m->message = cstring_init(0);
 	else {
 		m->message = string;
 	}
+	pthread_attr_init(&m->attr);
+	pthread_attr_setdetachstate(&m->attr, PTHREAD_CREATE_JOINABLE);
 	return m;
 }
 
@@ -41,14 +45,22 @@ int sim_message_free(sim_message r) {
 }
 
 
+static void_p sim_message_listen(sim_message r) {
+	int found = 0;
+	cstring old_msg = r->message;
+	while (!found) {
+		cstring msg = sim_transporter_listen(r->t);
+	}
+
+}
+
 sim_message sim_message_send(sim_message r) {
-	// Send message to transporter and receive data.
-	// Must use mutex.
+	pthread_create(&r->thread, &r->attr, (void_p) sim_message_listen, (void_p) r);
+	sim_message_respond(r);
+	pthread_join(r->thread, NULL);
 }
 
 
 void sim_message_respond(sim_message r) {
-	// Send message to transporter, but don't wait to receive data.
-	// This is used by sim_server on all responses
-	// And by sim_client when receiving QUERY.
+	sim_transporter_write(r->t, r->message);
 }

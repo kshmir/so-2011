@@ -46,7 +46,8 @@ int list_add(list p, void_p obj) {
 	node n = NULL;
 	
 	n = (node) malloc(sizeof(struct node));
-	
+
+
 	if (n != NULL) {
 		n->data = obj;
 		n->next = NULL;

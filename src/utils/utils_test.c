@@ -111,9 +111,5 @@ int main(int argc, char ** argv) {
 	
 	function f = build_string;
 	
-	cstring hola = f(cstring_copy("HOLA "), cstring_copy("ABUELA"));
-	
-	printf("%s",hola);
-	
 	return 0;
 }
