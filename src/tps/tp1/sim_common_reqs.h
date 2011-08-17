@@ -14,6 +14,9 @@
 #include "../../data_structures/queue.h"
 #include "../../includes.h"
 #include "../../utils/cstring.h"
-
+#include "core/sim_airline.h"
+#include "core/sim_extra.h"
+#include "core/sim_level.h"
+#include "core/sim_plane.h"
 
 #endif
