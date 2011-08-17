@@ -15,6 +15,6 @@ cstring sim_plane_serialize(sim_plane p);
 
 void sim_plane_main(sim_plane air);
 
-void sim_plane_print(sim_plane p);
+void sim_plane_print(sim_plane p);//only for debugging reasons
 
 #endif

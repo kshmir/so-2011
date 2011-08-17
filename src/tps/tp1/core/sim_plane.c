@@ -28,9 +28,7 @@ sim_plane sim_plane_deserialize(cstring s, int plane_id) {
 		int *value = malloc(sizeof(int));
 		*value = kp->amount;
 		list_add(p->medicines_keys, key);
-		printf("value:%d\n",*value);
 		map_set(p->medicines, key, value);
-		printf("delMapa:%d\n",*((int*)(map_get(p->medicines, key))));
 		while (*(s++) != '\n');
 		flag = *s != '\0';
 		free(kp);
@@ -45,7 +43,7 @@ cstring sim_plane_serialize(sim_plane p) {
 		cstring key = (cstring) list_node_value(n);
 		int * value = map_get(p->medicines, key);
 		sim_keypair kp = (sim_keypair) sim_keypair_init(key, *value);
-		s = sim_keypair_serialize(kp);
+		s = cstring_write(s,sim_keypair_serialize(kp));
 		s = cstring_write(s,"\n");
 		sim_keypair_free(kp);
 	}
