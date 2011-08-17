@@ -47,6 +47,7 @@ cstring cstring_sub(cstring s, int len);
 
 cstring cstring_copy_line(cstring s);
 
+void cstring_remove(cstring s, char c);
 
 int cstring_parseInt(cstring s, int * return_code);
 
