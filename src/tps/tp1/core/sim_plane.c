@@ -20,7 +20,7 @@ sim_plane sim_plane_deserialize(cstring s, int plane_id) {
 	cstring_remove(p->start_city, '\n');
 	while (*(s++) != '\n');
 	p->medicines_keys = list_init();
-	p->medicines = map_init(cstring_compare, int_cloner);
+	p->medicines = map_init(cstring_compare, cstring_copy);
 	int flag = TRUE;
 	while(flag){
 		sim_keypair kp = sim_keypair_deserialize(cstring_copy_line(s));

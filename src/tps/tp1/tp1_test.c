@@ -77,12 +77,7 @@ void serializing_test(){
 int main(int argc, char ** params) {
 	
 	//file_test();
-<<<<<<< HEAD
 	serializing_test();
 	//networking_test();
-=======
-	networking_test();
-	//sleep(1);
->>>>>>> 2daad12f6722107238f2d3a0c00323162910dad7
 	return 0;
 }
