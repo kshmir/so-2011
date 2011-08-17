@@ -222,13 +222,34 @@ cstring cstring_from_file(cstring path){
 		return NULL;
 	}
 	cstring buffer = cstring_init(BUFF_SIZE);
-	cstring string = cstring_init(0); // Oooo, be careful ;)
+	cstring string = cstring_init(0);
 	int i = 0;
 	while(read(fd, buffer, BUFF_SIZE)>0){
-		string = cstring_write(string, buffer); // This fixes it.
+		string = cstring_write(string, buffer);
 	}
 	free(buffer);
 	close(fd);
 	
 	return string;
+}
+
+
+
+cstring cstring_sub(cstring s, int len){
+	cstring ret = cstring_init(len);
+	int i = 0;
+	
+	for (i = 0; i<len; i++) {
+		ret[i] = s[i];
+	}
+	
+	return ret;
+}
+
+cstring cstring_copy_line(cstring s){
+	int i = 0;
+	while (s[i] != '\n' && s[i] != EOF){
+		i++;
+	}
+	return cstring_sub(s, i);
 }

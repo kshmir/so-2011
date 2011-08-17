@@ -16,7 +16,7 @@ void core_test() {
 
 
 void file_test(){
-	printf("%s/n", cstring_from_file("testFile"));
+	printf("%s", cstring_from_file("./testFile"));
 }
 
 struct thread_data {
