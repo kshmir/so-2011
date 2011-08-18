@@ -14,8 +14,26 @@ int sim_plane_comparer(void_p a1, void_p a2) {
 }
 
 sim_plane sim_plane_deserialize(cstring s, int plane_id) {
-	// Todo: Deserialize this
-	
+	sim_plane p = malloc(sizeof(struct sim_plane));
+	p->id = plane_id;
+	p->start_city = cstring_copy_line(s);
+	cstring_remove(p->start_city, '\n');
+	while (*(s++) != '\n');
+	p->medicines_keys = list_init();
+	p->medicines = map_init(cstring_compare, cstring_copy);
+	int flag = TRUE;
+	while(flag){
+		sim_keypair kp = sim_keypair_deserialize(cstring_copy_line(s));
+		cstring key = cstring_copy(kp->name);
+		int *value = malloc(sizeof(int));
+		*value = kp->amount;
+		list_add(p->medicines_keys, key);
+		map_set(p->medicines, key, value);
+		while (*(s++) != '\n');
+		flag = *s != '\0';
+		free(kp);
+	}
+	return p;
 }
 
 cstring sim_plane_serialize(sim_plane p) {
@@ -24,7 +42,7 @@ cstring sim_plane_serialize(sim_plane p) {
 	foreach(cstring, key, p->medicines_keys) {
 		int * value = map_get(p->medicines, key);
 		sim_keypair kp = (sim_keypair) sim_keypair_init(key, *value);
-		s = sim_keypair_serialize(kp);
+		s = cstring_write(s,sim_keypair_serialize(kp));
 		s = cstring_write(s,"\n");
 		sim_keypair_free(kp);
 	}
@@ -33,4 +51,15 @@ cstring sim_plane_serialize(sim_plane p) {
 
 void sim_plane_main(sim_plane air) {
 
+}
+
+void sim_plane_print(sim_plane p){
+	printf("%s\n",p->start_city);
+	int i = 0;
+	for(i = 0; i<list_size(p->medicines_keys); i++){
+		cstring key = list_get(p->medicines_keys, i);
+		int *value = (int*)(map_get(p->medicines, key));
+		printf("%s ", key);
+		printf("%d\n",*value);
+	}
 }

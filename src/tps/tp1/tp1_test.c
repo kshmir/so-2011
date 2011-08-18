@@ -54,10 +54,29 @@ void networking_test() {
 	
 }
 
+void serializing_test(){
+	//create the strings to be tested
+	printf("String:\n");
+	cstring plane = cstring_copy("Andorra\ndroga1 1\ndroga2 2\ndroga3 3\n");
+	printf("%s",plane);
+	//deserialize them
+	printf("Deserialized:\n");
+	sim_plane p = sim_plane_deserialize(plane, 0);
+	//print structure
+	sim_plane_print(p);
+	//serialize them
+	printf("Serialized:\n");
+	cstring s = sim_plane_serialize(p);
+	//print them
+	printf("%s",s);
+}
+
 int main(int argc, char ** params) {
 	
 	buffer = cstring_init(0);
 	//file_test();
 	networking_test();
+	//serializing_test();
+	//networking_test();
 	return 0;
 }

@@ -53,6 +53,8 @@ list cstring_split_list(cstring sub, cstring s);
 
 cstring cstring_copy_until_char(cstring str, char c);
 
+void cstring_remove(cstring s, char c);
+
 int cstring_parseInt(cstring s, int * return_code);
 
 void cstring_free(cstring s);
