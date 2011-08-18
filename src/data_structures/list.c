@@ -96,6 +96,13 @@ void_p  list_get(list p, int index) {
 }
 
 // Free's up the list
+void list_free_with_data(list p) {
+	foreach(void_p, n, p) {
+		free(n);
+	}
+	list_free(p);
+}
+
 void list_free(list p) {
 	if (p == NULL) {
 		return;
@@ -206,9 +213,16 @@ void_p list_header(list p) {
 }
 
 void_p list_node_next(void_p n) {
+	if (n == NULL) {
+		return NULL;
+	}
 	return ((node)n)->next;
 }
 
 void_p list_node_value(void_p n) { 
+	if (n == NULL) {
+		return NULL;
+	}
+	
 	return ((node)n)->data;
 }

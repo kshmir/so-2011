@@ -10,6 +10,7 @@
 
 #include "cstring.h"
 #include "utils_test.h"
+#include "../data_structures/list.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -20,11 +21,7 @@ void separator() {
 	printf("------------------------------------\n");	
 }
 
-typedef int (*function)();
 
-cstring build_string(cstring a, cstring b) {
-	return cstring_write(a,b);
-}
 
 
 void cstring_test() {
@@ -87,16 +84,22 @@ void cstring_test() {
 	joins[3] = 0;
 
 	
-	printf("String Join, reverse, fromInt, replace..\n");
+	printf("String Join, reverse, fromInt, replace, join list..\n");
 	
 	assert(cstring_compare(cstring_join(joins," - "),"HOLA - COMO - ANDAS") == 0);
 	assert(cstring_compare(cstring_reverse(cstring_copy("HOLA")),"ALOH") == 0);
 	assert(cstring_compare(cstring_fromInt(50002), "50002") == 0);
-	assert(cstring_compare(cstring_replace("HOLA CRISTIAN COMO ANDAS", " "),"HOLACRISTIANCOMOANDAS") == 0);
+	assert(cstring_compare(cstring_replace("HOLA CRISTIAN COMO ANDAS", " ", ""),"HOLACRISTIANCOMOANDAS") == 0);
 	cstring * lineas = cstring_split("hola\n\nchau","\n");
 	for (i = 0; lineas[i] ; i++) {
 	}
 	assert(i == 3);
+	
+	list l = cstring_split_list("HOLA_CRISTIAN_COMO_ANDAS", "_");
+	assert(list_size(l) == 4);
+	assert(strcmp(list_get(l, 0), "HOLA") == 0);
+	list_free_with_data(l);
+	
 	
 	printf("DONE...\n");
 	
@@ -109,7 +112,7 @@ void cstring_test() {
 int main(int argc, char ** argv) {
 	cstring_test();
 	
-	function f = build_string;
+
 	
 	return 0;
 }

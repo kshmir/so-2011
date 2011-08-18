@@ -21,8 +21,7 @@ sim_plane sim_plane_deserialize(cstring s, int plane_id) {
 cstring sim_plane_serialize(sim_plane p) {
 	cstring s = cstring_copy(p->start_city);
 	s = cstring_write(s,"\n");
-	foreach(n, p->medicines_keys) {
-		cstring key = (cstring) list_node_value(n);
+	foreach(cstring, key, p->medicines_keys) {
 		int * value = map_get(p->medicines, key);
 		sim_keypair kp = (sim_keypair) sim_keypair_init(key, *value);
 		s = sim_keypair_serialize(kp);

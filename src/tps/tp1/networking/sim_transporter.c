@@ -19,10 +19,10 @@ struct sim_transporter {
 	
 	queue				messages;
 	
-	function			open;  
-	function			write;
-	function			listen;
-	function			free; 
+	function			open;	
+	function			write;	
+	function			listen;	
+	function			free;	
 };	
 
 
@@ -52,11 +52,10 @@ void_p sim_transporter_listener(sim_transporter t) {
 	return NULL;
 }
 
-cstring sim_transporter_listen_request(sim_transporter sim, cstring request_match) {
-	
-}
 
-int mentira = 0;
+void sim_transporter_dequeue(sim_transporter t) {
+	queue_pull(t->messages);
+}
 
 cstring sim_transporter_listen(sim_transporter t) {
 	int value_found = 0;
@@ -67,9 +66,6 @@ cstring sim_transporter_listen(sim_transporter t) {
 			pthread_cond_wait(t->listener_received, t->listener_mutex);
 		}
 		data = queue_peek(t->messages);
-		mentira++;
-		if (mentira % 200 == 0)
-			queue_pull(t->messages);
 		if (data != NULL)
 			value_found = 1;	
 

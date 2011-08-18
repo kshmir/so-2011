@@ -5,20 +5,42 @@
 #include "networking/sim_transporter.h"
 
 
+void separator() {
+	printf("--------------------------------\n");
+}
+
 void networking_test(connection_type conn, int from_id, int to_id) {
 	sim_transporter t = sim_transporter_init(conn, from_id, to_id);
 	int i = 0;
-
 	
-	printf("Client sending data\n");
-	for (; i < 200; i++) {
-		sim_transporter_write(t,"cliente");
-	}
+	
+	// Starts transporter test
+	
+	sim_transporter_write(t,"cliente");
+	
 	cstring data = sim_transporter_listen(t);
+	sim_transporter_dequeue(t);
 	
 	assert(cstring_compare(data,"server") == 0);
-	printf("Client got the correct information");
 	
+	// Ends transporter test
+	
+	
+	// Starts response of message test
+	
+	data = sim_transporter_listen(t);
+	assert(cstring_compare("POST;Write again", data));
+	
+	//////////// This should be a server work
+	
+	sim_transporter_write(t, "RES POST;Hello baby"); 
+	
+	sim_transporter_write(t, "QUERY;asdkalsdjasd"); 
+	sim_transporter_write(t, "QUERY;asdkalsdjasd2"); 
+	sim_transporter_write(t, "QUERY;asdkalsdjasd3"); 
+	sim_transporter_write(t, "QUERY;asdkalsdjasd4"); 
+	
+	// End resposne of message test
 }
 
 int main(int argc, char ** params) {
