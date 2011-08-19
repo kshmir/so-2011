@@ -19,10 +19,12 @@ struct sim_transporter {
 	
 	queue				messages;
 	
-	function			open;  
-	function			write;
-	function			listen;
-	function			free; 
+	transporter_mode	mode;
+	
+	function			open;	
+	function			write;	
+	function			listen;	
+	function			free;	
 };	
 
 
@@ -52,11 +54,10 @@ void_p sim_transporter_listener(sim_transporter t) {
 	return NULL;
 }
 
-cstring sim_transporter_listen_request(sim_transporter sim, cstring request_match) {
-	
-}
 
-int mentira = 0;
+void sim_transporter_dequeue(sim_transporter t) {
+	queue_pull(t->messages);
+}
 
 cstring sim_transporter_listen(sim_transporter t) {
 	int value_found = 0;
@@ -67,9 +68,6 @@ cstring sim_transporter_listen(sim_transporter t) {
 			pthread_cond_wait(t->listener_received, t->listener_mutex);
 		}
 		data = queue_peek(t->messages);
-		mentira++;
-		if (mentira % 200 == 0)
-			queue_pull(t->messages);
 		if (data != NULL)
 			value_found = 1;	
 
@@ -99,31 +97,6 @@ static sim_transporter sim_transporter_start() {
 	return tr;
 }
 
-// Used by the client process to build a transporter to connect to it's server.
-sim_transporter sim_transporter_init(connection_type type, int from_id, int to_id) {
-	sim_transporter t = sim_transporter_start();
-	switch (type) {
-		case C_PIPE:
-			t->data = sim_pipe_transporter_init_client(from_id, to_id);
-			t->write = (function)	sim_pipe_transporter_write;
-			t->listen = (function)	sim_pipe_transporter_listen;
-			break;
-		case C_SHARED_MEMORY:
-			// bind functions to C_SHARED_MEMORY implementation.
-			break;
-		case C_SOCKETS:
-			// bind functions to C_SOCKETS implementation.
-			break;	
-		case C_M_QUEUES:
-			// bind functions to C_M_QUEUES implementation.
-			break;	
-		default:
-			break;
-	}
-	pthread_create(t->listener, NULL, (void_p) sim_transporter_listener, (void_p) t);
-	return t;
-}
-
 
 static void exec_process(process_type proc, connection_type type, int from_id, int to_id) {
 	int id = 0;
@@ -136,7 +109,7 @@ static void exec_process(process_type proc, connection_type type, int from_id, i
 					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
 			} else {
 				//int stat = 0;
-//				waitpid(id,&stat,NULL);
+				//waitpid(id,&stat,NULL);
 			}
 
 			break;
@@ -148,15 +121,24 @@ static void exec_process(process_type proc, connection_type type, int from_id, i
 
 
 // Used by the server process to build a process and open a connection to it.
-sim_transporter sim_transporter_fork(connection_type type, process_type proc, int from_id, int to_id) {
+sim_transporter sim_transporter_init(connection_type type, process_type proc, int from_id, int to_id, transporter_mode mode, int forks_child, int is_server) {
 	
 	sim_transporter t = sim_transporter_start();
+	t->mode = mode;
 	
-	// Make fork/exec of the connection type given, and pass the parameters to start the connection.
+	if (is_server && forks_child) {
+		exec_process(proc, type, from_id, to_id);
+	}
+	
 	switch (type) {
 		case C_PIPE:
-			exec_process(proc, type, from_id, to_id);
-			t->data = sim_pipe_transporter_init_server(from_id, to_id);
+			if (is_server) {
+				t->data = sim_pipe_transporter_init_server(from_id, to_id, mode);
+			}
+			else {
+				t->data = sim_pipe_transporter_init_client(from_id, to_id);
+			}
+
 			t->write = (function)  sim_pipe_transporter_write;
 			t->listen = (function) sim_pipe_transporter_listen;
 			break;
@@ -172,7 +154,9 @@ sim_transporter sim_transporter_fork(connection_type type, process_type proc, in
 		default:
 			break;
 	}
-	pthread_create(t->listener, NULL, (void_p) sim_transporter_listener, (void_p) t);
+	if (mode != MODE_WRITE) {
+		pthread_create(t->listener, NULL, (void_p) sim_transporter_listener, (void_p) t);
+	}
 	return t;
 }
 

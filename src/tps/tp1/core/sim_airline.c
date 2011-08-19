@@ -47,8 +47,7 @@ cstring sim_airline_serialize(sim_airline air, int hasId) {
 	}
 	s = cstring_write(s,cstring_fromInt(list_size(air->planes)));
 	s = cstring_write(s,"\n\n");
-	foreach(n, air->planes) { 
-		sim_plane p = (sim_plane) list_node_value(n);
+	foreach(sim_plane, p, air->planes) { 
 		s = cstring_write(s, sim_plane_serialize(p));
 		s = cstring_write(s,"\n");
 	}

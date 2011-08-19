@@ -225,8 +225,8 @@ data_structures_test: data_structures_graph data_structures_list data_structures
 	data_structures_tests_data_structures_test 
 	$(cc) -o data_structures_test $(data_structures_test)
 	
-utils_test:  utils_cstring utils_test_build
-	$(cc) -o utils_test $(utils_test_files)
+utils_test:  utils_cstring utils_test_build data_structures_list
+	$(cc) -o utils_test $(utils_test_files) $(data_structures)
 
 build_tp1: data_structures_graph \
 	data_structures_list \
