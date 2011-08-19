@@ -59,4 +59,6 @@ int cstring_parseInt(cstring s, int * return_code);
 
 void cstring_free(cstring s);
 
+cstring cstring_copy_till_char(cstring s, char c, int amount);
+
 #endif
