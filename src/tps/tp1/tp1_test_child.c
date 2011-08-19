@@ -10,7 +10,9 @@ void separator() {
 }
 
 void networking_test(connection_type conn, int from_id, int to_id) {
-	sim_transporter t = sim_transporter_init(conn, from_id, to_id);
+	sim_transporter t = sim_transporter_init(conn, P_TESTER, from_id, to_id, MODE_READWRITE, FALSE, FALSE);
+	
+
 	int i = 0;
 	
 	
@@ -35,10 +37,15 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	
 	sim_transporter_write(t, "RES POST;Hello baby"); 
 	
-	sim_transporter_write(t, "QUERY;asdkalsdjasd"); 
-	sim_transporter_write(t, "QUERY;asdkalsdjasd2"); 
-	sim_transporter_write(t, "QUERY;asdkalsdjasd3"); 
-	sim_transporter_write(t, "QUERY;asdkalsdjasd4"); 
+	sim_transporter_write(t, "QUERY ;asdkalsdjasd"); 
+	sim_transporter_write(t, "QUERY ;asdkalsdjasd2"); 
+	sim_transporter_write(t, "QUERY ;asdkalsdjasd3"); 
+	sim_transporter_write(t, "QUERY ;asdkalsdjasd4"); 
+	
+	sim_server serv = sim_server_init(t);
+	
+	
+	
 	
 	// End resposne of message test
 }

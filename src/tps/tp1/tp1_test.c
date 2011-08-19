@@ -34,7 +34,7 @@ void receiver(sim_message mes) {
 void networking_test() {
 	separator();
 	
-	sim_transporter t = sim_transporter_fork(C_PIPE, P_TESTER, 0, 1);
+	sim_transporter t = sim_transporter_init(C_PIPE, P_TESTER, 0, 1, MODE_READWRITE, TRUE, TRUE);
 
 	sim_transporter_write(t, "server");
 	cstring data = sim_transporter_listen(t);
@@ -47,10 +47,7 @@ void networking_test() {
 	data = sim_message_read(resp);
 	assert(cstring_compare(data, "Hello Baby"));
 	
-	
-	
 	sim_client c = sim_client_init(t, receiver);
-	
 	
 }
 
@@ -75,8 +72,8 @@ int main(int argc, char ** params) {
 	
 	buffer = cstring_init(0);
 	//file_test();
-	networking_test();
 	//serializing_test();
-	//networking_test();
+	
+	networking_test();
 	return 0;
 }

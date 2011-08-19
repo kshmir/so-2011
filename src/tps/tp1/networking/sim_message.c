@@ -57,8 +57,8 @@ int sim_message_free(sim_message r) {
 
 
 struct listener_data {
-	sim_message *	r;
-	sim_message *  	m;
+	sim_message 	r;
+	sim_message   	m;
 };
 
 static void_p sim_message_listen(struct listener_data * data) {
