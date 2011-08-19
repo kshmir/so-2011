@@ -33,16 +33,16 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 	int len = strlen(data);
 	if(len>=MSGQ_MSG_SIZE)
 		perror("Message was too big");
-	sstrcpy(t->write_buf.mtext,data);
+	strcpy(t->write_buf.mtext,data);
 	if (msgsnd(t->msgq_id, &(t->write_buf), len+1, 0) == -1) /* +1 for '\0' */
 		perror("Message could not be send");
 }
 
 cstring sim_msg_q_transporter_listen(sim_msg_q_transporter t, int * extra_data){
-	if (msgrcv(t->msgq_id, &(t->read_buf), MSGQ_MSG_SIZE, t->read_buf->mtype, 0) == -1) {
+	if (msgrcv(t->msgq_id, &(t->read_buf), MSGQ_MSG_SIZE, t->read_buf.mtype, 0) == -1) {
 		perror("Message could not be received");
 	}
-	return t->read_buf->mtext;
+	return t->read_buf.mtext;
 }
 
 void sim_msg_q_transporter_free(sim_msg_q_transporter transp){
