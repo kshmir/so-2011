@@ -37,12 +37,11 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	
 	sim_transporter_write(t, "RES POST;Hello baby"); 
 	
-	sim_transporter_write(t, "QUERY ;asdkalsdjasd"); 
-	sim_transporter_write(t, "QUERY ;asdkalsdjasd2"); 
-	sim_transporter_write(t, "QUERY ;asdkalsdjasd3"); 
-	sim_transporter_write(t, "QUERY ;asdkalsdjasd4"); 
+	sim_transporter_write(t, "QUERY ;1"); 
+	sim_transporter_write(t, "QUERY ;2"); 
+	sim_transporter_write(t, "QUERY ;3"); 
+	sim_transporter_write(t, "QUERY ;4"); 
 	
-	sim_server serv = sim_server_init(t);
 	
 	
 	

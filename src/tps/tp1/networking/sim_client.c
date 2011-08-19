@@ -32,16 +32,17 @@ static void_p sim_client_listen(sim_client r) {
 
 
 
-
-
-
-
-sim_client sim_client_init(sim_transporter t, sim_receiver r) {
+sim_client sim_client_from_transporter(sim_transporter t, sim_receiver r) {
 	sim_client c = (sim_client) malloc(sizeof(sim_client));
 	c->t = t;
 	c->r = r;
 	pthread_create(&c->listener_thread, NULL, (void_p) sim_client_listen, (void_p) c);	
 	return c;
+}
+
+sim_client sim_client_init(connection_type c_type, process_type p_type, int server_id, int client_id, sim_receiver query_receiver) {
+	sim_transporter t = sim_transporter_init(c_type, p_type, server_id, client_id, MODE_READWRITE, FALSE, FALSE);
+	return sim_client_from_transporter(t, query_receiver);
 }
 
 int sim_client_get_distance(sim_client c, int object_id, cstring from, cstring to) {

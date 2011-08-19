@@ -20,13 +20,13 @@ typedef int transporter_mode;
 #define P_AIRLINE				0
 #define P_LEVEL					1
 #define P_TESTER				2
+#define P_TESTER_SERVER			3
 
 // Type of connections
 #define C_PIPE					0
 #define C_SHARED_MEMORY			1
 #define C_SOCKETS				2
 #define C_M_QUEUES				3
-#define C_LOCAL_MEMORY			4
 
 sim_transporter sim_transporter_init(connection_type type,	// Tells the kind of IPC to use
 									 process_type proc,		// Tells the kind of Process to open (filename)

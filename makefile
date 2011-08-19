@@ -82,6 +82,23 @@ tp1_test_child_files = \
 	bin/sim_local_memory_transporter.o \
 	bin/tp1_test_child.o 
 
+#//MARK: ----- TP1 Test	Server Process	
+tp1_test_server_files = \
+	bin/sim_airline.o \
+	bin/sim_extra.o \
+	bin/sim_level.o \
+	bin/sim_plane.o \
+	bin/sim_client.o \
+	bin/sim_message.o \
+	bin/sim_server.o \
+	bin/sim_transporter.o \
+	bin/sim_msg_q_transporter.o \
+	bin/sim_pipe_transporter.o \
+	bin/sim_smem_transporter.o \
+	bin/sim_socket_transporter.o \
+	bin/sim_local_memory_transporter.o \
+	bin/tp1_test_server.o 
+
 #//MARK: ----- Examples declarations
 example_1 = \
 	bin/ejemplo_1.o
@@ -204,6 +221,9 @@ sim_tp1_test:
 	
 sim_tp1_test_child: 
 	$(cc) -o bin/tp1_test_child.o -c src/tps/tp1/tp1_test_child.c
+	
+sim_tp1_test_server: 
+	$(cc) -o bin/tp1_test_server.o -c src/tps/tp1/tp1_test_server.c
 
 
 #//MARK: ----- Targets
@@ -259,8 +279,10 @@ tp1: build_tp1 \
 tp1_test: build_tp1 \
 	sim_tp1_test \
 	sim_tp1_test_child \
+	sim_tp1_test_server \
 	utils_cstring
 	$(cc) -o tp1_test_child $(tp1_test_child_files) $(data_structures) $(utils)
+	$(cc) -o tp1_test_server $(tp1_test_server_files) $(data_structures) $(utils)
 	$(cc) -o tp1_test $(tp1_test_files) $(data_structures) $(utils)
 
 

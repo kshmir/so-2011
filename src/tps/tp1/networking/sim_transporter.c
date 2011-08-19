@@ -21,7 +21,6 @@ struct sim_transporter {
 	
 	transporter_mode	mode;
 	
-	function			open;	
 	function			write;	
 	function			listen;	
 	function			free;	
@@ -107,11 +106,14 @@ static void exec_process(process_type proc, connection_type type, int from_id, i
 			if (id == 0) {
 				execl("tp1_test_child", "tp1_test_child", cstring_fromInt(type),
 					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
-			} else {
-				//int stat = 0;
-				//waitpid(id,&stat,NULL);
 			}
-
+			break;
+		case P_TESTER_SERVER:		
+			id = fork();
+			if (id == 0) {
+				execl("tp1_test_server", "tp1_test_server", cstring_fromInt(type),
+					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
+			}
 			break;
 		default:
 			break;
@@ -138,9 +140,9 @@ sim_transporter sim_transporter_init(connection_type type, process_type proc, in
 			else {
 				t->data = sim_pipe_transporter_init_client(from_id, to_id);
 			}
-
-			t->write = (function)  sim_pipe_transporter_write;
+			t->write  = (function) sim_pipe_transporter_write;
 			t->listen = (function) sim_pipe_transporter_listen;
+			t->free   = (function) sim_pipe_transporter_free;
 			break;
 		case C_SHARED_MEMORY:
 			// bind functions to C_SHARED_MEMORY implementation.
@@ -160,15 +162,14 @@ sim_transporter sim_transporter_init(connection_type type, process_type proc, in
 	return t;
 }
 
-
-
-
-
 void sim_transporter_write(sim_transporter sim, cstring message) {
 	sim->write(sim->data, message);
 }
 
 void sim_transporter_free(sim_transporter sim) {
 	sim->free(sim->data);
+	free(sim->listener_mutex);
+	free(sim->listener_received);
+	free(sim->listener);
 	free(sim);
 }

@@ -9,7 +9,7 @@
 
 typedef struct sim_client * sim_client;
 
-sim_client sim_client_init(sim_transporter t, sim_receiver query_receiver);
+sim_client sim_client_init(connection_type c_type, process_type p_type, int server_id, int client_id, sim_receiver query_receiver);
 
 // GET requests of params.
 

@@ -90,6 +90,15 @@ cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * extra_data) {
 	}
 }
 
-void sim_pipe_transporter_free(sim_pipe_transporter transp) {
+void sim_pipe_transporter_free(sim_pipe_transporter t) {
+	if (t->mode == MODE_READ || t->mode == MODE_READWRITE) {
+		close(t->read_ptr);
+		free(t->read_fifo);
+	}
 	
+	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
+		close(t->write_ptr);
+		free(t->write_fifo);
+	}
+	free(t);
 }
