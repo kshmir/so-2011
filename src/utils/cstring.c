@@ -169,7 +169,7 @@ int cstring_parseInt(cstring s, int * return_code) {
 	int i = 0;
 	int minus = 0;
 	*return_code = 1;
-	while(s[i] != 0 && s[i] != '\n') { //LO QUE ME COSTÓ LLEGAR HASTA ESTO LA PUTA MADREEEEEEEE
+	while(s[i] != 0 && s[i] != '\n') {
 		if (s[i] == '-') {
 			minus = 1;
 			i++;
@@ -260,4 +260,14 @@ void cstring_remove(cstring s, char c){
 			s[0] = 0;
 		s++;
 	}
+}
+
+cstring cstring_copy_till_char(cstring s, char c, int amount){
+	int i = 0;
+	while (s[i] != 0 && amount) {
+		if( s[i++] == c )
+			amount--;
+	}
+	
+	return cstring_sub(s, i-1);
 }
