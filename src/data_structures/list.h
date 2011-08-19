@@ -12,9 +12,12 @@
 #ifndef _LIST_H_
 #define _LIST_H_
 
-#define foreach(item, list) \
-	void_p item = NULL; \
-	for(item = (void_p)list_header(list); item != NULL; item = (void_p)list_node_next(item))
+#define foreach(type, item, list) \
+	void_p _item = NULL; \
+	type   item  = NULL; \
+	for(_item = (void_p)list_header(list), item = list_node_value(_item); \
+		_item != NULL && item != NULL; \
+		_item = (void_p)list_node_next(_item), item = list_node_value((_item != NULL) ? _item : NULL))
 
 // This makes all calls to list equal to "struct list *"
 // So BEWARE that any call to list is a pointer by itself.
@@ -41,10 +44,12 @@ int list_indexOf(list p, void_p ptr, comparer comp);
 // Removes an element in the given index of the list
 int list_remove(list p, int index);
 
+void list_free_with_data(list p);
+
 void_p list_header(list p);
 
-void_p node_next(void_p n);
+void_p list_node_next(void_p n);
 
-void_p node_value(void_p n);
+void_p list_node_value(void_p n);
 
 #endif

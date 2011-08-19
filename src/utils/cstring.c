@@ -102,9 +102,9 @@ cstring cstring_write_c(cstring s,char c) {
 	return cstring_write(s,arr);
 }
 
-cstring cstring_replace(cstring original, cstring substr) {
+cstring cstring_replace(cstring original, cstring substr, cstring replacer) {
 	cstring * strings = cstring_split(original, substr);
-	cstring response = cstring_join(strings, "");
+	cstring response = cstring_join(strings, replacer);
 	int i = 0;
 	while(strings[i] != NULL) {
 		free(strings[i]);
@@ -135,7 +135,6 @@ cstring * cstring_split(cstring _sub, cstring s) {
 	cstring sub = cstring_copy(_sub);
 	sub = cstring_write(sub,s); // Dirty little hack ;)
 	cstring * result = (cstring *) calloc(sizeof(cstring), 5);
-	
 	int size = 0;
 	int hits = 0;
 	int index = 0;
@@ -164,12 +163,24 @@ cstring * cstring_split(cstring _sub, cstring s) {
 	return result;
 }
 
+list cstring_split_list(cstring string, cstring sub) {
+	cstring * splitted = cstring_split(string, sub);
+	int i = 0;
+	list l = list_init();
+	while(splitted[i] != NULL) {
+		list_add(l, splitted[i]);
+		i++;
+	}
+	free(splitted);
+	return l;
+}
+
 int cstring_parseInt(cstring s, int * return_code) { 
 	int ret = 0;
 	int i = 0;
 	int minus = 0;
 	*return_code = 1;
-	while(s[i] != 0 && s[i] != '\n') { //LO QUE ME COSTÓ LLEGAR HASTA ESTO LA PUTA MADREEEEEEEE
+	while(s[i] != 0 && s[i] != '\n') {
 		if (s[i] == '-') {
 			minus = 1;
 			i++;
@@ -203,7 +214,7 @@ int cstring_matches(cstring str, cstring s) {
 		free(splitted[index]);
 		index++;
 	}
-	if (index == 1) {
+	if (index == 2) {
 		result = 1;
 	}
 	free(splitted);
@@ -246,6 +257,16 @@ cstring cstring_sub(cstring s, int len){
 	return ret;
 }
 
+cstring cstring_copy_until_char(cstring s, char c) {
+	cstring new_string = cstring_init(0);
+	int i = 0;
+	while(s[i] && s[i] != c) {
+		new_string = cstring_write_c(new_string,s[i]);
+		i++;
+	}
+	return new_string;
+}
+
 cstring cstring_copy_line(cstring s){
 	int i = 0;
 	while (s[i] != '\n' && s[i] != EOF){
@@ -260,4 +281,14 @@ void cstring_remove(cstring s, char c){
 			s[0] = 0;
 		s++;
 	}
+}
+
+cstring cstring_copy_till_char(cstring s, char c, int amount){
+	int i = 0;
+	while (s[i] != 0 && amount) {
+		if( s[i++] == c )
+			amount--;
+	}
+	
+	return cstring_sub(s, i-1);
 }
