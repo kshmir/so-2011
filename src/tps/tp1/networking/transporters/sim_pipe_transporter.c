@@ -31,20 +31,30 @@ static sim_pipe_transporter create_pipe_transporter(cstring write_fifo, cstring 
 	pipe->mode = mode;
 	if (client == 1) {
 		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
-			pipe->write_ptr = open(write_fifo, O_WRONLY);
+
+				pipe->write_ptr = open(write_fifo, O_WRONLY);
+
+
 		}
 		if (mode == MODE_READ || mode == MODE_READWRITE) { 
-			pipe->read_ptr  = open(read_fifo, O_RDONLY);
+
+				pipe->read_ptr  = open(read_fifo, O_RDONLY);
+
 		}
 	}
 	else {
 		if (mode == MODE_READ || mode == MODE_READWRITE) {
-			pipe->read_ptr  = open(read_fifo, O_RDONLY);
+
+				pipe->read_ptr  = open(read_fifo, O_RDONLY);
+
 		}
 		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
-			pipe->write_ptr = open(write_fifo, O_WRONLY);
+
+				pipe->write_ptr = open(write_fifo, O_WRONLY);
+
 		}
 	}
+	return pipe;
 }
 
 sim_pipe_transporter sim_pipe_transporter_init_client(int server_id, int client_id) {
@@ -73,7 +83,9 @@ sim_pipe_transporter sim_pipe_transporter_init_server(int server_id, int client_
 
 void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data) {
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
+	//	printf("Before write %s\n", t->read_fifo);
 		write(t->write_ptr, data, cstring_len(data) + 1);
+	//	printf("After write %s\n", t->read_fifo);
 	}
 }
 

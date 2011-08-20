@@ -65,7 +65,7 @@ heap heap_expand(heap h) {
 	}
 	h2->Size = h->Size;
 	
-	free(h);
+	heap_free(h);
 	return h2;
 }
 

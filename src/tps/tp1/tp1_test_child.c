@@ -31,7 +31,7 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	// Starts response of message test
 	
 	data = sim_transporter_listen(t);
-	assert(cstring_compare("POST;Write again", data));
+	assert(cstring_compare("Write again", data));
 	
 	//////////// This should be a server work
 	
@@ -58,6 +58,7 @@ int main(int argc, char ** params) {
 		int parsed_3 = 0;
 		int to_id = cstring_parseInt(params[3], &parsed_3);
 		if (parsed_1 && parsed_2 && parsed_3) {
+			printf("starting test");
 			networking_test(connection_t, from_id, to_id);
 		}
 	}

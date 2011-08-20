@@ -11,8 +11,16 @@ void separator() {
 
 void networking_test(connection_type conn, int from_id, int to_id) {
 	// Starts a client and makes a lot of noise.
+	sim_client c = sim_client_init(conn, 0, from_id, to_id, NULL);
 	
-
+	cstring text = cstring_fromInt(to_id);
+	text = cstring_write(text, " 1234567890 1234567890 ");
+	
+	
+	sim_client_print(c,text); 
+	
+	
+	
 	// Stops sending noise to the server.
 }
 

@@ -7,6 +7,8 @@
  *
  */
 
+#include <pthread.h>
+
 #include "../includes.h"
 #include "tree.h"
 #include "list.h"
@@ -30,7 +32,8 @@ struct data {
 struct map {
 	tree t;
 	cloner clon_function;
-	int	comparer_index;
+	int					comparer_index;
+	pthread_mutex_t	*	mutex;
 };
 
 // This data is used to store the comparers of each map.
@@ -54,6 +57,8 @@ map map_init(comparer comp, cloner clon_function) {
 	tree t = tree_init(compare_data);
 	m->t = t;
 	m->comparer_index = comparers;
+	m->mutex = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(m->mutex, NULL);
 	// The map copies the keys if it has a function to do so
 	if (clon_function != NULL)
 		m->clon_function = clon_function;
@@ -72,6 +77,7 @@ map map_init(comparer comp, cloner clon_function) {
 		for (; i < comparers; i++) {
 			comparer_storage[i] = old[i];
 		}
+		free(old);
 		comparer_storage[i] = comp;
 	}
 	comparers++;
@@ -81,7 +87,7 @@ map map_init(comparer comp, cloner clon_function) {
 
 // This method and remove should be lockable!!!
 int map_set(map m, void_p key, void_p value) {
-	
+	pthread_mutex_lock(m->mutex);
 	data * d = (data*) malloc(sizeof(data));
 	if (m->clon_function)
 		d->key = m->clon_function(key);
@@ -91,11 +97,11 @@ int map_set(map m, void_p key, void_p value) {
 	d->value = value;
 	c_index = m->comparer_index;
 	if (tree_add(m->t, d)){
-		// This should be lockable or won't handle 
-		// multiple threads!!!!!!!!!!
+		pthread_mutex_unlock(m->mutex);
 		return 1;			
 	}	
 	else {
+		pthread_mutex_unlock(m->mutex);
 		free(d);
 		return 0;
 	}
@@ -104,14 +110,18 @@ int map_set(map m, void_p key, void_p value) {
 
 // This method should be locked
 void_p map_get(map m, void_p key) {
+	pthread_mutex_lock(m->mutex);
 	data * finder = (data*) malloc(sizeof(data));
 	finder->key = key;
 	c_index = m->comparer_index;
 	data * d = (data *)tree_get(m->t, finder);
 	free(finder);
-	if (d != NULL)
+	if (d != NULL) {
+		pthread_mutex_unlock(m->mutex);
 		return d->value;
+	}
 	else {
+		pthread_mutex_unlock(m->mutex);
 		return NULL;
 	}
 
@@ -119,6 +129,7 @@ void_p map_get(map m, void_p key) {
 
 // This method should be locked
 void_p map_remove(map m, void_p key) {
+	pthread_mutex_lock(m->mutex);
 	data * finder = (data*) malloc(sizeof(data));
 	finder->key = key;
 	c_index = m->comparer_index;
@@ -129,6 +140,7 @@ void_p map_remove(map m, void_p key) {
 		free(d->key);
 	}
 	free(d);
+	pthread_mutex_unlock(m->mutex);
 	return ret;
 }
 
@@ -136,12 +148,15 @@ void_p map_remove(map m, void_p key) {
 // It makes an array pointing to all the keys in the map.
 // You really shouldn't modify it's values...
 list map_keys(map m) {
+	pthread_mutex_lock(m->mutex);
 	int i = 0;
 	list datas = tree_to_list(m->t);
 	list l = list_init();
 	for (i=0; i < tree_size(m->t); i++) {
 		list_add(l, ((data*)list_get(datas, i))->key);
 	}
+	list_free(datas);
+	pthread_mutex_unlock(m->mutex);
 	return l;
 }
 
@@ -149,12 +164,15 @@ list map_keys(map m) {
 // It makes an array pointing to all the values in the map.
 // You can modify the values of this map.
 list map_values(map m) {
+	pthread_mutex_lock(m->mutex);
 	int i = 0;
 	list datas = tree_to_list(m->t);
 	list l = list_init();
 	for (i=0; i < tree_size(m->t); i++) {
 		list_add(l, ((data*)list_get(datas, i))->value);
 	}
+	list_free(datas);
+	pthread_mutex_unlock(m->mutex);
 	return l;
 }
 
@@ -165,6 +183,11 @@ int map_size(map m) {
 
 // Frees the map
 void map_free(map m) {
+	pthread_mutex_lock(m->mutex);
+	pthread_mutex_t * mutex = m->mutex;
 	tree_free(m->t);
 	free(m);
+	pthread_mutex_unlock(mutex);
+	pthread_mutex_destroy(mutex);
+	free(mutex);
 }

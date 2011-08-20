@@ -6,6 +6,7 @@
 
 #include <unistd.h>
 #include <pthread.h>
+#include <signal.h>
 
 
 struct sim_transporter {
@@ -17,38 +18,74 @@ struct sim_transporter {
 	
 	pthread_t		*	listener;
 	
-	queue				messages;
+
 	
 	transporter_mode	mode;
+	
+	int					kill_signal;
+	
+	int					client_id;
+	int					server_id;
 	
 	function			write;	
 	function			listen;	
 	function			free;	
+	
+	queue				messages;
 };	
 
 
+int sim_transporter_client_id(sim_transporter t) {
+	return t->client_id;
+}
+
+int sim_transporter_server_id(sim_transporter t) {
+	return t->server_id;
+}
+
+void sim_transporter_cleanup(sim_transporter t) {
+	free(t->listener_mutex);
+	free(t->listener_received);
+	free(t->listener);
+	t->free(t->data);
+	free(t);
+	return;
+}
 
 void_p sim_transporter_listener(sim_transporter t) {
-	int len, i;
+	int len, i, oldtype;
 	cstring builder = cstring_init(0);
 
+	
+	pthread_cleanup_push(sim_transporter_cleanup, t);
+	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
+
+	
 	while(TRUE) {
 		len = 0;
+
 		char * data = (char *) t->listen(t->data, &len);
+
 		i = 0;
 		for (; i < len; i++) {
 			builder = cstring_write_c(builder, data[i]);
 			if (data[i] == 0) {
 				if (cstring_len(builder) > 0) {
 					queue_poll(t->messages, builder);
+					printf("I SENT!: %d\n", queue_size(t->messages));
 					pthread_cond_broadcast(t->listener_received);
 					builder = cstring_init(0);
 				}
 			}
 		}
-		
+		if (data != NULL) {
+			free(data);
+		}
 	}
-
+	
+	
+	pthread_cleanup_pop(0);
+	
 	
 	return NULL;
 }
@@ -61,14 +98,19 @@ void sim_transporter_dequeue(sim_transporter t) {
 cstring sim_transporter_listen(sim_transporter t) {
 	int value_found = 0;
 	cstring data = NULL;
+
 	while(!value_found) {
 		pthread_mutex_lock(t->listener_mutex);
 		while (queue_empty(t->messages)) {
+			printf("I listen.........\n");
 			pthread_cond_wait(t->listener_received, t->listener_mutex);
 		}
 		data = queue_peek(t->messages);
-		if (data != NULL)
+		if (data != NULL) {
 			value_found = 1;	
+			printf("I found!: %d\n", queue_size(t->messages));
+		}
+	
 
 		pthread_mutex_unlock(t->listener_mutex);
 	}
@@ -78,18 +120,16 @@ cstring sim_transporter_listen(sim_transporter t) {
 static sim_transporter sim_transporter_start() {
 	sim_transporter tr = (sim_transporter) malloc(sizeof(struct sim_transporter));
 	
-	pthread_mutex_t * mutex		= (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
-	pthread_cond_t * received	= (pthread_cond_t *) malloc(sizeof(pthread_cond_t));
-	pthread_t	*	thread		= (pthread_t *) malloc(sizeof(pthread_t));
-
-	queue messages = queue_init();
+	pthread_mutex_t * mutex		= (pthread_mutex_t *) calloc(120,1);
+	pthread_cond_t * received	= (pthread_cond_t *) calloc(120,1);
+	pthread_t	*	thread		= (pthread_t *) calloc(120,1);
 	
 	pthread_mutex_init(mutex, NULL);
 	pthread_cond_init(received, NULL);
 
 
 	tr->listener = thread;
-	tr->messages = messages;
+	tr->messages = queue_init();
 	tr->listener_mutex = mutex;
 	tr->listener_received = received;
 	
@@ -127,10 +167,21 @@ sim_transporter sim_transporter_init(connection_type type, process_type proc, in
 	
 	sim_transporter t = sim_transporter_start();
 	t->mode = mode;
+	t->kill_signal = 0;
 	
 	if (is_server && forks_child) {
 		exec_process(proc, type, from_id, to_id);
 	}
+	
+	if (is_server) {
+		t->server_id = from_id;
+		t->client_id = to_id;
+		
+	}else {
+		t->client_id = from_id;
+		t->server_id = to_id;
+	}
+
 	
 	switch (type) {
 		case C_PIPE:
@@ -167,9 +218,11 @@ void sim_transporter_write(sim_transporter sim, cstring message) {
 }
 
 void sim_transporter_free(sim_transporter sim) {
-	sim->free(sim->data);
-	free(sim->listener_mutex);
-	free(sim->listener_received);
-	free(sim->listener);
-	free(sim);
+	printf("Freeing transporter\n");
+	if (sim->mode != MODE_WRITE) {
+		pthread_cancel(sim->listener);
+	} else {
+		sim_transporter_cleanup(sim);
+	}
+
 }

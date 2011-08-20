@@ -53,34 +53,84 @@ struct sim_server {
 	int					client_id_multiplier;
 };
 
+
+static void sim_server_listener_cleanup(sim_server s) {
+	map_free(s->responds_to);
+	sim_transporter_free(s->listen_transporter);
+	
+	list keys = map_keys(s->clients_transporters);
+	int i = 0;
+	for(; list_get(keys,i); i++) {
+		sim_transporter_free(map_get(s->clients_transporters, list_get(keys,i)));
+	}
+	map_free(s->clients_transporters);
+	list_free_with_data(keys);
+	
+	free(s);
+}
+
 /**
  Listens to all the messages being sent to the server.
  When matches a key string, it makes a response.
  Then keeps on listening.
  */
-static void sim_server_listen(sim_server s) {
-	return;
+static void sim_server_listener(sim_server s) {
+
+	
+	int oldtype;
+	pthread_cleanup_push(sim_server_listener_cleanup, s);
+	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
+	
+	s->listen_transporter = sim_transporter_init(s->c_type, 
+												 s->p_type, 
+												 s->server_id, 
+												 s->server_id, 
+												 MODE_READ, 
+												 FALSE, TRUE);
+	int count = 0;
 	while(TRUE) {
 		cstring msg = sim_transporter_listen(s->listen_transporter);
 		cstring header = cstring_copy_until_char(msg, ';');
 		
+
 		
+		int fail = 1;		
 		foreach(cstring, key, s->responds_to_keys) {
-			
+			//printf("hola: %s %d\n",msg, count++);
+			if (cstring_matches(header, key) == 1 || cstring_compare(key,header) == 0) {
+				sim_transporter_dequeue(s->listen_transporter);
+				list params = cstring_split_list(msg, ";");
+				list header_values = cstring_split_list((cstring)list_get(params,0)," ");
+				int ok = 1;
+				int id = cstring_parseInt((cstring)list_get(header_values,0), &ok);
+				sim_message _m = sim_message_init((sim_transporter)map_get(s->clients_transporters,&id), 
+																   cstring_write(cstring_copy("RESP "),list_get(params,0)), 
+																   list_get(params,1));
+				((function)map_get(s->responds_to, &key))(_m);
+				
+				list_free_with_data(params);
+				list_free_with_data(header_values);
+				fail = 0;
+			}
+		}
+		if (fail == 1) {
+			printf("msg: %s\n", msg);
 		}
 	}
+	
+	pthread_cleanup_pop(0);
 }
 
 sim_server sim_server_init(connection_type con, process_type p_type, int server_id) {		
 	sim_server s = (sim_server) malloc(sizeof(struct sim_server));
-	s->responds_to = map_init(cstring_comparer, cstring_cloner);
+	s->responds_to = map_init(cstring_comparer, NULL);
 	s->responds_to_keys = list_init();
 	s->clients_transporters = map_init(int_comparer, int_cloner);
 	s->c_type = con;
 	s->p_type = p_type;
 	s->client_id_seed = 1;
 	s->server_id = server_id;
-	s->listen_transporter = sim_transporter_init(con, p_type, server_id, server_id, MODE_READ, FALSE, TRUE);
+
 	
 	switch (p_type) {
 		case P_LEVEL:
@@ -94,14 +144,14 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 	}
 	
 	
-	pthread_create(&s->listener_thread, NULL, (void_p) sim_server_listen, (void_p) s);	
+	pthread_create(&s->listener_thread, NULL, (void_p) sim_server_listener, (void_p) s);	
 	return s;
 }
 
 
 
 int sim_server_add_receiver(sim_server s, cstring sequence, sim_receiver rec) {
-	map_set(s->responds_to, sequence, rec);
+	map_set(s->responds_to, &sequence, rec);
 	list_add(s->responds_to_keys, sequence);
 }
 
@@ -119,4 +169,9 @@ int sim_server_spawn_child(sim_server s) {
 	map_set(s->clients_transporters, &key, child_t);
 	
 	s->client_id_seed++;
+}
+
+
+int sim_server_free(sim_server s) {
+	pthread_cancel(s->listener_thread);
 }

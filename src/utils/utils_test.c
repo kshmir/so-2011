@@ -31,8 +31,10 @@ void cstring_test() {
 	
 	printf("Copy, write, write char...\n");
 	cstring s = cstring_copy("HOLA!");
-	assert(cstring_compare(cstring_write(s," CHAU!"), "HOLA! CHAU!") == 0);
-	assert(cstring_compare(cstring_write_c(s,'f'), "HOLA! CHAU!f") == 0);
+	s = cstring_write(s," CHAU!");
+	assert(cstring_compare(s, "HOLA! CHAU!") == 0);
+	s = cstring_write_c(s,'f');
+	assert(cstring_compare(s, "HOLA! CHAU!f") == 0);
 	free(s);
 	printf("DONE!\n");
 	
@@ -55,24 +57,34 @@ void cstring_test() {
 			assert(cstring_compare(splits[i],"AND") == 0);
 		else if (i == 6)
 			assert(cstring_compare(splits[i],"EXPAND") == 0);
+		
+		free(splits[i]);
 	}
 	assert(i == 7);
+	free(splits);
+	free(s);
 	printf("DONE!\n");
 	
 	printf("ParseInt...\n");
 	int ret = 0;
-	int parsed = cstring_parseInt(cstring_copy("-456"),&ret);
+	s = cstring_copy("-456");
+	int parsed = cstring_parseInt(s,&ret);
+	free(s);
 	assert(ret == 1);
 	assert(parsed == -456);
 	
 	
 	ret = 0;
-	parsed = cstring_parseInt(cstring_copy("2355"),&ret);
+	s = cstring_copy("2355");
+	parsed = cstring_parseInt(s,&ret);
+	free(s);
 	assert(ret == 1);
 	assert(parsed == 2355);
 	
 	ret = 0;
-	parsed = cstring_parseInt(cstring_copy("2355a"),&ret);
+	s = cstring_copy("2355a");
+	parsed = cstring_parseInt(s,&ret);
+	free(s);
 	assert(ret == 0);
 	
 	printf("DONE!...\n");
@@ -86,13 +98,25 @@ void cstring_test() {
 	
 	printf("String Join, reverse, fromInt, replace, join list..\n");
 	
-	assert(cstring_compare(cstring_join(joins," - "),"HOLA - COMO - ANDAS") == 0);
-	assert(cstring_compare(cstring_reverse(cstring_copy("HOLA")),"ALOH") == 0);
-	assert(cstring_compare(cstring_fromInt(50002), "50002") == 0);
-	assert(cstring_compare(cstring_replace("HOLA CRISTIAN COMO ANDAS", " ", ""),"HOLACRISTIANCOMOANDAS") == 0);
+	s = cstring_join(joins," - ");
+	assert(cstring_compare(s,"HOLA - COMO - ANDAS") == 0);
+	free(s);
+	s = cstring_copy("HOLA");
+	s = cstring_reverse(s);
+	assert(cstring_compare(s,"ALOH") == 0);
+	free(s);
+	s =	cstring_fromInt(50002);
+	assert(cstring_compare(s, "50002") == 0);
+	free(s);
+	s = cstring_replace("HOLA CRISTIAN COMO ANDAS", " ", "");
+	assert(cstring_compare(s,"HOLACRISTIANCOMOANDAS") == 0);
+	free(s);
 	cstring * lineas = cstring_split("hola\n\nchau","\n");
 	for (i = 0; lineas[i] ; i++) {
+		free(lineas[i]);
 	}
+	free(lineas);
+
 	assert(i == 3);
 	
 	list l = cstring_split_list("HOLA_CRISTIAN_COMO_ANDAS", "_");

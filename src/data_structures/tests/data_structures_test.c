@@ -159,7 +159,7 @@ void tree_test() {
 		int *value = tree_get(t,&i);
 		assert(int_comparer(value,list_get(values, i)) == 0);
 	}
-	
+	list_free(values);
 	
 	printf("DONE!\n");
 	
@@ -189,8 +189,8 @@ void map_test() {
 	
 	printf("It should init two maps\n");
 	// This is because of the internals, testing two is better :)
-	map m = map_init(int_comparer, int_cloner);
-	map m2 = map_init(int_comparer, int_cloner);
+	map m = map_init(int_comparer, NULL);
+	map m2 = map_init(int_comparer, NULL);
 	printf("DONE!\n");
 	
 	printf("TODO: This should work with threads\n");
@@ -236,13 +236,13 @@ void map_test() {
 	for (i = 0; i < 1024; i++) {
 		assert(*(int*)list_get(values, i) == i * i);
 	}
-	free(values);
+	list_free(values);
 	
 	list keys = map_keys(m);
 	for (i = 0; i < 1024; i++) {
 		assert(*(int*)list_get(keys, i) == i);
 	}
-	free(keys);
+	list_free(keys);
 	printf("DONE!\n");
 	
 
@@ -258,6 +258,7 @@ void map_test() {
 	}
 	printf("DONE!\n");
 	
+	map_free(m2);
 	map_free(m);
 	separator();
 }
@@ -362,9 +363,6 @@ void graph_test(){
 
 	}
 	printf("DONE!\n");
-	
-	printf("Testing access functions.\n");
-	printf("NOT DONE!\n");
 }
 
 void heap_test() {
@@ -373,7 +371,7 @@ void heap_test() {
 	
 	heap h = heap_init(1024,int_comparer);
 	
-	int datos[1024*1024];
+	int * datos = (int*) malloc(sizeof(int) * 1024*1024);
 	int i = 0;
 	printf("Inserting 1M records and resizing on the go \n");
 	for (; i < 1024*1024; i++) {
@@ -389,13 +387,15 @@ void heap_test() {
 	printf("Removing 1M records \n");
 	i = 0;
 	
-	for (; i < 1024*1024; i++) {
-		int a = *((int*)heap_remove_min(h));
-		assert(a == i);
+	for (; i < heap_empty(h); i++) {
+		int * a = ((int*)heap_remove_min(h));
+		assert(*a == i);
+		free(a);
 	}
 	printf("DONE!\n");
 	
 	heap_free(h);
+	free(datos);
 	
 	separator();
 }
@@ -405,34 +405,32 @@ void queue_test() {
 
 	printf("Testing Queue\n");
 	queue q = queue_init();
-	int a, b ,c;
-	a = 0;
-	b = 1;
-	c = 2;
-	char * s = "HOLA";
-	queue_poll(q, s);
-	queue_poll(q, &c);
-	queue_poll(q, &b);
-	queue_poll(q, &a);
-	assert((char *)queue_peek(q) == s);
-	assert((char *)queue_pull(q) == s);
-	assert(*(int*)queue_pull(q) == 2);
-	assert(*(int*)queue_pull(q) == 1);
-	assert(*(int*)queue_pull(q) == 0);
-	assert(queue_empty(q));
+	int i = 1;
+	for (; i < 1024; i++) {
+		queue_poll(q, &i);
+		queue_poll(q, &i);
+		assert(queue_size(q) == i + 1);
+		queue_peek(q);
+		assert(queue_size(q) == i + 1);
+		queue_pull(q);
+		assert(queue_size(q) == i);
+
+	}
 	printf("DONE!\n");
-	
+	queue_free(q);
 	separator();
 }
 
 int main(int argc, char ** argv) {
 	
 	tree_test();		// AVL Tree, for general storage.
+	map_test();			// Map,		 for storing data. (uses tree!)
+	graph_test();
+
 	stack_test();		// Stack,	 for algorithms.
 	list_test();		// List,	 for manipulating data.
-	map_test();			// Map,		 for storing data. (uses tree!)
 	heap_test();		// Heap,     for algorithms / queuing data (proccesses)
 	queue_test();
-	graph_test();
+
 	return 0;
 }

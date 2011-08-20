@@ -1,0 +1,8 @@
+#!/bin/bash
+mkdir ../so-2011
+cp -r src ../so-2011
+cp makefile ../so-2011
+cd ../so-2011
+make $1
+valgrind -v --leak-check=full --show-reachable=yes ./$1
+cd ../so

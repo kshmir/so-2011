@@ -22,13 +22,11 @@ sim_message sim_message_init(sim_transporter t, cstring header, cstring string) 
 		m->header = header;
 	}
 
-	
 	if (string == NULL)
 		m->message = cstring_init(0);
 	else {
 		m->message = string;
 	}
-	
 	
 	pthread_attr_init(&m->attr);
 	pthread_attr_setdetachstate(&m->attr, PTHREAD_CREATE_JOINABLE);
@@ -51,7 +49,6 @@ int sim_message_write(sim_message r, cstring data) {
 }
 
 int sim_message_free(sim_message r) {
-	free(r->message);
 	free(r);
 }
 
@@ -69,6 +66,10 @@ static void_p sim_message_listen(struct listener_data * data) {
 		cstring msg = sim_transporter_listen(r->t);
 		cstring header = cstring_copy_until_char(msg, ';');
 		
+		if (msg[0] == 0) {
+			return NULL; 
+		}
+		
 		if (cstring_matches(header,"RES ")) {
 			cstring no_resp = cstring_replace(msg, "RES ", "");
 			list splitted = cstring_split_list(no_resp, ";");
@@ -84,6 +85,9 @@ static void_p sim_message_listen(struct listener_data * data) {
 			free(no_resp);
 		} 
 		free(header);
+		if (msg != NULL) {
+			free(msg);
+		}
 	}
 	return 0;
 }
@@ -94,12 +98,16 @@ sim_message sim_message_send(sim_message r) {
 	pthread_create(&r->thread, &r->attr, (void_p) sim_message_listen, (void_p) &data);
 	sim_message_respond(r);
 	pthread_join(r->thread, NULL);
+	sim_message_free(r);
 	sim_message response = data.m;
 	return response;
 }
 
 
-void sim_message_respond(sim_message r) {
-	
-	sim_transporter_write(r->t, r->message);
+void sim_message_respond(sim_message r) {	
+	cstring array[3];
+	array[0] = r->header;
+	array[1] = r->message;
+	array[2] = NULL;
+	sim_transporter_write(r->t, cstring_join(array, ";"));
 }

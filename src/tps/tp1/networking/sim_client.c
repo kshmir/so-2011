@@ -6,12 +6,27 @@ struct sim_client {
 	sim_transporter t;
 	sim_receiver	r;
 	
+	int client_id;
+	
 	pthread_t		listener_thread;
 };
 
-static void_p sim_client_listen(sim_client r) {
+static void sim_client_listener_cleanup(sim_client r) {
+	sim_transporter_free(r->t);
+	//free(r);
+}
+
+static void_p sim_client_listener(sim_client r) {
+	int oldtype;
+	pthread_cleanup_push(sim_client_listener_cleanup, r);
+	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
 	while(TRUE) {
 		cstring msg = sim_transporter_listen(r->t);
+		
+		if (msg[0] == 0) {
+			return NULL; 
+		}
+		
 		cstring header = cstring_copy_until_char(msg, ';');
 		
 		if (cstring_compare(header,"QUERY ") == 0) {
@@ -28,15 +43,17 @@ static void_p sim_client_listen(sim_client r) {
 		}
 		free(header);
 	}
+	
+	pthread_cleanup_pop(0);
 }
 
 
 
 sim_client sim_client_from_transporter(sim_transporter t, sim_receiver r) {
-	sim_client c = (sim_client) malloc(sizeof(sim_client));
+	sim_client c = (sim_client) malloc(sizeof(struct sim_client));
 	c->t = t;
 	c->r = r;
-	pthread_create(&c->listener_thread, NULL, (void_p) sim_client_listen, (void_p) c);	
+	pthread_create(&c->listener_thread, NULL, (void_p) sim_client_listener, (void_p) c);	
 	return c;
 }
 
@@ -96,17 +113,19 @@ int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cst
 	return 0;
 }
 
-int sim_client_post_movement(sim_client c, int object_id, cstring from, cstring to) {
-	//	cstring get = cstring_fromInt(object_id); 
-	//	cstring_copy(" POST MOV ");
-	//	cstring_write(get, " ");
-	//	cstring_write(get, from);
-	//	cstring_write(get, " ");
-	//	cstring_write(get, to);	
-	//	cstring_write(get, " ");
-	//	cstring_write(get, cstring_FromInt(amount));
-	// This is quite useless, we have to review if the map must know where they are.... I don't think so.
-	return 0;
+int sim_client_print(sim_client c, cstring message, int _id) {
+	
+	int id = (_id != -1) ? _id : c->client_id;
+	
+	cstring header = cstring_write(cstring_fromInt(id), " PRINT ");
+	sim_message request = sim_message_init(c->t, header, message);
+	sim_message_respond(request);
+	free(header);
+	return 1;
+}
+
+void sim_client_free(sim_client c) {
+	pthread_cancel(c->listener_thread);
 }
 
 
