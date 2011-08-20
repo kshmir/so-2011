@@ -115,7 +115,7 @@ utils = \
 
 #//MARK: ----- GCC Declarations
 ### Flags and declarations	
-cc = gcc -m32 -g 
+cc = gcc -m32 -g -lpthread
 
 
 
