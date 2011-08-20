@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
+#include <time.h>
 
 #include "networking/sim_server.h"
 #include "networking/sim_transporter.h"
@@ -10,16 +11,22 @@ void separator() {
 }
 
 void networking_test(connection_type conn, int from_id, int to_id) {
+	srand(time(NULL));
 	// Starts a client and makes a lot of noise.
 	sim_client c = sim_client_init(conn, 0, from_id, to_id, NULL);
 	
+	int i = 0;
+	for(; i < to_id; i++)
+		rand();
+	
+	int j = rand() % 3 + 1;
 	cstring text = cstring_fromInt(to_id);
-	text = cstring_write(text, " 1234567890 1234567890 ");
-	
-	
+	text = cstring_write(text, cstring_fromInt(j));
+
+	sleep(j);
 	sim_client_print(c,text); 
 	
-	
+
 	
 	// Stops sending noise to the server.
 }

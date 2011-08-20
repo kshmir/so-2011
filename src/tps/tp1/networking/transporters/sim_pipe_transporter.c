@@ -29,31 +29,54 @@ static sim_pipe_transporter create_pipe_transporter(cstring write_fifo, cstring 
 	pipe->read_fifo = read_fifo;	
 	pipe->client = client;
 	pipe->mode = mode;
+	// MacOSX Doesn't seem to like going blocked, and it fails misserably.
+	// So this solves it :D
+#ifdef __MACH__
 	if (client == 1) {
 		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
-
-				pipe->write_ptr = open(write_fifo, O_WRONLY);
-
-
+			do {
+				pipe->write_ptr = open(write_fifo, O_WRONLY | O_NONBLOCK);
+			} while(pipe->write_ptr == -1);
+			
 		}
 		if (mode == MODE_READ || mode == MODE_READWRITE) { 
-
+			do {
 				pipe->read_ptr  = open(read_fifo, O_RDONLY);
-
+			} while(pipe->read_ptr == -1);
 		}
 	}
 	else {
 		if (mode == MODE_READ || mode == MODE_READWRITE) {
-
+			do {
 				pipe->read_ptr  = open(read_fifo, O_RDONLY);
-
+			} while(pipe->read_ptr == -1);
 		}
 		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
-
-				pipe->write_ptr = open(write_fifo, O_WRONLY);
-
+			do {
+				pipe->write_ptr = open(write_fifo, O_WRONLY | O_NONBLOCK);
+			} while(pipe->write_ptr == -1);
 		}
 	}
+#else
+	if (client == 1) {
+		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
+			pipe->write_ptr = open(write_fifo, O_WRONLY);
+		}
+		if (mode == MODE_READ || mode == MODE_READWRITE) { 
+			pipe->read_ptr  = open(read_fifo, O_RDONLY);			
+		}
+	}
+	else {
+		if (mode == MODE_READ || mode == MODE_READWRITE) {
+			pipe->read_ptr  = open(read_fifo, O_RDONLY);
+		}
+		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
+			pipe->write_ptr = open(write_fifo, O_WRONLY);
+		}
+	}
+#endif
+
+	
 	return pipe;
 }
 
@@ -83,9 +106,9 @@ sim_pipe_transporter sim_pipe_transporter_init_server(int server_id, int client_
 
 void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data) {
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
-	//	printf("Before write %s\n", t->read_fifo);
+		//	printf("Before write %s\n", t->read_fifo);
 		write(t->write_ptr, data, cstring_len(data) + 1);
-	//	printf("After write %s\n", t->read_fifo);
+		//	printf("After write %s\n", t->read_fifo);
 	}
 }
 

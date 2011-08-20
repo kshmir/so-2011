@@ -91,7 +91,7 @@ void networking_test(connection_type c_type) {
 		sim_server_spawn_child(s);
 	}
 	
-	sleep(1);
+	sleep(5);
 	
 	sim_server_free(s);
 	
