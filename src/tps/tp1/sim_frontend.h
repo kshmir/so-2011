@@ -1,9 +1,11 @@
 /*
- *  sim_frontend.h
- *  so-2011
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------
  *
- *  Created by Cristian Pereyra on 10/08/11.
- *  Copyright 2011 My Own. All rights reserved.
  *
  */
 

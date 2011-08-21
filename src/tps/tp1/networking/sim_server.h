@@ -15,6 +15,7 @@ typedef int process_type;
 
 sim_server sim_server_init(connection_type con, process_type p_type, int server_id);
 
+void sim_server_broadcast_query(sim_server s, cstring message);
 
 int sim_server_add_receiver(sim_server s, cstring sequence, sim_receiver f);
 

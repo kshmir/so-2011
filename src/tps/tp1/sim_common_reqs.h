@@ -1,5 +1,13 @@
-// Common requirements to all the simulation code.
-
+/*
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------
+ * Common requirements to all the simulation libraries.
+ * 
+ */
 
 #ifndef _SIM_COMMON_H_
 #define _SIM_COMMON_H_

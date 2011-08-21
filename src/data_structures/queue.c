@@ -15,7 +15,7 @@ struct queue{
 };
 
 queue	queue_init(){
-	queue q = (queue *)malloc(sizeof(struct queue));
+	queue q = (queue)malloc(sizeof(struct queue));
 	q->l = list_init();
 	return q;
 }

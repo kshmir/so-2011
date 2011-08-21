@@ -47,6 +47,7 @@ void sim_transporter_cleanup(sim_transporter t) {
 	free(t->listener_received);
 	free(t->listener);
 	t->free(t->data);
+	free(t->messages);
 	free(t);
 	return;
 }
@@ -56,7 +57,7 @@ void_p sim_transporter_listener(sim_transporter t) {
 	cstring builder = cstring_init(0);
 
 	
-	pthread_cleanup_push(sim_transporter_cleanup, t);
+	pthread_cleanup_push((void_p)sim_transporter_cleanup, t);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
 
 	
@@ -221,9 +222,8 @@ void sim_transporter_write(sim_transporter sim, cstring message) {
 }
 
 void sim_transporter_free(sim_transporter sim) {
-	printf("Freeing transporter\n");
 	if (sim->mode != MODE_WRITE) {
-		pthread_cancel(sim->listener);
+		pthread_cancel(*sim->listener);
 	} else {
 		sim_transporter_cleanup(sim);
 	}

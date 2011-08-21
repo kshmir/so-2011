@@ -78,7 +78,7 @@ static void sim_server_listener(sim_server s) {
 
 	
 	int oldtype;
-	pthread_cleanup_push(sim_server_listener_cleanup, s);
+	pthread_cleanup_push((void_p)sim_server_listener_cleanup, s);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
 	
 	s->listen_transporter = sim_transporter_init(s->c_type, 
@@ -97,21 +97,23 @@ static void sim_server_listener(sim_server s) {
 		int fail = 1;		
 		foreach(cstring, key, s->responds_to_keys) {
 			//printf("hola: %s %d\n",msg, count++);
-			if (cstring_matches(header, key) == 1 || cstring_compare(key,header) == 0) {
+			cstring safe_key = cstring_copy(key);
+			if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {
 				sim_transporter_dequeue(s->listen_transporter);
 				list params = cstring_split_list(msg, ";");
 				list header_values = cstring_split_list((cstring)list_get(params,0)," ");
 				int ok = 1;
 				int id = cstring_parseInt((cstring)list_get(header_values,0), &ok);
 				sim_message _m = sim_message_init((sim_transporter)map_get(s->clients_transporters,&id), 
-																   cstring_write(cstring_copy("RESP "),list_get(params,0)), 
+																   cstring_write(cstring_copy("RES "),list_get(params,0)), 
 																   list_get(params,1));
-				((function)map_get(s->responds_to, &key))(_m);
+				((function)map_get(s->responds_to, &safe_key))(_m);
 				
 				list_free_with_data(params);
 				list_free_with_data(header_values);
 				fail = 0;
 			}
+			free(safe_key);
 		}
 		if (fail == 1) {
 			printf("msg: %s\n", msg);
@@ -149,9 +151,26 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 }
 
 
+void sim_server_broadcast_query(sim_server s, cstring message) {
+	cstring header = cstring_copy("QUERY ");
+	cstring msg = cstring_copy(message);
+	
+	
+	list transporters = map_values(s->clients_transporters);
+	foreach(sim_transporter, t, transporters) {
+		sim_message m = sim_message_init(t, cstring_copy(header), cstring_copy(msg));
+		sim_message_respond(m);
+		sim_message_free(m);
+	}
+	list_free(transporters);
+	free(header);
+	free(msg);
+}
 
 int sim_server_add_receiver(sim_server s, cstring sequence, sim_receiver rec) {
-	map_set(s->responds_to, &sequence, rec);
+	int * ptr = (int *) malloc(sizeof(void_p));
+	* ptr = (int) sequence;
+	map_set(s->responds_to, ptr, rec);
 	list_add(s->responds_to_keys, sequence);
 }
 

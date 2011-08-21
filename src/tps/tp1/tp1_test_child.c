@@ -1,3 +1,14 @@
+/*
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------
+ *
+ *
+ */
+
 #include <stdio.h>
 #include <assert.h>
 

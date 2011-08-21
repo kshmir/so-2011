@@ -88,7 +88,7 @@ map map_init(comparer comp, cloner clon_function) {
 // This method and remove should be lockable!!!
 int map_set(map m, void_p key, void_p value) {
 	pthread_mutex_lock(m->mutex);
-	data * d = (data*) malloc(sizeof(data));
+	data * d = (data*) malloc(sizeof(struct data));
 	if (m->clon_function)
 		d->key = m->clon_function(key);
 	else {
@@ -111,7 +111,7 @@ int map_set(map m, void_p key, void_p value) {
 // This method should be locked
 void_p map_get(map m, void_p key) {
 	pthread_mutex_lock(m->mutex);
-	data * finder = (data*) malloc(sizeof(data));
+	data * finder = (data*) malloc(sizeof(struct data));
 	finder->key = key;
 	c_index = m->comparer_index;
 	data * d = (data *)tree_get(m->t, finder);
@@ -130,7 +130,7 @@ void_p map_get(map m, void_p key) {
 // This method should be locked
 void_p map_remove(map m, void_p key) {
 	pthread_mutex_lock(m->mutex);
-	data * finder = (data*) malloc(sizeof(data));
+	data * finder = (data*) malloc(sizeof(struct data));
 	finder->key = key;
 	c_index = m->comparer_index;
 	data * d = (data *)tree_delete(m->t, finder);	

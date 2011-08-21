@@ -159,7 +159,7 @@ cstring * cstring_split(cstring _sub, cstring s) {
 		hits++;
 	}
 	result[hits] = NULL;
-//	free(sub);
+	free(sub);
 	return result;
 }
 

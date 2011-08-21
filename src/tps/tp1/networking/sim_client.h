@@ -13,6 +13,7 @@ sim_client sim_client_init(connection_type c_type, process_type p_type, int serv
 
 // GET requests of params.
 
+
 int sim_client_get_distances(sim_client c, int object_id, cstring from, cstring to);
 
 map sim_client_get_medicines(sim_client c, int object_id, cstring from);

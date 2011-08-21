@@ -21,7 +21,7 @@ sim_message sim_message_init(sim_transporter t, cstring header, cstring string) 
 	else {
 		m->header = header;
 	}
-
+	
 	if (string == NULL)
 		m->message = cstring_init(0);
 	else {
@@ -39,12 +39,19 @@ cstring sim_message_read(sim_message r) {
 	return resp;
 }
 
-int sim_message_write(sim_message r, cstring data) {
-	if (r->message) {
-		r->message = cstring_init(0);
+int sim_message_set_header(sim_message r, cstring header) {
+	if (r->header != NULL) {
+		free(r->header);
 	}
-	
-	r->message = cstring_write(r->message, data);
+	r->header = cstring_copy(header);	
+	return 1;
+}
+
+int sim_message_write(sim_message r, cstring data) {
+	if (r->message != NULL) {
+		free(r->message);
+	}
+	r->message = cstring_copy(data);
 	return 1;
 }
 

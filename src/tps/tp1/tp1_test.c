@@ -1,3 +1,14 @@
+/*
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------
+ *
+ *
+ */
+
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -21,11 +32,22 @@ void file_test(){
 	printf("%s", cstring_from_file("./testFile"));
 }
 
+#define CLIENTS_COUNT 128
+
+pthread_cond_t	conds;
+pthread_mutex_t mutex;
 cstring buffer;
+
+int message_counter = 0;
 
 
 void print_receiver(sim_message mes) {
-	printf("MESSAGE FROM CLIENT: %s\n", sim_message_read(mes));
+	message_counter++;
+
+	if (message_counter >= CLIENTS_COUNT - 1) {
+		pthread_cond_broadcast(&conds);
+	}
+
 	sim_message_free(mes);
 }
 
@@ -35,46 +57,53 @@ void receiver(sim_message mes) {
 }
 
 void networking_test(connection_type c_type) {
-	//separator();
-//	
-//	printf("Starting transporter test\n");
-//	
-//	sim_transporter t = sim_transporter_init(c_type, P_TESTER, 0, 1, MODE_READWRITE, TRUE, TRUE);
-//	
-//	sim_transporter_write(t, "server");
-//	cstring data = sim_transporter_listen(t);
-//	sim_transporter_dequeue(t);
-//	
-//	printf("DONE!\n");
-//	
-//	separator();
-//	
-//	printf("Starting message test\n");
-//	
-//	sim_message m = sim_message_init(t, "POST", "Write again");
-//	sim_message resp = sim_message_send(m);
-//	data = sim_message_read(resp);
-//	assert(cstring_compare(data, "Hello Baby"));
-//	
-//	printf("DONE!\n");
-//	
-//	separator();
-//	
-//	printf("Starting client test\n");
-//	
-//	sim_client c = sim_client_from_transporter(t, (sim_receiver) receiver);
+	separator();
+	
+	pthread_mutex_init(&mutex,NULL);
+	pthread_cond_init(&conds,NULL);
+	
+	printf("Starting transporter test\n");
+	
+	sim_transporter t = sim_transporter_init(c_type, P_TESTER, 0, 1, MODE_READWRITE, TRUE, TRUE);
+	printf("It should be able to listen and write\n");	
 //	sleep(1);
-//	assert(cstring_compare(buffer, "1234") == 0);	
-//	sim_client_free(c);
-//	
-//	printf("DONE!\n");
-//
-//	printf("Waiting for client closing....\n");	
-//	sleep(1);
-//	printf("Waiting for client 1....\n");
-//	sleep(1);
-//	printf("Waiting for client 2....\n");
-//	separator();
+	sim_transporter_write(t, "server");
+
+	cstring data = sim_transporter_listen(t);
+	sim_transporter_dequeue(t);
+	assert(cstring_compare(data,"cliente") == 0);
+	
+	printf("DONE!\n");
+	
+	separator();
+	
+	printf("Starting message test\n");
+	
+	printf("It should be able to listen and write through a transporter, and get back the data\n");	
+	sim_message m = sim_message_init(t, "POST", "Write again");
+	sim_message resp = sim_message_send(m);
+	data = sim_message_read(resp);
+	assert(cstring_compare(data, "Hello Baby"));
+	
+	printf("DONE!\n");
+	
+	separator();
+	
+	printf("Starting client test\n");
+	printf("It should be able to have a listener for querying data\n");	
+	sim_client c = (sim_client) sim_client_from_transporter(t, receiver);
+	sleep(1);
+	assert(cstring_matches("1234",buffer) == 1 && strlen(buffer) > 0);	
+	sim_client_free(c);
+	
+	printf("DONE!\n");
+
+	printf("Waiting for client closing....\n");	
+	sleep(1);
+	printf("Waiting for client 1....\n");
+	sleep(1);
+	printf("Waiting for client 2....\n");
+	separator();
 	
 	
 
@@ -82,20 +111,32 @@ void networking_test(connection_type c_type) {
 	
 	sim_server s = sim_server_init(c_type, P_TESTER_SERVER, 0);
 	
-	cstring data_p = "PRINT ";
-	
+	cstring data_p = cstring_copy("PRINT ");
+
+	printf("I should receive 128 messages... it takes 3 seconds\n");
 	sim_server_add_receiver(s, data_p, (sim_receiver) print_receiver);
 	
 	int i = 0;
-	for (i = 0; i < 128; i++) {
+	for (i = 0; i < CLIENTS_COUNT; i++) {
 		sim_server_spawn_child(s);
 	}
 	
-	sleep(5);
+	pthread_cond_wait(&conds, &mutex);
+	printf("DONE!\n");
+	
+	message_counter = 0;
+	printf("Now I'll send messages to all my clients\n");
+	
+	sim_server_broadcast_query(s, cstring_copy("hello client"));
+	
+	while(message_counter <= CLIENTS_COUNT - 1);
 	
 	sim_server_free(s);
 	
 	printf("DONE!\n");
+
+	pthread_mutex_destroy(&mutex);
+	pthread_cond_destroy(&conds);
 	
 	separator();
 }
@@ -132,6 +173,6 @@ int main(int argc, char ** params) {
 	buffer = cstring_init(0);
 	//file_test();
 	//serializing_test();
-	networking_test(C_PIPE);
+	networking_test(C_M_QUEUES);
 	return 0;
 }
