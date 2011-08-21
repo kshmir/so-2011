@@ -15,7 +15,7 @@ struct queue{
 };
 
 queue	queue_init(){
-	queue q = malloc(sizeof(struct queue));
+	queue q = (queue *)malloc(sizeof(struct queue));
 	q->l = list_init();
 	return q;
 }
@@ -34,6 +34,10 @@ void_p	queue_pull(queue q){
 void_p	queue_peek(queue q){
 	void_p ret = list_get(q->l, 0);
 	return ret;
+}
+
+int queue_size(queue q) {
+	return list_size(q->l);
 }
 
 int		queue_empty(queue q) {

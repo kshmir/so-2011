@@ -28,18 +28,18 @@ cstring cstring_copy(cstring s){
 cstring cstring_fromInt(int number) {
 	cstring s = cstring_init(0);
 	if (number == 0) {
-		cstring_write_c(s,'0');
+		s = cstring_write_c(s,'0');
 	}
 		
 	if (number < 0) {
 		number *= -1;
-		cstring_write_c(s,'-');
+		s = cstring_write_c(s,'-');
 	}
 	
 	while(number > 0) { 
 		int rem = number % 10;
 		number /= 10;
-		cstring_write_c(s,'0' + rem);
+		s = cstring_write_c(s,'0' + rem);
 	}
 	return cstring_reverse(s);
 }
@@ -66,8 +66,8 @@ cstring cstring_reverse(cstring s) {
 }
 
 cstring cstring_expand(cstring s, int extraSize){
-	s = realloc(s, (cstring_len(s) + extraSize + 1) * sizeof(char));
-	return s;
+	cstring aux = realloc(s, (cstring_len(s) + extraSize + 1) * sizeof(char));
+	return aux;
 }
 
 int cstring_compare(cstring s1, cstring s2)
@@ -159,7 +159,7 @@ cstring * cstring_split(cstring _sub, cstring s) {
 		hits++;
 	}
 	result[hits] = NULL;
-	free(sub);
+//	free(sub);
 	return result;
 }
 
@@ -214,7 +214,7 @@ int cstring_matches(cstring str, cstring s) {
 		free(splitted[index]);
 		index++;
 	}
-	if (index == 2) {
+	if (index >= 2) {
 		result = 1;
 	}
 	free(splitted);

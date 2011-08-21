@@ -36,6 +36,10 @@ sim_transporter sim_transporter_init(connection_type type,	// Tells the kind of 
 									 int forks_child,		// Forks a process_type or not.
 									 int is_server);		// If it's the server then it can open a process
 
+int sim_transporter_client_id(sim_transporter t);
+
+int sim_transporter_server_id(sim_transporter t);
+
 void sim_transporter_free(sim_transporter transp);
 
 #endif

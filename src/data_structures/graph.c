@@ -8,13 +8,16 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include "graph.h"
 #include "list.h"
 #include "map.h"
 
+
 struct graph {
-	map nodes;
-	int	comparer_index;
+	map					nodes;
+	int					comparer_index;
+	pthread_mutex_t	*	mutex;
 };
 
 struct graph_node {
@@ -51,6 +54,7 @@ graph_node node_init(void_p key, void_p value){
 	ret->key = key;
 	ret->value = value;
 	ret->arcs = list_init();
+	
 	return ret;
 }
 
@@ -65,6 +69,8 @@ graph graph_init(comparer comp, cloner clon){
 	graph ret = malloc(sizeof(struct graph));
 	ret->nodes = map_init(compare_data, clon);
 	ret->comparer_index = comparers;
+	ret->mutex = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(ret->mutex, NULL);
 	// Builds the comparer array for each new map.
 	// It could have a threshold...
 	if (comparer_storage == NULL) {
@@ -80,6 +86,9 @@ graph graph_init(comparer comp, cloner clon){
 		comparer_storage[i] = comp;
 	}
 	
+
+
+	
 	comparers++;
 	return ret;
 }
@@ -91,13 +100,17 @@ int graph_size(graph g)
 
 // Agrega un nodo al grafo con la clave dada.
 int graph_add_node(graph g, void_p key, void_p value){
+	pthread_mutex_lock(g->mutex);
 	c_index = g->comparer_index;
 	graph_node n = node_init(key, value);
-	if (map_set(g->nodes, key, n))
+	if (map_set(g->nodes, key, n)){
+		pthread_mutex_unlock(g->mutex);
 		return TRUE;
+	}
 	else {
 		list_free(n->arcs);
 		free(n);
+		pthread_mutex_unlock(g->mutex);
 		return FALSE;
 	}
 
@@ -106,11 +119,13 @@ int graph_add_node(graph g, void_p key, void_p value){
 // Agrega un arco al grafo desde la primera clave hacia la segunda
 // Marcando el peso dado.
 int graph_add_arc(graph g, void_p from, void_p to, int weight){
+	pthread_mutex_lock(g->mutex);
 	c_index = g->comparer_index;
 	graph_node _to = (graph_node) map_get(g->nodes, to);
 	graph_node _from = (graph_node) map_get(g->nodes, from);
 	
 	if (_to == NULL || _from == NULL) {
+		pthread_mutex_unlock(g->mutex);
 		return FALSE;
 	}
 	
@@ -121,6 +136,7 @@ int graph_add_arc(graph g, void_p from, void_p to, int weight){
 	   list_indexOf(_to->arcs, b, graph_arc_comparer) != -1){
 		free(a);
 		free(b);
+		pthread_mutex_unlock(g->mutex);
 		return FALSE;
 	}
 
@@ -132,6 +148,7 @@ int graph_add_arc(graph g, void_p from, void_p to, int weight){
 		free(b);
 	}
 
+	pthread_mutex_unlock(g->mutex);
 	return TRUE;
 }
 
@@ -142,6 +159,7 @@ void_p graph_remove_node(graph g, void_p key){
 	// IDEA: Clean up everything
 	// This might leak!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//!!!!!!!!!!!!!!!!!!!!!
+	pthread_mutex_lock(g->mutex);
 	c_index = g->comparer_index;
 	graph_node n = map_get(g->nodes, key);
 	list arcs = n->arcs;
@@ -172,10 +190,12 @@ void_p graph_remove_node(graph g, void_p key){
 		free(n->value);
 		free(n);
 	}
+	pthread_mutex_unlock(g->mutex);
 }
 
 // Saca un arco del grafo. Hace free de la estructura interna
 int graph_remove_arc(graph g, void_p from, void_p to){
+	pthread_mutex_lock(g->mutex);
 	c_index = g->comparer_index;
 	graph_node nFrom = map_get(g->nodes, from);
 	graph_node nTo = map_get(g->nodes, to);
@@ -196,31 +216,43 @@ int graph_remove_arc(graph g, void_p from, void_p to){
 					save = list_get(arcs,i);
 					list_remove(arcs, i);
 					free(save);
+					pthread_mutex_unlock(g->mutex);
 					return TRUE;
 				}
 			}
+			pthread_mutex_unlock(g->mutex);
 			return TRUE;
 		}
 	}
+	pthread_mutex_unlock(g->mutex);
 	return FALSE;
 }
 
 // Devuelve los punteros a las claves del grafo
 list graph_keys(graph g){
+	pthread_mutex_lock(g->mutex);
 	c_index = g->comparer_index;
-	return map_keys(g->nodes);
+	list l = map_keys(g->nodes);
+	pthread_mutex_unlock(g->mutex);
+	return l;
 }
 
 // Devuelve los punteros a los nodos almacenados en el grafo.
 list graph_nodes(graph g){
+	pthread_mutex_lock(g->mutex);
 	c_index = g->comparer_index;
-	return map_values(g->nodes);
+	list l = map_values(g->nodes);
+	pthread_mutex_unlock(g->mutex);
+	return l;
 }
 
 // Devuelve el nodo de la clave dada
 graph_node graph_get_node(graph g, void_p key){
+	pthread_mutex_lock(g->mutex);
 	c_index = g->comparer_index;
-	return map_get(g->nodes, key);
+	graph_node n = map_get(g->nodes, key);
+	pthread_mutex_unlock(g->mutex);
+	return n;
 }
 
 
@@ -252,6 +284,8 @@ graph_node graph_arc_to(graph_arc a){
 
 // Libera el grafo.
 void graph_free(graph g){//TODO ver si map_keys devuelve una lista
+	pthread_mutex_lock(g->mutex);
+	pthread_mutex_t * mutex = g->mutex;
 	c_index = g->comparer_index;
 	list nodes = graph_keys(g);
 	int i = 0;
@@ -260,4 +294,7 @@ void graph_free(graph g){//TODO ver si map_keys devuelve una lista
 	}
 	free(nodes);
 	free(g);
+	pthread_mutex_unlock(mutex);
+	pthread_mutex_destroy(mutex);
+	free(mutex);
 }
