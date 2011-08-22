@@ -244,7 +244,14 @@ cstring cstring_from_file(cstring path){
 	return string;
 }
 
-
+cstring cstring_copy_len(cstring from, int len) {
+	cstring to = cstring_init(len);
+	int i = 0;
+	for (; i < len; i++) {
+		to[i] = from[i];
+	}
+	return to;
+}
 
 cstring cstring_sub(cstring s, int len){
 	cstring ret = cstring_init(len);

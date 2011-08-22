@@ -17,6 +17,8 @@ typedef char * cstring;
 
 cstring cstring_copy(cstring s);
 
+cstring cstring_copy_len(cstring from, cstring to, int len);
+
 cstring cstring_init(int size);
 
 cstring cstring_fromInt(int number);

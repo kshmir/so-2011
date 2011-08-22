@@ -59,7 +59,7 @@ void receiver(sim_message mes) {
 
 void networking_test(connection_type c_type) {
 	separator();
-	
+	buffer = cstring_init(0);
 	pthread_mutex_init(&mutex,NULL);
 	pthread_cond_init(&conds,NULL);
 	
@@ -176,9 +176,10 @@ int main(int argc, char ** params) {
 	printf("TO BE EFFICIENT OR STABLE. THEY ARE MEANT TO GUARANTEE THAT THE TP CAN WORK\n");
 	//file_test();
 	//serializing_test();
-	buffer = cstring_init(0);
-	networking_test(C_M_QUEUES);
-	buffer = cstring_init(0);
-	networking_test(C_PIPE);
+	//networking_test(C_M_QUEUES);
+	//networking_test(C_PIPE);
+	
+	sim_smem_transporter_init();
+	
 	return 0;
 }
