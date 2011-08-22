@@ -29,34 +29,32 @@
 #define MSGTQL   40 
 #define MSGQ_KEY 2204
 
-/**
- *	Structure used to send messages through the queue.
- */
-struct msgq_buf {
-	long mtype;					// Type of message to send, must be > 0.
-	char mtext[MSGSEG];			// 
-};
-
-struct sim_msg_q_transporter {
-	struct msgq_buf		read_buf;
-	struct msgq_buf		write_buf;
-	int					msgq_id;
-	int					server;
-	int					client;
-	key_t				key;
-
-};
-
 typedef struct sim_msg_q_transporter * sim_msg_q_transporter;
 
+/**
+	Starts a client
+ */
 sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int client_id);
 
+/**
+	Starts a server
+ */
 sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int client_id);
 
+/**
+	Writes through the transporter.
+ */
 void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data);
 
+/**
+	Listens to the transporter.
+ */
 cstring sim_msg_q_transporter_listen(sim_msg_q_transporter t, int * extra_data);
 
+
+/**
+	Frees the transporter.
+ */
 void sim_msg_q_transporter_free(sim_msg_q_transporter transp);
 
 #endif

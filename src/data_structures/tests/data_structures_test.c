@@ -423,6 +423,10 @@ void queue_test() {
 
 int main(int argc, char ** argv) {
 	
+	printf("NONE OF THE FOLLOWING TESTS ARE GUARANTEED TO PASS ON ALL PLATFORMS\n");
+	printf("THEY ARE USED AS ANOTHER DEVELOPMENT TOOL AND THEY ***ARE NOT*** MEANT\n");
+	printf("TO BE EFFICIENT OR STABLE. THEY ARE MEANT TO GUARANTEE THAT THE TP CAN WORK\n");
+	
 	tree_test();		// AVL Tree, for general storage.
 	map_test();			// Map,		 for storing data. (uses tree!)
 	graph_test();

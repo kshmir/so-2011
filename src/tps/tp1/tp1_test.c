@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <string.h>
 #include <assert.h>
 
 #include "networking/sim_client.h"
@@ -32,7 +33,7 @@ void file_test(){
 	printf("%s", cstring_from_file("./testFile"));
 }
 
-#define CLIENTS_COUNT 128
+#define CLIENTS_COUNT 64
 
 pthread_cond_t	conds;
 pthread_mutex_t mutex;
@@ -129,7 +130,7 @@ void networking_test(connection_type c_type) {
 	
 	sim_server_broadcast_query(s, cstring_copy("hello client"));
 	
-	while(message_counter <= CLIENTS_COUNT - 1);
+	while(message_counter <= CLIENTS_COUNT -1 );
 	
 	sim_server_free(s);
 	
@@ -170,9 +171,14 @@ void serializing_test(){
 
 int main(int argc, char ** params) {
 	
-	buffer = cstring_init(0);
+	printf("NONE OF THE FOLLOWING TESTS ARE GUARANTEED TO PASS ON ALL PLATFORMS\n");
+	printf("THEY ARE USED AS ANOTHER DEVELOPMENT TOOL AND THEY ***ARE NOT*** MEANT\n");
+	printf("TO BE EFFICIENT OR STABLE. THEY ARE MEANT TO GUARANTEE THAT THE TP CAN WORK\n");
 	//file_test();
 	//serializing_test();
+	buffer = cstring_init(0);
 	networking_test(C_M_QUEUES);
+	buffer = cstring_init(0);
+	networking_test(C_PIPE);
 	return 0;
 }

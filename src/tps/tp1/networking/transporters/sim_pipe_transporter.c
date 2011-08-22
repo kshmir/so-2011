@@ -3,18 +3,16 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-
-
 struct sim_pipe_transporter {
-	cstring				write_fifo;	
-	cstring				read_fifo;
+	cstring				write_fifo;			// Fifo to which the transporter writes.
+	cstring				read_fifo;			// Fifo to which the transporter listens.
 	
-	int					write_ptr;
-	int					read_ptr;
+	int					write_ptr;			// File descriptor to which we write.
+	int					read_ptr;			// File descriptor to which we read.
 	
-	transporter_mode	mode;
+	transporter_mode	mode;				// Transporter mode.
 	
-	int					client;
+	int					client;				// Tells wether it's a client or not.
 };
 
 static cstring create_fifo_name(int target_id) {
@@ -29,8 +27,9 @@ static sim_pipe_transporter create_pipe_transporter(cstring write_fifo, cstring 
 	pipe->read_fifo = read_fifo;	
 	pipe->client = client;
 	pipe->mode = mode;
-	// MacOSX Doesn't seem to like going blocked, and it fails misserably.
-	// So this solves it :D
+	// MacOSX doesn't seem to like going blocked, and it fails misserably.
+	// So this solves it, making the right call when not on a Mach Kernel system (Mac OS, MacOSX, NextSTEP, etc).
+	// We currently tested it only on Mac OSX 10.6.8, but in the worst case it'll only be porly performant.
 #ifdef __MACH__
 	if (client == 1) {
 		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
@@ -106,18 +105,16 @@ sim_pipe_transporter sim_pipe_transporter_init_server(int server_id, int client_
 
 void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data) {
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
-		//	printf("Before write %s\n", t->read_fifo);
 		write(t->write_ptr, data, cstring_len(data) + 1);
-		//	printf("After write %s\n", t->read_fifo);
 	}
 }
 
-cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * extra_data) {
+cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 	
 	if (t->mode == MODE_READ || t->mode == MODE_READWRITE) {
 		cstring str = cstring_init(64);
 		read(t->read_ptr, str, 64);
-		* extra_data = 64;
+		* length = 64;
 		return str;
 	}
 	else{
