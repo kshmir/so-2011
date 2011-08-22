@@ -266,7 +266,15 @@ sim_transporter sim_transporter_init(connection_type type,
 		// bind functions to C_SHARED_MEMORY implementation.
 		break;
 	case C_SOCKETS:
-		// bind functions to C_SOCKETS implementation.
+		if (is_server) {
+			t->data = sim_socket_transporter_init_server(from_id, to_id);
+		}
+		else {
+			t->data = sim_socket_transporter_init_client(from_id, to_id);
+		}
+		t->write  = (function) sim_socket_transporter_write;
+		t->listen = (function) sim_socket_transporter_listen;
+		t->free   = (function) sim_socket_transporter_free;
 		break;
 	case C_M_QUEUES:
 		if (is_server) {

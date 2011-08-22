@@ -177,6 +177,8 @@ int main(int argc, char ** params) {
 	//file_test();
 	//serializing_test();
 	buffer = cstring_init(0);
+	networking_test(C_SOCKETS);
+	buffer = cstring_init(0);
 	networking_test(C_M_QUEUES);
 	buffer = cstring_init(0);
 	networking_test(C_PIPE);
