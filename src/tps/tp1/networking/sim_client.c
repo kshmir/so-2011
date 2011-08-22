@@ -1,21 +1,44 @@
+/**
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------------------------------------------------------------
+ * sim_client is used as a way to communicate with it's owner, aka server.
+ * It has several handlers which lock until they receive a response from the server, which can be
+ * specific to the game, such as filling a city with medicine or sending a response at the end of a turn.
+ * It also allows an abstraction layer from the transporter.
+ * It stands over message and transporter.
+ */
 #include "sim_client.h"
 
 #include <pthread.h>
 
+/**
+ * Data structure for the client.   
+ */
 struct sim_client {
-	sim_transporter t;
-	sim_receiver	r;
 	
-	int client_id;
+	sim_transporter t;						// Internal transporter used by the client.
+	sim_receiver	r;						// Query receiver.
 	
-	pthread_t		listener_thread;
+	int client_id;							// ID to which it listens.
+	
+	pthread_t		listener_thread;		// Listener thread.
 };
 
+/**
+ * Cleans the client after a callback which stops the thread.
+ */
 static void sim_client_listener_cleanup(sim_client r) {
 	sim_transporter_free(r->t);
-	//free(r);
+	free(r);
 }
 
+/**
+ * Listener for query petitions.
+ */
 static void_p sim_client_listener(sim_client r) {
 	int oldtype;
 	pthread_cleanup_push((void_p)sim_client_listener_cleanup, r);
@@ -47,8 +70,9 @@ static void_p sim_client_listener(sim_client r) {
 	pthread_cleanup_pop(0);
 }
 
-
-
+/**
+ * Starts the client from an existing transporter, it allows to make the construction more flexible. for example, for testing.
+ */
 sim_client sim_client_from_transporter(sim_transporter t, sim_receiver r) {
 	sim_client c = (sim_client) malloc(sizeof(struct sim_client));
 	c->t = t;
@@ -57,11 +81,17 @@ sim_client sim_client_from_transporter(sim_transporter t, sim_receiver r) {
 	return c;
 }
 
+/**
+ * Starts the client with the parameters received, usually used after being fork'd/exec'd by a server.
+ */
 sim_client sim_client_init(connection_type c_type, process_type p_type, int server_id, int client_id, sim_receiver query_receiver) {
 	sim_transporter t = sim_transporter_init(c_type, p_type, server_id, client_id, MODE_READWRITE, FALSE, FALSE);
 	return sim_client_from_transporter(t, query_receiver);
 }
 
+/**
+ * Gets a distance between points, we should check if we must really use this or not.
+ */
 int sim_client_get_distance(sim_client c, int object_id, cstring from, cstring to) {
 	cstring header = cstring_fromInt(object_id); 
 	header = cstring_write(header,cstring_copy(" DIST"));
@@ -82,6 +112,9 @@ int sim_client_get_distance(sim_client c, int object_id, cstring from, cstring t
 	return value;
 }
 
+/**
+ * Gets all the medicines from a point.
+ */
 map sim_client_get_medicines(sim_client c, int object_id, cstring from) {
 	cstring header = cstring_fromInt(object_id); 
 	header = cstring_write(header, cstring_copy(" MEDS"));
@@ -95,7 +128,9 @@ map sim_client_get_medicines(sim_client c, int object_id, cstring from) {
 	return NULL;
 }
 
-
+/**
+ * Fills a point with medicine.
+ */
 int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cstring medicine, int amount) {
 	cstring header = cstring_fromInt(object_id); 
 	header = cstring_write(header, cstring_copy(" MEDF"));
@@ -113,6 +148,9 @@ int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cst
 	return 0;
 }
 
+/**
+ * Sends a print message to a server.
+ */
 int sim_client_print(sim_client c, cstring message, int _id) {
 	
 	int id = (_id != -1) ? _id : c->client_id;
@@ -124,6 +162,9 @@ int sim_client_print(sim_client c, cstring message, int _id) {
 	return 1;
 }
 
+/**
+ * Cleans the client, it's thread and it's data.
+ */
 void sim_client_free(sim_client c) {
 	pthread_cancel(c->listener_thread);
 }

@@ -14,6 +14,27 @@
 
 #include "sim_msg_q_transporter.h"
 
+/**
+ *	Structure used to send messages through the queue.
+ */
+struct msgq_buf {
+	long mtype;					// Type of message to send, must be > 0.
+	char mtext[MSGSEG];			// Text to send.
+};
+
+/**
+ * Structure which extends the generic transporter.
+ */
+struct sim_msg_q_transporter {
+	struct msgq_buf		read_buf;		// Buffer used to read.
+	struct msgq_buf		write_buf;		// Buffer used to write.
+	int					msgq_id;		// Message queue ID.
+	int					server;			// Server ID.
+	int					client;			// Client ID.
+	int					mode;			// Connection mode.
+	key_t				key;			// Message queue key.
+};
+
 
 sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int client_id){
 	sim_msg_q_transporter t = malloc(sizeof(struct sim_msg_q_transporter));
@@ -57,9 +78,10 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 		t->write_buf.mtext[i] = 0;
 	}
 	memcpy(t->write_buf.mtext, data, strlen(data));
-	while (msgsnd(t->msgq_id, &t->write_buf, sizeof(struct msgq_buf) - sizeof(long), 0) == -1) /* +1 for '\0' */
+	int attempts = 0;
+	while (msgsnd(t->msgq_id, &t->write_buf, sizeof(struct msgq_buf) - sizeof(long), 0) == -1 && attempts < 100) /* +1 for '\0' */
 	{
-		perror("Message could not be send");
+		attempts++;
 	}
 
 }

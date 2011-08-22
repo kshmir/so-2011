@@ -62,7 +62,6 @@ tp1_test_files = \
 	bin/sim_pipe_transporter.o \
 	bin/sim_smem_transporter.o \
 	bin/sim_socket_transporter.o \
-	bin/sim_local_memory_transporter.o \
 	bin/tp1_test.o 
 
 #//MARK: ----- TP1 Test	Child Process
@@ -79,7 +78,6 @@ tp1_test_child_files = \
 	bin/sim_pipe_transporter.o \
 	bin/sim_smem_transporter.o \
 	bin/sim_socket_transporter.o \
-	bin/sim_local_memory_transporter.o \
 	bin/tp1_test_child.o 
 
 #//MARK: ----- TP1 Test	Server Process	
@@ -96,7 +94,6 @@ tp1_test_server_files = \
 	bin/sim_pipe_transporter.o \
 	bin/sim_smem_transporter.o \
 	bin/sim_socket_transporter.o \
-	bin/sim_local_memory_transporter.o \
 	bin/tp1_test_server.o 
 
 #//MARK: ----- Examples declarations
@@ -115,8 +112,13 @@ utils = \
 
 #//MARK: ----- GCC Declarations
 ### Flags and declarations	
-cc = gcc -m32 -g -lpthread
 
+UNAME := $(shell uname -s)
+ifeq ($(UNAME),Linux)
+	cc = gcc -m32 -g -lpthread
+else
+	cc = gcc -m32 -g 
+endif
 
 
 #//MARK: -
@@ -207,9 +209,6 @@ sim_smem_transporter:
 sim_socket_transporter: 
 	$(cc) -o bin/sim_socket_transporter.o -c src/tps/tp1/networking/transporters/sim_socket_transporter.c
 	
-sim_local_memory_transporter: 
-	$(cc) -o bin/sim_local_memory_transporter.o -c src/tps/tp1/networking/transporters/sim_local_memory_transporter.c
-	
 sim_frontend: 
 	$(cc) -o bin/sim_frontend.o -c src/tps/tp1/sim_frontend.c
 
@@ -266,7 +265,6 @@ build_tp1: data_structures_graph \
 	sim_msg_q_transporter \
 	sim_pipe_transporter \
 	sim_smem_transporter \
-	sim_local_memory_transporter \
 	sim_socket_transporter \
 	sim_frontend
 
@@ -338,5 +336,4 @@ show_usage:
 	@echo "Only TP1 is available for now"
 	@echo "Example 1: Threads"
 	@echo "Example 2: Fork/exec/wait"
-	@echo "--------------------------------------------"
-
+	@echo "--------------------------------------------"	

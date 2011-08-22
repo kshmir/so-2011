@@ -5,7 +5,6 @@
 
 #include "sim_plane.h"
 #include "../networking/sim_client.h"
-#include "../networking/sim_server.h"
 
 typedef struct sim_airline * sim_airline;
 

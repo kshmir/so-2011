@@ -1,3 +1,35 @@
+/**
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------------------------------------------------------------
+ * sim_transporter interface.
+ *		sim_transporter is the basic implementation of our IPC layer.
+ *		It handles an inheritance pattern via pointers to function, the three basic pointers are
+ *		write, listen and free. It is initialized in sim_transporter_init which also initializes 
+ *		the current implementation.
+ *      It can be set as READ, WRITE or READWRITE.
+ *      It can also build another process by forking it.
+ *      When writing, it just writes directly to the target it actually points.
+ *		When reading, it does the following:
+ *			It starts a neverending thread which is only stopped when freeing the transporter.
+ *          The thread is used to "listen" to the other transporter end and push the data to the data queue.
+ *          After it pushes something to the queue, the subscribed threads receive a call and are able to read 
+ *			each message.
+ *			This kind of implementation allows multiple threads to listen to one end at the same time.
+ *          After a message is read, it must be dequeued if accepted.
+ *		When freeing, it does the following:
+ *			It makes a cancel call to the listener thread.
+ *			After that call an async handler called sim_transporter_cleanup is executed and frees everything up,
+ *          safely stopping the thread, which might otherwise be locked by the listener.
+ * sim_transporter should only be used by:
+ *		sim_server
+ *      sim_client
+ *      sim_message
+ */
+
 #include "sim_transporter.h"
 #include "transporters/sim_msg_q_transporter.h"
 #include "transporters/sim_pipe_transporter.h"
@@ -8,41 +40,52 @@
 #include <pthread.h>
 #include <signal.h>
 
-
+/**
+	Data structure for the transporter.
+ */
 struct sim_transporter {
-	connection_type		type;  
-	void_p				data;
+	connection_type		type;							// Type of connection, it decides which IPC should run.
+	void_p				data;							// Contains the data of the inherited IPC handler.
 
-	pthread_mutex_t	*	listener_mutex;
-	pthread_cond_t	*	listener_received;
+	pthread_mutex_t	*	listener_mutex;					// Mutex for the distribuitor
+	pthread_cond_t	*	listener_received;				// Cond used to unlock the subscribers
 
-	pthread_t		*	listener;
+	pthread_t		*	listener;						// Thread which listens and pushes to the subscribers.
 	
-
+	transporter_mode	mode;							// Tells whether its RD, WR or RDWR
 	
-	transporter_mode	mode;
+	int					client_id;						// Client ID - not actually used
+	int					server_id;						// Server ID - not actually used
 	
+	function			write;							// Write handler
+	function			listen;							// Listen handler
+	function			free;							// Free handler
 	
-	int					client_id;
-	int					server_id;
-	
-	function			write;	
-	function			listen;	
-	function			free;	
-	
-	queue				messages;
+	queue				messages;						// Queue of received messages.
 };	
 
-
+/**
+	Accesor for client_id, it is used in upper levels of the IPC implementation, like server or client.
+	@param t The transporter
+	@return The client_id of the transporter.
+ */
 int sim_transporter_client_id(sim_transporter t) {
 	return t->client_id;
 }
 
+/**
+	 Accesor for server_id, it is used in upper levels of the IPC implementation, like server or client.
+	 @param t The transporter
+	 @return The server_id of the transporter.
+ */
 int sim_transporter_server_id(sim_transporter t) {
 	return t->server_id;
 }
 
-void sim_transporter_cleanup(sim_transporter t) {
+/**
+	Cleans up a transporter, after stopping the listener, or directly if it's writeonly.
+ */
+static void sim_transporter_cleanup(sim_transporter t) {
 	free(t->listener_mutex);
 	free(t->listener_received);
 	free(t->listener);
@@ -52,20 +95,20 @@ void sim_transporter_cleanup(sim_transporter t) {
 	return;
 }
 
-void_p sim_transporter_listener(sim_transporter t) {
+/**
+	Listens constantly to the underlying IPC, builds cstrings out of it, and pushes them to the main queue.
+ */
+static void_p sim_transporter_listener(sim_transporter t) {
 	int len, i, oldtype;
 	cstring builder = cstring_init(0);
-
-	
+	// The following is a macro for cancelling the thread
 	pthread_cleanup_push((void_p)sim_transporter_cleanup, t);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
-
-	
 	while(TRUE) {
+		// This loops enqueues as many messages as built by the char * array.
+		// This helps us to only care about sending zero ending strings as messages.
 		len = 0;
-
 		char * data = (char *) t->listen(t->data, &len);
-
 		i = 0;
 		for (; i < len; i++) {
 			builder = cstring_write_c(builder, data[i]);
@@ -81,17 +124,24 @@ void_p sim_transporter_listener(sim_transporter t) {
 			free(data);
 		}
 	}
-	
-	
+	// The following is a macro for cancelling the thread
 	pthread_cleanup_pop(0);
 	return NULL;
 }
 
-
+/**
+	Takes off the last message read from the queue.
+	TWO subscribers shouldn't accept the same message at the same time.
+ */
 void sim_transporter_dequeue(sim_transporter t) {
 	queue_pull(t->messages);
 }
 
+/**
+	Listens and locks until there is something to read.
+	It *** might *** always return the same string until another process has read it successfully. 
+	It would be great to improve this.
+ */
 cstring sim_transporter_listen(sim_transporter t) {
 	int value_found = 0;
 	cstring data = NULL;
@@ -112,6 +162,9 @@ cstring sim_transporter_listen(sim_transporter t) {
 	return data;
 }
 
+/**
+	Starts a transporter, but makes no connections, only memory stuff.
+ */
 static sim_transporter sim_transporter_start() {
 	sim_transporter tr = (sim_transporter) malloc(sizeof(struct sim_transporter));
 
@@ -134,7 +187,9 @@ static sim_transporter sim_transporter_start() {
 	return tr;
 }
 
-
+/**
+	Opens a new process and passes the corresponding params to it.
+ */
 static void exec_process(process_type proc, connection_type type, int from_id, int to_id) {
 	int id = 0;
 
@@ -159,9 +214,25 @@ static void exec_process(process_type proc, connection_type type, int from_id, i
 }
 
 
-
-// Used by the server process to build a process and open a connection to it.
-sim_transporter sim_transporter_init(connection_type type, process_type proc, int from_id, int to_id, transporter_mode mode, int forks_child, int is_server) {
+/**
+	Starts a new transporter and opens the connections.
+	It can fork a process or start as a client. 
+	@param type The type of IPC to use.
+	@param proc The type of process to open.
+	@param from_id The id from which the transporter is started
+	@param to_id   The id to which the transporter is connected, it might create it if it forks_child
+	@param mode    The mode with with the transporter operates, READ, READWRITE or WRITE.
+	@param forks_child Tells wether the transporter forks a new child. It must be true and must have is_server as true.
+	@param is_server It tells if it forks a server.
+	@return The local endpoint of the transporter built, with the listener on if it's set to read.
+ */
+sim_transporter sim_transporter_init(connection_type type, 
+									 process_type proc, 
+									 int from_id, 
+									 int to_id, 
+									 transporter_mode mode, 
+									 int forks_child, 
+									 int is_server) {
 
 	sim_transporter t = sim_transporter_start();
 	t->mode = mode;
@@ -217,10 +288,16 @@ sim_transporter sim_transporter_init(connection_type type, process_type proc, in
 	return t;
 }
 
+/**
+	Writes a message to the current transporter.
+ */
 void sim_transporter_write(sim_transporter sim, cstring message) {
 	sim->write(sim->data, message);
 }
 
+/**
+	Free's up a transporter
+ */
 void sim_transporter_free(sim_transporter sim) {
 	if (sim->mode != MODE_WRITE) {
 		pthread_cancel(*sim->listener);

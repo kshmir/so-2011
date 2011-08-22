@@ -1,3 +1,16 @@
+/**
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------------------------------------------------------------
+ * sim_server acts as a one-to-many information distribuiter.
+ * It binds string sequences to functions which process the data.
+ * It can also send a query message to it's clients to make a specific petition.
+ */
+
+
 #include "sim_server.h"
 #include "sim_transporter.h"
 #include <pthread.h>
@@ -46,14 +59,26 @@ struct sim_server {
 	 */
 	map					clients_transporters;
 	
+	/**
+		Stores the server id.
+	 */
 	int					server_id;
 	
+	/**
+		Used as a seed for the client.
+	 */
 	int					client_id_seed;
 	
+	/**
+		Uses a multiplier for the clientid.
+	 */
 	int					client_id_multiplier;
 };
 
 
+/**
+	Cleans the server and all it's resources.
+ */
 static void sim_server_listener_cleanup(sim_server s) {
 	map_free(s->responds_to);
 	sim_transporter_free(s->listen_transporter);
@@ -70,9 +95,9 @@ static void sim_server_listener_cleanup(sim_server s) {
 }
 
 /**
- Listens to all the messages being sent to the server.
- When matches a key string, it makes a response.
- Then keeps on listening.
+	 Listens to all the messages being sent to the server.
+	 When matches a key string, it makes a response.
+	 Then keeps on listening.
  */
 static void sim_server_listener(sim_server s) {
 
@@ -123,6 +148,9 @@ static void sim_server_listener(sim_server s) {
 	pthread_cleanup_pop(0);
 }
 
+/**
+	Starts the server and it's local listener.
+ */
 sim_server sim_server_init(connection_type con, process_type p_type, int server_id) {		
 	sim_server s = (sim_server) malloc(sizeof(struct sim_server));
 	s->responds_to = map_init(cstring_comparer, NULL);
@@ -151,6 +179,10 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 }
 
 
+/**
+	Sends a broadcast query to it's clients.
+	It's used for clients responding to actions like stop or tick.
+ */
 void sim_server_broadcast_query(sim_server s, cstring message) {
 	cstring header = cstring_copy("QUERY ");
 	cstring msg = cstring_copy(message);
@@ -167,6 +199,9 @@ void sim_server_broadcast_query(sim_server s, cstring message) {
 	free(msg);
 }
 
+/**
+	Binds a char sequence to a receiver, it allows the server to responds to events.
+ */
 int sim_server_add_receiver(sim_server s, cstring sequence, sim_receiver rec) {
 	int * ptr = (int *) malloc(sizeof(void_p));
 	* ptr = (int) sequence;
@@ -174,6 +209,9 @@ int sim_server_add_receiver(sim_server s, cstring sequence, sim_receiver rec) {
 	list_add(s->responds_to_keys, sequence);
 }
 
+/**
+	Creates a new client process and makes a transporter which can write to it.
+ */
 int sim_server_spawn_child(sim_server s) {
 	
 	sim_transporter child_t = sim_transporter_init(s->c_type,
@@ -190,7 +228,9 @@ int sim_server_spawn_child(sim_server s) {
 	s->client_id_seed++;
 }
 
-
+/**
+	Free's the server and it's thread.
+ */
 int sim_server_free(sim_server s) {
 	pthread_cancel(s->listener_thread);
 }

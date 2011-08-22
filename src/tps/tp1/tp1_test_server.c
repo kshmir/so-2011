@@ -55,7 +55,7 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 
 	sleep(j);
 	glob = c;
-	sim_client_print(c,text); 
+	sim_client_print(c,text, -1); 
 	
 
 	pthread_cond_wait(&conds, &mutex);

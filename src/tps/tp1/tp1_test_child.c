@@ -31,6 +31,7 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	
 	sim_transporter_write(t,"cliente");
 	
+	sleep(1);
 	cstring data = sim_transporter_listen(t);
 	sim_transporter_dequeue(t);
 	
