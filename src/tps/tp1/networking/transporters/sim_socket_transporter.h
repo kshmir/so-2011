@@ -3,8 +3,8 @@
 #ifndef _SIM_socket_TRANSPORTER_H_
 #define _SIM_socket_TRANSPORTER_H_
 
-#include <arpa/inet.h>
 #include <ctype.h>
+#include <arpa/inet.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
