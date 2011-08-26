@@ -3,6 +3,7 @@
 #ifndef _SIM_socket_TRANSPORTER_H_
 #define _SIM_socket_TRANSPORTER_H_
 
+#include <arpa/inet.h>
 #include <ctype.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -24,6 +25,10 @@ struct sim_socket_transporter{
 		int					client;
 		int					socket_number;
 		int					socketfd;
+		int 				clilen;
+		int 				client_len;
+		struct sockaddr_in 	client_sockaddr_in;
+		struct sockaddr_in 	server_sockaddr_in;
 
 	};
 typedef struct sim_socket_transporter * sim_socket_transporter;
