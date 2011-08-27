@@ -11,6 +11,9 @@
 
 #include "sim_frontend.h"
 
+
 int sim_frontend_main(list params) {
+	c_type connection_type = 0;
+	
 	
 }

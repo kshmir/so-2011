@@ -45,6 +45,10 @@ int list_indexOf(list p, void_p ptr, comparer comp);
 // Removes an element in the given index of the list
 int list_remove(list p, int index);
 
+list list_from_ptrarray_w_count(int size, size_t block_size, void_p ptr);
+
+list list_from_ptrarray_null_ended(char ** values);
+
 void list_free_with_data(list p);
 
 void_p list_header(list p);
