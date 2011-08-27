@@ -80,7 +80,6 @@ struct sim_server {
 	Cleans the server and all it's resources.
  */
 static void sim_server_listener_cleanup(sim_server s) {
-	printf("bye says server");
 	map_free(s->responds_to);
 	sim_transporter_free(s->listen_transporter);
 	
@@ -235,6 +234,5 @@ int sim_server_spawn_child(sim_server s) {
 	Free's the server and it's thread.
  */
 int sim_server_free(sim_server s) {
-	printf("OMFG\n");
 	pthread_cancel(s->listener_thread);
 }

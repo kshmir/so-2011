@@ -12,9 +12,6 @@
 static int shm_id = 0;
 
 void * shm_create(size_t s) {
-	if (shm_id != 0) {
-		return NULL;
-	}
 	const char * path = "./tmp/mem";
 	int op = open(path,O_CREAT, 0666);
 	close(op);

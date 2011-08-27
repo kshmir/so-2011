@@ -15,8 +15,8 @@
 #include <fcntl.h>
 #include <string.h>
 
-#ifndef _CSTRING_H_
-#define _CSTRING_H_
+#ifndef _SEM_H_
+#define _SEM_H_
 
 // Starts a semaphore.
 int sem_create(int key);

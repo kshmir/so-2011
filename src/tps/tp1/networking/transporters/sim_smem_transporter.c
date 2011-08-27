@@ -230,7 +230,7 @@ void smem_init_space(sim_smem_transporter * s) {
 	s->sem_available_blocks = sem_create(255);
 	
 	
-	s->space = shm_create(sizeof(smem_space));
+	s->space = (smem_space *)shm_create(sizeof(smem_space));
 /*	int i = 0;
 	for (i = 0; i < sizeof(smem_space); i++) {
 		s->space->data[i] = 0;

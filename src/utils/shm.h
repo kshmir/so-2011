@@ -15,6 +15,9 @@
 #include <fcntl.h>
 #include <string.h>
 
+
+#ifndef _SEM_H_
+#define _SEM_H_
 /**
  Creates a shared memory of the size given.
  Returns -1 if it's invalid.
@@ -27,3 +30,4 @@ void * shm_create(size_t s);
  Deletes the already allocated shared memory.
  */
 void shm_delete();
+#endif

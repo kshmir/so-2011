@@ -8,6 +8,7 @@
  */
 
 #include "sem.h"
+#include <stdio.h>
 
 int sem_create(int key) {
 	char path[50];
