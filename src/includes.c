@@ -77,3 +77,31 @@ void_p cstring_cloner(void_p s1) {
 	*nuevo = strcpy(*nuevo, _s1);
 	return nuevo;
 }
+
+void separator() {
+	printf("--------------------------------\n");
+}
+
+void tp1_disclaimer() {
+	separator();
+	
+	printf("SISTEMAS OPERATIVOS - ITBA - 2011\n\n");
+	printf("Alumnos\n");
+	printf("\tMARSEILLAN, AGUSTIN\n");
+	printf("\tPEREYRA, CRISTIAN\n");
+	printf("\tVIDELA, MAXIMO\n");
+	
+	separator();
+}
+
+void tp1_usage() {
+	printf("You can use this program by passing the following parameters:\n");
+	
+	printf("\t --method (method_name)\n\t\tWhere the method can be 'fifos', 'message_queues', 'shared_memory' or 'sockets'\n");
+	printf("\t --level (file_path)\n\t\tPath to the level file.\n");
+	printf("\t --airline (file_path) (file_path) ...\n\t\tReads files until it reaches something different. It must be the last param\n");
+
+	separator();
+}
+
+

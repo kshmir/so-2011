@@ -20,6 +20,9 @@
 		_item != NULL && item != NULL; \
 		_item = (void_p)list_node_next(_item), item = list_node_value((_item != NULL) ? _item : NULL))
 
+#define foreach_next(item) \
+		_item = (void_p)list_node_next(_item); item = list_node_value((_item != NULL) ? _item : NULL);
+
 // This makes all calls to list equal to "struct list *"
 // So BEWARE that any call to list is a pointer by itself.
 typedef struct list * list;

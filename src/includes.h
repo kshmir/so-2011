@@ -54,4 +54,6 @@ void_p double_cloner(void_p double1);
 
 void_p cstring_cloner(void_p s1);
 
+void tp1_disclaimer();
+
 #endif
