@@ -21,23 +21,21 @@
 #include "networking/sim_transporter.h"
 #include "sim_common_reqs.h"
 
+#ifndef __MACH__
+#define CLIENTS_COUNT 32
+#else
+#define CLIENTS_COUNT 7 // OSX Has no fun with more than this clients on shmem
+#endif
+
 void separator() {
 	printf("--------------------------------\n");
 }
 
-void core_test() {
 
-}
 
 void file_test(){
 	printf("%s", cstring_from_file("./testFile"));
 }
-
-#ifndef __MACH__
-	#define CLIENTS_COUNT 32
-#else
-	#define CLIENTS_COUNT 8 // OSX Has no fun with more than this clients on shmem
-#endif
 
 pthread_cond_t	conds;
 pthread_mutex_t mutex;
@@ -48,13 +46,10 @@ int message_counter = 0;
 
 void print_receiver(sim_message mes) {
 	message_counter++;
-
 	
-	printf("Receive counter: %d %s\n", message_counter, sim_message_read(mes));
 	if (message_counter >= CLIENTS_COUNT) {
 		pthread_cond_broadcast(&conds);
 	}
-
 
 	sim_message_free(mes);
 }
@@ -202,11 +197,11 @@ int main(int argc, char ** params) {
 //	networking_test(C_M_QUEUES);
 	
 	
-	message_counter = 0;
-	separator();
-	printf("STARTING SOCKETS TEST\n");
-	separator();
-	networking_test(C_SOCKETS);
+//	message_counter = 0;
+//	separator();
+//	printf("STARTING SOCKETS TEST\n");
+//	separator();
+//	networking_test(C_SOCKETS);
 	
 
 	message_counter = 0;

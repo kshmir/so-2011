@@ -246,7 +246,7 @@ sim_transporter sim_transporter_init(connection_type type,
 		t->server_id = from_id;
 		t->client_id = to_id;
 		
-	}else {
+	} else {
 		t->client_id = from_id;
 		t->server_id = to_id;
 	}

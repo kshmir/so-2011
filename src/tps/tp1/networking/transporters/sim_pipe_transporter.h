@@ -1,3 +1,13 @@
+/**
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------------------------------------------------------------
+ * FIFO implementation of transporter.
+ */
+
 #include "../../sim_common_reqs.h"
 
 #ifndef _SIM_pipe_TRANSPORTER_H_

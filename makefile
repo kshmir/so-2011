@@ -104,9 +104,13 @@ example_1 = \
 #//MARK: ----- Utils declarations
 utils_test_files = \
 	bin/cstring.o \
+	bin/sem.o \
+	bin/shm.o \
 	bin/utils_test.o
 	
 utils = \
+	bin/sem.o \
+	bin/shm.o \
 	bin/cstring.o
 
 
@@ -160,6 +164,11 @@ data_structures_tests_data_structures_test:
 			  
 utils_cstring: 
 	$(cc) -o bin/cstring.o -c src/utils/cstring.c		                    
+	
+utils_sem: 
+	$(cc) -o bin/sem.o -c src/utils/sem.c		                    
+utils_shm: 
+	$(cc) -o bin/shm.o -c src/utils/shm.c		                    
 		
 utils_test_build: 
 	$(cc) -o bin/utils_test.o -c src/utils/utils_test.c		                    
@@ -271,14 +280,14 @@ build_tp1: data_structures_graph \
 ### Generates tp1
 tp1: build_tp1 \
 	sim_tp1 \
-	utils_cstring
+	utils_cstring utils_sem utils_shm
 	$(cc) -o tp1 $(tp1) $(data_structures) $(utils)
 
 tp1_test: build_tp1 \
 	sim_tp1_test \
 	sim_tp1_test_child \
 	sim_tp1_test_server \
-	utils_cstring
+	utils_cstring utils_sem utils_shm
 	$(cc) -o tp1_test_child $(tp1_test_child_files) $(data_structures) $(utils)
 	$(cc) -o tp1_test_server $(tp1_test_server_files) $(data_structures) $(utils)
 	$(cc) -o tp1_test $(tp1_test_files) $(data_structures) $(utils)
