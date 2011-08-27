@@ -9,7 +9,7 @@
  *
  */
 
-#include "sim_common_reqs.h"
+#include "../sim_common_reqs.h"
 
 #ifndef _SIM_FRONTEND_H_
 #define _SIM_FRONTEND_H_
