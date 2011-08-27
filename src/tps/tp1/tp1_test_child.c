@@ -35,6 +35,7 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	cstring data = sim_transporter_listen(t);
 	sim_transporter_dequeue(t);
 	
+	printf("Client got..... %s\n",data);
 	assert(cstring_compare(data,"server") == 0);
 	
 	// Ends transporter test

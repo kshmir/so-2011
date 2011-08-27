@@ -38,7 +38,7 @@ struct sim_msg_q_transporter {
 
 sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int client_id){
 	sim_msg_q_transporter t = malloc(sizeof(struct sim_msg_q_transporter));
-	t->key=ftok("/tmp",'#');
+	t->key=ftok("./tmp",'#');
 	if ((t->msgq_id = msgget(t->key, 0600 | IPC_CREAT )) == -1) { /* connect to the queue */
 		perror("msgget");
 		return NULL;
@@ -52,7 +52,7 @@ sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int clien
 
 sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int client_id){
 	sim_msg_q_transporter t = malloc(sizeof(struct sim_msg_q_transporter));
-	t->key=ftok("/tmp",'#');
+	t->key=ftok("./tmp",'#');
 	if ((t->msgq_id = msgget(t->key, 0600 | IPC_CREAT)) == -1) { /* connect to the queue */
 		perror("msgget");
 		return NULL;

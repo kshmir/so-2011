@@ -12,6 +12,7 @@
 #ifndef _LIST_H_
 #define _LIST_H_
 
+// Este foreach es ninja
 #define foreach(type, item, list) \
 	void_p _item = NULL; \
 	type   item  = NULL; \

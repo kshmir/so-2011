@@ -80,6 +80,7 @@ struct sim_server {
 	Cleans the server and all it's resources.
  */
 static void sim_server_listener_cleanup(sim_server s) {
+	printf("bye says server");
 	map_free(s->responds_to);
 	sim_transporter_free(s->listen_transporter);
 	
@@ -90,7 +91,7 @@ static void sim_server_listener_cleanup(sim_server s) {
 	}
 	map_free(s->clients_transporters);
 	list_free_with_data(keys);
-	
+
 	free(s);
 }
 
@@ -104,15 +105,18 @@ static void sim_server_listener(sim_server s) {
 	
 	int oldtype;
 	pthread_cleanup_push((void_p)sim_server_listener_cleanup, s);
-	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
+
+	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+
+
 	
 	s->listen_transporter = sim_transporter_init(s->c_type, 
 												 s->p_type, 
 												 s->server_id, 
-												 s->server_id, 
+												 255, 
 												 MODE_READ, 
 												 FALSE, TRUE);
-	int count = 0;
 	while(TRUE) {
 		cstring msg = sim_transporter_listen(s->listen_transporter);
 		cstring header = cstring_copy_until_char(msg, ';');
@@ -121,7 +125,6 @@ static void sim_server_listener(sim_server s) {
 		
 		int fail = 1;		
 		foreach(cstring, key, s->responds_to_keys) {
-			//printf("hola: %s %d\n",msg, count++);
 			cstring safe_key = cstring_copy(key);
 			if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {
 				sim_transporter_dequeue(s->listen_transporter);
@@ -140,9 +143,6 @@ static void sim_server_listener(sim_server s) {
 			}
 			free(safe_key);
 		}
-		if (fail == 1) {
-			printf("msg: %s\n", msg);
-		}
 	}
 	
 	pthread_cleanup_pop(0);
@@ -158,19 +158,22 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 	s->clients_transporters = map_init(int_comparer, int_cloner);
 	s->c_type = con;
 	s->p_type = p_type;
-	s->client_id_seed = 1;
+
 	s->server_id = server_id;
 
 	
 	switch (p_type) {
 		case P_LEVEL:
+			s->client_id_seed = 10;
 			s->client_id_multiplier = 1;
 			break;
 		case P_AIRLINE:
-			s->client_id_multiplier = 1000;
+			s->client_id_seed = 10;
+			s->client_id_multiplier = 1;
 			break;
 		default:
-			s->client_id_multiplier = 1000;
+			s->client_id_seed = 10;
+			s->client_id_multiplier = 1;
 	}
 	
 	
@@ -232,5 +235,6 @@ int sim_server_spawn_child(sim_server s) {
 	Free's the server and it's thread.
  */
 int sim_server_free(sim_server s) {
+	printf("OMFG\n");
 	pthread_cancel(s->listener_thread);
 }

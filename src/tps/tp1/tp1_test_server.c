@@ -49,11 +49,10 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	for(; i < to_id; i++)
 		rand();
 	
-	int j = rand() % 3 + 1;
+//	int j = rand() % 3 + 1;
 	cstring text = cstring_fromInt(to_id);
-	text = cstring_write(text, cstring_fromInt(j));
 
-	sleep(j);
+//	sleep(j);
 	glob = c;
 	sim_client_print(c,text, -1); 
 	

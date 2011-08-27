@@ -108,6 +108,9 @@ void cstring_test() {
 	s =	cstring_fromInt(50002);
 	assert(cstring_compare(s, "50002") == 0);
 	free(s);
+	s =	cstring_fromInt(0);
+	assert(cstring_compare(s, "0") == 0);
+	free(s);
 	s = cstring_replace("HOLA CRISTIAN COMO ANDAS", " ", "");
 	assert(cstring_compare(s,"HOLACRISTIANCOMOANDAS") == 0);
 	free(s);

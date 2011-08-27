@@ -90,7 +90,7 @@ static void sim_transporter_cleanup(sim_transporter t) {
 	free(t->listener_received);
 	free(t->listener);
 	t->free(t->data);
-	free(t->messages);
+	queue_free(t->messages);
 	free(t);
 	return;
 }
@@ -103,6 +103,7 @@ static void_p sim_transporter_listener(sim_transporter t) {
 	cstring builder = cstring_init(0);
 	// The following is a macro for cancelling the thread
 	pthread_cleanup_push((void_p)sim_transporter_cleanup, t);
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
 	while(TRUE) {
 		// This loops enqueues as many messages as built by the char * array.
@@ -263,7 +264,10 @@ sim_transporter sim_transporter_init(connection_type type,
 		t->free   = (function) sim_pipe_transporter_free;
 		break;
 	case C_SHARED_MEMORY:
-		// bind functions to C_SHARED_MEMORY implementation.
+		t->data = sim_smem_transporter_init(from_id, to_id, is_server);
+		t->write = (function) sim_smem_transporter_write;
+		t->listen = (function) sim_smem_transporter_listen;
+		t->free   = (function) sim_smem_transporter_free;
 		break;
 	case C_SOCKETS:
 		if (is_server) {
