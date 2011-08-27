@@ -42,6 +42,7 @@ static void sim_client_listener_cleanup(sim_client r) {
 static void_p sim_client_listener(sim_client r) {
 	int oldtype;
 	pthread_cleanup_push((void_p)sim_client_listener_cleanup, r);
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
 	while(TRUE) {
 		cstring msg = sim_transporter_listen(r->t);

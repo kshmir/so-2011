@@ -7,7 +7,7 @@
  * -----------------------------------
  *
  *
- */
+ */ 
 
 #include <stdio.h>
 #include <unistd.h>
@@ -33,7 +33,11 @@ void file_test(){
 	printf("%s", cstring_from_file("./testFile"));
 }
 
-#define CLIENTS_COUNT 64
+#ifndef __MACH__
+	#define CLIENTS_COUNT 32
+#else
+	#define CLIENTS_COUNT 8 // OSX Has no fun with more than this clients on shmem
+#endif
 
 pthread_cond_t	conds;
 pthread_mutex_t mutex;
@@ -45,9 +49,12 @@ int message_counter = 0;
 void print_receiver(sim_message mes) {
 	message_counter++;
 
-	if (message_counter >= CLIENTS_COUNT - 1) {
+	
+	printf("Receive counter: %d %s\n", message_counter, sim_message_read(mes));
+	if (message_counter >= CLIENTS_COUNT) {
 		pthread_cond_broadcast(&conds);
 	}
+
 
 	sim_message_free(mes);
 }
@@ -63,50 +70,52 @@ void networking_test(connection_type c_type) {
 	pthread_mutex_init(&mutex,NULL);
 	pthread_cond_init(&conds,NULL);
 	
-	printf("Starting transporter test\n");
-	
-	sim_transporter t = sim_transporter_init(c_type, P_TESTER, 0, 1, MODE_READWRITE, TRUE, TRUE);
-	printf("It should be able to listen and write\n");	
+//	printf("Starting transporter test\n");
+//	
+//	sim_transporter t = sim_transporter_init(c_type, P_TESTER, 0, 1, MODE_READWRITE, TRUE, TRUE);
+//	printf("It should be able to listen and write\n");	
+//	sim_transporter_write(t, "server");
+//
+//	cstring data = sim_transporter_listen(t);
+//	sim_transporter_dequeue(t);
+//	assert(cstring_compare(data,"cliente") == 0);
+//	
+//	printf("DONE!\n");
+//	
+//	separator();
+//	
+//	printf("Starting message test\n");
+//	
+//	printf("It should be able to listen and write through a transporter, and get back the data\n");	
+//	sim_message m = sim_message_init(t, "POST", "Write again");
+//	sim_message resp = sim_message_send(m);
+//	data = sim_message_read(resp);
+//	assert(cstring_compare(data, "Hello Baby"));
+//	
+//	printf("DONE!\n");
+//	
+//	separator();
+//	
+//	printf("Starting client test\n");
+//	printf("It should be able to have a listener for querying data\n");	
+//	sim_client c = (sim_client) sim_client_from_transporter(t, receiver);
 //	sleep(1);
-	sim_transporter_write(t, "server");
-
-	cstring data = sim_transporter_listen(t);
-	sim_transporter_dequeue(t);
-	assert(cstring_compare(data,"cliente") == 0);
-	
-	printf("DONE!\n");
-	
-	separator();
-	
-	printf("Starting message test\n");
-	
-	printf("It should be able to listen and write through a transporter, and get back the data\n");	
-	sim_message m = sim_message_init(t, "POST", "Write again");
-	sim_message resp = sim_message_send(m);
-	data = sim_message_read(resp);
-	assert(cstring_compare(data, "Hello Baby"));
-	
-	printf("DONE!\n");
-	
-	separator();
-	
-	printf("Starting client test\n");
-	printf("It should be able to have a listener for querying data\n");	
-	sim_client c = (sim_client) sim_client_from_transporter(t, receiver);
-	sleep(1);
-	assert(cstring_matches("1234",buffer) == 1 && strlen(buffer) > 0);	
-	sim_client_free(c);
-	
-	printf("DONE!\n");
-
-	printf("Waiting for client closing....\n");	
-	sleep(1);
-	printf("Waiting for client 1....\n");
-	sleep(1);
-	printf("Waiting for client 2....\n");
-	separator();
-	
-	
+//	if (c_type != C_SHARED_MEMORY) {
+//		assert(cstring_matches("1234",buffer) == 1 && strlen(buffer) > 0);	
+//	}
+//
+//	sim_client_free(c);
+//	
+//	printf("DONE!\n");
+//
+//	printf("Waiting for client closing....\n");	
+//	sleep(1);
+//	printf("Waiting for client 1....\n");
+//	sleep(1);
+//	printf("Waiting for client 2....\n");
+//	separator();
+//	
+//	
 
 	printf("Starting server test\n");
 	
@@ -129,13 +138,17 @@ void networking_test(connection_type c_type) {
 	printf("Now I'll send messages to all my clients\n");
 	
 	sim_server_broadcast_query(s, cstring_copy("hello client"));
-	
-	while(message_counter <= CLIENTS_COUNT -1 );
+	#ifndef __MACH__
+		pthread_cond_wait(&conds, &mutex);
+	#else
+		while (message_counter <= CLIENTS_COUNT - 1);
+	#endif
 	
 	sim_server_free(s);
 	
 	printf("DONE!\n");
 
+	sleep(1);
 	pthread_mutex_destroy(&mutex);
 	pthread_cond_destroy(&conds);
 	
@@ -176,10 +189,25 @@ int main(int argc, char ** params) {
 	printf("TO BE EFFICIENT OR STABLE. THEY ARE MEANT TO GUARANTEE THAT THE TP CAN WORK\n");
 	//file_test();
 	//serializing_test();
-	//networking_test(C_M_QUEUES);
-	//networking_test(C_PIPE);
+//	message_counter = 0;
+//	separator();
+//	printf("STARTING FIFOS TEST\n");
+//	separator();
+//	networking_test(C_PIPE);
+//
+//	message_counter = 0;
+//	separator();
+//	printf("STARTING MESSAGE QUEUES TEST\n");
+//	separator();
+//	networking_test(C_M_QUEUES);
 	
-	sim_smem_transporter_init();
+
+	message_counter = 0;
+	separator();
+	printf("STARTING SHARED MEMORY TEST\n");
+	separator();
+	networking_test(C_SHARED_MEMORY);
+
 	
 	return 0;
 }
