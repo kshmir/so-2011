@@ -193,24 +193,38 @@ static sim_transporter sim_transporter_start() {
  */
 static void exec_process(process_type proc, connection_type type, int from_id, int to_id) {
 	int id = 0;
-
+	
 	switch (proc) {
-	case P_TESTER:
-		id = fork();
-		if (id == 0) {
-			execl("tp1_test_child", "tp1_test_child", cstring_fromInt(type),
-					cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
-		}
-		break;
-	case P_TESTER_SERVER:
-		id = fork();
-		if (id == 0) {
-			execl("tp1_test_server", "tp1_test_server", cstring_fromInt(type),
-					cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
-		}
-		break;
-	default:
-		break;
+		case P_TESTER:
+			id = fork();
+			if (id == 0) {
+				execl("tp1_test_child", "tp1_test_child", cstring_fromInt(type),
+					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
+			}
+			break;
+		case P_TESTER_SERVER:
+			id = fork();
+			if (id == 0) {
+				execl("tp1_test_server", "tp1_test_server", cstring_fromInt(type),
+					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
+			}
+			break;
+		case P_LEVEL:
+			id = fork();
+			if (id == 0) {
+				execl("tp1_level", "tp1_level", cstring_fromInt(type),
+					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
+			}
+			break;
+		case P_AIRLINE:
+			id = fork();
+			if (id == 0) {
+				execl("tp1_airline", "tp1_airline", cstring_fromInt(type),
+					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
+			}
+			break;
+		default:
+			break;
 	}
 }
 
