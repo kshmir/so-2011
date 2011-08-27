@@ -8,7 +8,7 @@ sim_socket_transporter sim_socket_transporter_init_client(int server_id, int cli
 	sim_socket_transporter t= malloc(sizeof (struct sim_socket_transporter));
 	struct sockaddr_in cli_addr;
 	int clilen;
-	int sockfd;
+	int sockfd=-1;
 	clilen=sizeof(cli_addr);
 	int* cl=malloc(sizeof (int));
 	*cl=client_id;
@@ -28,7 +28,7 @@ sim_socket_transporter sim_socket_transporter_init_client(int server_id, int cli
 		perror("connect call failed");
 		exit(1);
 	}
-	if(sockfd==NULL){
+	if(sockfd==-1){
 		perror("Invalid server Id");
 		exit(1);
 	}
@@ -36,12 +36,14 @@ sim_socket_transporter sim_socket_transporter_init_client(int server_id, int cli
 	t->client=client_id;
 	t->server=server_id;
 	t->socket_number=sockfd;
+	t->socketfd=sockfd;
 	t->client_sockaddr_in=client;
+	t->server_sockaddr_in=server;
 	char desc[3];
 	desc[0]=0;
 	desc[1]=(char)client_id;
 	desc[2]=0;
-	if(sendto(sockfd,desc,3,0,&server,SIZE)==-1)
+	if(sendto(sockfd,desc,3,0,(struct sockaddr *)&server,SIZE)==-1)
 		perror("error al autenticarse");
 	printf("client: %d, server: %d, socketfd: %d",t->client,t->server,t->socketfd);
 	return t;
@@ -55,8 +57,6 @@ sim_socket_transporter sim_socket_transporter_init_server(int client_id, int ser
 		int* sid=malloc(sizeof(int));
 		//		*sid=server_id;
 		*sid=0;
-		int client_len=SIZE;
-		int open=1;
 		/* The local server port */
 		struct sockaddr_in server = {AF_INET,SOCKETNUMBER,INADDR_ANY};
 
@@ -84,27 +84,31 @@ sim_socket_transporter sim_socket_transporter_init_server(int client_id, int ser
 	t->client_len=sizeof(struct sockaddr_in);
 	t->client=client_id;
 	t->server=0;
-	t->socket_number=NULL;
-	t->socketfd=NULL;
+	t->socket_number=-1;
+	t->socketfd=-1;
 	return t;
 }
 
 void sim_socket_transporter_write(sim_socket_transporter t, cstring data){
-	int l,sockfd;
+	int l,sockfd=0;
 	if(t==NULL)
 		return;
 	l=cstring_len(data);
-	if(t->socketfd==NULL){
+	if(t->socketfd==-1){
+		sockfd=serverfd;
 		if(map_get(sockfd_id,&t->client)==NULL)
-			send(serverfd,data,l,0);
+			if(send(serverfd,data,l,0)==-1)
+				perror("error al enviar 1");
 		else{
 			t->client_sockaddr_in=*((struct sockaddr_in*)map_get(sockfd_id,&t->client));
-			sendto(serverfd,data,l,0,&(t->client_sockaddr_in),(socklen_t)t->client_len);
+			if(sendto(serverfd,data,l,0,(struct sockaddr*)(&(t->client_sockaddr_in)),(socklen_t)t->client_len)==-1)
+			perror("error al enviar 2");
 		}
 		printf("Soy server y escribo el dato: \"%s\" con el socket: %d\n",data,serverfd);
 	}else{
-		if(sendto(t->socketfd,data,l,0,&t->server_sockaddr_in,SIZE)==-1)
-			perror("error al enviar");
+		sockfd=t->socketfd;
+		if(sendto(t->socketfd,data,l,0,(struct sockaddr*)(&(t->server_sockaddr_in)),(socklen_t)SIZE)==-1)
+			perror("error al enviar 3");
 		printf("Soy client y ");
 	printf("escribo el dato: \"%s\" con el socket: %d\n",data,sockfd);
 	}
@@ -112,7 +116,7 @@ void sim_socket_transporter_write(sim_socket_transporter t, cstring data){
 
 cstring sim_socket_transporter_listen(sim_socket_transporter t, int * extra_data){
 	int sockfd;
-	if(t->socketfd==NULL){
+	if(t->socketfd==-1){
 		sockfd=serverfd;
 	}else{
 		sockfd=t->socketfd;
@@ -122,7 +126,6 @@ cstring sim_socket_transporter_listen(sim_socket_transporter t, int * extra_data
 	//	char ret;
 	//	recv(sockfd,&ret,1,0);
 	struct sockaddr_in cli_addr;
-	int clilen = sizeof(cli_addr);
 	int client_len=sizeof(struct sockaddr_in);
 	struct sockaddr_in client;
 
@@ -136,11 +139,13 @@ cstring sim_socket_transporter_listen(sim_socket_transporter t, int * extra_data
 	ret[0]=1;
 	int flag=1;
 	while(flag){
-		if(t->socketfd==NULL){
-			aux=recvfrom(sockfd,&ret[i++],1,0,&client,&client_len);
+		printf("i: %d\n",i);
+		if(t->socketfd==-1){
+			aux=recvfrom(sockfd,&ret[i++],1,0,(struct sockaddr*)&client,(socklen_t *)&client_len);
 		}else{
 			aux=recv(sockfd,&ret[i++],1,0);
 		}
+		printf("\naux: %d, ret[%d]: %c\n",aux,i-1,ret[i-1]);
 		if(aux<=0)
 			flag=0;
 		else{
@@ -149,20 +154,20 @@ cstring sim_socket_transporter_listen(sim_socket_transporter t, int * extra_data
 				ret=(char*)realloc(ret,max);
 			}
 			if(ret[i-1]==0 && i!=1){
-				if(i!=3 || t->socketfd!=NULL )
+				if(i!=3 || t->socketfd!=-1 )
 					flag=0;
 				else{
 					if(ret[2]==0){
 						*cl_map_id=(int)ret[1];
 						memcpy(cli_addr_map,&cli_addr,sizeof(struct sockaddr_in));
 						map_set(sockfd_id,cl_map_id,cli_addr_map);
+						printf("\nSe agrego cliente %d\n",*cl_map_id);
 					}
-					i=0;
 					flag=0;
 				}
 			}
 		}
-		printf("ret[%d]: %c",i-1,ret[i-1]);
+//		printf("ret[%d]: %c",i-1,ret[i-1]);
 	}
 	*extra_data=i+1;
 	//	ret=(char*)realloc(ret,(i+1)*sizeof(char));
@@ -172,7 +177,7 @@ cstring sim_socket_transporter_listen(sim_socket_transporter t, int * extra_data
 }
 
 void sim_socket_transporter_free(sim_socket_transporter transp){
-	if(transp->socketfd==NULL){
+	if(transp->socketfd==-1){
 		list a=map_values(sockfd_id);
 		foreach(struct sockaddr_in*, t, a) {
 			free(t);
