@@ -12,8 +12,8 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "networking/sim_server.h"
-#include "networking/sim_transporter.h"
+#include "../networking/sim_server.h"
+#include "../networking/sim_transporter.h"
 
 
 void separator() {

@@ -14,8 +14,8 @@
 #include <time.h>
 #include <pthread.h>
 
-#include "networking/sim_server.h"
-#include "networking/sim_transporter.h"
+#include "../networking/sim_server.h"
+#include "../networking/sim_transporter.h"
 
 
 void separator() {

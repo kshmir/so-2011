@@ -225,13 +225,13 @@ sim_tp1:
 	$(cc) -o bin/tp1.o -c src/tps/tp1/tp1.c
 
 sim_tp1_test: 
-	$(cc) -o bin/tp1_test.o -c src/tps/tp1/tp1_test.c
+	$(cc) -o bin/tp1_test.o -c src/tps/tp1/tests/tp1_test.c
 	
 sim_tp1_test_child: 
-	$(cc) -o bin/tp1_test_child.o -c src/tps/tp1/tp1_test_child.c
+	$(cc) -o bin/tp1_test_child.o -c src/tps/tp1/tests/tp1_test_child.c
 	
 sim_tp1_test_server: 
-	$(cc) -o bin/tp1_test_server.o -c src/tps/tp1/tp1_test_server.c
+	$(cc) -o bin/tp1_test_server.o -c src/tps/tp1/tests/tp1_test_server.c
 
 
 #//MARK: ----- Targets

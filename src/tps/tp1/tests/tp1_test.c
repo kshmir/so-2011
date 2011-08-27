@@ -15,11 +15,11 @@
 #include <string.h>
 #include <assert.h>
 
-#include "networking/sim_client.h"
-#include "networking/sim_message.h"
-#include "networking/sim_server.h"
-#include "networking/sim_transporter.h"
-#include "sim_common_reqs.h"
+#include "../networking/sim_client.h"
+#include "../networking/sim_message.h"
+#include "../networking/sim_server.h"
+#include "../networking/sim_transporter.h"
+#include "../sim_common_reqs.h"
 
 #ifndef __MACH__
 #define CLIENTS_COUNT 32
