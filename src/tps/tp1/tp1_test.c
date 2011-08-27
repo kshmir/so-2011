@@ -182,19 +182,21 @@ int main(int argc, char ** params) {
 	printf("NONE OF THE FOLLOWING TESTS ARE GUARANTEED TO PASS ON ALL PLATFORMS\n");
 	printf("THEY ARE USED AS ANOTHER DEVELOPMENT TOOL AND THEY ***ARE NOT*** MEANT\n");
 	printf("TO BE EFFICIENT OR STABLE. THEY ARE MEANT TO GUARANTEE THAT THE TP CAN WORK\n");
-	//file_test();
-	//serializing_test();
+	
+//	file_test();
+//	serializing_test();
+//
 //	message_counter = 0;
 //	separator();
 //	printf("STARTING FIFOS TEST\n");
 //	separator();
 //	networking_test(C_PIPE);
-//
-//	message_counter = 0;
-//	separator();
-//	printf("STARTING MESSAGE QUEUES TEST\n");
-//	separator();
-//	networking_test(C_M_QUEUES);
+
+	message_counter = 0;
+	separator();
+	printf("STARTING MESSAGE QUEUES TEST\n");
+	separator();
+	networking_test(C_M_QUEUES);
 	
 	
 //	message_counter = 0;
@@ -204,11 +206,11 @@ int main(int argc, char ** params) {
 //	networking_test(C_SOCKETS);
 	
 
-	message_counter = 0;
-	separator();
-	printf("STARTING SHARED MEMORY TEST\n");
-	separator();
-	networking_test(C_SHARED_MEMORY);
+//	message_counter = 0;
+//	separator();
+//	printf("STARTING SHARED MEMORY TEST\n");
+//	separator();
+//	networking_test(C_SHARED_MEMORY);
 
 	
 	return 0;

@@ -38,7 +38,7 @@ int sem_up(int sem, int amount) {
 	sops.sem_flg = SEM_UNDO;
 	
 	if (semop(sem, &sops, 1) == -1) {
-		perror("Semaphore fail on UP");
+	//	perror("Semaphore fail on UP");
 		return -1;
 	}
 	return 1;

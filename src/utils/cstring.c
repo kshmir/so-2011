@@ -264,6 +264,9 @@ cstring cstring_copy_len(cstring from, int len) {
 	int i = 0;
 	for (; i < len; i++) {
 		to[i] = from[i];
+		if (from[i] == 0) {
+			break;
+		}
 	}
 	return to;
 }

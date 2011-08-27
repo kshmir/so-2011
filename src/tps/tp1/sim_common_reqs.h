@@ -22,6 +22,8 @@
 #include "../../data_structures/queue.h"
 #include "../../includes.h"
 #include "../../utils/cstring.h"
+#include "../../utils/sem.h"
+#include "../../utils/shm.h"
 #include "core/sim_airline.h"
 #include "core/sim_extra.h"
 #include "core/sim_level.h"
