@@ -70,52 +70,52 @@ void networking_test(connection_type c_type) {
 	pthread_mutex_init(&mutex,NULL);
 	pthread_cond_init(&conds,NULL);
 	
-//	printf("Starting transporter test\n");
-//	
-//	sim_transporter t = sim_transporter_init(c_type, P_TESTER, 0, 1, MODE_READWRITE, TRUE, TRUE);
-//	printf("It should be able to listen and write\n");	
-//	sim_transporter_write(t, "server");
-//
-//	cstring data = sim_transporter_listen(t);
-//	sim_transporter_dequeue(t);
-//	assert(cstring_compare(data,"cliente") == 0);
-//	
-//	printf("DONE!\n");
-//	
-//	separator();
-//	
-//	printf("Starting message test\n");
-//	
-//	printf("It should be able to listen and write through a transporter, and get back the data\n");	
-//	sim_message m = sim_message_init(t, "POST", "Write again");
-//	sim_message resp = sim_message_send(m);
-//	data = sim_message_read(resp);
-//	assert(cstring_compare(data, "Hello Baby"));
-//	
-//	printf("DONE!\n");
-//	
-//	separator();
-//	
-//	printf("Starting client test\n");
-//	printf("It should be able to have a listener for querying data\n");	
-//	sim_client c = (sim_client) sim_client_from_transporter(t, receiver);
-//	sleep(1);
-//	if (c_type != C_SHARED_MEMORY) {
-//		assert(cstring_matches("1234",buffer) == 1 && strlen(buffer) > 0);	
-//	}
-//
-//	sim_client_free(c);
-//	
-//	printf("DONE!\n");
-//
-//	printf("Waiting for client closing....\n");	
-//	sleep(1);
-//	printf("Waiting for client 1....\n");
-//	sleep(1);
-//	printf("Waiting for client 2....\n");
-//	separator();
-//	
-//	
+	printf("Starting transporter test\n");
+	
+	sim_transporter t = sim_transporter_init(c_type, P_TESTER, 0, 1, MODE_READWRITE, TRUE, TRUE);
+	printf("It should be able to listen and write\n");	
+	sim_transporter_write(t, "server");
+
+	cstring data = sim_transporter_listen(t);
+	sim_transporter_dequeue(t);
+	assert(cstring_compare(data,"cliente") == 0);
+	
+	printf("DONE!\n");
+	
+	separator();
+	
+	printf("Starting message test\n");
+	
+	printf("It should be able to listen and write through a transporter, and get back the data\n");	
+	sim_message m = sim_message_init(t, "POST", "Write again");
+	sim_message resp = sim_message_send(m);
+	data = sim_message_read(resp);
+	assert(cstring_compare(data, "Hello Baby"));
+	
+	printf("DONE!\n");
+	
+	separator();
+	
+	printf("Starting client test\n");
+	printf("It should be able to have a listener for querying data\n");	
+	sim_client c = (sim_client) sim_client_from_transporter(t, receiver);
+	sleep(1);
+	if (c_type != C_SHARED_MEMORY) {
+		assert(cstring_matches("1234",buffer) == 1 && strlen(buffer) > 0);	
+	}
+
+	sim_client_free(c);
+	
+	printf("DONE!\n");
+
+	printf("Waiting for client closing....\n");	
+	sleep(1);
+	printf("Waiting for client 1....\n");
+	sleep(1);
+	printf("Waiting for client 2....\n");
+	separator();
+	
+	
 
 	printf("Starting server test\n");
 	
