@@ -201,6 +201,13 @@ int main(int argc, char ** params) {
 //	separator();
 //	networking_test(C_M_QUEUES);
 	
+	
+	message_counter = 0;
+	separator();
+	printf("STARTING SOCKETS TEST\n");
+	separator();
+	networking_test(C_SOCKETS);
+	
 
 	message_counter = 0;
 	separator();
@@ -209,6 +216,5 @@ int main(int argc, char ** params) {
 	networking_test(C_SHARED_MEMORY);
 
 	
->>>>>>> ab4bf64fb5a898bfb7015f7837f95a7ca83d5831
 	return 0;
 }
