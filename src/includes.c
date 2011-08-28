@@ -8,6 +8,9 @@
  */
 
 #include "includes.h"
+#include "data_structures/queue.h"
+
+#include <pthread.h>
 
 #include <string.h>
 #include <stdlib.h>
