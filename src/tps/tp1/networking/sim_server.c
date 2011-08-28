@@ -134,7 +134,7 @@ static void sim_server_listener(sim_server s) {
 				sim_message _m = sim_message_init((sim_transporter)map_get(s->clients_transporters,&id), 
 																   cstring_write(cstring_copy("RES "),list_get(params,0)), 
 																   list_get(params,1));
-				((function)map_get(s->responds_to, &safe_key))(_m);
+				((function)map_get(s->responds_to, safe_key))(_m);
 				
 				list_free_with_data(params);
 				list_free_with_data(header_values);
@@ -205,9 +205,7 @@ void sim_server_broadcast_query(sim_server s, cstring message) {
 	Binds a char sequence to a receiver, it allows the server to responds to events.
  */
 int sim_server_add_receiver(sim_server s, cstring sequence, sim_receiver rec) {
-	int * ptr = (int *) malloc(sizeof(void_p));
-	* ptr = (int) sequence;
-	map_set(s->responds_to, ptr, rec);
+	map_set(s->responds_to, sequence, rec);
 	list_add(s->responds_to_keys, sequence);
 }
 

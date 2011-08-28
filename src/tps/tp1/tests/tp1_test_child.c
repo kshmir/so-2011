@@ -42,7 +42,8 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	
 	
 	// Starts response of message test
-	
+
+	printf("Client waiting for server to say 'Write again'");
 	data = sim_transporter_listen(t);
 	assert(cstring_compare("Write again", data));
 	
@@ -56,6 +57,7 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	sim_transporter_write(t, "QUERY ;4"); 
 	
 	
+	sim_transporter_free(t);
 	
 	
 	
