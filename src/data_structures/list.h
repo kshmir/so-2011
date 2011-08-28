@@ -20,6 +20,13 @@
 		_item != NULL && item != NULL; \
 		_item = (void_p)list_node_next(_item), item = list_node_value((_item != NULL) ? _item : NULL))
 
+#define foreach_(type, item, list) \
+	void_p _item = NULL; \
+	type   item  = NULL; \
+	for(_item = (void_p)list_header(list), item = list_node_value(_item); \
+		_item != NULL && item != NULL; \
+		_item = (void_p)list_node_next(_item), item = list_node_value((_item != NULL) ? _item : NULL))
+
 #define foreach_next(item) \
 		_item = (void_p)list_node_next(_item); item = list_node_value((_item != NULL) ? _item : NULL);
 

@@ -14,6 +14,10 @@ struct sim_level {
 	sim_server airlines_server;
 };
 
+int sim_level_has_city(sim_level lev, cstring city) {
+	return graph_get_node(lev->level, city) != NULL;
+}
+
 cstring sim_level_serialize(sim_level level) {
 	int n = list_size(graph_keys(level->level));
 	cstring s = cstring_fromInt(n);
@@ -54,54 +58,99 @@ cstring sim_level_serialize(sim_level level) {
 }
 
 sim_level sim_level_deserialize(cstring s) {
-	sim_level l = malloc(sizeof(struct sim_level));
-	l->level = graph_init((comparer)cstring_compare, (cloner)cstring_copy);
+	sim_level l = calloc(sizeof(struct sim_level), 1);
+	l->level = graph_init((comparer)cstring_comparer, (cloner)cstring_copy);
 	int i = 0;
-	int nc = cstring_parseInt(s, &i);
-	while (s[i++]!='\n');
-	while (s[i++]!='\n');
-	int j = 0;
-	int flag = TRUE;
-	for (j = 0; j<nc; j++) {
-		cstring key = cstring_copy_line(s+i);
-		cstring_remove(key, '\n');
-		while (s[i++]!='\n');
-		
-		map meds = map_init((comparer)cstring_compare, (cloner)cstring_copy);
-		flag = TRUE;
-		while (flag) {
-			sim_keypair kp = sim_keypair_deserialize(cstring_copy_line(s+i));
-			cstring medName = cstring_copy(kp->name);
-			int *amount = malloc(sizeof(int));
-			*amount = kp->amount;
-			free(kp);
-			map_set(meds, medName, amount);
-			while (s[i++]!='\n');
-			if (s[i] == '\n') {
-				flag = FALSE;
-				i++;
+	int amount = 0;
+	int error = 0;
+	list lines = cstring_split_list(s, "\n");
+	
+	foreach(cstring, line, lines) {
+		if (strlen(line) > 0) {
+			if (i == 0) {
+				int _err = 1;
+				amount = cstring_parseInt(line, &_err);
+				if (!_err) {
+					error = 1;
+					break;
+				}
+			} else if (amount > 0) {
+				cstring city_name = (cstring) malloc(sizeof(cstring));
+				if (cstring_matches(line, " ")) {
+					error = 1;
+					break;
+				}
+				city_name = cstring_copy(line);
+				map medicines = map_init(cstring_comparer, NULL);
+				graph_add_node(l->level, city_name, medicines);
+				
+
+				foreach_next(line);
+				while(line != NULL && strlen(line) > 0 && !error) {
+					sim_keypair kp = sim_keypair_deserialize(line);
+					if (kp != NULL) {
+						int * value = calloc(sizeof(int), 1);
+						*value = kp->amount;
+						map_set(medicines, cstring_copy(kp->name), value);
+					}
+					else {
+						error = 1;
+					}
+					free(kp);
+					foreach_next(line);
+				}
+				if (error) {
+					break;
+				}
+				amount--;
+			} else {
+				while(line != NULL && strlen(line) > 0 && !error) {
+					sim_map_relation r = sim_map_relation_deserialize(line);
+					if (r != NULL) {
+						graph_add_arc(l->level, r->from, r->to, r->weight);
+					}
+					else {
+						error = 1;
+					}
+					foreach_next(line);
+				}
 			}
+
 		}
-		graph_add_node(l->level, key, meds);
+		if (error) {
+			break;
+		}
+		i++;
 	}
-	flag = TRUE;
-	while (flag){
-		cstring from = cstring_copy_till_char(s+i, ' ', 1);
-		while (s[i++] != ' ');
-		cstring to = cstring_copy_till_char(s+i, ' ', 1);
-		while (s[i++] != ' ');
-		int rc = 0;
-		int weight = cstring_parseInt(s+i, &rc);
-		while (s[i++] != '\n');
-		if(s[i]=='\n')
-			i++;
-		if(s[i]==0)
-			flag = FALSE;
-		graph_add_arc(l->level, from, to, weight);
-		cstring_free(from);
-		cstring_free(to);
+	list_free(lines);	
+	if (error) {	
+		graph_free(l->level);
+		free(l);
+		return NULL;
 	}
+	
 	return l;
+}
+
+void sim_level_free(sim_level lev) {
+	if (lev->frontend_client != NULL) {
+		sim_client_free(lev->frontend_client);
+	}
+	if (lev->airlines_server != NULL) {
+		sim_server_free(lev->airlines_server);
+	}
+	
+	list keys = graph_keys(lev->level);
+	
+	foreach(cstring, key, keys) {
+		graph_node n = graph_get_node(lev->level,key);
+		if (graph_node_value(n) != NULL) {
+			map_free(graph_node_value(n));
+		}
+	}
+	list_free(keys);
+	
+	free(lev->level);
 }
 
 void sim_level_main(sim_level air) {

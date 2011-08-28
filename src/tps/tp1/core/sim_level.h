@@ -12,6 +12,12 @@ cstring sim_level_serialize(sim_level lev);
 
 sim_level sim_level_deserialize(cstring s);
 
+
+int sim_level_has_city(sim_level lev, cstring city);
+
+
+void sim_level_free(sim_level lev);
+
 void sim_level_main(sim_level lev);
 
 #endif

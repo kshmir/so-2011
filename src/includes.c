@@ -39,8 +39,12 @@ int double_comparer(void_p double1, void_p double2) {
 	}
 }
 
+int cstring_ds_comparer(void_p s1, void_p s2) {
+	return strcmp((char*)s1, *(char**)s2);
+}
+
 int cstring_comparer(void_p s1, void_p s2) {
-	return strcmp(*(char**)s1, *(char**)s2);
+	return strcmp((char*)s1, (char*)s2);
 }
 
 
@@ -78,7 +82,7 @@ void_p cstring_cloner(void_p s1) {
 	return nuevo;
 }
 
-void separator() {
+static void separator() {
 	printf("--------------------------------\n");
 }
 

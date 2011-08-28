@@ -44,9 +44,6 @@ int connection_int(cstring * str) {
 	return -1;
 }
 
-
-
-
 int sim_validator_params(list args, cstring * return_level, list return_airlines, cstring * error, connection_type * c_type) {
 	foreach(cstring *, key, args) {
 		switch(validator_int(key)) {
@@ -71,7 +68,6 @@ int sim_validator_params(list args, cstring * return_level, list return_airlines
 			case PARAM_AIRLINE:
 				foreach_next(key);
 				while(key != NULL) {
-					foreach_next(key);
 					if (access(*key, R_OK) == 0) {
 						list_add(return_airlines,cstring_copy(*key));
 					} else {
@@ -79,6 +75,7 @@ int sim_validator_params(list args, cstring * return_level, list return_airlines
 						* error = cstring_write(* error, *key);
 						return -1;
 					}
+					foreach_next(key);
 				}
 				if (list_size(return_airlines) == 0) {
 					* error = cstring_copy("Error: Didn't have extra params for airline files");
@@ -95,7 +92,41 @@ int sim_validator_params(list args, cstring * return_level, list return_airlines
 		* error = cstring_copy("Not enough data to start program!");
 		return -1;
 	}
-	
-	
 	return 1;
 }
+
+sim_level sim_validator_level(cstring path) {
+	cstring file_data = cstring_from_file(path);
+	
+	if (file_data == NULL) {
+		return NULL;
+	}
+	
+	sim_level lev = sim_level_deserialize(file_data);
+	free(file_data);	
+	
+	return lev;
+}
+
+sim_airline sim_validator_airline(cstring path, sim_level lev) {
+	cstring file_data = cstring_from_file(path);
+	
+	if (file_data == NULL) {
+		return NULL;
+	}
+	
+	sim_airline air = sim_airline_deserialize(file_data, -1);
+	free(file_data);	
+	
+
+	foreach(sim_plane, plane, sim_airline_planes(air)) {
+		
+		if (!sim_level_has_city(lev, sim_plane_start_city(plane))) {
+//			sim_airline_free(air); TODO!
+			return NULL;
+		}
+	}
+
+	return air;	
+}
+

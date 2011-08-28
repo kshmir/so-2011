@@ -17,24 +17,47 @@ list sim_airline_planes(sim_airline air) {
 }
 
 sim_airline sim_airline_deserialize(cstring s, int airline_id) {
-	sim_airline airline = malloc(sizeof(struct sim_airline));
-	airline->id = airline_id;
-	int i = 0;
-	int nplanes = cstring_parseInt(cstring_copy_line(s), &i);
-	i = 0;
-	while (s[i++]!='\n');
-	while (s[i++]!='\n');
-	int j = 0;
+	sim_airline airline = calloc(sizeof(struct sim_airline), 1);
 	airline->planes = list_init();
-	for(j = 0; j<nplanes; j++){
-		cstring splane = cstring_copy_till_char(s+i, '\n', 3);
-		sim_plane p = sim_plane_deserialize(splane, airline_id*1000 + j);
-		list_add(airline->planes, p);
-		free(splane);
-		while (s[i++]!='\n');
-		while (s[i++]!='\n');
-		while (s[i++]!='\n');
+	int i = 0;
+	int amount = 0;
+	int error = 0;
+	list lines = cstring_split_list(s, "\n");
+	foreach(cstring, line, lines) {
+		if (strlen(line) > 0) {
+			if (i == 0) {
+				int _err = 1;
+				amount = cstring_parseInt(line, &_err);
+				if (!_err) {
+					error = 1;
+					break;
+				}
+			} else {
+				cstring plane_start_point = cstring_copy(line);
+				sim_plane p = (sim_plane) sim_plane_init(plane_start_point);
+				foreach_next(line);
+				while(strlen(line) > 0 && !error) {
+					sim_keypair kp = sim_keypair_deserialize(line);
+					if (kp != NULL) {
+						sim_plane_set_medicines(p, cstring_copy(kp->name), kp->amount);
+					} else {
+						error = 1;
+					}
+					sim_keypair_free(kp);
+					foreach_next(line);
+				}
+				list_add(airline->planes, p);
+				amount--;
+			}
+		}
+		i++;
 	}
+	list_free(lines);
+	
+	if (error || amount > 0) {
+		return NULL;
+	}
+	
 	
 	return airline;
 }
@@ -48,7 +71,7 @@ cstring sim_airline_serialize(sim_airline air, int hasId) {
 	s = cstring_write(s,cstring_fromInt(list_size(air->planes)));
 	s = cstring_write(s,"\n\n");
 	foreach(sim_plane, p, air->planes) { 
-		s = cstring_write(s, sim_plane_serialize(p));
+		s = cstring_write(s, (cstring) sim_plane_serialize(p));
 		s = cstring_write(s,"\n");
 	}
 	return s;
