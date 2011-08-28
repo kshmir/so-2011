@@ -140,6 +140,27 @@ int list_size(list l) {
 	return size;
 }
 
+
+
+list list_from_ptrarray_w_count(int size, size_t block_size, void_p ptr) {
+	list l = list_init();
+	int i = 0;
+	for(; i < size; i++) {
+		list_add(l, ((char*)ptr + block_size * i));
+	}
+	return l;
+}
+
+list list_from_ptrarray_null_ended(char ** values)  {
+	list l = list_init();
+	int i = 0;
+	for(; values[i] != NULL; i++) {
+		list_add(l, values[i]);
+	}
+	return l;
+}
+
+
 // Inserts data to the list.
 // Returns -1 if it's a in invalid operation, or the index if it's valid.
 int list_insert(list p, int index, void_p  ptr) {

@@ -13,31 +13,24 @@ int sim_plane_comparer(void_p a1, void_p a2) {
 	return _a1->id - _a2->id;
 }
 
-sim_plane sim_plane_deserialize(cstring s, int plane_id) {
-	sim_plane p = malloc(sizeof(struct sim_plane));
-	p->id = plane_id;
-	p->start_city = cstring_copy_line(s);
-	cstring_remove(p->start_city, '\n');
-	while (*(s++) != '\n');
-	s = cstring_copy(s);
-	cstring_remove(s, '\n');
-	s = cstring_write_c(s, ' ');
+sim_plane sim_plane_init(cstring s) {
+	sim_plane p = calloc(sizeof(struct sim_plane),1);
+	p->start_city = s;
 	p->medicines_keys = list_init();
-	p->medicines = map_init((comparer)cstring_compare, (cloner)cstring_copy);
-	int flag = TRUE;
-	while(flag){
-		sim_keypair kp = sim_keypair_deserialize(cstring_copy_till_char(s, ' ', 2));
-		cstring key = cstring_copy(kp->name);
-		int *value = malloc(sizeof(int));
-		*value = kp->amount;
-		list_add(p->medicines_keys, key);
-		map_set(p->medicines, key, value);
-		while (*(s++) != ' ');
-		while (*(s++) != ' ');
-		flag = *s != '\0';
-		free(kp);
-	}
+	p->medicines = map_init(cstring_comparer, NULL);
 	return p;
+}
+
+cstring sim_plane_start_city(sim_plane p) {
+	return p->start_city;
+}
+
+void sim_plane_set_medicines(sim_plane p, cstring key, int value) {
+	int * v = calloc(sizeof(int),1);
+	* v = value;
+	
+	list_add(p->medicines_keys, key);
+	map_set(p->medicines, key, v);
 }
 
 cstring sim_plane_serialize(sim_plane p) {

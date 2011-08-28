@@ -10,6 +10,7 @@
  */
 
 #include "../sim_common_reqs.h"
+#include "../networking/sim_transporter.h"
 
 #ifndef _SIM_FRONTEND_H_
 #define _SIM_FRONTEND_H_
