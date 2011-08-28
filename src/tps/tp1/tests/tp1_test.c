@@ -97,9 +97,7 @@ void networking_test(connection_type c_type) {
 	printf("It should be able to have a listener for querying data\n");	
 	sim_client c = (sim_client) sim_client_from_transporter(t, receiver);
 	sleep(1);
-	if (c_type != C_SHARED_MEMORY) {
-		assert(cstring_matches("1234",buffer) == 1 && strlen(buffer) > 0);	
-	}
+
 
 	sim_client_free(c);
 	

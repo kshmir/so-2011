@@ -36,7 +36,6 @@ int sem_create(int key) {
 	close(op);	
 	
 	key_t k = ftok(path, (char) (key));	
-	unlink(path);
 	int sem = semget(k, 1, (IPC_CREAT | 0666)); 
 	if (sem < 0) {
 		perror("Semaphore fail!");
