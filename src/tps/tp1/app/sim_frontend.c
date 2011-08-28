@@ -12,6 +12,7 @@
 #include "sim_frontend.h"
 
 
+
 void sim_frontend_print(cstring data) {
 	printf("%s\n",data);
 }
@@ -22,6 +23,16 @@ void sim_frontend_receiver(sim_message mes) {
 	free(data);
 	sim_message_free(mes);
 }
+
+int sim_frontend_start_processes(sim_level lev, list airlines) {
+	
+	
+	printf("%s\n",sim_level_serialize(lev));
+	
+}
+
+
+
 
 
 
@@ -38,7 +49,7 @@ int sim_frontend_main(list params) {
 	if (sim_validator_params(params, &level_file, airline_files, &error_string, &c_type) == TRUE) {
 		cstring error_file = NULL;
 		sim_level lev = (sim_level) sim_validator_level(level_file);
-		
+		list airlines = list_init();
 		if (lev != NULL) {
 			foreach(cstring, file, airline_files) {
 				sim_airline airline = (sim_airline) sim_validator_airline(file, lev);
@@ -46,9 +57,11 @@ int sim_frontend_main(list params) {
 					error_file = file;
 					break;
 				}
+				list_add(airlines, airline);
 			}
 			if (error_file == NULL) {
-				// Enter on loop.
+				sim_frontend_start_processes(lev, airlines);
+				
 			}
 			else {
 				sim_frontend_print("Error on airline file named:");
