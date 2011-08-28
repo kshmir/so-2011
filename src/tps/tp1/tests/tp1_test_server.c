@@ -59,6 +59,8 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 
 	pthread_cond_wait(&conds, &mutex);
 	
+	sim_client_free(c);
+	
 	// Stops sending noise to the server.
 }
 

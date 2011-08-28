@@ -66,7 +66,12 @@ cstring cstring_reverse(cstring s) {
 }
 
 cstring cstring_expand(cstring s, int extraSize){
-	cstring aux = realloc(s, (cstring_len(s) + extraSize + 1) * sizeof(char));
+	cstring aux = realloc(s, (cstring_len(s) + extraSize + 10) * sizeof(char));
+	int i = cstring_len(aux);
+	int len = cstring_len(aux) + extraSize;
+	for (; i < len + 1; i++) {
+		aux[i] = 0;
+	}	
 	return aux;
 }
 
@@ -135,13 +140,13 @@ cstring * cstring_split(cstring _sub, cstring s) {
 	cstring sub = cstring_copy(_sub);
 	sub = cstring_write(sub,s); // Dirty little hack ;)
 	cstring * result = (cstring *) calloc(sizeof(cstring), 5);
-	int size = 0;
+	int size = 5;
 	int hits = 0;
 	int index = 0;
 	void * found = 0;
 	while((found = (void *)strstr(sub + index,s)) != NULL) {
 		
-		if (hits == size) {
+		if (hits == size - 1) {
 			result = (cstring *) realloc(result, sizeof(char*) * (size + 5));
 			size += 5;
 		}
@@ -155,6 +160,7 @@ cstring * cstring_split(cstring _sub, cstring s) {
 			result[hits][i] = found_cstring[i];
 		}
 		result[hits][i] = 0;
+	
 		index += len + cstring_len(s);
 		hits++;
 	}
@@ -237,11 +243,17 @@ cstring cstring_from_file(cstring path){
 	int i = 0;
 	while(read(fd, buffer, BUFF_SIZE)>0){
 		string = cstring_write(string, buffer);
+		for (; i < BUFF_SIZE; i++) {
+			buffer[i] = 0;
+		}
 	}
 	free(buffer);
 	close(fd);
 	
-	return string;
+	
+	cstring _string = cstring_replace(string, "\r", "");
+	free(string);
+	return _string;
 }
 
 int cstring_capped_len(cstring data, int max_size) {

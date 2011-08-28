@@ -3,36 +3,7 @@
 #ifndef _SIM_socket_TRANSPORTER_H_
 #define _SIM_socket_TRANSPORTER_H_
 
-#include <ctype.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define SIZE sizeof(struct sockaddr_in)
-#define SOCKETNUMBER 5115
-#define DEF_RSV_SIZE 51
-#define	WAITING_CONNECTIONS	256
-#define SERVER_ADDR	"127.0.0.1"
-
-
-struct sim_socket_transporter{
-		int					server;
-		int					client;
-		int					socket_number;
-		int					socketfd;
-		int 				clilen;
-		int 				client_len;
-		struct sockaddr_in 	client_sockaddr_in;
-		struct sockaddr_in 	server_sockaddr_in;
-
-	};
 typedef struct sim_socket_transporter * sim_socket_transporter;
-
 
 sim_socket_transporter sim_socket_transporter_init_client(int server_id, int client_id);
 
