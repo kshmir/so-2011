@@ -128,9 +128,9 @@ static void_p sim_message_listen(struct listener_data * data) {
 			free(no_resp);
 		} 
 		free(header);
-		if (msg != NULL) {
-			free(msg);
-		}
+//		if (msg != NULL) {
+//			free(msg);
+//		}
 	}
 	return 0;
 }

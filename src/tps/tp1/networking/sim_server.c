@@ -15,73 +15,84 @@
 #include "sim_transporter.h"
 #include <pthread.h>
 
+
+// This is as AGLY as it lucs. 
+// But it's the only way to override our vision of transporter over sockets.
+extern int					sck_override;
+extern queue				sck_override_queue;
+extern pthread_mutex_t		sck_override_mutex;
+extern pthread_cond_t		sck_override_received;
+
 /**
-	Handles all the connections across clients transparently.
-	It first starts listening on a thread with a read-only sim_transporter.
-	When it receives a matching key, it sends the associated receiver to it.
-*/
+ Handles all the connections across clients transparently.
+ It first starts listening on a thread with a read-only sim_transporter.
+ When it receives a matching key, it sends the associated receiver to it.
+ */
 struct sim_server {
 	/**
-		Stores as keys the sequence to match.
-		Stores as values the receiver function to invoke.
+	 Stores as keys the sequence to match.
+	 Stores as values the receiver function to invoke.
 	 */
 	map					responds_to;
 	/** 
-		List of the params stored as keys to respond for each value.
+	 List of the params stored as keys to respond for each value.
 	 */
 	list				responds_to_keys;
-
+	
 	/**
-		Stores the kind of connection to use between clients and server.
+	 Stores the kind of connection to use between clients and server.
 	 */
 	connection_type		c_type;
 	
 	
 	/**
-		Stores the kind of process to open as a child
+	 Stores the kind of process to open as a child
 	 */
 	process_type		p_type;
-
-
+	
+	
 	/**
-		The thread used to listen to clients.
+	 The thread used to listen to clients.
 	 */
 	pthread_t			listener_thread;
 	
 	/**
-		The read only transporter used to listen to clients.
+	 The read only transporter used to listen to clients.
 	 */
 	sim_transporter		listen_transporter;
-
+	
 	/**
-		Stores integers (IDs) of each client as keys.
-		Stores transporters   of each client as values.
+	 Stores integers (IDs) of each client as keys.
+	 Stores transporters   of each client as values.
 	 */
 	map					clients_transporters;
 	
 	/**
-		Stores the server id.
+	 Stores the server id.
 	 */
 	int					server_id;
 	
 	/**
-		Used as a seed for the client.
+	 Used as a seed for the client.
 	 */
 	int					client_id_seed;
 	
 	/**
-		Uses a multiplier for the clientid.
+	 Uses a multiplier for the clientid.
 	 */
 	int					client_id_multiplier;
 };
 
 
 /**
-	Cleans the server and all it's resources.
+ Cleans the server and all it's resources.
  */
 static void sim_server_listener_cleanup(sim_server s) {
 	map_free(s->responds_to);
-	sim_transporter_free(s->listen_transporter);
+	if (s->listen_transporter != NULL) {
+		sim_transporter_free(s->listen_transporter);
+	}
+
 	
 	list keys = map_keys(s->clients_transporters);
 	int i = 0;
@@ -90,51 +101,76 @@ static void sim_server_listener_cleanup(sim_server s) {
 	}
 	map_free(s->clients_transporters);
 	list_free_with_data(keys);
-
+	
 	free(s);
 }
 
 /**
-	 Listens to all the messages being sent to the server.
-	 When matches a key string, it makes a response.
-	 Then keeps on listening.
+ Listens to all the messages being sent to the server.
+ When matches a key string, it makes a response.
+ Then keeps on listening.
  */
 static void sim_server_listener(sim_server s) {
-
+	
 	
 	int oldtype;
 	pthread_cleanup_push((void_p)sim_server_listener_cleanup, s);
-
+	
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
-
-
 	
-	s->listen_transporter = sim_transporter_init(s->c_type, 
-												 s->p_type, 
-												 s->server_id, 
-												 255, 
-												 MODE_READ, 
-												 FALSE, TRUE);
+	
+	if (s->c_type == C_SOCKETS) {
+		sck_override_queue = queue_init();
+		pthread_mutex_init(&sck_override_mutex, NULL);
+		pthread_cond_init(&sck_override_received, NULL);
+		sck_override = 1;
+		s->listen_transporter = NULL;
+	}
+	else
+	{
+		s->listen_transporter = sim_transporter_init(s->c_type, 
+													 s->p_type, 
+													 s->server_id, 
+													 255, 
+													 MODE_READ, 
+													 FALSE, TRUE);
+	}
+	
 	while(TRUE) {
-		cstring msg = sim_transporter_listen(s->listen_transporter);
+		cstring msg = NULL;
+		
+		if (s->c_type == C_SOCKETS) {
+			if (queue_size(sck_override_queue) == 0) {
+				pthread_cond_wait(&sck_override_received, &sck_override_mutex);
+			}
+			msg = queue_pull(sck_override_queue);
+		} else {
+			msg = sim_transporter_listen(s->listen_transporter);
+		}
+		
+		
 		cstring header = cstring_copy_until_char(msg, ';');
 		
-
+		
 		
 		int fail = 1;		
 		foreach(cstring, key, s->responds_to_keys) {
 			cstring safe_key = cstring_copy(key);
 			if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {
-				sim_transporter_dequeue(s->listen_transporter);
+				if (s->c_type != C_SOCKETS) {
+					sim_transporter_dequeue(s->listen_transporter);
+				}
+				
+				
 				list params = cstring_split_list(msg, ";");
 				list header_values = cstring_split_list((cstring)list_get(params,0)," ");
 				int ok = 1;
 				int id = cstring_parseInt((cstring)list_get(header_values,0), &ok);
 				sim_message _m = sim_message_init((sim_transporter)map_get(s->clients_transporters,&id), 
-																   cstring_write(cstring_copy("RES "),list_get(params,0)), 
-																   list_get(params,1));
-				((function)map_get(s->responds_to, &safe_key))(_m);
+												  cstring_write(cstring_copy("RES "),list_get(params,0)), 
+												  list_get(params,1));
+				((function)map_get(s->responds_to, safe_key))(_m);
 				
 				list_free_with_data(params);
 				list_free_with_data(header_values);
@@ -148,7 +184,7 @@ static void sim_server_listener(sim_server s) {
 }
 
 /**
-	Starts the server and it's local listener.
+ Starts the server and it's local listener.
  */
 sim_server sim_server_init(connection_type con, process_type p_type, int server_id) {		
 	sim_server s = (sim_server) malloc(sizeof(struct sim_server));
@@ -157,9 +193,9 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 	s->clients_transporters = map_init(int_comparer, int_cloner);
 	s->c_type = con;
 	s->p_type = p_type;
-
+	
 	s->server_id = server_id;
-
+	
 	
 	switch (p_type) {
 		case P_LEVEL:
@@ -182,8 +218,8 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 
 
 /**
-	Sends a broadcast query to it's clients.
-	It's used for clients responding to actions like stop or tick.
+ Sends a broadcast query to it's clients.
+ It's used for clients responding to actions like stop or tick.
  */
 void sim_server_broadcast_query(sim_server s, cstring message) {
 	cstring header = cstring_copy("QUERY ");
@@ -202,17 +238,15 @@ void sim_server_broadcast_query(sim_server s, cstring message) {
 }
 
 /**
-	Binds a char sequence to a receiver, it allows the server to responds to events.
+ Binds a char sequence to a receiver, it allows the server to responds to events.
  */
 int sim_server_add_receiver(sim_server s, cstring sequence, sim_receiver rec) {
-	int * ptr = (int *) malloc(sizeof(void_p));
-	* ptr = (int) sequence;
-	map_set(s->responds_to, ptr, rec);
+	map_set(s->responds_to, sequence, rec);
 	list_add(s->responds_to_keys, sequence);
 }
 
 /**
-	Creates a new client process and makes a transporter which can write to it.
+ Creates a new client process and makes a transporter which can write to it.
  */
 int sim_server_spawn_child(sim_server s) {
 	
@@ -231,7 +265,7 @@ int sim_server_spawn_child(sim_server s) {
 }
 
 /**
-	Free's the server and it's thread.
+ Free's the server and it's thread.
  */
 int sim_server_free(sim_server s) {
 	pthread_cancel(s->listener_thread);

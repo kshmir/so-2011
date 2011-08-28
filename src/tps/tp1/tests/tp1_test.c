@@ -82,6 +82,8 @@ void networking_test(connection_type c_type) {
 	printf("Starting message test\n");
 	
 	printf("It should be able to listen and write through a transporter, and get back the data\n");	
+	
+	printf("I send write again\n");
 	sim_message m = sim_message_init(t, "POST", "Write again");
 	sim_message resp = sim_message_send(m);
 	data = sim_message_read(resp);
@@ -136,7 +138,7 @@ void networking_test(connection_type c_type) {
 	#ifndef __MACH__
 		pthread_cond_wait(&conds, &mutex);
 	#else
-		while (message_counter <= CLIENTS_COUNT - 1);
+		while (message_counter <= CLIENTS_COUNT - 2);
 	#endif
 	
 	sim_server_free(s);
@@ -182,12 +184,12 @@ int main(int argc, char ** params) {
 	
 //	file_test();
 //	serializing_test();
-//
-//	message_counter = 0;
-//	separator();
-//	printf("STARTING FIFOS TEST\n");
-//	separator();
-//	networking_test(C_PIPE);
+
+	message_counter = 0;
+	separator();
+	printf("STARTING FIFOS TEST\n");
+	separator();
+	networking_test(C_PIPE);
 
 	message_counter = 0;
 	separator();
@@ -196,19 +198,21 @@ int main(int argc, char ** params) {
 	networking_test(C_M_QUEUES);
 	
 	
-//	message_counter = 0;
-//	separator();
-//	printf("STARTING SOCKETS TEST\n");
-//	separator();
-//	networking_test(C_SOCKETS);
+	message_counter = 0;
+	separator();
+	printf("STARTING SOCKETS TEST\n");
+	separator();
+	networking_test(C_SOCKETS);
 	
 
-//	message_counter = 0;
-//	separator();
-//	printf("STARTING SHARED MEMORY TEST\n");
-//	separator();
-//	networking_test(C_SHARED_MEMORY);
+	message_counter = 0;
+	separator();
+	printf("STARTING SHARED MEMORY TEST\n");
+	separator();
+	networking_test(C_SHARED_MEMORY);
 
+	
+	
 	
 	return 0;
 }
