@@ -1,12 +1,15 @@
 #include "sim_socket_transporter.h"
 
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <unistd.h>
 #include <stdio.h>
 
-#define SOCKET_READ_SIZE 32
+#define SOCKET_READ_SIZE 64
+
+static map server_descriptors = NULL;
 
 struct sim_socket_transporter {
 	int					server_id;
@@ -51,7 +54,9 @@ sim_socket_transporter sim_socket_transporter_init_client(int server_id, int cli
 	path = cstring_write(path, cstring_fromInt(t->client_id));
 	strcpy(t->server_add.sun_path, path);
 	
-	if (connect(t->server_fd, (void_p)&t->server_add, server_len) == -1) {
+	
+	while (connect(t->server_fd, (void_p)&t->server_add, server_len) == -1) {
+		printf("Couldn't connect to server: %s\n", t->server_add.sun_path);
 		perror("connect");	
 	}
 	
@@ -73,25 +78,43 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 	t->client_id = client_id;
 	t->server_id = server_id;
 	
+	if (server_descriptors == NULL) {
+		server_descriptors = map_init(int_comparer, NULL);
+	}
+	
 //	t->startup_thread		= (pthread_t *) malloc(sizeof(pthread_t));
 //	pthread_create(t->startup_thread, NULL, (void_p) init_server_async, (void_p) t);
 	
-	t->server_fd = socket(AF_UNIX, SOCK_STREAM, 0);
-	
-	t->server_add.sun_family = AF_UNIX;
-	cstring path = cstring_copy("./tmp/sck_id_");
-	path = cstring_write(path, cstring_fromInt(t->client_id));
-	strcpy(t->server_add.sun_path, path);
+
 	
 	
 	int server_len = sizeof(struct sockaddr_un);
 	int client_len = sizeof(struct sockaddr_un);
 	
-	// 2
-	if (bind(t->server_fd, (void_p)  &t->server_add, server_len) == -1) {
-		perror("bind");
-		exit(1);
-	}
+//	if (map_get(server_descriptors, &t->server_id) == NULL) {
+		
+		t->server_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+		
+		t->server_add.sun_family = AF_UNIX;
+		cstring path = cstring_copy("./tmp/sck_id_");
+		path = cstring_write(path, cstring_fromInt(t->client_id));
+		strcpy(t->server_add.sun_path, path);
+		
+		if (bind(t->server_fd, (void_p)  &t->server_add, server_len) == -1) {
+			perror("bind");
+			exit(1);
+		}
+		int * _sid = (int*) malloc(sizeof(int));
+		int * _sfd = (int*) malloc(sizeof(int));
+		* _sid = t->server_id;
+		* _sfd = t->server_fd;
+		map_set(server_descriptors, _sid, _sfd);
+//	} else {
+//		t->server_fd = * (int*) map_get(server_descriptors, &t->server_id);
+//	}
+
+
+
 	
 	// 3
 	if (listen(t->server_fd, 5) == -1) {
@@ -100,6 +123,8 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 	}
 	
 	
+	// Este codigo debería pasar a un thread que alimente todo.
+	// Cola de mensajes y wow, estamos andando
 	// 4
 	if ((t->client_fd = accept(t->server_fd,(void_p)&t->client_add,&client_len)) == -1) {
 		perror("accept");	
@@ -134,6 +159,9 @@ void sim_socket_transporter_free(sim_socket_transporter transp){
 	close(transp->server_fd);
 	close(transp->client_fd);
 	if (!transp->is_client) {
+		if (map_get(server_descriptors, &transp->server_id) != NULL) {
+			map_remove(server_descriptors, &transp->server_id);
+		}
 		cstring path = cstring_copy("./tmp/sck_id_");
 		path = cstring_write(path, cstring_fromInt(transp->client_id));
 		if (unlink(path) == -1){
