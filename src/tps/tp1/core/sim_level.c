@@ -12,6 +12,8 @@ struct sim_level {
 		
 	sim_client frontend_client;
 	sim_server airlines_server;
+	
+	int	  control_sem;
 };
 
 int sim_level_has_city(sim_level lev, cstring city) {
@@ -21,12 +23,12 @@ int sim_level_has_city(sim_level lev, cstring city) {
 cstring sim_level_serialize(sim_level level) {
 	int n = list_size(graph_keys(level->level));
 	cstring s = cstring_fromInt(n);
-	cstring_write(s, "\n\n");
+    s =  cstring_write(s, "\n\n");
 	int i = 0, j = 0;
 	for (i=0; i<n; i++) {
 		cstring city = list_get(graph_keys(level->level),i);
-		cstring_write(s, city);
-		cstring_write(s, "\n");
+		s = cstring_write(s, city);
+		s = cstring_write(s, "\n");
 		map meds = (map)(graph_node_value(graph_get_node(level->level, city)));
 		list medNames = map_keys(meds);
 		for (j=0; j<list_size(medNames); j++) {
@@ -153,7 +155,31 @@ void sim_level_free(sim_level lev) {
 	free(lev->level);
 }
 
-void sim_level_main(sim_level air) {
+void sim_level_query_receiver(sim_message s) {
+	
+}
+
+void sim_level_main(int connection_t, int from_id, int to_id) {
+	sim_client c = sim_client_init(connection_t, 0, from_id, to_id, sim_level_query_receiver);
+	
+	
+	sim_level l = sim_client_copy_level(c, to_id);
+	int control_sem = sem_create_typed(0, "control");
+	
+
+	list airlines = sim_client_copy_airline(c, to_id);
+	
+	cstring	alert = cstring_copy("PRINT! ");
+	
+	
+	sim_airline first_airline = list_get(airlines,0);
+	sim_plane first_plane = list_get(sim_airline_planes(first_airline), 0);
+	alert = cstring_write(alert, sim_plane_start_city(first_plane));
+	
+	sim_client_print(c, alert, to_id);
+	
+	sem_up(control_sem, 1);
+	
 	// Inicializa el server, bindea sus funciones al server.
 	// Las mismas se vinculan con el cliente del frond a forma de log.
 }

@@ -342,6 +342,7 @@ sim_transporter sim_transporter_init(connection_type type,
  Writes a message to the current transporter.
  */
 void sim_transporter_write(sim_transporter sim, cstring message) {
+	printf("Imprimo %s\n", message);
 	sim->write(sim->data, message);
 }
 

@@ -18,6 +18,6 @@ int sim_level_has_city(sim_level lev, cstring city);
 
 void sim_level_free(sim_level lev);
 
-void sim_level_main(sim_level lev);
+void sim_level_main(int connection_t, int from_id, int to_id);
 
 #endif

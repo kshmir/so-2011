@@ -50,6 +50,8 @@ typedef void (*sim_receiver)(sim_message data);
 sim_message sim_message_init(sim_transporter t, cstring header, cstring string);
 
 
+cstring sim_message_header(sim_message r);
+
 /**
  * Accesor for the message.
  */

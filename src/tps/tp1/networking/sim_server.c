@@ -81,6 +81,8 @@ struct sim_server {
 	 Uses a multiplier for the clientid.
 	 */
 	int					client_id_multiplier;
+	
+	int					spawn_sem;
 };
 
 
@@ -193,7 +195,7 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 	s->clients_transporters = map_init(int_comparer, int_cloner);
 	s->c_type = con;
 	s->p_type = p_type;
-	
+	s->spawn_sem = sem_create_typed(server_id, "spawn");
 	s->server_id = server_id;
 	
 	
@@ -262,11 +264,13 @@ int sim_server_spawn_child(sim_server s) {
 	map_set(s->clients_transporters, &key, child_t);
 	
 	s->client_id_seed++;
+	sem_down(s->spawn_sem, 1);
 }
 
 /**
  Free's the server and it's thread.
  */
 int sim_server_free(sim_server s) {
+	sem_free(s->spawn_sem);
 	pthread_cancel(s->listener_thread);
 }
