@@ -199,18 +199,18 @@ int main(int argc, char ** params) {
 	networking_test(C_M_QUEUES);
 	
 	
-//	message_counter = 0;
-//	separator();
-//	printf("STARTING SOCKETS TEST\n");
-//	separator();
-//	networking_test(C_SOCKETS);
+	message_counter = 0;
+	separator();
+	printf("STARTING SOCKETS TEST\n");
+	separator();
+	networking_test(C_SOCKETS);
 	
 
-//	message_counter = 0;
-//	separator();
-//	printf("STARTING SHARED MEMORY TEST\n");
-//	separator();
-//	networking_test(C_SHARED_MEMORY);
+	message_counter = 0;
+	separator();
+	printf("STARTING SHARED MEMORY TEST\n");
+	separator();
+	networking_test(C_SHARED_MEMORY);
 
 	
 	return 0;
