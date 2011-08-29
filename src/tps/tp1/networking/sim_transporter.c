@@ -275,6 +275,7 @@ sim_transporter sim_transporter_init(connection_type type,
 	
 	switch (type) {
 		case C_PIPE:
+			printf("Starting pipes.....\n");
 			if (is_server && forks_child) {
 				exec_process(proc, type, from_id, to_id);
 			}
@@ -290,6 +291,7 @@ sim_transporter sim_transporter_init(connection_type type,
 			t->type = C_PIPE;
 			break;
 		case C_SHARED_MEMORY:
+			printf("Starting shared memory.....\n");
 			if (is_server && forks_child) {
 				exec_process(proc, type, from_id, to_id);
 			}
@@ -300,6 +302,7 @@ sim_transporter sim_transporter_init(connection_type type,
 			t->type = C_SHARED_MEMORY;
 			break;
 		case C_SOCKETS:
+			printf("Starting sockets.....\n");
 			if (is_server && forks_child) {
 				exec_process(proc, type, from_id, to_id);
 			}
@@ -315,6 +318,7 @@ sim_transporter sim_transporter_init(connection_type type,
 			t->type = C_SOCKETS;
 			break;
 		case C_M_QUEUES:
+			printf("Starting message queues.....\n");
 			if (is_server) {
 				t->data = sim_msg_q_transporter_init_server(from_id, to_id);
 			}

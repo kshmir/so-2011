@@ -73,7 +73,8 @@ void networking_test(connection_type c_type) {
 
 	cstring data = sim_transporter_listen(t);
 	sim_transporter_dequeue(t);
-	assert(cstring_compare(data,"cliente") == 0);
+	printf("%s\n", data);
+	assert(cstring_len(data) == 10);
 	
 	printf("DONE!\n");
 	
@@ -183,24 +184,24 @@ int main(int argc, char ** params) {
 //	file_test();
 //	serializing_test();
 
-//	message_counter = 0;
-//	separator();
-//	printf("STARTING FIFOS TEST\n");
-//	separator();
-//	networking_test(C_PIPE);
-//
-//	message_counter = 0;
-//	separator();
-//	printf("STARTING MESSAGE QUEUES TEST\n");
-//	separator();
-//	networking_test(C_M_QUEUES);
-//	
-//	
-//	message_counter = 0;
-//	separator();
-//	printf("STARTING SOCKETS TEST\n");
-//	separator();
-//	networking_test(C_SOCKETS);
+	message_counter = 0;
+	separator();
+	printf("STARTING FIFOS TEST\n");
+	separator();
+	networking_test(C_PIPE);
+
+	message_counter = 0;
+	separator();
+	printf("STARTING MESSAGE QUEUES TEST\n");
+	separator();
+	networking_test(C_M_QUEUES);
+	
+	
+	message_counter = 0;
+	separator();
+	printf("STARTING SOCKETS TEST\n");
+	separator();
+	networking_test(C_SOCKETS);
 	
 
 	message_counter = 0;

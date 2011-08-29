@@ -9,6 +9,9 @@
 
 #include "includes.h"
 #include "data_structures/queue.h"
+#include "utils/cstring.h"
+#include <stdarg.h>
+
 
 #include <pthread.h>
 
@@ -87,6 +90,33 @@ void_p cstring_cloner(void_p s1) {
 
 static void separator() {
 	printf("--------------------------------\n");
+}
+
+void cprintf(char * format, int color, ...) {
+	
+	va_list args;
+	va_start (args, color);
+	cstring _format = cstring_init(0);
+	if (color == OK) {
+		_format = cstring_write(_format,_OKo);
+		_format	= cstring_write(_format,format);
+		_format = cstring_write(_format,_OKc);
+	} else if (color == DEBUG) {
+		_format = cstring_write(_format,_DEBUGo);
+		_format	= cstring_write(_format,format);
+		_format = cstring_write(_format,_DEBUGc);
+	}
+	else if (color == ERROR) {
+		_format = cstring_write(_format,_ERRORo);
+		_format	= cstring_write(_format,format);
+		_format = cstring_write(_format,_ERRORc);
+	}else {
+		_format	= cstring_write(_format,format);
+	}
+	
+	vprintf (_format, args);
+	free(_format);
+	va_end (args);	
 }
 
 void tp1_disclaimer() {

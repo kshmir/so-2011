@@ -56,6 +56,20 @@ void_p double_cloner(void_p double1);
 
 void_p cstring_cloner(void_p s1);
 
+#define OK		1
+#define DEBUG	2
+#define	ERROR	3
+
+#define _OKo "\033[0;32m"
+#define _OKc "\033[0m"
+#define _DEBUGo "\033[0;34m"
+#define _DEBUGc "\033[0m"
+#define _ERRORo "\033[0;31m"
+#define _ERRORc "\033[0m"
+
+
+void cprintf(char * format, int color, ...);
+
 void tp1_disclaimer();
 
 #endif

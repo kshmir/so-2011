@@ -77,7 +77,7 @@ cstring sim_airline_serialize(sim_airline air, int hasId) {
 	return s;
 }
 
-void sim_airline_main(sim_client c, int airline_id) {
+void sim_airline_main(int connection_t, int from_id, int to_id) {
 	// Pide la información del airline y se deserializa
 	// Airline inicializa sus threads para cada plane y los pone en accion.
 }

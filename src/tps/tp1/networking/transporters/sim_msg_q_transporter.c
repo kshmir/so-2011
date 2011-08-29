@@ -50,7 +50,7 @@ sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int clien
 	t->server			= server_id + 1;
 	t->write_buf.mtype	= t->server;
 	t->read_buf.mtype	= t->client;
-	t->write_sem = sem_create(255);
+	t->write_sem = sem_create(250);
 	return t;
 }
 
@@ -59,9 +59,10 @@ sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int clien
 	t->key=ftok("./tmp",'#');
 	
 	t->msgq_id = msgget(t->key, 0600 | IPC_CREAT | IPC_EXCL);
+	t->write_sem = sem_create(250);
 	if (t->msgq_id != -1) {
-		t->write_sem = sem_create(255);
-		sem_up(t->write_sem,1);
+		t->write_sem = sem_create(250);
+		sem_up(t->write_sem,2);
 	}
 	
 	if ((t->msgq_id = msgget(t->key, 0600 | IPC_CREAT)) == -1) { /* connect to the queue */
@@ -72,7 +73,7 @@ sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int clien
 	t->server			= server_id + 1;
 	t->write_buf.mtype	= t->client ;
 	t->read_buf.mtype	= t->server;
-	t->write_sem = sem_create(255);
+
 	
 	return t;
 }
@@ -87,13 +88,15 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 	cstring _data_buffer = data;
 	int end = 0;
 
-	sem_down(t->write_sem , 1);
+//	sem_down(t->write_sem , 1);
 	while(!end) {
 		int block_len = sizeof(struct msgq_buf) - sizeof(long);
 		int len = strlen(data);
 		int index = 0;
 		int i = 0;
-		cstring d = cstring_copy_len(_data_buffer, block_len);
+		cstring d = cstring_copy_len(_data_buffer, block_len - 1);
+		d = cstring_expand(d,1);
+		d[block_len] = 0;
 		_data_buffer += block_len;
 		for (; i < block_len; i++) {
 			t->write_buf.mtext[i] = data[i];
@@ -108,7 +111,7 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 			attempts++;
 		}
 	}
-	sem_up(t->write_sem, 1);
+//	sem_up(t->write_sem, 1);
 
 }
 

@@ -171,7 +171,6 @@ void sim_level_query_receiver(sim_message s) {
 	cstring header = cstring_init(0);
 	cstring response = cstring_init(0);
 	int noerror = 0;
-
 	if (cstring_compare(message, "INIT_STAT") == 0) {
 		if (current_level == NULL) {
 			printf("Too soon :(");
@@ -192,7 +191,7 @@ void sim_level_query_receiver(sim_message s) {
 
 void sim_level_spawn_airlines() {
 	foreach(sim_airline, airline, airlines) {
-		sim_server_spawn_child(current_level->airlines_server);
+	//	sim_server_spawn_child(current_level->airlines_server);
 	}
 }
 
@@ -212,11 +211,12 @@ void sim_level_main(int connection_t, int from_id, int to_id) {
 	current_level = l;
 	airlines = sim_client_copy_airline(c, to_id);
 	
-	current_level->airlines_server = sim_server_init(connection_t, P_AIRLINE, to_id);
+
+	//current_level->airlines_server = sim_server_init(connection_t, P_AIRLINE, to_id);
 	
-	sim_level_spawn_airlines();
-	
-	sim_level_game();
+//	sim_level_spawn_airlines();
+//	
+//	sim_level_game();
 
 	sem_up(l->frontend_sem, 1);
 }

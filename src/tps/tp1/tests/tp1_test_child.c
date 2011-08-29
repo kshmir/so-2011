@@ -29,7 +29,7 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	
 	// Starts transporter test
 	
-	sim_transporter_write(t,"cliente");
+	sim_transporter_write(t,"0123456789");
 	
 	sleep(1);
 	cstring data = sim_transporter_listen(t);

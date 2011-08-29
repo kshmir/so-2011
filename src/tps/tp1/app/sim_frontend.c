@@ -80,7 +80,9 @@ int sim_frontend_start_server(connection_type t) {
 
 int sim_frontend_start_processes(sim_level lev, list airlines) {
 	sim_server_spawn_child(print_server);
-	sem_down(control_sem, 1);
+	sleep(1);
+//	sem_down(control_sem, 1);
+	printf("I send INIT_STAT");
 	sim_server_broadcast_query(print_server, "INIT_STAT");
 	sem_down(control_sem, 1);
 }

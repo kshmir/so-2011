@@ -258,8 +258,8 @@ cstring cstring_from_file(cstring path){
 
 int cstring_capped_len(cstring data, int max_size) {
 	int i = 0;
-	for (i = 0; i < max_size && data[i]; i++);
-	return (i == max_size) ? -1 : i;
+	for (i = 0; i <= max_size && data[i]; i++);
+	return (i == max_size + 1) ? -1 : i;
 }
 
 cstring cstring_copy_len_in(cstring from, cstring in, int len) {
@@ -274,7 +274,7 @@ cstring cstring_copy_len_in(cstring from, cstring in, int len) {
 cstring cstring_copy_len(cstring from, int len) {
 	cstring to = cstring_init(len);
 	int i = 0;
-	for (; i < len; i++) {
+	for (; i <= len; i++) {
 		to[i] = from[i];
 		if (from[i] == 0) {
 			break;
