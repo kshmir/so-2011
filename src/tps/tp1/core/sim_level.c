@@ -1,5 +1,8 @@
 #include "sim_level.h"
 
+static sim_level current_level = NULL;
+static list		 airlines = NULL;
+
 struct sim_level {
 	// level_distances
 	//	stores cstrings  as: keys	# Name of the city
@@ -12,6 +15,16 @@ struct sim_level {
 		
 	sim_client frontend_client;
 	sim_server airlines_server;
+	
+	int	  level_id;
+	
+	int	  turn;
+	
+	int	  frontend_sem;
+	
+	int	  airline_sem;
+	
+	
 };
 
 int sim_level_has_city(sim_level lev, cstring city) {
@@ -21,12 +34,12 @@ int sim_level_has_city(sim_level lev, cstring city) {
 cstring sim_level_serialize(sim_level level) {
 	int n = list_size(graph_keys(level->level));
 	cstring s = cstring_fromInt(n);
-	cstring_write(s, "\n\n");
+    s =  cstring_write(s, "\n\n");
 	int i = 0, j = 0;
 	for (i=0; i<n; i++) {
 		cstring city = list_get(graph_keys(level->level),i);
-		cstring_write(s, city);
-		cstring_write(s, "\n");
+		s = cstring_write(s, city);
+		s = cstring_write(s, "\n");
 		map meds = (map)(graph_node_value(graph_get_node(level->level, city)));
 		list medNames = map_keys(meds);
 		for (j=0; j<list_size(medNames); j++) {
@@ -153,7 +166,57 @@ void sim_level_free(sim_level lev) {
 	free(lev->level);
 }
 
-void sim_level_main(sim_level air) {
-	// Inicializa el server, bindea sus funciones al server.
-	// Las mismas se vinculan con el cliente del frond a forma de log.
+void sim_level_query_receiver(sim_message s) {
+	cstring message = sim_message_read(s);
+	cstring header = cstring_init(0);
+	cstring response = cstring_init(0);
+	int noerror = 0;
+
+	if (cstring_compare(message, "INIT_STAT") == 0) {
+		if (current_level == NULL) {
+			printf("Too soon :(");
+		} else {
+			header = cstring_write(header, "0 PRINT");
+			sim_message_set_header(s, header);
+			response = cstring_expand(response, 100);
+			sprintf(response, "I am level #%d I have %d cities and %d airlines", 
+					current_level->level_id, 
+					graph_size(current_level->level),
+					list_size(airlines));
+			sim_message_write(s, response);
+			sim_message_send(s);
+			sem_up(current_level->frontend_sem,1);
+		}
+	}
+}
+
+void sim_level_spawn_airlines() {
+	foreach(sim_airline, airline, airlines) {
+		sim_server_spawn_child(current_level->airlines_server);
+	}
+}
+
+void sim_level_game() {
+	
+}
+
+
+void sim_level_main(int connection_t, int from_id, int to_id) {
+	sim_client c = sim_client_init(connection_t, 0, from_id, to_id, sim_level_query_receiver);
+	sim_level l = sim_client_copy_level(c, to_id);	
+	
+	l->frontend_sem = sem_create_typed(0, "control");
+	l->frontend_sem = sem_create_typed(0, "airline");
+	
+	l->level_id = to_id;
+	current_level = l;
+	airlines = sim_client_copy_airline(c, to_id);
+	
+	current_level->airlines_server = sim_server_init(connection_t, P_AIRLINE, to_id);
+	
+	sim_level_spawn_airlines();
+	
+	sim_level_game();
+
+	sem_up(l->frontend_sem, 1);
 }

@@ -10,6 +10,24 @@
 #include "sem.h"
 #include <stdio.h>
 
+int sem_create_typed(int key, char * type) {
+	char path[50];
+	sprintf(path,"./tmp/sem%s%d",type,key);
+	
+	int op = open(path,O_CREAT, 0666);
+	close(op);	
+	
+	key_t k = ftok(path, (char) (key));	
+	
+
+	int sem = semget(k, 1, (IPC_CREAT | 0666)); 
+	if (sem < 0) {
+		perror("Semaphore fail!");
+		return -1;
+	}
+	return sem;
+}
+
 int sem_create(int key) {
 	char path[50];
 	sprintf(path,"./tmp/sem%d",key);

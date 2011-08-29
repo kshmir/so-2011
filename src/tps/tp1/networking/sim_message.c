@@ -57,6 +57,10 @@ sim_message sim_message_init(sim_transporter t, cstring header, cstring string) 
 	return m;
 }
 
+cstring sim_message_header(sim_message r) {
+	return r->header;
+}
+
 /**
  * Accesor for the message.
  */
@@ -116,6 +120,8 @@ static void_p sim_message_listen(struct listener_data * data) {
 		if (cstring_matches(header,"RES ")) {
 			cstring no_resp = cstring_replace(msg, "RES ", "");
 			list splitted = cstring_split_list(no_resp, ";");
+			
+			
 			
 			if (list_size(splitted) == 2) {
 				if (cstring_compare(list_get(splitted, 0), r->header) == 0) {

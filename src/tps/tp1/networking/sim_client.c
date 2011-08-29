@@ -23,6 +23,8 @@ struct sim_client {
 	sim_transporter t;						// Internal transporter used by the client.
 	sim_receiver	r;						// Query receiver.
 	
+	int	spawn_sem;
+	
 	int client_id;							// ID to which it listens.
 	
 	pthread_t		listener_thread;		// Listener thread.
@@ -44,19 +46,21 @@ static void_p sim_client_listener(sim_client r) {
 	pthread_cleanup_push((void_p)sim_client_listener_cleanup, r);
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
+	
 	while(TRUE) {
 		cstring msg = sim_transporter_listen(r->t);
 		
 		if (msg[0] == 0) {
 			return NULL; 
 		}
-		
+
+
 		cstring header = cstring_copy_until_char(msg, ';');
 		
 		if (cstring_compare(header,"QUERY ") == 0) {
 			cstring no_resp = cstring_replace(msg, "QUERY ", "");
 			list splitted = cstring_split_list(no_resp, ";");
-			
+
 			if (list_size(splitted) == 2) {
 				r->r(sim_message_init(r->t,list_get(splitted, 0), list_get(splitted, 1)));
 				sim_transporter_dequeue(r->t);
@@ -78,7 +82,9 @@ sim_client sim_client_from_transporter(sim_transporter t, sim_receiver r) {
 	sim_client c = (sim_client) malloc(sizeof(struct sim_client));
 	c->t = t;
 	c->r = r;
+	c->spawn_sem = sem_create_typed(sim_transporter_client_id(t), "spawn");
 	pthread_create(&c->listener_thread, NULL, (void_p) sim_client_listener, (void_p) c);	
+	sem_up(c->spawn_sem, 1);
 	return c;
 }
 
@@ -116,17 +122,36 @@ int sim_client_get_distance(sim_client c, int object_id, cstring from, cstring t
 /**
  * Gets all the medicines from a point.
  */
-map sim_client_get_medicines(sim_client c, int object_id, cstring from) {
+sim_level sim_client_copy_level(sim_client c, int object_id) {
 	cstring header = cstring_fromInt(object_id); 
-	header = cstring_write(header, cstring_copy(" MEDS"));
-	cstring get = cstring_copy(from);
+	header = cstring_write(header, cstring_copy(" COPY_LEVEL"));
+	cstring get = cstring_copy("");
 	sim_message request = sim_message_init(c->t, header, get);
 	sim_message response = sim_message_send(request);
-	sim_message_free(request);
-	// Rebuild map from response
-	// Response should be... RES {object_id} MEDS;(list of medicines as saved in files)
-	
-	return NULL;
+
+	return sim_level_deserialize(sim_message_read(response));
+}
+
+list sim_client_copy_airline(sim_client c, int object_id) {
+	cstring header = cstring_fromInt(object_id); 
+	header = cstring_write(header, cstring_copy(" COPY_AIR"));
+	list l = list_init();
+	int i = 0;
+	int end = 0;
+	while (!end) {
+		cstring get = cstring_fromInt(i);
+		sim_message request = sim_message_init(c->t, header, get);
+		sim_message response = sim_message_send(request);
+		cstring data = sim_message_read(response);
+		if (cstring_compare(data, "null") == 0) {
+			end = TRUE;
+		} else {
+			sim_airline air = sim_airline_deserialize(data, -1);
+			list_add(l, air);
+		}
+		i++;
+	}
+	return l;
 }
 
 /**

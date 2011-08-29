@@ -37,9 +37,10 @@ typedef int transporter_mode;
 
 // Types of connections
 #define C_PIPE					0
-#define C_SHARED_MEMORY			1
+#define C_M_QUEUES				1
 #define C_SOCKETS				2
-#define C_M_QUEUES				3
+#define C_SHARED_MEMORY			3
+
 
 
 /**

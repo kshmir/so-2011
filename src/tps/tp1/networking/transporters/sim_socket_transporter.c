@@ -60,7 +60,6 @@ sim_socket_transporter sim_socket_transporter_init_client(int server_id, int cli
 	t->write_fd = t->server_fd;	
 
 	return t;
-
 }
 
 sim_socket_transporter sim_socket_transporter_init_server(int server_id, int client_id){
