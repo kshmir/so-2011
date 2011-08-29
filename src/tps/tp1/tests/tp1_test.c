@@ -185,24 +185,24 @@ int main(int argc, char ** params) {
 //	file_test();
 //	serializing_test();
 
-	message_counter = 0;
-	separator();
-	printf("STARTING FIFOS TEST\n");
-	separator();
-	networking_test(C_PIPE);
-
-	message_counter = 0;
-	separator();
-	printf("STARTING MESSAGE QUEUES TEST\n");
-	separator();
-	networking_test(C_M_QUEUES);
-	
-	
-	message_counter = 0;
-	separator();
-	printf("STARTING SOCKETS TEST\n");
-	separator();
-	networking_test(C_SOCKETS);
+//	message_counter = 0;
+//	separator();
+//	printf("STARTING FIFOS TEST\n");
+//	separator();
+//	networking_test(C_PIPE);
+//
+//	message_counter = 0;
+//	separator();
+//	printf("STARTING MESSAGE QUEUES TEST\n");
+//	separator();
+//	networking_test(C_M_QUEUES);
+//	
+//	
+//	message_counter = 0;
+//	separator();
+//	printf("STARTING SOCKETS TEST\n");
+//	separator();
+//	networking_test(C_SOCKETS);
 	
 
 	message_counter = 0;

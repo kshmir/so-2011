@@ -244,7 +244,7 @@ void smem_init_space(sim_smem_transporter * s) {
 		
 		
 		// You don't actually want this little ones to be different than this.
-		sem_up(s->sem_available_blocks, SMEM_BLOCK_AVAIL_COUNT + 1);
+		sem_up(s->sem_available_blocks, def->available_blocks + 1);
 		sem_up(s->sem_alloc, 1);
 	}
 
@@ -281,14 +281,17 @@ smem_header_block * smem_get_next_header_block(sim_smem_transporter * s, int * b
 	if (*block_qty >= def->available_blocks) {
 		*block_qty = def->available_blocks;
 		
-		sem_down(s->sem_available_blocks, def->available_blocks);
+//		sem_down(s->sem_available_blocks, def->available_blocks);
 	
 		def->available_blocks = 0;
+		def->total_available_blocks--;
 		sem_down(s->sem_available_blocks, 1);
+
 	}
 	else {
 		sem_down(s->sem_available_blocks, *block_qty);
 		def->available_blocks -= *block_qty;
+		def->total_available_blocks -= *block_qty;
 		
 	}
 	
@@ -404,11 +407,12 @@ short smem_get_next_block_and_alloc(sim_smem_transporter * s, int * block_qty) {
 			}
 			last_id = index;
 			
+			printf("I RESERVE block %d\n",index);
 			qty--;			
 		}
-		
+
 		index++;
-		
+
 		if (index == SMEM_BLOCK_AVAIL_COUNT) {
 			index = 0;
 		}
@@ -440,6 +444,8 @@ int smem_block_write(smem_block * b, char * data) {
 void smem_space_write(sim_smem_transporter * s, cstring data) {
 	
 	smem_header_define_block * def = smem_get_header_define(s);
+	
+	printf("write: %d %d\n", def->total_available_blocks, sem_value(s->sem_available_blocks));
 	cstring _data_buffer = data;
 	int data_qty = 1 + (cstring_len(data) / SMEM_DATA_SIZE);
 	int blocks_to_write = data_qty;
@@ -471,6 +477,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 		cstring d = cstring_copy_len(_data_buffer, SMEM_BLOCK_AVAIL_COUNT);
 		_data_buffer += SMEM_BLOCK_AVAIL_COUNT;
 		end = smem_block_write(block_cur, d);
+		
 		smem_set_block_written(s, block_cur_id, 1);
 //		free(d);
 		
@@ -478,6 +485,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 
 		
 		sem_up(s->sem_header_w, 1);
+		
 //		printf("I send %s to %d, listens %d block_id %d header_id %d ref_sem %d\n", data,  header_b->ref_id, header_b->listens, block_cur_id, ((int)header_b - (int)s->space) / sizeof(smem_header_block),
 //			   sem_value(s->sem_header_w));
 		// blocks_available semaphore down.
@@ -508,7 +516,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 	
 	
 	// TODO: Fix this!!!!!!!!
-	//sem_down(s->sem_header_r, 1);
+//	sem_down(s->sem_header_r, 1);
 	
 
 	int read_index = (s->read_index == 0) ? s->read_index : (s->read_index - 1);
@@ -553,8 +561,28 @@ cstring smem_space_read(sim_smem_transporter * s) {
 //	printf("I found listens:%d\tindex:%d\tref_id:%d\tIm:%d\tmsg:%s\t%d\tsem_reader:%d\n",current->listens,read_index,current->ref_id,s->from_id,response,s->is_server,
 //		   sem_value(s->sem_header_r) + 1);
 	if (current->listens_c == current->listens) {
+		sem_down(s->sem_alloc, 1);
 		current->listens = current->listens_c = 0;
+		int block_id = current->block_id;
+		int c_block_id = -1;
+		current_block = smem_get_block(s, current->block_id);
+		while (c_block_id != block_id) {
+			if (c_block_id == -1) {
+				c_block_id = block_id;
+			}
+			smem_set_block_allocd(s, c_block_id, 0);
+			c_block_id = current_block->next;
+		}
+		def->total_available_blocks++;
+		
+		
+		printf("I release block %d\n", block_id);
+		
 		// We should tell the world we dissalloc all the data, shouldn't we??!?!?
+		sem_up(s->sem_alloc, 1);
+		
+		
+		
 	}
 	s->read_index = read_index;
 	return response;

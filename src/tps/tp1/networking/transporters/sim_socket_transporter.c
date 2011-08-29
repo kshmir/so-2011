@@ -61,7 +61,7 @@ sim_socket_transporter sim_socket_transporter_init_client(int server_id, int cli
 	t->listen_fd = t->server_fd;
 	t->write_fd = t->server_fd;	
 
-
+	return t;
 }
 
 static void * init_server_async(sim_socket_transporter t) {
