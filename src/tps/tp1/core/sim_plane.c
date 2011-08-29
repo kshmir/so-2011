@@ -40,7 +40,7 @@ cstring sim_plane_serialize(sim_plane p) {
 		int * value = map_get(p->medicines, key);
 		sim_keypair kp = (sim_keypair) sim_keypair_init(key, *value);
 		s = cstring_write(s,sim_keypair_serialize(kp));
-		s = cstring_write(s," ");
+		s = cstring_write(s,"\n");
 		sim_keypair_free(kp);
 	}
 	s[cstring_len(s)-1] = '\n';

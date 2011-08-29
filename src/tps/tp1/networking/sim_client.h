@@ -5,6 +5,7 @@
 
 #include "sim_message.h"
 #include "sim_transporter.h"
+#include "../core/sim_level.h"
 
 typedef struct sim_client * sim_client;
 
@@ -31,6 +32,9 @@ int sim_client_get_distance(sim_client c, int object_id, cstring from, cstring t
  */
 map sim_client_get_medicines(sim_client c, int object_id, cstring from);
 
+
+
+sim_level sim_client_copy_level(sim_client c, int object_id);
 
 // POST request of params.
 

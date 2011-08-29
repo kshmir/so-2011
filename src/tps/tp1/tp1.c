@@ -6,6 +6,7 @@ int main(int argc, char ** params) {
 	
 	list_remove(args, 0);
 	sim_frontend_main(args);
+	sleep(1);
 	
 	list_free(args);
 	return 0;
