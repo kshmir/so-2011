@@ -561,7 +561,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 //	printf("I found listens:%d\tindex:%d\tref_id:%d\tIm:%d\tmsg:%s\t%d\tsem_reader:%d\n",current->listens,read_index,current->ref_id,s->from_id,response,s->is_server,
 //		   sem_value(s->sem_header_r) + 1);
 	if (current->listens_c == current->listens) {
-		sem_down(s->sem_alloc, 1);
+		//sem_down(s->sem_alloc, 1);
 		current->listens = current->listens_c = 0;
 		int block_id = current->block_id;
 		int c_block_id = -1;
@@ -579,7 +579,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 		printf("I release block %d\n", block_id);
 		
 		// We should tell the world we dissalloc all the data, shouldn't we??!?!?
-		sem_up(s->sem_alloc, 1);
+//		sem_up(s->sem_alloc, 1);
 		
 		
 		
