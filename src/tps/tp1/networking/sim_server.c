@@ -174,7 +174,7 @@ static void sim_server_listener(sim_server s) {
 												  list_get(params,1));
 				((function)map_get(s->responds_to, safe_key))(_m);
 				
-				list_free_with_data(params);
+				list_free(params);
 				list_free_with_data(header_values);
 				fail = 0;
 			}

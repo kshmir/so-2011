@@ -46,19 +46,21 @@ static void_p sim_client_listener(sim_client r) {
 	pthread_cleanup_push((void_p)sim_client_listener_cleanup, r);
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
+	
 	while(TRUE) {
 		cstring msg = sim_transporter_listen(r->t);
 		
 		if (msg[0] == 0) {
 			return NULL; 
 		}
-		
+
+
 		cstring header = cstring_copy_until_char(msg, ';');
 		
 		if (cstring_compare(header,"QUERY ") == 0) {
 			cstring no_resp = cstring_replace(msg, "QUERY ", "");
 			list splitted = cstring_split_list(no_resp, ";");
-			
+
 			if (list_size(splitted) == 2) {
 				r->r(sim_message_init(r->t,list_get(splitted, 0), list_get(splitted, 1)));
 				sim_transporter_dequeue(r->t);
@@ -149,7 +151,6 @@ list sim_client_copy_airline(sim_client c, int object_id) {
 		}
 		i++;
 	}
-	sim_client_print(c, "I get out\n", 0);
 	return l;
 }
 

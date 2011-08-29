@@ -34,23 +34,17 @@ void sim_frontend_receiver(sim_message mes) {
 
 
 void sim_frontend_copy_level(sim_message mes) {
-	cstring header = cstring_copy("RES ");
-	header = cstring_write(header,cstring_copy(sim_message_header(mes)));
-	sim_message_set_header(mes, header);
 	sim_message_write(mes, sim_level_serialize(level));
 	sim_message_respond(mes);
 }
 
 void sim_frontend_copy_airline(sim_message mes) {
-	cstring header = cstring_copy("RES ");
 	cstring data = cstring_copy(sim_message_read(mes));
 	int error = 0;
 	int airline_index = cstring_parseInt(data, &error);
 	
 
 	if (error) {
-		header = cstring_write(header,cstring_copy(sim_message_header(mes)));
-		sim_message_set_header(mes, header);
 		sim_airline air = list_get(airlines, airline_index);
 		cstring resp = cstring_init(0);
 
@@ -87,7 +81,8 @@ int sim_frontend_start_server(connection_type t) {
 int sim_frontend_start_processes(sim_level lev, list airlines) {
 	sim_server_spawn_child(print_server);
 	sem_down(control_sem, 1);
-
+	sim_server_broadcast_query(print_server, "INIT_STAT");
+	sem_down(control_sem, 1);
 }
 
 

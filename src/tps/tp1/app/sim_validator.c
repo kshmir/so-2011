@@ -8,7 +8,7 @@
 
 static char validator_params[3][10] = {"--method", "--level", "--airline"};
 
-static char connection_params[4][15] = {"fifos", "message_queues", "shared_memory", "sockets"};
+static char connection_params[4][15] = {"fifos", "message_queues", "sockets", "shared_memory"};
 
 int validator_int(cstring * str) {
 	int i = 0;
@@ -120,7 +120,6 @@ sim_airline sim_validator_airline(cstring path, sim_level lev) {
 	
 
 	foreach(sim_plane, plane, sim_airline_planes(air)) {
-		
 		if (!sim_level_has_city(lev, sim_plane_start_city(plane))) {
 //			sim_airline_free(air); TODO!
 			return NULL;
