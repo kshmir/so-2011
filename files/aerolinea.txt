@@ -1,0 +1,16 @@
+3
+
+BuenosAires
+Paracetamol 500
+Aspirina 500
+Ibuprofeno 200
+
+BuenosAires
+Paracetamol 200
+Aspirina 1000
+Ibuprofeno 1000
+
+Rosario
+Paracetamol 1000
+Aspirina 200
+Ibuprofeno 450

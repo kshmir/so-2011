@@ -1,7 +1,19 @@
+/**
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------------------------------------------------------------
+ * FIFO implementation of transporter.
+ */
+
 #include "sim_pipe_transporter.h"
 
 #include <unistd.h>
 #include <fcntl.h>
+
+#define PIPE_READ_SIZE 1024
 
 struct sim_pipe_transporter {
 	cstring				write_fifo;			// Fifo to which the transporter writes.
@@ -112,9 +124,9 @@ void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data) {
 cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 	
 	if (t->mode == MODE_READ || t->mode == MODE_READWRITE) {
-		cstring str = cstring_init(64);
-		read(t->read_ptr, str, 64);
-		* length = 64;
+		cstring str = cstring_init(PIPE_READ_SIZE);
+		read(t->read_ptr, str, PIPE_READ_SIZE);
+		* length = PIPE_READ_SIZE;
 		return str;
 	}
 	else{

@@ -14,8 +14,8 @@
 #include <time.h>
 #include <pthread.h>
 
-#include "networking/sim_server.h"
-#include "networking/sim_transporter.h"
+#include "../networking/sim_server.h"
+#include "../networking/sim_transporter.h"
 
 
 void separator() {
@@ -58,6 +58,8 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	
 
 	pthread_cond_wait(&conds, &mutex);
+	
+	sim_client_free(c);
 	
 	// Stops sending noise to the server.
 }

@@ -12,6 +12,8 @@
  * //         Another fix:  resort messages. (it's better to use a semaphore :P)
  */
 
+
+
 #include "sim_msg_q_transporter.h"
 
 /**
@@ -33,6 +35,7 @@ struct sim_msg_q_transporter {
 	int					client;			// Client ID.
 	int					mode;			// Connection mode.
 	key_t				key;			// Message queue key.
+	int					write_sem;		// Semaphore used for writing.
 };
 
 
@@ -47,12 +50,20 @@ sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int clien
 	t->server			= server_id + 1;
 	t->write_buf.mtype	= t->server;
 	t->read_buf.mtype	= t->client;
+	t->write_sem = sem_create(255);
 	return t;
 }
 
 sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int client_id){
 	sim_msg_q_transporter t = malloc(sizeof(struct sim_msg_q_transporter));
 	t->key=ftok("./tmp",'#');
+	
+	t->msgq_id = msgget(t->key, 0600 | IPC_CREAT | IPC_EXCL);
+	if (t->msgq_id != -1) {
+		t->write_sem = sem_create(255);
+		sem_up(t->write_sem,1);
+	}
+	
 	if ((t->msgq_id = msgget(t->key, 0600 | IPC_CREAT)) == -1) { /* connect to the queue */
 		perror("msgget");
 		return NULL;
@@ -61,6 +72,8 @@ sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int clien
 	t->server			= server_id + 1;
 	t->write_buf.mtype	= t->client ;
 	t->read_buf.mtype	= t->server;
+	t->write_sem = sem_create(255);
+	
 	return t;
 }
 
@@ -71,24 +84,37 @@ static int safe_strlen(char* s, int max_size) {
 }
 
 void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
-	int len = strlen(data);
-	int index = 0;
-	int i = 0;
-	for (; i < sizeof(struct msgq_buf) - sizeof(long); i++) {
-		t->write_buf.mtext[i] = 0;
+	cstring _data_buffer = data;
+	int end = 0;
+
+	sem_down(t->write_sem , 1);
+	while(!end) {
+		int block_len = sizeof(struct msgq_buf) - sizeof(long);
+		int len = strlen(data);
+		int index = 0;
+		int i = 0;
+		cstring d = cstring_copy_len(_data_buffer, block_len);
+		_data_buffer += block_len;
+		for (; i < block_len; i++) {
+			t->write_buf.mtext[i] = data[i];
+			if (data[i] == 0) {
+				end = 1;
+				break;
+			}
+		}
+		int attempts = 0;
+		while (msgsnd(t->msgq_id, &t->write_buf, sizeof(struct msgq_buf) - sizeof(long), 0) == -1 && attempts < 100) /* +1 for '\0' */
+		{
+			attempts++;
+		}
 	}
-	memcpy(t->write_buf.mtext, data, strlen(data));
-	int attempts = 0;
-	while (msgsnd(t->msgq_id, &t->write_buf, sizeof(struct msgq_buf) - sizeof(long), 0) == -1 && attempts < 100) /* +1 for '\0' */
-	{
-		attempts++;
-	}
+	sem_up(t->write_sem, 1);
 
 }
 
 cstring sim_msg_q_transporter_listen(sim_msg_q_transporter t, int * extra_data){
 	if (msgrcv(t->msgq_id, &(t->read_buf), sizeof(struct msgq_buf) - sizeof(long), t->read_buf.mtype, 0) == -1) {
-		perror("Message could not be received");
+//		perror("Message could not be received");
 	}
 	
 	*extra_data = safe_strlen(t->read_buf.mtext, sizeof(struct msgq_buf) - sizeof(long));
@@ -98,6 +124,7 @@ cstring sim_msg_q_transporter_listen(sim_msg_q_transporter t, int * extra_data){
 
 void sim_msg_q_transporter_free(sim_msg_q_transporter transp){
 	msgctl(transp->msgq_id, IPC_RMID, NULL);	
+	sem_free(transp->write_sem);
 	free(transp);
 }
 

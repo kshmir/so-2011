@@ -284,7 +284,6 @@ graph_node graph_arc_to(graph_arc a){
 
 // Libera el grafo.
 void graph_free(graph g){//TODO ver si map_keys devuelve una lista
-	pthread_mutex_lock(g->mutex);
 	pthread_mutex_t * mutex = g->mutex;
 	c_index = g->comparer_index;
 	list nodes = graph_keys(g);
@@ -294,7 +293,4 @@ void graph_free(graph g){//TODO ver si map_keys devuelve una lista
 	}
 	free(nodes);
 	free(g);
-	pthread_mutex_unlock(mutex);
-	pthread_mutex_destroy(mutex);
-	free(mutex);
 }

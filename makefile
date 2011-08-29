@@ -45,7 +45,7 @@ tp1 = \
 	bin/sim_smem_transporter.o \
 	bin/sim_socket_transporter.o \
 	bin/sim_frontend.o \
-	bin/tp1.o
+	bin/sim_validator.o
 
 
 #//MARK: ----- TP1 Test
@@ -104,9 +104,13 @@ example_1 = \
 #//MARK: ----- Utils declarations
 utils_test_files = \
 	bin/cstring.o \
+	bin/sem.o \
+	bin/shm.o \
 	bin/utils_test.o
 	
 utils = \
+	bin/sem.o \
+	bin/shm.o \
 	bin/cstring.o
 
 
@@ -160,6 +164,11 @@ data_structures_tests_data_structures_test:
 			  
 utils_cstring: 
 	$(cc) -o bin/cstring.o -c src/utils/cstring.c		                    
+	
+utils_sem: 
+	$(cc) -o bin/sem.o -c src/utils/sem.c		                    
+utils_shm: 
+	$(cc) -o bin/shm.o -c src/utils/shm.c		                    
 		
 utils_test_build: 
 	$(cc) -o bin/utils_test.o -c src/utils/utils_test.c		                    
@@ -210,19 +219,28 @@ sim_socket_transporter:
 	$(cc) -o bin/sim_socket_transporter.o -c src/tps/tp1/networking/transporters/sim_socket_transporter.c
 	
 sim_frontend: 
-	$(cc) -o bin/sim_frontend.o -c src/tps/tp1/sim_frontend.c
-
+	$(cc) -o bin/sim_frontend.o -c src/tps/tp1/app/sim_frontend.c
+	
+sim_validator: 
+	$(cc) -o bin/sim_validator.o -c src/tps/tp1/app/sim_validator.c
+	
 sim_tp1: 
 	$(cc) -o bin/tp1.o -c src/tps/tp1/tp1.c
+	
+sim_tp1_airline: 
+	$(cc) -o bin/tp1_airline.o -c src/tps/tp1/tp1_airline.c
+	
+sim_tp1_level: 
+	$(cc) -o bin/tp1_level.o -c src/tps/tp1/tp1_level.c
 
 sim_tp1_test: 
-	$(cc) -o bin/tp1_test.o -c src/tps/tp1/tp1_test.c
+	$(cc) -o bin/tp1_test.o -c src/tps/tp1/tests/tp1_test.c
 	
 sim_tp1_test_child: 
-	$(cc) -o bin/tp1_test_child.o -c src/tps/tp1/tp1_test_child.c
+	$(cc) -o bin/tp1_test_child.o -c src/tps/tp1/tests/tp1_test_child.c
 	
 sim_tp1_test_server: 
-	$(cc) -o bin/tp1_test_server.o -c src/tps/tp1/tp1_test_server.c
+	$(cc) -o bin/tp1_test_server.o -c src/tps/tp1/tests/tp1_test_server.c
 
 
 #//MARK: ----- Targets
@@ -244,7 +262,7 @@ data_structures_test: data_structures_graph data_structures_list data_structures
 	data_structures_tests_data_structures_test 
 	$(cc) -o data_structures_test $(data_structures_test)
 	
-utils_test:  utils_cstring utils_test_build data_structures_list
+utils_test:  utils_cstring utils_test_build utils_sem utils_shm data_structures_list 
 	$(cc) -o utils_test $(utils_test_files) $(data_structures)
 
 build_tp1: data_structures_graph \
@@ -266,19 +284,24 @@ build_tp1: data_structures_graph \
 	sim_pipe_transporter \
 	sim_smem_transporter \
 	sim_socket_transporter \
-	sim_frontend
+	sim_frontend \
+	sim_validator
 
 ### Generates tp1
 tp1: build_tp1 \
 	sim_tp1 \
-	utils_cstring
-	$(cc) -o tp1 $(tp1) $(data_structures) $(utils)
+	sim_tp1_level \
+	sim_tp1_airline \
+	utils_cstring utils_sem utils_shm
+	$(cc) -o tp1 $(tp1) $(data_structures) $(utils) bin/tp1.o
+	$(cc) -o tp1_level $(tp1) $(data_structures) $(utils) bin/tp1_level.o
+	$(cc) -o tp1_airline $(tp1) $(data_structures) $(utils) bin/tp1_airline.o
 
 tp1_test: build_tp1 \
 	sim_tp1_test \
 	sim_tp1_test_child \
 	sim_tp1_test_server \
-	utils_cstring
+	utils_cstring utils_sem utils_shm
 	$(cc) -o tp1_test_child $(tp1_test_child_files) $(data_structures) $(utils)
 	$(cc) -o tp1_test_server $(tp1_test_server_files) $(data_structures) $(utils)
 	$(cc) -o tp1_test $(tp1_test_files) $(data_structures) $(utils)
