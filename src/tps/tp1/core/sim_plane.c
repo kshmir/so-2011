@@ -47,8 +47,12 @@ cstring sim_plane_serialize(sim_plane p) {
 	return s;
 }
 
-void sim_plane_main(sim_plane air) {
-
+void sim_plane_main(sim_plane plane) {
+	pthread_mutex_lock(waiting_planes);
+	spawned_airplanes++;
+	if(spawned_airplanes==max_airplanes){
+		pthread_cond_signal(&all_planes_asleep);
+	}
 }
 
 void sim_plane_print(sim_plane p){

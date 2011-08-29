@@ -2,9 +2,17 @@
 
 struct sim_airline {
 	int id ;
-	list planes ;
+	list planes ;		pthread_cond_wait()
 	sim_client c;
+	graph level_graph;
 };
+
+extern	int spawned_airplanes=0;
+extern	pthread_cond_t all_planes_asleep;
+extern pthread_mutex_t waiting_planes;
+extern int max_airplanes=0;
+extern sim_level air_level=NULL;
+extern sim_airline airline=NULL;
 
 int sim_airline_comparer(void_p a1, void_p a2) {		
 	sim_airline _a1 = (sim_airline) a1;
@@ -53,12 +61,12 @@ sim_airline sim_airline_deserialize(cstring s, int airline_id) {
 		i++;
 	}
 	list_free(lines);
-	
+
 	if (error || amount > 0) {
 		return NULL;
 	}
-	
-	
+
+
 	return airline;
 }
 
@@ -78,6 +86,24 @@ cstring sim_airline_serialize(sim_airline air, int hasId) {
 }
 
 void sim_airline_main(sim_client c, int airline_id) {
-	// Pide la información del airline y se deserializa
+	pthread_cond_init(&all_planes_asleep,NULL);
+	pthread_mutex_init(&waiting_planes,NULL);
+	pthread_mutex_lock(&waiting_planes);
+	cstring data=cstring_write("REQUEST AIRLINE ",cstring_parseInt(airline_id));
+	sim_transporter_write(c->t, data);
+	cstring res=sim_transporter_listen(c->t);
+	airline = sim_airline_deserialize(res,airline_id);
+	sim_transporter_write(c->t,"REQUEST LEVELGRAPH");
+	res=sim_transporter_listen(c->t);
+	air_level = sim_level_deserialize(res,airline_id);
+	max_airplanes=list_size(airline->planes);
+	int i = 0;
+	for(i=0; i<list_size(airline->planes); i++){
+		pthread_t tid;
+		pthread_create(&tid,NULL,sim_plane_main,list_get(airline->planes,i));
+
+	}
+		pthread_cond_wait(&all_planes_asleep,&waiting_planes);
+	// Pide la información del airline y se deserializa checked!
 	// Airline inicializa sus threads para cada plane y los pone en accion.
 }
