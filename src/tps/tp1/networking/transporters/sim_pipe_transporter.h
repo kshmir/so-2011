@@ -31,7 +31,7 @@ sim_pipe_transporter sim_pipe_transporter_init_server(int client_id, int server_
 void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data);
 
 /**
- *	Starts the new client.
+ *	Reads the data from the pipe
  */
 cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length);
 
