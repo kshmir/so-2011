@@ -201,12 +201,12 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 	
 	switch (p_type) {
 		case P_LEVEL:
-			s->client_id_seed = 10;
+			s->client_id_seed = 5;
 			s->client_id_multiplier = 1;
 			break;
 		case P_AIRLINE:
-			s->client_id_seed = 10;
-			s->client_id_multiplier = 1;
+			s->client_id_seed = 1;
+			s->client_id_multiplier = 100;
 			break;
 		default:
 			s->client_id_seed = 10;
@@ -260,6 +260,8 @@ int sim_server_spawn_child(sim_server s) {
 												   TRUE, 
 												   TRUE);
 	int key = s->client_id_seed * s->client_id_multiplier;
+	
+//	cprintf("I spawn my child %d\n", OK, key);
 	
 	map_set(s->clients_transporters, &key, child_t);
 	

@@ -15,7 +15,9 @@ sim_server print_server;
 sim_level  level;
 list	   airlines;
 
-int		   control_sem = 0;
+int		   frontend_sem = 0;
+int		   level_sem = 0;
+
 
 
 void sim_frontend_print(cstring data) {
@@ -68,23 +70,27 @@ void sim_frontend_copy_airline(sim_message mes) {
 
 int sim_frontend_start_server(connection_type t) {
 	print_server = sim_server_init(t, P_LEVEL, 0);
+	
 	char * seq = "PRINT";
 	sim_server_add_receiver(print_server, seq, sim_frontend_receiver);
 	char * seq2 = "COPY_LEVEL";
 	sim_server_add_receiver(print_server, seq2, sim_frontend_copy_level);
 	char * seq3 = "COPY_AIR";
 	sim_server_add_receiver(print_server, seq3, sim_frontend_copy_airline);
-	control_sem = sem_create_typed(0, "control");
+	
+	frontend_sem = sem_create_typed(0, "frontend");
+	level_sem    = sem_create_typed(0, "level");
 }
 
 
 int sim_frontend_start_processes(sim_level lev, list airlines) {
 	sim_server_spawn_child(print_server);
-	sleep(1);
-//	sem_down(control_sem, 1);
-	printf("I send INIT_STAT");
+	sem_down(frontend_sem, 1);
+	printf("I send INIT_STAT\n");
 	sim_server_broadcast_query(print_server, "INIT_STAT");
-	sem_down(control_sem, 1);
+	sem_down(frontend_sem, 1);
+	sem_up(level_sem, 1);
+	sem_down(frontend_sem, 1);
 }
 
 
@@ -147,7 +153,7 @@ int sim_frontend_main(list params) {
 		free(error_string);
 	}
 	
-	sem_free(control_sem);
+	sem_free(frontend_sem);
 	
 	free(c_type);
 	

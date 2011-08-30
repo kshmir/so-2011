@@ -1,10 +1,25 @@
 #include "sim_airline.h"
 
+static sim_airline line;
+
 struct sim_airline {
-	int id ;
-	list planes ;
-	sim_client c;
+	int			id;
+	list		planes;
+	sim_client	c;
+	graph		level_graph;
+	sim_level   level;
+	int			airline_sem;
+	int         level_sem;
 };
+
+
+int sim_airline_id(sim_airline air) {
+	return air->id;
+}
+
+void sim_airline_set_id(sim_airline air, int id) {
+	air->id = id;
+}
 
 int sim_airline_comparer(void_p a1, void_p a2) {		
 	sim_airline _a1 = (sim_airline) a1;
@@ -19,6 +34,8 @@ list sim_airline_planes(sim_airline air) {
 sim_airline sim_airline_deserialize(cstring s, int airline_id) {
 	sim_airline airline = calloc(sizeof(struct sim_airline), 1);
 	airline->planes = list_init();
+	airline->id = airline_id;
+
 	int i = 0;
 	int amount = 0;
 	int error = 0;
@@ -53,18 +70,18 @@ sim_airline sim_airline_deserialize(cstring s, int airline_id) {
 		i++;
 	}
 	list_free(lines);
-	
+
 	if (error || amount > 0) {
 		return NULL;
 	}
-	
-	
+
+
 	return airline;
 }
 
 cstring sim_airline_serialize(sim_airline air, int hasId) {
 	cstring s = cstring_init(1);
-	if(hasId){
+	if (hasId) {
 		s = cstring_write(s,cstring_fromInt(air->id));
 		s = cstring_write(s,"\n\n");
 	}
@@ -77,7 +94,33 @@ cstring sim_airline_serialize(sim_airline air, int hasId) {
 	return s;
 }
 
+void sim_airline_query_receiver(sim_message resp) {
+	
+}
+
+
 void sim_airline_main(int connection_t, int from_id, int to_id) {
-	// Pide la información del airline y se deserializa
+
+	sim_client c = sim_client_init(connection_t, 0, from_id, to_id, sim_airline_query_receiver);
+	printf("Client OPEN\n");
+
+	sim_airline air = sim_client_copy_single_airline(c, to_id);
+	
+	air->airline_sem = sem_create_typed(0, "airline");
+	air->level_sem = sem_create_typed(0, "level");
+	air->level = sim_client_copy_level(c, to_id);
+	
+	char response[100];
+	
+	sprintf(response, "My level has %d cities", graph_size(sim_level_graph(air->level)));
+	sim_client_print(c, response, 0);
+	
+	sem_up(air->level_sem,1);
+	
+	printf("I lock :D\n");
+	
+	sem_down(air->airline_sem,1);
+
+	// Pide la información del airline y se deserializa checked!
 	// Airline inicializa sus threads para cada plane y los pone en accion.
 }

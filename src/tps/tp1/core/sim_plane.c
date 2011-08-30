@@ -47,17 +47,10 @@ cstring sim_plane_serialize(sim_plane p) {
 	return s;
 }
 
-void sim_plane_main(sim_plane air) {
-
+void sim_plane_main(sim_plane plane) {
+	
 }
 
-void sim_plane_print(sim_plane p){
-	printf("%s\n",p->start_city);
-	int i = 0;
-	for(i = 0; i<list_size(p->medicines_keys); i++){
-		cstring key = list_get(p->medicines_keys, i);
-		int *value = (int*)(map_get(p->medicines, key));
-		printf("%s ", key);
-		printf("%d\n",*value);
-	}
+void sim_plane_print(sim_plane p) {
+
 }

@@ -21,11 +21,15 @@ struct sim_level {
 	int	  turn;
 	
 	int	  frontend_sem;
-	
 	int	  airline_sem;
+	int	  level_sem;
 	
 	
 };
+
+graph sim_level_graph(sim_level lev) {
+	return lev->level;
+}
 
 int sim_level_has_city(sim_level lev, cstring city) {
 	return graph_get_node(lev->level, city) != NULL;
@@ -183,15 +187,81 @@ void sim_level_query_receiver(sim_message s) {
 					graph_size(current_level->level),
 					list_size(airlines));
 			sim_message_write(s, response);
-			sim_message_send(s);
 			sem_up(current_level->frontend_sem,1);
+			sim_message_send(s);
+
 		}
 	}
 }
 
+void sim_level_receiver(sim_message s) {
+	cstring data = sim_message_read(s);
+	list header = cstring_split_list(sim_message_header(s), " ");
+	
+	
+	int noerr = 0;
+	int sender_id = cstring_parseInt(list_get(header,1), &noerr);
+	if (noerr == 0) {
+		sender_id = current_level->level_id;
+	}
+	
+	sim_client_print(current_level->frontend_client, data, sender_id);
+
+	list_free_with_data(header);
+}
+
+void sim_level_copy_level(sim_message mes) {
+	sim_message_write(mes, sim_level_serialize(current_level));
+	sim_message_respond(mes);
+}
+
+void sim_level_copy_single_airline(sim_message s){
+	cstring data = cstring_copy(sim_message_read(s));
+	int noerror = 0;
+	int airline_id = cstring_parseInt(data, &noerror);
+
+	sim_airline air = NULL;
+	foreach(sim_airline, _air, airlines) {
+
+		if (sim_airline_id(_air) == -1) {
+			sim_airline_set_id(_air, airline_id);
+			air = _air;
+			break;
+		}
+	}
+
+	if (noerror) {
+		cstring resp = cstring_init(0);
+		
+		if (air != NULL) {
+			resp = cstring_write(resp, sim_airline_serialize(air, FALSE));
+		}
+		else {
+			resp = cstring_write(resp, "null");
+		}
+		sim_message_write(s, resp);
+		sim_message_respond(s);
+	}
+
+	free(data);	
+}
+
+void sim_level_start_server(int connection_t, int to_id) {
+	current_level->airlines_server = sim_server_init(connection_t, P_AIRLINE, to_id);
+	
+	char * seq = "PRINT";
+	sim_server_add_receiver(current_level->airlines_server, seq, sim_level_receiver);
+	char * seq2 = "COPY_LEVEL";
+	sim_server_add_receiver(current_level->airlines_server, seq2, sim_level_copy_level);
+	char * seq3 = "COPY_SAIR";
+	sim_server_add_receiver(current_level->airlines_server, seq3, sim_level_copy_single_airline);
+	
+}
+
 void sim_level_spawn_airlines() {
 	foreach(sim_airline, airline, airlines) {
-	//	sim_server_spawn_child(current_level->airlines_server);
+		sim_server_spawn_child(current_level->airlines_server);
+		sem_down(current_level->level_sem, 1);	
 	}
 }
 
@@ -203,20 +273,32 @@ void sim_level_game() {
 void sim_level_main(int connection_t, int from_id, int to_id) {
 	sim_client c = sim_client_init(connection_t, 0, from_id, to_id, sim_level_query_receiver);
 	sim_level l = sim_client_copy_level(c, to_id);	
+
+	current_level = l;
 	
-	l->frontend_sem = sem_create_typed(0, "control");
-	l->frontend_sem = sem_create_typed(0, "airline");
+	l->frontend_client = c;
+
+	l->frontend_sem = sem_create_typed(0, "frontend");
+	l->airline_sem = sem_create_typed(0, "airline");
+	l->level_sem = sem_create_typed(0, "level");
 	
 	l->level_id = to_id;
-	current_level = l;
+
 	airlines = sim_client_copy_airline(c, to_id);
 	
-
-	//current_level->airlines_server = sim_server_init(connection_t, P_AIRLINE, to_id);
+	sem_up(l->frontend_sem, 1);
+	sem_down(l->level_sem, 1);
 	
-//	sim_level_spawn_airlines();
+	sim_level_start_server(connection_t, to_id + 1);
+	
+	sim_level_spawn_airlines();
+	
+
+	sem_up(l->frontend_sem, 1);
+	printf("I revive them all");
+	sem_up(l->airline_sem, list_size(airlines));
 //	
 //	sim_level_game();
 
-	sem_up(l->frontend_sem, 1);
+
 }

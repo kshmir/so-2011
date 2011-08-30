@@ -154,6 +154,26 @@ list sim_client_copy_airline(sim_client c, int object_id) {
 	return l;
 }
 
+void_p sim_client_copy_single_airline(sim_client c, int object_id) {
+
+	cstring header = cstring_fromInt(object_id); 
+	header = cstring_write(header, cstring_copy(" COPY_SAIR"));
+
+	cstring get = cstring_fromInt(object_id);
+
+	sim_message request = sim_message_init(c->t, header, get);
+	sim_message response = sim_message_send(request);
+	cstring data = sim_message_read(response);
+	
+
+	sim_airline air = sim_airline_deserialize(data, object_id);
+
+	printf("GOT %d planes and id %d\n", list_size(sim_airline_planes(air)), sim_airline_id(air));
+	free(data);
+	return air;
+}
+
+
 /**
  * Fills a point with medicine.
  */

@@ -101,6 +101,7 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 		
 		if (bind(t->server_fd, (void_p)  &t->server_add, server_len) == -1) {
 			perror("bind");
+			cprintf("Address %s\n", ERROR, t->server_add.sun_path);
 			exit(1);
 		}
 		int * _sid = (int*) malloc(sizeof(int));
