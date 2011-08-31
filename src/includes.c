@@ -120,6 +120,24 @@ void cprintf(char * format, int color, ...) {
 	sem_up(c_sem, 1);
 }
 
+int IPCS_sem = 0;
+
+void IPCSDebug(char * msg, int type, ...) {
+	if (IPCS_sem == 0){
+		IPCS_sem = sem_create_typed(0, "IPCSDebug");
+		sem_set_value(IPCS_sem, 1);
+	}
+
+	sem_down(IPCS_sem, 1);
+	va_list args;
+	va_start (args, type);
+
+	vfprintf (stderr,msg, args);
+
+	va_end (args);
+	sem_up(IPCS_sem, 1);
+}
+
 void tp1_disclaimer() {
 	separator();
 	

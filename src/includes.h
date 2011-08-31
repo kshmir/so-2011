@@ -107,6 +107,13 @@ void_p cstring_cloner(void_p s1);
 #define _ERRORo "\033[0;31m"
 #define _ERRORc "\033[0m"
 
+#define	SMEM_DEBUG	0
+#define	SOCK_DEBUG	0
+#define	PIPE_DEBUG	0
+#define	MSGQ_DEBUG	0
+
+#define	READ	0x01
+#define	WRITE	0x02
 
 void cprintf(char * format, int color, ...);
 
