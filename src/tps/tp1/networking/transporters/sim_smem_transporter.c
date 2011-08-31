@@ -312,19 +312,16 @@ smem_header_block * smem_get_next_header_block(sim_smem_transporter * s, int * b
 	
 	int index = def->current_header_index;
 	smem_header_block * next = smem_get_header_block(s,index);
-	printf("SMEM WRITE: %d blocks available, asking for %d blocks on index %d\n", def->available_blocks, *block_qty, index);
 	if (index == SMEM_BLOCK_AVAIL_COUNT) {
 		index = 0;
 	}
 	while (next->listens > 0 && next->listens > next->listens_c) {
-		printf("SEARCH\n");
 		next = smem_get_header_block(s,index + 1);
 		index++;
 		if (index == SMEM_BLOCK_AVAIL_COUNT) {
 			index = 0;
 		}
 	}
-	printf("I GET OUT\n");
 	def->current_header_index = index + 1;
 	
 	if (def->current_header_index == SMEM_BLOCK_AVAIL_COUNT) {
@@ -414,7 +411,6 @@ short smem_get_next_block_and_alloc(sim_smem_transporter * s, int * block_qty) {
 	short start_id = 0;
 	short last_id = 0;
 	while(qty > 0) {
-		printf("SEARCH %d\n", index);
 		if (smem_get_block_allocd(s, index) == 0) {
 			smem_set_block_allocd(s, index, 1);
 			smem_set_block_broadcast(s, index, 0);
@@ -506,7 +502,6 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 		end = smem_block_write(block_cur, d);
 		
 		smem_set_block_written(s, block_cur_id, 1);
-		printf("SMEM: Write on block %d\n", block_cur_id);
 //		free(d);
 		
 
@@ -579,7 +574,6 @@ cstring smem_space_read(sim_smem_transporter * s) {
 		}
 	}
 	
-	printf("SMEM READ INDEX: %d\n",read_index);
 
 	
 	smem_block * current_block = smem_get_block(s, current->block_id);
@@ -656,7 +650,6 @@ sim_smem_transporter * sim_smem_transporter_init(int server_id, int client_id, i
 	Write to the shared memoery.
 */
 void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
-	printf("SMEM: WRITING %s\n",data);
 	smem_space_write(t, data);
 }
 
@@ -666,7 +659,6 @@ void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) {
 	cstring data = smem_space_read(t);
 	*extra_data = strlen(data) + 1;
-	printf("SMEM: READING %s\n",data);
 	return data;
 }
 

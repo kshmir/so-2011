@@ -108,12 +108,7 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 
 	// 3
 	if (listen(t->server_fd, 5) == -1) {
-<<<<<<< HEAD
-		if(SOCKET_DEBUG)
-			fprintf(stderr,"Error when listening at socket file descriptor: %d, server id: %d\n",t->server_fd,t->server_id);
-=======
 		IPCSDebug(SOCK_DEBUG,"Error while listening by server_fd:%d\n",t->server_fd);
->>>>>>> 3e85d8a440e91927605a4104f878ac1487578c7a
 		exit(1);
 	}
 
@@ -122,12 +117,7 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 	// Cola de mensajes y wow, estamos andando
 	// 4
 	if ((t->client_fd = accept(t->server_fd,(void_p)&t->client_add,&client_len)) == -1) {
-<<<<<<< HEAD
-		if(SOCKET_DEBUG)
-			fprintf(stderr,"Error when accepting at socket file descriptor: %d, server id: %d\n",t->server_fd,t->server_id);
-=======
 		IPCSDebug(SOCK_DEBUG,"Error when accepting a connection by server_fd:%d\n",t->server_fd);
->>>>>>> 3e85d8a440e91927605a4104f878ac1487578c7a
 	}
 
 	t->listen_fd = t->client_fd;
@@ -138,13 +128,8 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 
 void sim_socket_transporter_write(sim_socket_transporter t, cstring data){
 
-<<<<<<< HEAD
-	if (write(t->write_fd, data, cstring_len(data) + 1) == -1 && (SOCKET_DEBUG & WRITE)) {
-		fprintf(stderr,"Error while writing message: %s, by socket fd: %d\n",data,t->listen_fd);
-=======
 	if (write(t->write_fd, data, cstring_len(data) + 1) == -1) {
 		IPCSDebug(SOCK_DEBUG&WRITE,"Error while writting by write_fd:%d\n",t->write_fd);
->>>>>>> 3e85d8a440e91927605a4104f878ac1487578c7a
 	}
 
 }
@@ -152,13 +137,8 @@ void sim_socket_transporter_write(sim_socket_transporter t, cstring data){
 
 cstring sim_socket_transporter_listen(sim_socket_transporter t, int * len){
 	cstring data = cstring_init(SOCKET_READ_SIZE + 1);
-<<<<<<< HEAD
-	if (read(t->listen_fd, data, SOCKET_READ_SIZE) == -1 && (SOCKET_DEBUG & READ)) {
-		fprintf(stderr,"Error while reading by socket fd: %d\n",t->listen_fd);
-=======
 	if (read(t->listen_fd, data, SOCKET_READ_SIZE) == -1) {
 		IPCSDebug(SOCK_DEBUG&READ,"I am %d (client=1, server=0), listen_fd: %d\n", t->is_client,t->listen_fd);
->>>>>>> 3e85d8a440e91927605a4104f878ac1487578c7a
 	}
 	* len = SOCKET_READ_SIZE; 
 
@@ -175,13 +155,8 @@ void sim_socket_transporter_free(sim_socket_transporter transp){
 		}
 		cstring path = cstring_copy("./tmp/sck_id_");
 		path = cstring_write(path, cstring_fromInt(transp->client_id));
-<<<<<<< HEAD
 		if (unlink(path) == -1 && SOCKET_DEBUG){
-			fprintf(stderr,"Error when unlinking %s\n",path);
-=======
-		if (unlink(path) == -1){
 			IPCSDebug(SOCK_DEBUG,"Error while trying to unlink path:%s\n",path);
->>>>>>> 3e85d8a440e91927605a4104f878ac1487578c7a
 		}
 	}
 

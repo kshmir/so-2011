@@ -1,4 +1,5 @@
 
+
 #include "sim_airline.h"
 
 static sim_airline airline;
@@ -16,6 +17,7 @@ struct sim_airline {
 	int					level_sem;
 
 	int					planes_sem;
+	int					planes_end_sem;
 	int					internal_sem;
 	
 	int					end_order;
@@ -27,6 +29,10 @@ struct sim_airline {
 	pthread_cond_t	*	unlock_cond;			// Cond used to unlock.
 };
 
+
+int sim_airline_planes_end_sem(sim_airline air) {
+	return air->planes_end_sem;
+}
 
 int sim_airline_planes_sem(sim_airline air) {
 	return air->planes_sem;
@@ -169,10 +175,10 @@ void sim_airline_query_receiver(sim_message resp) {
 			airline->current_turn = turn;
 			set_planes_to_think(list_get(params,2));
 		//	cprintf("LEVEL TO AIRLINE: Setting airline UP %d\n", AZUL_CLARO, airline->id);
-			sem_up(airline->internal_sem, 1);
 			sem_down(airline->airline_sem, 1);
+			sem_up(airline->internal_sem, 1);
+
 		//	cprintf("AIRLINE: I UNLOCK\n", ROSA);
-			cprintf("GOT MESS\n",AZUL);
 		}
 
 		list_free_with_data(params);
@@ -184,10 +190,11 @@ void sim_airline_game() {
 	sleep(1);
 	while (!airline->end_order) {
 		sem_down(airline->internal_sem, 1);					// Lock #5
-		pthread_cond_broadcast(airline->unlock_cond);
+		cprintf("AIRLINE: BROAD\n", AZUL_CLARO);
+		sem_up(airline->planes_end_sem, list_size(airline->planes));
 			
+		
 		sem_down(airline->planes_sem, list_size(airline->planes));
-
 //		cprintf("AIRLINE: Sending level UP %d %d\n", AZUL, airline->id, sem_value(airline->internal_sem));
 		sem_up(airline->level_sem, 1);						// Unlock #5
 	}
@@ -206,6 +213,11 @@ void sim_airline_main(int connection_t, int from_id, int to_id) {
 	cstring _planes_sem = cstring_copy("planes");
 	_planes_sem = cstring_write(_planes_sem, cstring_fromInt(to_id));
 	air->planes_sem = sem_create_typed(0, _planes_sem);
+	
+	cstring _planes_end_sem = cstring_copy("planes_end");
+	_planes_end_sem = cstring_write(_planes_end_sem, cstring_fromInt(to_id));
+	air->planes_end_sem = sem_create_typed(0, _planes_end_sem);
+	
 	air->airline_sem = sem_create_typed(0, "airline");
 	air->level_sem = sem_create_typed(0, "level");
 	cstring _internal_sem = cstring_copy("internal");

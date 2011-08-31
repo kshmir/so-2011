@@ -79,9 +79,10 @@ void sim_plane_main(struct sim_plane_data * d) {
 	plane->turn_counter = 0;
 
 	while (!plane->set_dead) {
-		pthread_cond_wait((void_p)sim_airline_cond(airline), (void_p)sim_airline_mutex(airline));
+		sem_down(sim_airline_planes_end_sem(airline),1);
+		cprintf("PLANE: I unlock\n", VERDE_CLARO);
 		if (plane->must_think) {
-			cprintf("PLANE: I think :D %d\t %d\t %d\n", VERDE, plane->turn_counter, sim_airline_id(airline), plane->id);
+			//cprintf("PLANE: I think :D %d\t %d\t %d\n", VERDE, plane->turn_counter, sim_airline_id(airline), plane->id);
 		}
 		sem_up(sim_airline_planes_sem(airline), 1);
 		plane->turn_counter++;

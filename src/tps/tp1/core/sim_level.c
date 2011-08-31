@@ -336,7 +336,7 @@ void sim_level_game() {
 		cprintf("LEVEL: Going down for TURN %d\n", ROJO, current_level->turn);
 		send_turn_tick();
 		sem_down(current_level->level_sem, list_size(airlines));		
-		usleep(200 * 1000);
+		//usleep(10 * 1000);
 		current_level->turn++;
 	}
 }
