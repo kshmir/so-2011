@@ -249,7 +249,7 @@ void smem_init_space(sim_smem_transporter * s) {
 		
 		// You don't actually want this little ones to be different than this.
 		sem_up(s->sem_available_blocks, def->available_blocks + 1);
-		sem_up(s->sem_header_r,1);	
+		sem_set_value(s->sem_header_r,0);	
 
 		sem_up(s->sem_alloc, 1);
 	}
@@ -295,16 +295,14 @@ smem_header_block * smem_get_next_header_block(sim_smem_transporter * s, int * b
 	if (*block_qty > SMEM_BLOCK_MAX_ALLOC) {
 		*block_qty = SMEM_BLOCK_MAX_ALLOC;
 	}
+
 	
 	if (*block_qty >= def->available_blocks) {
 		*block_qty = def->available_blocks;
-		
 		sem_down(s->sem_available_blocks, def->available_blocks);
 	
 		def->available_blocks = 0;
-		def->total_available_blocks--;
-		sem_down(s->sem_available_blocks, 1);
-
+		def->total_available_blocks = 0;
 	}
 	else {
 		sem_down(s->sem_available_blocks, *block_qty);
@@ -315,13 +313,19 @@ smem_header_block * smem_get_next_header_block(sim_smem_transporter * s, int * b
 	
 	int index = def->current_header_index;
 	smem_header_block * next = smem_get_header_block(s,index);
+	printf("SMEM WRITE: %d blocks available, asking for %d blocks on index %d\n", def->available_blocks, *block_qty, index);
+	if (index == SMEM_BLOCK_AVAIL_COUNT) {
+		index = 0;
+	}
 	while (next->listens > 0 && next->listens > next->listens_c) {
+		printf("SEARCH\n");
 		next = smem_get_header_block(s,index + 1);
 		index++;
 		if (index == SMEM_BLOCK_AVAIL_COUNT) {
 			index = 0;
 		}
 	}
+	printf("I GET OUT\n");
 	def->current_header_index = index + 1;
 	
 	if (def->current_header_index == SMEM_BLOCK_AVAIL_COUNT) {
@@ -376,15 +380,15 @@ int smem_get_block_reading(sim_smem_transporter * s, int index) {
 	return (b->flags >> 0xc) & 0x1;
 }
 
-
+// Ya fue..........
 void smem_set_block_allocd(sim_smem_transporter * s, int index, int value) {
 	smem_block * b = smem_get_block(s,index);
-	b->flags |= 0x800 * value;
+	b->flags = value;
 }
 
 int smem_get_block_allocd(sim_smem_transporter * s, int index) {
 	smem_block * b = smem_get_block(s,index);
-	return (b->flags >> 0xb) & 0x1;
+	return b->flags;
 }
 
 void smem_set_block_next(sim_smem_transporter * s, int index, short value) {
@@ -411,6 +415,7 @@ short smem_get_next_block_and_alloc(sim_smem_transporter * s, int * block_qty) {
 	short start_id = 0;
 	short last_id = 0;
 	while(qty > 0) {
+		printf("SEARCH %d\n", index);
 		if (smem_get_block_allocd(s, index) == 0) {
 			smem_set_block_allocd(s, index, 1);
 			smem_set_block_broadcast(s, index, 0);
@@ -467,6 +472,8 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	int data_qty = 1 + (cstring_len(data) / SMEM_DATA_SIZE);
 	//printf("DATA_SIZE: %d\n", SMEM_DATA_SIZE);
 	int blocks_to_write = data_qty;
+
+	
 	smem_header_block * header_b = smem_get_next_header_block(s,&blocks_to_write); // Toma un slot, o espera.
 	smem_header_block * header_cur = header_b;
 	smem_block	* block_cur = NULL;
@@ -479,6 +486,8 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	header_b->listens = 1;
 	header_b->listens_c = 0;
 	sem_up(s->sem_alloc, 1);
+	
+	
 	
 	
 	
@@ -498,6 +507,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 		end = smem_block_write(block_cur, d);
 		
 		smem_set_block_written(s, block_cur_id, 1);
+		printf("SMEM: Write on block %d\n", block_cur_id);
 //		free(d);
 		
 
@@ -549,7 +559,9 @@ cstring smem_space_read(sim_smem_transporter * s) {
 
 	
 
-	int read_index = (s->read_index == 0) ? s->read_index : (s->read_index - 1);
+
+	int read_index = s->read_index;
+
 	int found = 0;
 	smem_header_block * current = NULL;
 	while (!found) {
@@ -563,10 +575,12 @@ cstring smem_space_read(sim_smem_transporter * s) {
 			read_index++;
 		}	
 		
-		if (read_index == SMEM_BLOCK_COUNT - 1) {
+		if (read_index == SMEM_BLOCK_COUNT) {
 			read_index = 0;
 		}
 	}
+	
+	printf("SMEM READ INDEX: %d\n",read_index);
 
 	
 	smem_block * current_block = smem_get_block(s, current->block_id);
@@ -584,10 +598,12 @@ cstring smem_space_read(sim_smem_transporter * s) {
 		}
 	}
 	def->available_blocks += blocks_read;
+	def->total_available_blocks += blocks_read;
 	current->listens_c++;
 	
 	sem_up(s->sem_available_blocks,blocks_read);
 	
+	printf("SMEM: Read, available blocks: %d\n", sem_value(s->sem_available_blocks));
 //	//printf("I found listens:%d\tindex:%d\tref_id:%d\tIm:%d\tmsg:%s\t%d\tsem_reader:%d\n",current->listens,read_index,current->ref_id,s->from_id,response,s->is_server,
 //		   sem_value(s->sem_header_r) + 1);
 	if (current->listens_c == current->listens) {
@@ -604,7 +620,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 			smem_set_block_allocd(s, c_block_id, 0);
 			current_block = smem_get_block(s, current_block->next);
 		}
-		def->total_available_blocks++;
+
 		
 		// We should tell the world we dissalloc all the data, shouldn't we??!?!?
 //		sem_up(s->sem_alloc, 1);
@@ -642,6 +658,7 @@ sim_smem_transporter * sim_smem_transporter_init(int server_id, int client_id, i
 	Write to the shared memoery.
 */
 void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
+	printf("SMEM: WRITING %s\n",data);
 	smem_space_write(t, data);
 }
 
@@ -651,6 +668,7 @@ void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) {
 	cstring data = smem_space_read(t);
 	*extra_data = strlen(data) + 1;
+	printf("SMEM: READING %s\n",data);
 	return data;
 }
 

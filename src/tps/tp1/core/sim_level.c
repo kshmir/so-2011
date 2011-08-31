@@ -1,5 +1,7 @@
 #include "sim_level.h"
 
+#include <time.h>
+
 static sim_level current_level = NULL;
 static list		 airlines = NULL;
 
@@ -334,7 +336,7 @@ void sim_level_game() {
 		cprintf("LEVEL: Going down for TURN %d\n", ROJO, current_level->turn);
 		send_turn_tick();
 		sem_down(current_level->level_sem, list_size(airlines));		
-		sleep(1);
+		usleep(200 * 1000);
 		current_level->turn++;
 	}
 }
