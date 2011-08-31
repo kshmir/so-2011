@@ -41,7 +41,7 @@ sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int clien
 	sim_msg_q_transporter t = malloc(sizeof(struct sim_msg_q_transporter));
 	t->key=ftok("./tmp",'#');
 	if ((t->msgq_id = msgget(t->key, 0600 | IPC_CREAT )) == -1) { /* connect to the queue */
-		perror("msgget");
+		IPCSDebug(MSGQ_DEBUG,"Error while registering at message queue with key: %d\n",t->key);
 		return NULL;
 	}
 	t->client			= client_id + 1;
@@ -59,7 +59,7 @@ sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int clien
 
 
 	if ((t->msgq_id = msgget(t->key, 0600 | IPC_CREAT)) == -1) { /* connect to the queue */
-		perror("msgget");
+		IPCSDebug(MSGQ_DEBUG,"Error while registering at message queue with key: %d\n",t->key);
 		return NULL;
 	}
 	t->client			= client_id + 1;
@@ -80,7 +80,7 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 	cstring _data_buffer = data;
 	int end = 0;
 
-//	sem_down(t->write_sem , 1);
+	//	sem_down(t->write_sem , 1);
 	while(!end) {
 		int block_len = sizeof(struct msgq_buf) - sizeof(long);
 		int len = strlen(data);
@@ -102,14 +102,16 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 		{
 			attempts++;
 		}
+		if(attempts!=0)
+			IPCSDebug(MSGQ_DEBUG&WRITE,"Total attempts to write: %d\n",attempts);
 	}
-//	sem_up(t->write_sem, 1);
+	//	sem_up(t->write_sem, 1);
 
 }
 
 cstring sim_msg_q_transporter_listen(sim_msg_q_transporter t, int * extra_data){
 	if (msgrcv(t->msgq_id, &(t->read_buf), sizeof(struct msgq_buf) - sizeof(long), t->read_buf.mtype, 0) == -1) {
-		//		perror("Message could not be received");
+		IPCSDebug(MSGQ_DEBUG&READ,"Message could not be received\n");
 	}
 
 	*extra_data = safe_strlen(t->read_buf.mtext, sizeof(struct msgq_buf) - sizeof(long));

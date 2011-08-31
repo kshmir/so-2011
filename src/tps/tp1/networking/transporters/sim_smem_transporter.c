@@ -254,15 +254,14 @@ void smem_init_space(sim_smem_transporter * s) {
 		sem_up(s->sem_alloc, 1);
 	}
 
-/*
-	//c//printf("Starting shared memory reference: from: %d, to: %d\
+
+	IPCSDebug(SMEM_DEBUG,"Starting shared memory reference: from: %d, to: %d\
 		   \nalloc: %d\t%d\nread: %d\t%d\nwrite: %d\t%d\navailable_blocks: %d\t%d\n",
-			OK,
 		   s->from_id, s->to_id,
 		   s->sem_alloc, sem_value(s->sem_alloc),
 		   s->sem_header_r, sem_value(s->sem_header_r),
 		   s->sem_header_w, sem_value(s->sem_header_w),
-		   s->sem_available_blocks, sem_value(s->sem_available_blocks));*/
+		   s->sem_available_blocks, sem_value(s->sem_available_blocks));
 	
 }
 
@@ -430,7 +429,7 @@ short smem_get_next_block_and_alloc(sim_smem_transporter * s, int * block_qty) {
 			}
 			last_id = index;
 			
-			//printf("I RESERVE block %d\n",index);
+			IPCSDebug(SMEM_DEBUG,"I RESERVE block %d\n",index);
 			qty--;			
 		}
 
@@ -470,7 +469,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	
 	cstring _data_buffer = data;
 	int data_qty = 1 + (cstring_len(data) / SMEM_DATA_SIZE);
-	//printf("DATA_SIZE: %d\n", SMEM_DATA_SIZE);
+	IPCSDebug(SMEM_DEBUG&WRITE,"DATA_SIZE: %d\n", SMEM_DATA_SIZE);
 	int blocks_to_write = data_qty;
 
 	
@@ -503,7 +502,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 		// Now we're malloc'd 
 		cstring d = cstring_copy_len(_data_buffer, SMEM_DATA_SIZE);
 		_data_buffer += SMEM_DATA_SIZE + 1;
-		//printf("\n\nSTRING LEN: %d, %s\n\n", cstring_len(d), d);
+		IPCSDebug(SMEM_DEBUG&WRITE,"\n\nSTRING LEN: %d, %s\n\n", cstring_len(d), d);
 		end = smem_block_write(block_cur, d);
 		
 		smem_set_block_written(s, block_cur_id, 1);
@@ -515,10 +514,10 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 		int oldVal = sem_value(s->sem_header_w);
 		
 		sem_up(s->sem_header_w, 1);
-		//printf("UP on write %d\t %d\t old: %d\n END = %d",s->sem_header_w, sem_value(s->sem_header_w), oldVal, end);
+		IPCSDebug(SMEM_DEBUG&WRITE,"UP on write %d\t %d\t old: %d\n END = %d",s->sem_header_w, sem_value(s->sem_header_w), oldVal, end);
 		
-//		//printf("I send %s to %d, listens %d block_id %d header_id %d ref_sem %d\n", data,  header_b->ref_id, header_b->listens, block_cur_id, ((int)header_b - (int)s->space) / sizeof(smem_header_block),
-//			   sem_value(s->sem_header_w));
+		IPCSDebug(SMEM_DEBUG&WRITE,"I send %s to %d, listens %d block_id %d header_id %d ref_sem %d\n", data,  header_b->ref_id, header_b->listens, block_cur_id, ((int)header_b - (int)s->space) / sizeof(smem_header_block),
+			   sem_value(s->sem_header_w));
 		// blocks_available semaphore down.
 		// read semaphore up
 		
@@ -526,7 +525,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 			short next_id = block_cur->next;
 			block_cur_id = next_id;
 			block_cur = smem_get_block(s, next_id);
-			//c//printf("%d vs %d", ERROR, next_id, block_cur_id);
+			IPCSDebug(SMEM_DEBUG&WRITE,"%d vs %d", next_id, block_cur_id);
 			
 		}
 
@@ -535,7 +534,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	}
 	
 	if (end && data_qty != 0) {
-		//printf("Amount calculation error!");
+		IPCSDebug(SMEM_DEBUG&WRITE,"Amount calculation error!");
 	}
 	
 	
@@ -552,10 +551,10 @@ cstring smem_space_read(sim_smem_transporter * s) {
 	
 	
 	// TODO: Fix this!!!!!!!!
-	//c//printf("Read sem value: %d\t %d\n", ERROR, s->sem_header_r, sem_value(s->sem_header_r));
+	IPCSDebug(SMEM_DEBUG&READ,"Read sem value: %d\t %d\n", s->sem_header_r, sem_value(s->sem_header_r));
 	
 	sem_down(s->sem_header_r, 1);
-	//c//printf("UNLOCK! %d\t %d\n", DEBUG, s->sem_header_r, sem_value(s->sem_header_r));
+	IPCSDebug(SMEM_DEBUG&READ,"UNLOCK! %d\t %d\n", s->sem_header_r, sem_value(s->sem_header_r));
 
 	
 
@@ -603,9 +602,8 @@ cstring smem_space_read(sim_smem_transporter * s) {
 	
 	sem_up(s->sem_available_blocks,blocks_read);
 	
-	printf("SMEM: Read, available blocks: %d\n", sem_value(s->sem_available_blocks));
-//	//printf("I found listens:%d\tindex:%d\tref_id:%d\tIm:%d\tmsg:%s\t%d\tsem_reader:%d\n",current->listens,read_index,current->ref_id,s->from_id,response,s->is_server,
-//		   sem_value(s->sem_header_r) + 1);
+	IPCSDebug(SMEM_DEBUG&READ,"I found listens:%d\tindex:%d\tref_id:%d\tIm:%d\tmsg:%s\t%d\tsem_reader:%d\n",current->listens,read_index,current->ref_id,s->from_id,response,s->is_server,
+		   sem_value(s->sem_header_r) + 1);
 	if (current->listens_c == current->listens) {
 		//sem_down(s->sem_alloc, 1);
 		current->listens = current->listens_c = 0;
