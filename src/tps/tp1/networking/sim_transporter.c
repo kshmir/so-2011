@@ -165,6 +165,10 @@ cstring sim_transporter_listen(sim_transporter t) {
 		while (queue_empty(t->messages)) {
 			pthread_cond_wait(t->listener_received, t->listener_mutex);
 		}
+		
+
+		
+
 		data = queue_peek(t->messages);
 		if (data != NULL) {
 			value_found = 1;	

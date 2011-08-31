@@ -165,12 +165,14 @@ void sim_airline_query_receiver(sim_message resp) {
 		int turn = cstring_parseInt(list_get(params, 1), &noerror);
 		
 		if (noerror) {
+
 			airline->current_turn = turn;
 			set_planes_to_think(list_get(params,2));
 		//	cprintf("LEVEL TO AIRLINE: Setting airline UP %d\n", AZUL_CLARO, airline->id);
+			sem_up(airline->internal_sem, 1);
 			sem_down(airline->airline_sem, 1);
 		//	cprintf("AIRLINE: I UNLOCK\n", ROSA);
-			sem_up(airline->internal_sem, 1);
+			cprintf("GOT MESS\n",AZUL);
 		}
 
 		list_free_with_data(params);
@@ -184,7 +186,8 @@ void sim_airline_game() {
 		sem_down(airline->internal_sem, 1);					// Lock #5
 		pthread_cond_broadcast(airline->unlock_cond);
 			
-		sem_down(airline->planes_sem, list_size(airline->planes));				
+		sem_down(airline->planes_sem, list_size(airline->planes));
+
 //		cprintf("AIRLINE: Sending level UP %d %d\n", AZUL, airline->id, sem_value(airline->internal_sem));
 		sem_up(airline->level_sem, 1);						// Unlock #5
 	}
@@ -225,10 +228,9 @@ void sim_airline_main(int connection_t, int from_id, int to_id) {
 	airline = air;
 	airline->c = c;
 	
-	char response[100];
 	
-	sprintf(response, "My level has %d cities", graph_size(sim_level_graph(air->level)));
-	sim_client_print(c, response, 0);
+	cprintf("My level has %d cities\n", ROJO, graph_size(sim_level_graph(air->level)));
+	
 										 
 	int i = list_size(airline->planes);
 	foreach(sim_plane, plane, airline->planes) {
@@ -239,10 +241,8 @@ void sim_airline_main(int connection_t, int from_id, int to_id) {
 		pthread_create(&airline->p_threads[i++], NULL, (void_p) sim_plane_main, (void_p) dat);
 
 		sem_down(air->internal_sem, 1);
-		cprintf("AIRLINE: THREAD NACE\n", AZUL_CLARO);
 	}		
 
-	cprintf("AIRLINE: THREADS LISTOS\n", AZUL);
 	sem_up(air->level_sem,1);								// Tells the level we're ready to play.
 	sem_down(air->airline_sem,1);
 	

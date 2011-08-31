@@ -109,9 +109,11 @@ utils_test_files = \
 	bin/utils_test.o
 	
 utils = \
+	bin/unixColors.o \
 	bin/sem.o \
 	bin/shm.o \
-	bin/cstring.o
+	bin/cstring.o 
+
 
 
 #//MARK: ----- GCC Declarations
@@ -242,6 +244,17 @@ sim_tp1_test_child:
 sim_tp1_test_server: 
 	$(cc) -o bin/tp1_test_server.o -c src/tps/tp1/tests/tp1_test_server.c
 
+colors: 
+	$(cc) -o bin/colors.o -c src/utils/colors.c
+
+noColors: 
+	$(cc) -o bin/noColors.o -c src/utils/noColors.c
+	
+unixColors: 
+	$(cc) -o bin/unixColors.o -c src/utils/unixColors.c
+	
+winColors: 
+	$(cc) -o bin/winColors.o -c src/utils/winColors.c
 
 #//MARK: ----- Targets
 
@@ -292,7 +305,7 @@ tp1: build_tp1 \
 	sim_tp1 \
 	sim_tp1_level \
 	sim_tp1_airline \
-	utils_cstring utils_sem utils_shm
+	utils_cstring utils_sem utils_shm unixColors
 	$(cc) -o tp1 $(tp1) $(data_structures) $(utils) bin/tp1.o
 	$(cc) -o tp1_level $(tp1) $(data_structures) $(utils) bin/tp1_level.o
 	$(cc) -o tp1_airline $(tp1) $(data_structures) $(utils) bin/tp1_airline.o
@@ -301,7 +314,7 @@ tp1_test: build_tp1 \
 	sim_tp1_test \
 	sim_tp1_test_child \
 	sim_tp1_test_server \
-	utils_cstring utils_sem utils_shm
+	utils_cstring utils_sem utils_shm unixColors
 	$(cc) -o tp1_test_child $(tp1_test_child_files) $(data_structures) $(utils)
 	$(cc) -o tp1_test_server $(tp1_test_server_files) $(data_structures) $(utils)
 	$(cc) -o tp1_test $(tp1_test_files) $(data_structures) $(utils)
@@ -360,3 +373,4 @@ show_usage:
 	@echo "Example 1: Threads"
 	@echo "Example 2: Fork/exec/wait"
 	@echo "--------------------------------------------"	
+ 
