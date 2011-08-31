@@ -18,12 +18,12 @@
 struct sim_pipe_transporter {
 	cstring				write_fifo;			// Fifo to which the transporter writes.
 	cstring				read_fifo;			// Fifo to which the transporter listens.
-	
+
 	int					write_ptr;			// File descriptor to which we write.
 	int					read_ptr;			// File descriptor to which we read.
-	
+
 	transporter_mode	mode;				// Transporter mode.
-	
+
 	int					client;				// Tells wether it's a client or not.
 };
 
@@ -48,7 +48,7 @@ static sim_pipe_transporter create_pipe_transporter(cstring write_fifo, cstring 
 			do {
 				pipe->write_ptr = open(write_fifo, O_WRONLY | O_NONBLOCK);
 			} while(pipe->write_ptr == -1);
-			
+
 		}
 		if (mode == MODE_READ || mode == MODE_READWRITE) { 
 			do {
@@ -87,21 +87,21 @@ static sim_pipe_transporter create_pipe_transporter(cstring write_fifo, cstring 
 	}
 #endif
 
-	
+
 	return pipe;
 }
 
 sim_pipe_transporter sim_pipe_transporter_init_client(int server_id, int client_id) {
 	cstring write_fifo = create_fifo_name(server_id);
 	cstring read_fifo = create_fifo_name(client_id);
-	
+
 	return create_pipe_transporter(write_fifo, read_fifo, 1, MODE_READWRITE);
 }
 
 sim_pipe_transporter sim_pipe_transporter_init_server(int server_id, int client_id, transporter_mode mode) {
 	cstring write_fifo = NULL;
 	cstring read_fifo = NULL;
-	
+
 	if (mode == MODE_WRITE || mode == MODE_READWRITE) {
 		write_fifo = create_fifo_name(client_id);
 		mkfifo(write_fifo, 0666);
@@ -110,22 +110,26 @@ sim_pipe_transporter sim_pipe_transporter_init_server(int server_id, int client_
 		read_fifo  = create_fifo_name(server_id);
 		mkfifo(read_fifo, 0666);
 	}
-	
+
 	return create_pipe_transporter(write_fifo, read_fifo, 0, mode);
 }
 
 
 void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data) {
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
-		write(t->write_ptr, data, cstring_len(data) + 1);
+		if(write(t->write_ptr, data, cstring_len(data) + 1)==-1){
+			IPCSDebug(PIPE_DEBUG&WRITE,"Error while writting with write_ptr: %d",t->write_ptr);
+		}
 	}
 }
 
 cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
-	
+
 	if (t->mode == MODE_READ || t->mode == MODE_READWRITE) {
 		cstring str = cstring_init(PIPE_READ_SIZE);
-		read(t->read_ptr, str, PIPE_READ_SIZE);
+		if(read(t->read_ptr, str, PIPE_READ_SIZE)==-1){
+			IPCSDebug(PIPE_DEBUG&READ,"Error while reading with read_ptr: %d",t->read_ptr);
+		}
 		* length = PIPE_READ_SIZE;
 		return str;
 	}
@@ -136,12 +140,14 @@ cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 
 void sim_pipe_transporter_free(sim_pipe_transporter t) {
 	if (t->mode == MODE_READ || t->mode == MODE_READWRITE) {
-		close(t->read_ptr);
+		if(close(t->read_ptr)==-1)
+			IPCSDebug(PIPE_DEBUG&WRITE,"Error while closing fd: %d",t->read_ptr);
 		free(t->read_fifo);
 	}
-	
+
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
-		close(t->write_ptr);
+		if(close(t->write_ptr)==-1)
+			IPCSDebug(PIPE_DEBUG&WRITE,"Error while closing fd: %d",t->write_ptr);
 		free(t->write_fifo);
 	}
 	free(t);
