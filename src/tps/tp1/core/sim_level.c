@@ -177,24 +177,13 @@ void sim_level_free(sim_level lev) {
 
 void sim_level_query_receiver(sim_message s) {
 	cstring message = sim_message_read(s);
-	cstring header = cstring_init(0);
-	cstring response = cstring_init(0);
 	int noerror = 0;
 	if (cstring_compare(message, "INIT_STAT") == 0) {
 		if (current_level == NULL) {
 			printf("Too soon :(");
 		} else {
-			header = cstring_write(header, "0 PRINT");
-			sim_message_set_header(s, header);
-			response = cstring_expand(response, 100);
-			sprintf(response, "I am level #%d I have %d cities and %d airlines", 
-					current_level->level_id, 
-					graph_size(current_level->level),
-					list_size(airlines));
-			sim_message_write(s, response);
+			cprintf("Got spawn authorization\n", ROSA);
 			sem_up(current_level->frontend_sem,1);
-			sim_message_send(s);
-
 		}
 	}
 }
@@ -266,9 +255,8 @@ void sim_level_start_server(int connection_t, int to_id) {
 void sim_level_spawn_airlines() {
 	foreach(sim_airline, airline, airlines) {
 		sim_server_spawn_child(current_level->airlines_server);
-		printf("LEVEL: Going down for spawning\n");
+		cprintf("LEVEL: Going down for spawning\n", ROSA);
 		sem_down(current_level->level_sem, 1);						// Lock #4
-		printf("LEVEL: Going UP from Spawning\n");
 	}
 }
 
@@ -306,6 +294,7 @@ void send_turn_tick() {
 
 	sem_set_value(current_level->airline_sem, 0);
 	
+	cprintf("LEVEL: SENDING %s\n", ROSA, msg);
 	sim_server_broadcast_query(current_level->airlines_server, msg);
 
 	sem_up(current_level->airline_sem, list_size(airlines));
@@ -338,16 +327,14 @@ void start_planes_map() {
 }
 
 void sim_level_game() {
-	printf("Start Level!!!!!!!\n");
+	cprintf("LEVEL: STARTING GAME\n", ROJO);
 	start_planes_map();
 	sem_up(current_level->airline_sem,list_size(airlines));
 	while (sim_level_alive()) {		
-
-
 		cprintf("LEVEL: Going down for TURN %d\n", ROJO, current_level->turn);
 		send_turn_tick();
 		sem_down(current_level->level_sem, list_size(airlines));		
-//		sleep(1);
+		sleep(1);
 		current_level->turn++;
 	}
 }
@@ -371,7 +358,7 @@ void sim_level_main(int connection_t, int from_id, int to_id) {
 	airlines = sim_client_copy_airline(c, to_id);
 	
 	sem_up(l->frontend_sem, 1);
-	printf("LEVEL: Going down for startup\n");
+	cprintf("LEVEL: Going down for startup\n", ROSA);
 	sem_down(l->level_sem, 1);				// Lock #3
 	
 	sim_level_start_server(connection_t, to_id + 1);

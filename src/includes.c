@@ -113,6 +113,8 @@ void cprintf(char * format, int color, ...) {
 	
 	textattr(CLEAR);
 	
+	printf("");
+	
 
 	va_end (args);	
 	sem_up(c_sem, 1);
