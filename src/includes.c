@@ -121,6 +121,8 @@ void cprintf(char * format, int color, ...) {
 int IPCS_sem = 0;
 
 void IPCSDebug(char * msg, int type, ...) {
+	if(!(type&READ) && !(type&WRITE))
+		return;
 	if (IPCS_sem == 0){
 		IPCS_sem = sem_create_typed(0, "IPCSDebug");
 		sem_set_value(IPCS_sem, 1);
