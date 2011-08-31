@@ -85,12 +85,15 @@ int sim_frontend_start_server(connection_type t) {
 
 int sim_frontend_start_processes(sim_level lev, list airlines) {
 	sim_server_spawn_child(print_server);
-	sem_down(frontend_sem, 1);
-	printf("I send INIT_STAT\n");
+	cprintf("FRONTEND: Going down\n", ROJO);
+	sem_down(frontend_sem, 1);					// Lock #1
 	sim_server_broadcast_query(print_server, "INIT_STAT");
-	sem_down(frontend_sem, 1);
-	sem_up(level_sem, 1);
-	sem_down(frontend_sem, 1);
+	cprintf("FRONTEND: Going down\n", ROJO);
+	sem_down(frontend_sem, 1);					// Lock #2
+	sem_up(level_sem, 1);						
+	cprintf("FRONTEND: Going down\n", ROJO);
+	sem_down(frontend_sem, 1);					
+	cprintf("FRONTEND: SHUTDOWN\n", ROJO);
 }
 
 
@@ -119,7 +122,6 @@ int sim_frontend_main(list params) {
 				list_add(_airlines, airline);
 			}
 			if (error_file == NULL) {
-				
 				sim_frontend_start_server(*c_type);
 				level = lev;
 				airlines = _airlines;

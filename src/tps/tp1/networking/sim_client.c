@@ -122,7 +122,7 @@ int sim_client_get_distance(sim_client c, int object_id, cstring from, cstring t
 /**
  * Gets all the medicines from a point.
  */
-sim_level sim_client_copy_level(sim_client c, int object_id) {
+void_p sim_client_copy_level(sim_client c, int object_id) {
 	cstring header = cstring_fromInt(object_id); 
 	header = cstring_write(header, cstring_copy(" COPY_LEVEL"));
 	cstring get = cstring_copy("");

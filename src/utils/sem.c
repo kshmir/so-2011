@@ -48,6 +48,16 @@ int sem_value(int sem) {
 	return semctl(sem, 0, GETVAL, NULL);
 }
 
+int sem_set_value(int sem, int val) {
+	union semun {
+        int val;                    /* valor para SETVAL */
+        struct semid_ds *buf;       /* buffer para IPC_STAT, IPC_SET */
+        unsigned short int *array;  /* array para GETALL, SETALL */
+        struct seminfo *__buf;      /* buffer para IPC_INFO */
+	} s;
+	s.val = val;
+	return semctl(sem, 0, SETVAL, s);
+}
 
 int sem_up(int sem, int amount) {
 	struct sembuf sops;

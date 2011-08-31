@@ -8,6 +8,9 @@
 
 typedef struct sim_level * sim_level;
 
+
+graph sim_level_graph(sim_level lev);
+
 cstring sim_level_serialize(sim_level lev);
 
 sim_level sim_level_deserialize(cstring s);

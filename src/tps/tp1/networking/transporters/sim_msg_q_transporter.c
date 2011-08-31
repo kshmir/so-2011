@@ -34,8 +34,7 @@ struct sim_msg_q_transporter {
 	int					server;			// Server ID.
 	int					client;			// Client ID.
 	int					mode;			// Connection mode.
-	key_t				key;			// Message queue key.
-	int					write_sem;		// Semaphore used for writing.
+	key_t				key;
 };
 
 
@@ -50,7 +49,6 @@ sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int clien
 	t->server			= server_id + 1;
 	t->write_buf.mtype	= t->server;
 	t->read_buf.mtype	= t->client;
-	t->write_sem = sem_create(250);
 	return t;
 }
 
@@ -59,11 +57,7 @@ sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int clien
 	t->key=ftok("./tmp",'#');
 	
 	t->msgq_id = msgget(t->key, 0600 | IPC_CREAT | IPC_EXCL);
-	t->write_sem = sem_create(250);
-	if (t->msgq_id != -1) {
-		t->write_sem = sem_create(250);
-		sem_up(t->write_sem,2);
-	}
+
 	
 	if ((t->msgq_id = msgget(t->key, 0600 | IPC_CREAT)) == -1) { /* connect to the queue */
 		perror("msgget");
@@ -127,7 +121,6 @@ cstring sim_msg_q_transporter_listen(sim_msg_q_transporter t, int * extra_data){
 
 void sim_msg_q_transporter_free(sim_msg_q_transporter transp){
 	msgctl(transp->msgq_id, IPC_RMID, NULL);	
-	sem_free(transp->write_sem);
 	free(transp);
 }
 

@@ -123,6 +123,10 @@ void cstring_test() {
 	assert(i == 3);
 	
 	list l = cstring_split_list("HOLA_CRISTIAN_COMO_ANDAS", "_");
+
+	
+	
+	
 	assert(list_size(l) == 4);
 	assert(strcmp(list_get(l, 0), "HOLA") == 0);
 	list_free_with_data(l);

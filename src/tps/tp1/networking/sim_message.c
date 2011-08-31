@@ -123,7 +123,8 @@ static void_p sim_message_listen(struct listener_data * data) {
 			
 			
 			
-			if (list_size(splitted) == 2) {
+			if (list_size(splitted) == 2)
+			{
 				if (cstring_compare(list_get(splitted, 0), r->header) == 0) {
 					found = 1;
 					data->m = sim_message_init(r->t,list_get(splitted, 0), list_get(splitted, 1));

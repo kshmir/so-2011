@@ -25,6 +25,9 @@ void	queue_poll(queue q, void_p e){
 }
 
 void_p	queue_pull(queue q){
+	if (q == NULL || list_size(q->l) == 0) {
+		return NULL;
+	}
 	void_p ret = list_get(q->l, 0);
 	list_remove(q->l, 0);
 	

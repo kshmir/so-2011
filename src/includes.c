@@ -10,6 +10,8 @@
 #include "includes.h"
 #include "data_structures/queue.h"
 #include "utils/cstring.h"
+#include "utils/sem.h"
+#include "utils/colors.h"
 #include <stdarg.h>
 
 
@@ -92,31 +94,28 @@ static void separator() {
 	printf("--------------------------------\n");
 }
 
+int c_sem = 0;
+
 void cprintf(char * format, int color, ...) {
-	
+	if (c_sem == 0){
+		c_sem = sem_create_typed(0, "cprintf");
+		sem_set_value(c_sem, 1);
+	}
+
+	sem_down(c_sem, 1);
 	va_list args;
 	va_start (args, color);
-	cstring _format = cstring_init(0);
-	if (color == OK) {
-		_format = cstring_write(_format,_OKo);
-		_format	= cstring_write(_format,format);
-		_format = cstring_write(_format,_OKc);
-	} else if (color == DEBUG) {
-		_format = cstring_write(_format,_DEBUGo);
-		_format	= cstring_write(_format,format);
-		_format = cstring_write(_format,_DEBUGc);
-	}
-	else if (color == ERROR) {
-		_format = cstring_write(_format,_ERRORo);
-		_format	= cstring_write(_format,format);
-		_format = cstring_write(_format,_ERRORc);
-	}else {
-		_format	= cstring_write(_format,format);
-	}
 	
-	vprintf (_format, args);
-	free(_format);
+	textcolor(color);
+	
+
+	vprintf (format, args);	
+	
+	textattr(CLEAR);
+	
+
 	va_end (args);	
+	sem_up(c_sem, 1);
 }
 
 void tp1_disclaimer() {

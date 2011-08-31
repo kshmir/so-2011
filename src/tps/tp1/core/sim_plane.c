@@ -1,11 +1,32 @@
 #include "sim_plane.h"
 
+
 struct sim_plane {
 	int		id;
 	cstring start_city;
 	list	medicines_keys;
 	map		medicines;
+	
+	int		turn_counter;
+	int		must_think;
+	int		set_dead;
 };
+
+int sim_plane_set_id(sim_plane p, int i) { 
+	p->id = i;
+}
+
+int sim_plane_id(sim_plane p) { 
+	return p->id;
+}
+
+void sim_plane_set_dead(sim_plane p,int num) {
+	p->set_dead = num;
+}
+
+void sim_plane_set_to_think(sim_plane p,int num) {
+	p->must_think = num;
+}
 
 int sim_plane_comparer(void_p a1, void_p a2) {
 	sim_plane _a1 = (sim_plane) a1;
@@ -47,8 +68,25 @@ cstring sim_plane_serialize(sim_plane p) {
 	return s;
 }
 
-void sim_plane_main(sim_plane plane) {
-	
+void sim_plane_main(struct sim_plane_data * d) {
+	sim_airline airline = (sim_airline) d->airline;
+	sim_plane plane = (sim_plane) d->plane;
+	sim_level level = (sim_level) d->level;
+
+	sem_up(sim_airline_internal_sem(airline), 1);	
+	cprintf("PLANE: I start and wait\n", VERDE);
+	plane->set_dead = 0;
+	plane->turn_counter = 0;
+
+	while (!plane->set_dead) {
+		pthread_cond_wait((void_p)sim_airline_cond(airline), (void_p)sim_airline_mutex(airline));
+		if (plane->must_think) {
+			cprintf("PLANE: I think :D %d\t %d\t %d\n", VERDE, plane->turn_counter, sim_airline_id(airline), plane->id);
+		}
+		sem_up(sim_airline_planes_sem(airline), 1);
+		plane->turn_counter++;
+	}
+
 }
 
 void sim_plane_print(sim_plane p) {

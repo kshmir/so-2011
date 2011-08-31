@@ -120,6 +120,21 @@ cstring cstring_replace(cstring original, cstring substr, cstring replacer) {
 }
 
 
+cstring cstring_join_list(list strings, cstring s) {
+	int i = 0;
+	cstring sub = cstring_init(0);
+	foreach(cstring, str, strings)  {
+		if (i == 0) {
+			sub = cstring_write(sub, str);
+			foreach_next(str);
+		}
+		sub = cstring_write(sub, s);
+		sub = cstring_write(sub, str);
+		i++;
+	}
+	return sub;
+}
+
 
 cstring cstring_join(cstring * cstrings, cstring s) { 
 	int i = 1;
@@ -232,7 +247,7 @@ void cstring_free(cstring s) {
 	free(s);
 }
 
-cstring cstring_from_file(cstring path){
+cstring cstring_from_file(cstring path)	{
 	int fd = open(path, O_RDONLY);
 	if( fd < 0 ){
 		close(fd);

@@ -8,7 +8,7 @@
  *  Copyright 2011 My Own. All rights reserved.
  *
  */
-
+#include "utils/colors.h"
 
 
 #ifndef _INCLUDE_H_
@@ -18,6 +18,46 @@
 #define FALSE 0
 #include <stdio.h>
 #include <stdlib.h>
+
+
+// it'd be cool to have this as a variable
+#define USE_COLORS 1
+
+typedef enum {
+	NEGRO        ,
+	ROJO         ,
+	VERDE        ,
+	MARRON       ,
+	AZUL         ,
+	VIOLETA      ,
+	CELESTE      ,
+	GRIS_CLARO   ,
+	GRIS         ,
+	ROSA         ,
+	VERDE_CLARO  ,
+	AMARILLO     ,
+	AZUL_CLARO   ,
+	VIOLETA_CLARO,
+	CELESTE_CLARO,
+	BLANCO
+	
+} color;
+
+typedef enum {
+	CLEAR        ,
+	NONE         ,
+	
+	NEGRITA      ,
+	SUBRAYADO    ,
+	BLINK        ,
+	INVERTIDO    ,
+	
+	NO_NEGRITA   ,
+	NO_SUBRAYADO ,
+	NO_BLINK     ,
+	NO_INVERTIDO
+	
+} attr;
 
 // void pointer for all our solutions
 typedef void * void_p;

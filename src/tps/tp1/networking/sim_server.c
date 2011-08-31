@@ -205,8 +205,8 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 			s->client_id_multiplier = 1;
 			break;
 		case P_AIRLINE:
-			s->client_id_seed = 1;
-			s->client_id_multiplier = 100;
+			s->client_id_seed = 100;
+			s->client_id_multiplier = 1;
 			break;
 		default:
 			s->client_id_seed = 10;
@@ -226,7 +226,6 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 void sim_server_broadcast_query(sim_server s, cstring message) {
 	cstring header = cstring_copy("QUERY ");
 	cstring msg = cstring_copy(message);
-	
 	
 	list transporters = map_values(s->clients_transporters);
 	foreach(sim_transporter, t, transporters) {
@@ -265,7 +264,7 @@ int sim_server_spawn_child(sim_server s) {
 	
 	map_set(s->clients_transporters, &key, child_t);
 	
-	s->client_id_seed++;
+	s->client_id_multiplier++;
 	sem_down(s->spawn_sem, 1);
 }
 

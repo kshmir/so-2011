@@ -12,6 +12,10 @@ struct sim_level {
 	////// int *    as: values		# Amount of medicine.
 	// stores distances	 as: arcs   # Distance between cities
 	graph level;
+	
+	map	  plane_location;
+	map	  plane_distance;
+	
 		
 	sim_client frontend_client;
 	sim_server airlines_server;
@@ -19,6 +23,7 @@ struct sim_level {
 	int	  level_id;
 	
 	int	  turn;
+	
 	
 	int	  frontend_sem;
 	int	  airline_sem;
@@ -194,7 +199,7 @@ void sim_level_query_receiver(sim_message s) {
 	}
 }
 
-void sim_level_receiver(sim_message s) {
+void sim_level_print_receiver(sim_message s) {
 	cstring data = sim_message_read(s);
 	list header = cstring_split_list(sim_message_header(s), " ");
 	
@@ -250,7 +255,7 @@ void sim_level_start_server(int connection_t, int to_id) {
 	current_level->airlines_server = sim_server_init(connection_t, P_AIRLINE, to_id);
 	
 	char * seq = "PRINT";
-	sim_server_add_receiver(current_level->airlines_server, seq, sim_level_receiver);
+	sim_server_add_receiver(current_level->airlines_server, seq, sim_level_print_receiver);
 	char * seq2 = "COPY_LEVEL";
 	sim_server_add_receiver(current_level->airlines_server, seq2, sim_level_copy_level);
 	char * seq3 = "COPY_SAIR";
@@ -261,12 +266,90 @@ void sim_level_start_server(int connection_t, int to_id) {
 void sim_level_spawn_airlines() {
 	foreach(sim_airline, airline, airlines) {
 		sim_server_spawn_child(current_level->airlines_server);
-		sem_down(current_level->level_sem, 1);	
+		printf("LEVEL: Going down for spawning\n");
+		sem_down(current_level->level_sem, 1);						// Lock #4
+		printf("LEVEL: Going UP from Spawning\n");
+	}
+}
+
+// Updates all the data of distances of each plane and sends all the ones which must update in numbers
+// Separated by a comma.
+cstring planes_update_moves() {
+	cstring data = cstring_init(0);
+	list keys = map_keys(current_level->plane_distance);
+	list valids = list_init();
+	foreach(int *, key, keys) {
+		int * val = map_get(current_level->plane_distance, key);
+		if (* val == -1) {
+			*val = 0;
+		} else if (*val > 0){
+			*val -= 1;
+		} else {
+			list_add(valids, cstring_fromInt(*key));
+		}
+	}	
+	data = cstring_join_list(valids, ",");
+	list_free_with_data(valids);
+	return data;
+}
+
+
+void send_turn_tick() {
+	cstring msg = cstring_copy("TURN ");
+	cstring valid_planes = planes_update_moves();
+	msg = cstring_write(msg, cstring_fromInt(current_level->turn));
+
+
+	
+	msg = cstring_write(msg, " ");
+	msg = cstring_write(msg, valid_planes);
+
+	sem_set_value(current_level->airline_sem, 0);
+	
+	sim_server_broadcast_query(current_level->airlines_server, msg);
+
+	sem_up(current_level->airline_sem, list_size(airlines));
+	
+	free(valid_planes);
+	free(msg);
+}
+
+int sim_level_alive() {
+	return current_level->turn <= 100;
+}
+
+void start_planes_map() {
+	current_level->plane_location = map_init(int_comparer, int_cloner);
+	current_level->plane_distance = map_init(int_comparer, int_cloner);
+	int j = 1;
+	foreach(sim_airline, airline, airlines) {
+		list planes = sim_airline_planes(airline);
+		int pid = 100 * j;
+		int i = 1;
+		for(; i < list_size(planes) + 1; i++) {
+			int id = pid + i;
+			int * value = malloc(sizeof(int));
+			*value = 0;
+			map_set(current_level->plane_distance, &id, value);
+			map_set(current_level->plane_location, &id, sim_plane_start_city((sim_plane)list_get(planes, i - 1)));
+		}
+		j++;
 	}
 }
 
 void sim_level_game() {
-	
+	printf("Start Level!!!!!!!\n");
+	start_planes_map();
+	sem_up(current_level->airline_sem,list_size(airlines));
+	while (sim_level_alive()) {		
+
+
+		cprintf("LEVEL: Going down for TURN %d\n", ROJO, current_level->turn);
+		send_turn_tick();
+		sem_down(current_level->level_sem, list_size(airlines));		
+//		sleep(1);
+		current_level->turn++;
+	}
 }
 
 
@@ -278,27 +361,30 @@ void sim_level_main(int connection_t, int from_id, int to_id) {
 	
 	l->frontend_client = c;
 
-	l->frontend_sem = sem_create_typed(0, "frontend");
 	l->airline_sem = sem_create_typed(0, "airline");
+	l->frontend_sem = sem_create_typed(0, "frontend");
 	l->level_sem = sem_create_typed(0, "level");
 	
 	l->level_id = to_id;
+	l->turn = 0;
 
 	airlines = sim_client_copy_airline(c, to_id);
 	
 	sem_up(l->frontend_sem, 1);
-	sem_down(l->level_sem, 1);
+	printf("LEVEL: Going down for startup\n");
+	sem_down(l->level_sem, 1);				// Lock #3
 	
 	sim_level_start_server(connection_t, to_id + 1);
 	
 	sim_level_spawn_airlines();
 	
+	
 
+	
+	sim_level_game();
+	
+	sim_server_broadcast_query(current_level->airlines_server, "END");
+	printf("Game end\n");
 	sem_up(l->frontend_sem, 1);
-	printf("I revive them all");
-	sem_up(l->airline_sem, list_size(airlines));
-//	
-//	sim_level_game();
-
 
 }

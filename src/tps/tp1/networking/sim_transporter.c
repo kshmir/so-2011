@@ -67,6 +67,8 @@ struct sim_transporter {
 	function			listen;							// Listen handler
 	function			free;							// Free handler
 	
+	
+	
 	queue				messages;						// Queue of received messages.
 };	
 

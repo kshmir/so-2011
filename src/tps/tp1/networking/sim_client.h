@@ -37,7 +37,7 @@ map sim_client_get_medicines(sim_client c, int object_id, cstring from);
 
 list sim_client_copy_airline(sim_client c, int object_id);
 
-sim_level sim_client_copy_level(sim_client c, int object_id);
+void_p sim_client_copy_level(sim_client c, int object_id);
 
 void_p sim_client_copy_single_airline(sim_client c, int object_id);
 
