@@ -10,7 +10,6 @@
  */
 #include "utils/colors.h"
 
-
 #ifndef _INCLUDE_H_
 #define _INCLUDE_H_
 
