@@ -104,6 +104,8 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 		}
 		if(attempts!=0)
 			IPCSDebug(MSGQ_DEBUG&WRITE,"Total attempts to write: %d\n",attempts);
+		IPCSDebug(MSGQ_DEBUG&WRITE,"MSGQ sent: %s\n",data);
+
 	}
 	//	sem_up(t->write_sem, 1);
 
@@ -112,7 +114,8 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 cstring sim_msg_q_transporter_listen(sim_msg_q_transporter t, int * extra_data){
 	if (msgrcv(t->msgq_id, &(t->read_buf), sizeof(struct msgq_buf) - sizeof(long), t->read_buf.mtype, 0) == -1) {
 		IPCSDebug(MSGQ_DEBUG&READ,"Message could not be received\n");
-	}
+	}else
+		IPCSDebug(MSGQ_DEBUG&READ,"MSGQ received: %s\n",t->read_buf.mtext);
 
 	*extra_data = safe_strlen(t->read_buf.mtext, sizeof(struct msgq_buf) - sizeof(long));
 

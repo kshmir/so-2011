@@ -119,7 +119,8 @@ void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data) {
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
 		if(write(t->write_ptr, data, cstring_len(data) + 1)==-1){
 			IPCSDebug(PIPE_DEBUG&WRITE,"Error while writting with write_ptr: %d",t->write_ptr);
-		}
+		}else
+			IPCSDebug(PIPE_DEBUG&WRITE,"PIPE sent: %s",data);
 	}
 }
 
@@ -129,7 +130,8 @@ cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 		cstring str = cstring_init(PIPE_READ_SIZE);
 		if(read(t->read_ptr, str, PIPE_READ_SIZE)==-1){
 			IPCSDebug(PIPE_DEBUG&READ,"Error while reading with read_ptr: %d",t->read_ptr);
-		}
+		}else
+		IPCSDebug(PIPE_DEBUG&READ,"PIPE rcvd: %s",str);
 		* length = PIPE_READ_SIZE;
 		return str;
 	}
