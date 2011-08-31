@@ -39,9 +39,6 @@ sim_socket_transporter sim_socket_transporter_init_client(int server_id, int cli
 	t->is_client = 1;
 
 	t->server_fd = socket(AF_UNIX, SOCK_STREAM, 0);
-	if(SOCKET_DEBUG && t->server_fd==-1){
-		fprintf(stderr,"Couldn't open the socket file descriptor");
-	}
 	int server_len = sizeof(struct sockaddr_un);
 
 	t->server_add.sun_family = AF_UNIX;
@@ -155,9 +152,9 @@ void sim_socket_transporter_free(sim_socket_transporter transp){
 		}
 		cstring path = cstring_copy("./tmp/sck_id_");
 		path = cstring_write(path, cstring_fromInt(transp->client_id));
-		if (unlink(path) == -1 && SOCKET_DEBUG){
-			IPCSDebug(SOCK_DEBUG,"Error while trying to unlink path:%s\n",path);
-		}
+
+		IPCSDebug(SOCK_DEBUG,"Error while trying to unlink path:%s\n",path);
+
 	}
 
 }

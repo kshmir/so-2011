@@ -74,14 +74,15 @@ void sim_plane_main(struct sim_plane_data * d) {
 	sim_level level = (sim_level) d->level;
 
 	sem_up(sim_airline_internal_sem(airline), 1);	
-	cprintf("PLANE: I start and wait\n", VERDE);
 	plane->set_dead = 0;
 	plane->turn_counter = 0;
 
 	while (!plane->set_dead) {
 		sem_down(sim_airline_planes_end_sem(airline),1);
-		cprintf("PLANE: I unlock\n", VERDE_CLARO);
 		if (plane->must_think) {
+			cprintf("About to think....\n", VERDE);
+//			cprintf("Pointer: %x\n", (int)sim_level_graph(level));
+			
 			//cprintf("PLANE: I think :D %d\t %d\t %d\n", VERDE, plane->turn_counter, sim_airline_id(airline), plane->id);
 		}
 		sem_up(sim_airline_planes_sem(airline), 1);

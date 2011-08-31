@@ -296,7 +296,7 @@ void send_turn_tick() {
 
 	sem_set_value(current_level->airline_sem, 0);
 	
-	cprintf("LEVEL: SENDING %s\n", ROSA, msg);
+//	cprintf("LEVEL: SENDING %s\n", ROSA, msg);
 	sim_server_broadcast_query(current_level->airlines_server, msg);
 
 	sem_up(current_level->airline_sem, list_size(airlines));
@@ -329,14 +329,13 @@ void start_planes_map() {
 }
 
 void sim_level_game() {
-	cprintf("LEVEL: STARTING GAME\n", ROJO);
+	cprintf("LEVEL: STARTING GAME\n", CELESTE);
 	start_planes_map();
 	sem_up(current_level->airline_sem,list_size(airlines));
 	while (sim_level_alive()) {		
-		cprintf("LEVEL: Going down for TURN %d\n", ROJO, current_level->turn);
+		cprintf("LEVEL: Going down for TURN %d\n", CELESTE, current_level->turn);
 		send_turn_tick();
 		sem_down(current_level->level_sem, list_size(airlines));		
-		//usleep(10 * 1000);
 		current_level->turn++;
 	}
 }
