@@ -14,6 +14,14 @@
 #ifndef _INCLUDE_H_
 #define _INCLUDE_H_
 
+#define	SOCKET_DEBUG 0
+#define	SMEM_DEBUG 0
+#define	MSGQ_DEBUG 0
+#define	PIPE_DEBUG 0
+
+#define READ 0x01
+#define	WRITE	0x02
+
 #define TRUE 1
 #define FALSE 0
 #include <stdio.h>

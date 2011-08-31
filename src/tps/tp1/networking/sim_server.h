@@ -5,7 +5,7 @@
  *		PEREYRA
  *		VIDELA
  * -----------------------------------------------------------------------------------------
- * sim_server acts as a one-to-many information distribuiter.
+ * sim_server acts as a one-to-many information distributer.
  * It binds string sequences to functions which process the data.
  * It can also send a query message to it's clients to make a specific petition.
  */

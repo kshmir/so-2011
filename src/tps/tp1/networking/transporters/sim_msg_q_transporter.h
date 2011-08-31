@@ -31,23 +31,25 @@
 
 typedef struct sim_msg_q_transporter * sim_msg_q_transporter;
 
-/**
-	Starts a client
- */
+/*
+ * Client initialization: initializes the message queue if needed and connects to it using a key.
+ * Returns the message queue transporter information necessary to write and listen.
+ * */
 sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int client_id);
 
-/**
-	Starts a server
- */
+/*
+ * Server initialization: initializes the message queue if needed and connects to it using a key.
+ * Returns the message queue transporter information necessary to write and listen.
+ * */
 sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int client_id);
 
 /**
-	Writes through the transporter.
+	Writes through the transporter received.
  */
 void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data);
 
 /**
-	Listens to the transporter.
+	Reads from the transporter.
  */
 cstring sim_msg_q_transporter_listen(sim_msg_q_transporter t, int * extra_data);
 
