@@ -85,13 +85,7 @@ int sim_frontend_start_server(connection_type t) {
 
 int sim_frontend_start_processes(sim_level lev, list airlines) {
 	sim_server_spawn_child(print_server);
-	cprintf("FRONTEND: Going down\n", VERDE);
-	sem_down(frontend_sem, 1);					// Lock #1
-	sim_server_broadcast_query(print_server, "INIT_STAT");
-	cprintf("FRONTEND: Going down\n", VERDE);
-	sem_down(frontend_sem, 1);					// Lock #2
-	sem_up(level_sem, 1);						
-	cprintf("FRONTEND: Going down\n", VERDE);
+	cprintf("FRONTEND: Going down to spawn\n", VERDE);
 	sem_down(frontend_sem, 1);					
 	cprintf("FRONTEND: SHUTDOWN\n", VERDE);
 }

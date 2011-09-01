@@ -14,6 +14,5 @@ int main(int argc, char ** params) {
 			sim_level_main(connection_t, from_id, to_id);
 		}
 	}
-	sleep(1);
 	return 0;
 }

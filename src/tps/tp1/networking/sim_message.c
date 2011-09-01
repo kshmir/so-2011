@@ -175,5 +175,7 @@ void sim_message_respond(sim_message r) {
 	array[0] = r->header;
 	array[1] = r->message;
 	array[2] = NULL;
-	sim_transporter_write(r->t, cstring_join(array, ";"));
+	cstring joined = cstring_join(array, ";");
+	sim_transporter_write(r->t, joined);
+	free(joined);
 }

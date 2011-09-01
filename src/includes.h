@@ -115,7 +115,7 @@ void_p cstring_cloner(void_p s1);
 #define _ERRORc "\033[0m"
 
 #define	SMEM_DEBUG	0
-#define	SOCK_DEBUG	1
+#define	SOCK_DEBUG	0
 #define	PIPE_DEBUG	0
 #define	MSGQ_DEBUG	0
 

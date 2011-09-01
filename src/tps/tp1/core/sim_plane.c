@@ -76,16 +76,62 @@ void sim_plane_main(struct sim_plane_data * d) {
 	sem_up(sim_airline_internal_sem(airline), 1);	
 	plane->set_dead = 0;
 	plane->turn_counter = 0;
-
+	cprintf("PLANE: I'm ready with id %d\n", VERDE_CLARO,plane->id);
 	while (!plane->set_dead) {
-		sem_down(sim_airline_planes_end_sem(airline),1);
+		sim_airline_set_planes_waiting(airline, sim_airline_planes_waiting(airline) + 1);
+		pthread_cond_wait(sim_airline_planes_cond(airline), sim_airline_mutex(airline));
+//		sem_down(sim_airline_planes_end_sem(airline),1);
 		if (plane->must_think) {
-			cprintf("About to think....\n", VERDE);
-//			cprintf("Pointer: %x\n", (int)sim_level_graph(level));
-			
-			//cprintf("PLANE: I think :D %d\t %d\t %d\n", VERDE, plane->turn_counter, sim_airline_id(airline), plane->id);
+		//	graph_node n = graph_get_node(sim_level_graph(level), plane->start_city);
+//			map m = graph_node_value(n);
+//			if (m != NULL) {
+//				int fill_done = 0;
+//				int filld_count = 0;
+//				list city_m_keys = map_keys(m);
+////				foreach(cstring, med, city_m_keys) {
+////					int i = 0;
+////					for(; i < list_size(plane->medicines_keys) && !fill_done; i++) {
+////						cstring plane_med = list_get(plane->medicines_keys, i);
+////						if (plane_med != NULL && cstring_compare(med, plane_med) == 0) {
+////							int * val = map_get(plane->medicines, list_get(plane->medicines_keys, i));
+////							if (val != NULL) {
+////								int fill_value = sim_client_post_medicine_fill((sim_client) sim_airline_client(airline), 
+////																			   sim_airline_id(airline), 
+////																			   plane->start_city, 
+////																			   med, 
+////																			   * val);
+////								if (fill_value != -1) {
+////									* val = fill_value;
+////									fill_done = 1;
+////								}
+////							}
+////						}
+////
+////
+////					}
+//
+//					if (fill_done) {
+//						cprintf("PLANE: FILL", VERDE);
+//						break;
+//					}
+//
+//				}
+//			}
+//			else {
+//				
+//				// For debugging
+//				list g_keys = graph_keys(sim_level_graph(level));
+//				foreach(cstring, key, g_keys) {
+//					cprintf("AIRLINE MAP KEY: %s\n", ROSA, key);
+//				}
+//				cprintf("PLANE %d has bad data %s %d\n", ROJO, plane->id, plane->start_city, graph_size(sim_level_graph(level)));
+//				getc(stdin);
+//			}
+
+			cprintf("PLANE: I think :D %d\t %d\t %d\n", VERDE, plane->turn_counter, sim_airline_id(airline), plane->id);
 		}
-		sem_up(sim_airline_planes_sem(airline), 1);
+		sim_airline_set_planes_running(airline, sim_airline_planes_running(airline) - 1);
+		pthread_cond_broadcast(sim_airline_waiting_cond(airline));
 		plane->turn_counter++;
 	}
 

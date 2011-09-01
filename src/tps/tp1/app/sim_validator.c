@@ -33,6 +33,7 @@ int connection_int(cstring * str) {
 		
 		if (cstring_compare(parsed2, connection_params[i]) == 0)
 		{
+			cprintf("VALIDATOR: Selected IPC: %s\n", ROJO, parsed2);
 			free(parsed);
 			free(parsed2);
 			return i;	

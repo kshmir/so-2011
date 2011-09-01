@@ -265,6 +265,9 @@ void_p graph_node_key(graph_node n){
 }
 // Devuelve el valor del nodo
 void_p graph_node_value(graph_node n){
+	if (n == NULL) {
+		return NULL;
+	}
 	return n->value;
 }
 // Devuelve los arcos del nodo

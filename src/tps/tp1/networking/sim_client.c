@@ -169,7 +169,6 @@ void_p sim_client_copy_single_airline(sim_client c, int object_id) {
 
 	sim_airline air = sim_airline_deserialize(data, object_id);
 
-	printf("GOT %d planes and id %d\n", list_size(sim_airline_planes(air)), sim_airline_id(air));
 	free(data);
 	return air;
 }
@@ -188,11 +187,14 @@ int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cst
 	get = cstring_write(get, cstring_fromInt(amount));
 	sim_message request = sim_message_init(c->t, header, get);
 	sim_message response = sim_message_send(request);
-	sim_message_free(request);
+	
+	cstring rsp = sim_message_read(response);
+	int noerror = 0;
+	int val = cstring_parseInt(rsp, &noerror);
 	// Rebuild response
-	// Response should be... RES {object_id} MEDF;{city} {medicine} {value}
+	// Response should be... RES {object_id} MEDF;{value}
 	// Where value is -1 if there's an error, or the remaining amount of medicine.
-	return 0;
+	return val;
 }
 
 /**

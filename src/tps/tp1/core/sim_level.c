@@ -115,7 +115,8 @@ sim_level sim_level_deserialize(cstring s) {
 					if (kp != NULL) {
 						int * value = calloc(sizeof(int), 1);
 						*value = kp->amount;
-						map_set(medicines, cstring_copy(kp->name), value);
+						cstring n = cstring_copy(kp->name);
+						map_set(medicines, n, value);
 					}
 					else {
 						error = 1;
@@ -182,9 +183,9 @@ void sim_level_query_receiver(sim_message s) {
 	int noerror = 0;
 	if (cstring_compare(message, "INIT_STAT") == 0) {
 		if (current_level == NULL) {
-			printf("Too soon :(");
+			sleep(1);
+			sem_up(current_level->frontend_sem,1);
 		} else {
-			cprintf("Got spawn authorization\n", ROSA);
 			sem_up(current_level->frontend_sem,1);
 		}
 	}
@@ -242,6 +243,70 @@ void sim_level_copy_single_airline(sim_message s){
 	free(data);	
 }
 
+void sim_level_med_fill_transaction(sim_message msg) {
+	
+	cstring data = sim_message_read(msg);
+	cprintf("LEVEL: FILL TRANSACTION %s\n", ROJO, data);
+	list splitted = cstring_split_list(data, " ");
+	cstring city = list_get(splitted, 0);
+	cstring medicine = list_get(splitted, 1);
+	int error = 0;
+	int ret_value = -1;
+	int value =  cstring_parseInt(list_get(splitted, 2), &error);
+
+	graph_node city_data_node = graph_get_node(current_level->level, city);
+	if (city_data_node != NULL) {
+		map city_data = graph_node_value(city_data_node);
+		if (map_get(city_data, medicine) != NULL) {
+			int * med = (int *) map_get(city_data, medicine);
+			if (value > * med) {
+				ret_value = value - * med;
+				* med = 0;
+			} else {
+				ret_value = 0;
+				* med = * med - value;
+			}			
+		}
+	}
+
+	cstring response = cstring_fromInt(ret_value);
+	sim_message_write(msg, response);
+	cprintf("LEVEL: RESPONDING WITH %s %x\n", ROJO, response, msg);
+	sim_message_respond(msg);
+	free(response);
+
+	list_free_with_data(splitted);
+}
+
+void sim_level_set_path_transaction(sim_message msg) {
+	
+}
+
+void sim_level_med_get_value(sim_message msg) {
+	cstring data = sim_message_read(msg);
+	cprintf("LEVEL: GET VALUE %s\n", AMARILLO, data);	
+	list splitted = cstring_split_list(data, " ");
+	cstring city = list_get(splitted, 0);
+	cstring medicine = list_get(splitted, 1);	
+	
+	int ret_value = -1;
+	
+	graph_node city_data_node = graph_get_node(current_level->level, city);
+	if (city_data_node != NULL) {
+		map city_data = graph_node_value(city_data_node);
+		if (map_get(city_data, medicine) != NULL) {
+			ret_value = * (int *) map_get(city_data, medicine);
+		}
+	}
+	
+	cstring response = cstring_fromInt(ret_value);
+	sim_message_write(msg, response);
+	sim_message_respond(msg);
+	free(response);
+
+	list_free_with_data(splitted);
+}
+
 void sim_level_start_server(int connection_t, int to_id) {
 	current_level->airlines_server = sim_server_init(connection_t, P_AIRLINE, to_id);
 	
@@ -251,7 +316,12 @@ void sim_level_start_server(int connection_t, int to_id) {
 	sim_server_add_receiver(current_level->airlines_server, seq2, sim_level_copy_level);
 	char * seq3 = "COPY_SAIR";
 	sim_server_add_receiver(current_level->airlines_server, seq3, sim_level_copy_single_airline);
-	
+	char * seq4 = "MEDF";
+	sim_server_add_receiver(current_level->airlines_server, seq4, sim_level_med_fill_transaction);	
+	char * seq5 = "SET_TO";
+	sim_server_add_receiver(current_level->airlines_server, seq4, sim_level_set_path_transaction);	
+	char * seq6 = "MEDG";
+	sim_server_add_receiver(current_level->airlines_server, seq4, sim_level_med_get_value);	
 }
 
 void sim_level_spawn_airlines() {
@@ -296,7 +366,6 @@ void send_turn_tick() {
 
 	sem_set_value(current_level->airline_sem, 0);
 	
-//	cprintf("LEVEL: SENDING %s\n", ROSA, msg);
 	sim_server_broadcast_query(current_level->airlines_server, msg);
 
 	sem_up(current_level->airline_sem, list_size(airlines));
@@ -329,7 +398,7 @@ void start_planes_map() {
 }
 
 void sim_level_game() {
-	cprintf("LEVEL: STARTING GAME\n", CELESTE);
+	cprintf("LEVEL: Starting game\n", CELESTE);
 	start_planes_map();
 	sem_up(current_level->airline_sem,list_size(airlines));
 	while (sim_level_alive()) {		
@@ -357,10 +426,7 @@ void sim_level_main(int connection_t, int from_id, int to_id) {
 	l->turn = 0;
 
 	airlines = sim_client_copy_airline(c, to_id);
-	
-	sem_up(l->frontend_sem, 1);
-	cprintf("LEVEL: Going down for startup\n", ROSA);
-	sem_down(l->level_sem, 1);				// Lock #3
+
 	
 	sim_level_start_server(connection_t, to_id + 1);
 	
@@ -372,7 +438,7 @@ void sim_level_main(int connection_t, int from_id, int to_id) {
 	sim_level_game();
 	
 	sim_server_broadcast_query(current_level->airlines_server, "END");
-	printf("Game end\n");
+	cprintf("LEVEL: Game end\n", CELESTE);
 	sem_up(l->frontend_sem, 1);
 
 }
