@@ -124,6 +124,7 @@ void cprintf(char * format, int color, ...) {
 int IPCS_sem = 0;
 
 void IPCSDebug(char * msg, int type, ...) {
+	return; ////////// TIRA BUS ERROR EN OSX
 	if(!(type&READ) && !(type&WRITE))
 		return;
 	if (IPCS_sem == 0){

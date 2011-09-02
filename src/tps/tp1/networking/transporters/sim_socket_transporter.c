@@ -48,7 +48,7 @@ sim_socket_transporter sim_socket_transporter_init_client(int server_id, int cli
 
 
 	while (connect(t->server_fd, (void_p)&t->server_add, server_len) == -1) {
-		IPCSDebug(SOCK_DEBUG,"Couldn't connect to server: %s\n", t->server_add.sun_path);
+		//IPCSDebug(SOCK_DEBUG,"Couldn't connect to server: %s\n", t->server_add.sun_path);
 	}
 
 	t->listen_fd = t->server_fd;
@@ -88,7 +88,7 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 	strcpy(t->server_add.sun_path, path);
 
 	if (bind(t->server_fd, (void_p)  &t->server_add, server_len) == -1) {
-		IPCSDebug(SOCK_DEBUG,"Couldn't bind address %s\n", t->server_add.sun_path);
+		//IPCSDebug(SOCK_DEBUG,"Couldn't bind address %s\n", t->server_add.sun_path);
 		exit(1);
 	}
 	int * _sid = (int*) malloc(sizeof(int));
@@ -105,7 +105,7 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 
 	// 3
 	if (listen(t->server_fd, 5) == -1) {
-		IPCSDebug(SOCK_DEBUG,"Error while listening by server_fd:%d\n",t->server_fd);
+		//IPCSDebug(SOCK_DEBUG,"Error while listening by server_fd:%d\n",t->server_fd);
 		exit(1);
 	}
 
@@ -114,7 +114,7 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 	// Cola de mensajes y wow, estamos andando
 	// 4
 	if ((t->client_fd = accept(t->server_fd,(void_p)&t->client_add,&client_len)) == -1) {
-		IPCSDebug(SOCK_DEBUG,"Error when accepting a connection by server_fd:%d\n",t->server_fd);
+		//IPCSDebug(SOCK_DEBUG,"Error when accepting a connection by server_fd:%d\n",t->server_fd);
 	}
 
 	t->listen_fd = t->client_fd;
@@ -126,18 +126,19 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 void sim_socket_transporter_write(sim_socket_transporter t, cstring data){
 
 	if (write(t->write_fd, data, cstring_len(data) + 1) == -1) {
-		IPCSDebug(SOCK_DEBUG&WRITE,"Error while writting by write_fd:%d\n",t->write_fd);
-	}else
-		IPCSDebug(SOCK_DEBUG&READ,"SOCK sent: %s",data);
+		//IPCSDebug(SOCK_DEBUG&WRITE,"Error while writting by write_fd:%d\n",t->write_fd);
+	}else {
+		//IPCSDebug(SOCK_DEBUG&READ,"SOCK sent: %s",data);
+	}
 }
 
 
 cstring sim_socket_transporter_listen(sim_socket_transporter t, int * len){
 	cstring data = cstring_init(SOCKET_READ_SIZE + 1);
 	if (read(t->listen_fd, data, SOCKET_READ_SIZE) == -1) {
-		IPCSDebug(SOCK_DEBUG&READ,"I am %d (client=1, server=0), listen_fd: %d\n", t->is_client,t->listen_fd);
+		//IPCSDebug(SOCK_DEBUG&READ,"I am %d (client=1, server=0), listen_fd: %d\n", t->is_client,t->listen_fd);
 	}else
-		IPCSDebug(SOCK_DEBUG&READ,"SOCK received: %s",data);
+		//IPCSDebug(SOCK_DEBUG&READ,"SOCK received: %s",data);
 	* len = SOCKET_READ_SIZE; 
 
 	return data;
