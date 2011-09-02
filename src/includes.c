@@ -7,6 +7,7 @@
  *1
  */
 
+#include <sys/types.h>
 #include "includes.h"
 #include "data_structures/queue.h"
 #include "utils/cstring.h"
@@ -98,7 +99,7 @@ int c_sem = 0;
 
 void cprintf(char * format, int color, ...) {
 	if (c_sem == 0){
-		c_sem = sem_create_typed(0, "cprintf");
+		c_sem = sem_create_typed("cprintf");
 		sem_set_value(c_sem, 1);
 	}
 
@@ -126,7 +127,7 @@ void IPCSDebug(char * msg, int type, ...) {
 	if(!(type&READ) && !(type&WRITE))
 		return;
 	if (IPCS_sem == 0){
-		IPCS_sem = sem_create_typed(0, "IPCSDebug");
+		IPCS_sem = sem_create_typed("IPCSDebug");
 		sem_set_value(IPCS_sem, 1);
 	}
 
@@ -138,6 +139,11 @@ void IPCSDebug(char * msg, int type, ...) {
 
 	va_end (args);
 	sem_up(IPCS_sem, 1);
+}
+
+void free_prints_sem() {
+	sem_free_typed(IPCS_sem, "IPCSDebug");
+	sem_free_typed(c_sem, "cprintf");
 }
 
 void tp1_disclaimer() {
@@ -163,3 +169,41 @@ void tp1_usage() {
 }
 
 
+int printed = 0;
+void _catch(int sig)
+{
+	if (!printed) {
+		cprintf("\nFRONTEND: Bye bye :)\n", ROJO);
+		printed = 1;
+	}
+	killpg(0, sig);  
+	nftw("./tmp", (void_p)  unlink_cb, 64, 0);
+	exit(0);
+}
+
+void _catch_child(int sig)
+{
+	printf(" ");
+	nftw("./tmp", (void_p) unlink_cb, 64, 0);
+	exit(0);
+}
+
+
+int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftwbuf)
+{
+	if (cstring_matches((cstring)fpath, "sem_typed_")) {
+		list values = cstring_split_list((cstring)fpath, "sem_typed_");
+		int sem = sem_create_typed(list_get(values,1));
+		sem_free_typed(sem, list_get(values, 1));
+	} else if (cstring_matches((cstring)fpath, "sem_")) {
+		list values = cstring_split_list((cstring)fpath, "sem_");
+		int noerror = 0;
+		int sem = cstring_parseInt(list_get(values, 1), &noerror);
+		int id = sem_create(sem);
+		sem_free(id, 0);
+	}
+    int rv = unlink(fpath);
+	
+	
+    return 0;
+}

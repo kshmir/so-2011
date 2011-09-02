@@ -179,8 +179,13 @@ void sim_airline_query_receiver(sim_message resp) {
 		airline->end_order = 1;
 		foreach(sim_plane, plane, airline->planes) {
 			sim_plane_set_dead(plane, 1);
+			
 		}
+		airline->planes_running = 0;
+		airline->planes_waiting = list_size(airline->planes);
+		pthread_cond_broadcast(airline->unlock_airline_waiting);
 		sem_up(airline->internal_sem, 1);
+		cprintf("KILL ORDER FOR AIRLINE %d\n", ROJO, airline->id);
 	} else if (cstring_matches(data, "TURN")) {				// TURN changes the turn inside the airline.
 															// And unlocks it in order to think
 		list params = cstring_split_list(data, " ");
@@ -205,9 +210,11 @@ void sim_airline_query_receiver(sim_message resp) {
 }
 
 void sim_airline_game() {
-//	sleep(1);
 	while (!airline->end_order) {
 		sem_down(airline->internal_sem, 1);
+		if (airline->end_order) {
+			return;
+		}
 		while (airline->planes_waiting < list_size(airline->planes));
 		airline->planes_running = list_size(airline->planes);
 		pthread_cond_broadcast(airline->unlock_planes_moving);
@@ -217,9 +224,6 @@ void sim_airline_game() {
 			pthread_cond_wait(airline->unlock_airline_waiting, airline->unlock_mutex);
 		}
 
-		//usleep(50000);	
-		
-//		cprintf("AIRLINE: Sending level UP %d %d\n", AZUL, airline->id, sem_value(airline->internal_sem));
 		sem_up(airline->level_sem, 1);						// Unlock #5
 	}
 }
@@ -234,12 +238,12 @@ void sim_airline_main(int connection_t, int from_id, int to_id) {
 	airline = air;
 	air->end_order = 0;
 	
-	air->airline_sem = sem_create_typed(0, "airline");
-	air->level_sem = sem_create_typed(0, "level");
+	air->airline_sem = sem_create_typed("airline");
+	air->level_sem = sem_create_typed("level");
 	cstring _internal_sem = cstring_copy("internal");
 	_internal_sem = cstring_write(_internal_sem, cstring_fromInt(to_id));
 	
-	air->internal_sem = sem_create_typed(0, _internal_sem);
+	air->internal_sem = sem_create_typed(_internal_sem);
 	air->level = sim_client_copy_level(c, to_id);
 	air->current_turn = 0;
 	air->planes_waiting = 0;
@@ -279,9 +283,17 @@ void sim_airline_main(int connection_t, int from_id, int to_id) {
 	
 	sim_airline_game();
 	
+
+	sem_down(air->level_sem, 1);
+	
+//	sem_free_typed(air->internal_sem, _internal_sem);
+	sem_down(air->airline_sem, 1);
+	
+//	cprintf("AIRLINE: LEAVING! id: %d\n", AZUL_CLARO, airline->id);	
+
+
 	
 	sim_client_free(c);
-
 	// Pide la información del airline y se deserializa checked!
 	// Airline inicializa sus threads para cada plane y los pone en accion.
 }

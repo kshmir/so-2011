@@ -80,6 +80,10 @@ void sim_plane_main(struct sim_plane_data * d) {
 	while (!plane->set_dead) {
 		sim_airline_set_planes_waiting(airline, sim_airline_planes_waiting(airline) + 1);
 		pthread_cond_wait(sim_airline_planes_cond(airline), sim_airline_mutex(airline));
+		
+		if (plane->set_dead) {
+			return;
+		}
 //		sem_down(sim_airline_planes_end_sem(airline),1);
 		if (plane->must_think) {
 		//	graph_node n = graph_get_node(sim_level_graph(level), plane->start_city);

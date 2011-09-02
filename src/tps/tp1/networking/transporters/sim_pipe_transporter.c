@@ -21,9 +21,13 @@ struct sim_pipe_transporter {
 
 	int					write_ptr;			// File descriptor to which we write.
 	int					read_ptr;			// File descriptor to which we read.
+	
+	int					client_id;
+	int					server_id;
 
 	transporter_mode	mode;				// Transporter mode.
 
+	int					sem;
 	int					client;				// Tells wether it's a client or not.
 };
 
@@ -95,6 +99,13 @@ sim_pipe_transporter sim_pipe_transporter_init_client(int server_id, int client_
 	cstring write_fifo = create_fifo_name(server_id);
 	cstring read_fifo = create_fifo_name(client_id);
 
+	sim_pipe_transporter t = create_pipe_transporter(write_fifo, read_fifo, 1, MODE_READWRITE);
+
+	//t->sem = sem_create(client_id);
+	//sem_up(t->sem, 1);
+	
+	t->server_id = server_id;
+	t->client_id = client_id;
 	return create_pipe_transporter(write_fifo, read_fifo, 1, MODE_READWRITE);
 }
 
@@ -111,7 +122,17 @@ sim_pipe_transporter sim_pipe_transporter_init_server(int server_id, int client_
 		mkfifo(read_fifo, 0666);
 	}
 
-	return create_pipe_transporter(write_fifo, read_fifo, 0, mode);
+	sim_pipe_transporter t = create_pipe_transporter(write_fifo, read_fifo, 0, mode);
+
+	//t->sem = sem_create(client_id);
+//	sem_down(t->sem, 1);
+
+	t->server_id = server_id;
+	t->client_id = client_id;
+
+
+
+	return t;
 }
 
 
@@ -142,13 +163,22 @@ void sim_pipe_transporter_free(sim_pipe_transporter t) {
 	if (t->mode == MODE_READ || t->mode == MODE_READWRITE) {
 		if(close(t->read_ptr)==-1)
 			IPCSDebug(PIPE_DEBUG&WRITE,"Error while closing fd: %d",t->read_ptr);
+		unlink(t->read_fifo);
 		free(t->read_fifo);
 	}
 
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
 		if(close(t->write_ptr)==-1)
 			IPCSDebug(PIPE_DEBUG&WRITE,"Error while closing fd: %d",t->write_ptr);
+		unlink(t->write_fifo);
 		free(t->write_fifo);
 	}
+	if (t->client) {
+		sem_free(t->sem, t->client_id);
+	} else {
+		sem_free(t->sem, t->server_id);
+	}
+
+	
 	free(t);
 }

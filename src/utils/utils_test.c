@@ -11,6 +11,7 @@
 #include "cstring.h"
 #include "utils_test.h"
 #include "../data_structures/list.h"
+#include "sem.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -22,6 +23,22 @@ void separator() {
 }
 
 
+void sem_test() {
+	separator();
+	printf("SEMAPHORE TEST\n");
+	int s = sem_create(10);
+	int s2 = sem_create(10);
+	printf("%d %d\n", s, s2);
+	sem_free(s,10);
+	sem_free(s2,10);
+	
+	int t = sem_create_typed("text_1");
+	int t2 = sem_create_typed("text_1");
+	printf("%d %d\n", t, t2);
+	sem_free_typed(t, "text_1");	
+	sem_free_typed(t, "text_2");
+	separator();
+}
 
 
 void cstring_test() {
@@ -145,6 +162,7 @@ int main(int argc, char ** argv) {
 	printf("THEY ARE USED AS ANOTHER DEVELOPMENT TOOL AND THEY ***ARE NOT*** MEANT\n");
 	printf("TO BE EFFICIENT OR STABLE. THEY ARE MEANT TO GUARANTEE THAT THE TP CAN WORK\n");
 	
-	cstring_test();
+//	cstring_test();
+	sem_test();
 	return 0;
 }

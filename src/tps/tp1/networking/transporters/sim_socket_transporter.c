@@ -150,11 +150,9 @@ void sim_socket_transporter_free(sim_socket_transporter transp){
 		if (map_get(server_descriptors, &transp->server_id) != NULL) {
 			map_remove(server_descriptors, &transp->server_id);
 		}
-		cstring path = cstring_copy("./tmp/sck_id_");
-		path = cstring_write(path, cstring_fromInt(transp->client_id));
-
-		IPCSDebug(SOCK_DEBUG,"Error while trying to unlink path:%s\n",path);
-
 	}
+	cstring path = cstring_copy("./tmp/sck_id_");
+	path = cstring_write(path, cstring_fromInt(transp->client_id));
+	unlink(path);
 
 }

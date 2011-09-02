@@ -78,8 +78,8 @@ int sim_frontend_start_server(connection_type t) {
 	char * seq3 = "COPY_AIR";
 	sim_server_add_receiver(print_server, seq3, sim_frontend_copy_airline);
 	
-	frontend_sem = sem_create_typed(0, "frontend");
-	level_sem    = sem_create_typed(0, "level");
+	frontend_sem = sem_create_typed("frontend");
+	level_sem    = sem_create_typed("level");
 }
 
 
@@ -139,7 +139,7 @@ int sim_frontend_main(list params) {
 	}
 	
 	
-	list_free_with_data(airline_files);
+//	list_free_with_data(airline_files);
 	
 	if (level_file != NULL) {
 		free(level_file);
@@ -149,7 +149,7 @@ int sim_frontend_main(list params) {
 		free(error_string);
 	}
 	
-	sem_free(frontend_sem);
+	//sem_free_typed(frontend_sem, "frontend");
 	
 	free(c_type);
 	

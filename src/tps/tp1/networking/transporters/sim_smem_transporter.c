@@ -72,6 +72,7 @@
 #include <string.h>
 
 
+
 /**
 	smem_space is the declaration of the shared memory space we alloc.
  */
@@ -673,11 +674,11 @@ cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) 
 	Free up everything.
  */
 void sim_smem_transporter_free(sim_smem_transporter * transp) {
+//	sem_free(transp->sem_header_w, transp->to_id);
+//	sem_free(transp->sem_header_r, transp->from_id);
+//	sem_free(transp->sem_available_blocks, 255);
+//	sem_free(transp->sem_alloc, 254);
 
-	sem_free(transp->sem_header_w);
-	sem_free(transp->sem_header_r);
-	sem_free(transp->sem_available_blocks);
-	sem_free(transp->sem_alloc);
 	shm_delete();
 	free(transp);
 }

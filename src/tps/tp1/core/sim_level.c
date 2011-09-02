@@ -174,6 +174,8 @@ void sim_level_free(sim_level lev) {
 		}
 	}
 	list_free(keys);
+//	sem_free_typed(lev->level_sem, "level");
+//	sem_free_typed(lev->airline_sem, "airline");
 	
 	free(lev->level);
 }
@@ -308,8 +310,11 @@ void sim_level_med_get_value(sim_message msg) {
 }
 
 void sim_level_start_server(int connection_t, int to_id) {
-	current_level->airlines_server = sim_server_init(connection_t, P_AIRLINE, to_id);
+
 	
+	current_level->airlines_server = sim_server_init(connection_t, P_AIRLINE, to_id);
+
+
 	char * seq = "PRINT";
 	sim_server_add_receiver(current_level->airlines_server, seq, sim_level_print_receiver);
 	char * seq2 = "COPY_LEVEL";
@@ -411,34 +416,48 @@ void sim_level_game() {
 
 
 void sim_level_main(int connection_t, int from_id, int to_id) {
+
 	sim_client c = sim_client_init(connection_t, 0, from_id, to_id, sim_level_query_receiver);
+
 	sim_level l = sim_client_copy_level(c, to_id);	
+
 
 	current_level = l;
 	
 	l->frontend_client = c;
 
-	l->airline_sem = sem_create_typed(0, "airline");
-	l->frontend_sem = sem_create_typed(0, "frontend");
-	l->level_sem = sem_create_typed(0, "level");
+	l->airline_sem = sem_create_typed("airline");
+	l->frontend_sem = sem_create_typed("frontend");
+	l->level_sem = sem_create_typed("level");
 	
 	l->level_id = to_id;
 	l->turn = 0;
 
 	airlines = sim_client_copy_airline(c, to_id);
 
-	
+
+
 	sim_level_start_server(connection_t, to_id + 1);
-	
+
 	sim_level_spawn_airlines();
-	
+
 	
 
 	
+
 	sim_level_game();
+
+
 	
 	sim_server_broadcast_query(current_level->airlines_server, "END");
-	cprintf("LEVEL: Game end\n", CELESTE);
-	sem_up(l->frontend_sem, 1);
+	
 
+
+	cprintf("LEVEL: Game end\n", CELESTE);
+
+	sem_up(l->level_sem, list_size(airlines));
+	sem_down(l->airline_sem, list_size(airlines));
+	sem_up(l->frontend_sem, 1);	
+	
+	sim_level_free(l);
 }

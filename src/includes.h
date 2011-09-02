@@ -9,9 +9,14 @@
  *
  */
 #include "utils/colors.h"
+#include <stdio.h>
+#include <ftw.h>
+#include <unistd.h>
 
 #ifndef _INCLUDE_H_
 #define _INCLUDE_H_
+
+#define NINJA_GROUP 0xfe0
 
 #define	SOCKET_DEBUG 0
 #define	SMEM_DEBUG 0
@@ -25,6 +30,7 @@
 #define FALSE 0
 #include <stdio.h>
 #include <stdlib.h>
+#define TIMEOUT 250 * 1000 * 1000
 
 
 // it'd be cool to have this as a variable
@@ -125,5 +131,11 @@ void_p cstring_cloner(void_p s1);
 void cprintf(char * format, int color, ...);
 
 void tp1_disclaimer();
+
+int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftwbuf);
+
+void _catch(int sig);
+
+void _catch_child(int sig);
 
 #endif

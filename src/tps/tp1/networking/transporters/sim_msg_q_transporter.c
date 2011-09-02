@@ -55,7 +55,7 @@ sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int clien
 	sim_msg_q_transporter t = malloc(sizeof(struct sim_msg_q_transporter));
 	t->key=ftok("./tmp",'#');
 
-	t->msgq_id = msgget(t->key, 0600 | IPC_CREAT | IPC_EXCL);
+	t->msgq_id = msgget(t->key, 0600);
 
 
 	if ((t->msgq_id = msgget(t->key, 0600 | IPC_CREAT)) == -1) { /* connect to the queue */
@@ -110,6 +110,11 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 }
 
 cstring sim_msg_q_transporter_listen(sim_msg_q_transporter t, int * extra_data){
+	if (msgget(t->key, 0600) == -1)  {
+		* extra_data = 0;
+		return cstring_copy("");
+	}
+	
 	if (msgrcv(t->msgq_id, &(t->read_buf), sizeof(struct msgq_buf) - sizeof(long), t->read_buf.mtype, 0) == -1) {
 		IPCSDebug(MSGQ_DEBUG&READ,"Message could not be received\n");
 	}

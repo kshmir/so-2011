@@ -1,6 +1,9 @@
 #include "sim_common_reqs.h"
+#include <signal.h>
 
 int main(int argc, char ** params) { 
+	signal(SIGKILL, &_catch_child);
+	signal(SIGINT, &_catch_child);
 	if (argc == 4) {	
 		int parsed_1 = 0;
 		int parsed_2 = 0;
@@ -14,5 +17,6 @@ int main(int argc, char ** params) {
 			sim_airline_main(connection_t, from_id, to_id);
 		}
 	}
+	nftw("./tmp",  (void_p) unlink_cb, 64, 0);
 	return 0;
 }

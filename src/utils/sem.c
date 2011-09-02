@@ -10,16 +10,15 @@
 #include "sem.h"
 #include <stdio.h>
 
-int sem_create_typed(int key, char * type) {
+int sem_create_typed(char * type) {
 	char path[50];
-	sprintf(path,"./tmp/sem%s%d",type,key);
+	sprintf(path,"./tmp/sem_typed_%s",type);
 	
 	int op = open(path,O_CREAT, 0666);
 	close(op);	
 	
-	key_t k = ftok(path, (char) (key));	
+	key_t k = ftok(path, (char) 0);	
 	
-
 	int sem = semget(k, 1, (IPC_CREAT | 0666)); 
 	if (sem < 0) {
 		perror("Semaphore fail!");
@@ -30,7 +29,7 @@ int sem_create_typed(int key, char * type) {
 
 int sem_create(int key) {
 	char path[50];
-	sprintf(path,"./tmp/sem%d",key);
+	sprintf(path,"./tmp/sem_%d",key);
 	
 	int op = open(path,O_CREAT, 0666);
 	close(op);	
@@ -76,11 +75,26 @@ int sem_down(int sem, int amount) {
 	sem_up(sem, -amount);
 }
 
-int sem_free(int sem) {
+int sem_free(int sem, int key) {
+
 	if (semctl(sem, 0, IPC_RMID, NULL) == -1) {
-		
 		//perror("ERROR: could not clean up semaphore\n");
 		return -1;
 	}
+	char path[50];
+	sprintf(path,"./tmp/sem_%d",key);
+	unlink(path);
+	return 1;
+}
+
+int sem_free_typed(int sem, char * type) {
+	
+	if (semctl(sem, 0, IPC_RMID, NULL) == -1) {
+		//perror("ERROR: could not clean up semaphore\n");
+		return -1;
+	}
+	char path[50];						
+	sprintf(path,"./tmp/sem_typed_%s",type);
+	unlink(path);
 	return 1;
 }

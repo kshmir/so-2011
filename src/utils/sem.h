@@ -31,6 +31,7 @@ int sem_up(int sem, int amount);
 int sem_down(int sem, int amount);
 
 // Free's a semaphore.
-int sem_free(int sem);
+int sem_free(int sem, int key);
+
 
 #endif

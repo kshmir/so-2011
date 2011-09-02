@@ -34,4 +34,5 @@ void shm_delete() {
 	if (shmctl(shm_id, 0, IPC_RMID, 0) == -1) {
 		//perror("ERROR: could not clean up shared memory\n");
 	}	
+	unlink("./tmp/mem");
 } 

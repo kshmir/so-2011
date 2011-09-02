@@ -210,7 +210,7 @@ static sim_transporter sim_transporter_start() {
  */
 static void exec_process(process_type proc, connection_type type, int from_id, int to_id) {
 	int id = 0;
-	
+	int parent = getpid();
 	switch (proc) {
 		case P_TESTER:
 			id = fork();
@@ -229,7 +229,7 @@ static void exec_process(process_type proc, connection_type type, int from_id, i
 		case P_LEVEL:
 			id = fork();
 			if (id == 0) {
-			//	sleep(10);
+				setpgid(id, parent);
 				execl("./tp1_level", "tp1_level", cstring_fromInt(type),
 					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
 			}
@@ -237,6 +237,8 @@ static void exec_process(process_type proc, connection_type type, int from_id, i
 		case P_AIRLINE:
 			id = fork();
 			if (id == 0) {
+				parent = getpgid(parent);
+				setpgid(id, parent);
 				execl("./tp1_airline", "tp1_airline", cstring_fromInt(type),
 					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
 			}
@@ -266,7 +268,7 @@ sim_transporter sim_transporter_init(connection_type type,
 									 transporter_mode mode, 
 									 int forks_child, 
 									 int is_server) {
-	
+
 	sim_transporter t = sim_transporter_start();
 	t->mode = mode;
 	
