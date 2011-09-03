@@ -44,7 +44,7 @@ void sim_frontend_copy_airline(sim_message mes) {
 	cstring data = cstring_copy(sim_message_read(mes));
 	int error = 0;
 	int airline_index = cstring_parseInt(data, &error);
-	
+
 
 	if (error) {
 		sim_airline air = list_get(airlines, airline_index);
@@ -70,14 +70,14 @@ void sim_frontend_copy_airline(sim_message mes) {
 
 int sim_frontend_start_server(connection_type t) {
 	print_server = sim_server_init(t, P_LEVEL, 0);
-	
+
 	char * seq = "PRINT";
 	sim_server_add_receiver(print_server, seq, sim_frontend_receiver);
 	char * seq2 = "COPY_LEVEL";
 	sim_server_add_receiver(print_server, seq2, sim_frontend_copy_level);
 	char * seq3 = "COPY_AIR";
 	sim_server_add_receiver(print_server, seq3, sim_frontend_copy_airline);
-	
+
 	frontend_sem = sem_create_typed("frontend");
 	level_sem    = sem_create_typed("level");
 }
@@ -95,20 +95,21 @@ int sim_frontend_start_processes(sim_level lev, list airlines) {
 int sim_frontend_main(list params) {
 	tp1_disclaimer();
 	tp1_usage();
-	
+
 	connection_type * c_type = (connection_type *) malloc(sizeof(connection_type));
 	* c_type = -1;
 	cstring level_file = NULL;
 	list	airline_files = list_init();
 	cstring error_string = NULL;
-	
+	int line_error=0;
+
 	if (sim_validator_params(params, &level_file, airline_files, &error_string, c_type) == TRUE) {
 		cstring error_file = NULL;
-		sim_level lev = (sim_level) sim_validator_level(level_file);
+		sim_level lev = (sim_level) sim_validator_level(level_file,&line_error);
 		list _airlines = list_init();
 		if (lev != NULL) {
 			foreach(cstring, file, airline_files) {
-				sim_airline airline = (sim_airline) sim_validator_airline(file, lev);
+				sim_airline airline = (sim_airline) sim_validator_airline(file, lev,&line_error);
 				if (airline == NULL) {
 					error_file = file;
 					break;
@@ -120,37 +121,43 @@ int sim_frontend_main(list params) {
 				level = lev;
 				airlines = _airlines;
 				sim_frontend_start_processes(lev, airlines);
-				
+
 			}
 			else {
 				sim_frontend_print("Error on airline file named:");
 				sim_frontend_print(error_file);
+				cstring aux=cstring_copy(" at line number: ");
+				aux=cstring_write(aux,cstring_fromInt(line_error));
+				sim_frontend_print(aux);
 			}
 
-			
+
 		} else {
 			sim_frontend_print("Error on level file named:");
 			sim_frontend_print(level_file);
+			cstring aux=cstring_copy(" at line number: ");
+			aux=cstring_write(aux,cstring_fromInt(line_error));
+			sim_frontend_print(aux);
 		}
 	}
 	else {
 		sim_frontend_print("PARAMS ERROR:");
 		sim_frontend_print(error_string);
 	}
-	
-	
-//	list_free_with_data(airline_files);
-	
+
+
+	//	list_free_with_data(airline_files);
+
 	if (level_file != NULL) {
 		free(level_file);
 	}
-	
+
 	if (error_string != NULL) {
 		free(error_string);
 	}
-	
+
 	//sem_free_typed(frontend_sem, "frontend");
-	
+
 	free(c_type);
-	
+
 }

@@ -96,27 +96,26 @@ int sim_validator_params(list args, cstring * return_level, list return_airlines
 	return 1;
 }
 
-sim_level sim_validator_level(cstring path) {
+sim_level sim_validator_level(cstring path,int * line_error) {
 	cstring file_data = cstring_from_file(path);
-	
 	if (file_data == NULL) {
 		return NULL;
 	}
 	
-	sim_level lev = sim_level_deserialize(file_data);
+	sim_level lev = sim_level_deserialize_line_error(file_data,line_error);
 	free(file_data);	
 	
 	return lev;
 }
 
-sim_airline sim_validator_airline(cstring path, sim_level lev) {
+sim_airline sim_validator_airline(cstring path, sim_level lev, int* line_error) {
 	cstring file_data = cstring_from_file(path);
 	
 	if (file_data == NULL) {
 		return NULL;
 	}
 	
-	sim_airline air = sim_airline_deserialize(file_data, -1);
+	sim_airline air = sim_airline_deserialize_line_error(file_data, -1,line_error);
 	free(file_data);	
 	
 
