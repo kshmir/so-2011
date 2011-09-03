@@ -121,6 +121,12 @@ cstring cstring_replace(cstring original, cstring substr, cstring replacer) {
 
 
 cstring cstring_join_list(list strings, cstring s) {
+	if (list_size(strings) == 0) {
+		return cstring_copy("");
+	} else if (list_size(strings) == 1) {
+		return cstring_copy(list_get(strings,0));
+	}
+
 	int i = 0;
 	cstring sub = cstring_init(0);
 	foreach(cstring, str, strings)  {
@@ -258,7 +264,7 @@ cstring cstring_from_file(cstring path)	{
 	int i = 0;
 	while(read(fd, buffer, BUFF_SIZE)>0){
 		string = cstring_write(string, buffer);
-		for (; i < BUFF_SIZE; i++) {
+		for (i = 0; i <= BUFF_SIZE; i++) {
 			buffer[i] = 0;
 		}
 	}

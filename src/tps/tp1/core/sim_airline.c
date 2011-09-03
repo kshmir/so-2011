@@ -167,13 +167,18 @@ cstring sim_airline_serialize(sim_airline air, int hasId) {
 
 void set_planes_to_think(cstring splitted) {
 	list splits = cstring_split_list(splitted, ",");
+	
+	list planes = airline->planes;
+	int i = 0;
+	for (; i < list_size(planes); i++) {
+		sim_plane p = (sim_plane)list_get(planes,i);
+		sim_plane_set_to_think(p,FALSE);
+	}
 	foreach(cstring, _id, splits) {
 		int noerr = 0;
 		int id = cstring_parseInt(_id, &noerr);
 
-		list planes = airline->planes;
-		int i = 0;
-		for (; i < list_size(planes); i++) {
+		for (i = 0; i < list_size(planes); i++) {
 			sim_plane p = (sim_plane)list_get(planes,i);
 			if (sim_plane_id(p) == id) {
 				sim_plane_set_to_think(p,TRUE);
@@ -196,7 +201,6 @@ void sim_airline_query_receiver(sim_message resp) {
 		airline->planes_waiting = list_size(airline->planes);
 		pthread_cond_broadcast(airline->unlock_airline_waiting);
 		sem_up(airline->internal_sem, 1);
-		cprintf("KILL ORDER FOR AIRLINE %d\n", ROJO, airline->id);
 	} else if (cstring_matches(data, "TURN")) {				// TURN changes the turn inside the airline.
 		// And unlocks it in order to think
 		list params = cstring_split_list(data, " ");
@@ -204,7 +208,6 @@ void sim_airline_query_receiver(sim_message resp) {
 		int turn = cstring_parseInt(list_get(params, 1), &noerror);
 
 		if (noerror) {
-
 			airline->current_turn = turn;
 			set_planes_to_think(list_get(params,2));
 			//	cprintf("LEVEL TO AIRLINE: Setting airline UP %d\n", AZUL_CLARO, airline->id);

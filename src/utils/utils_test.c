@@ -139,12 +139,11 @@ void cstring_test() {
 
 	assert(i == 3);
 	
-	list l = cstring_split_list("HOLA_CRISTIAN_COMO_ANDAS", "_");
+	list l = cstring_split_list("HOLA", "_");
 
+
+	cstring joined =  cstring_join_list(l, "_");	
 	
-	
-	
-	assert(list_size(l) == 4);
 	assert(strcmp(list_get(l, 0), "HOLA") == 0);
 	list_free_with_data(l);
 	
@@ -162,7 +161,7 @@ int main(int argc, char ** argv) {
 	printf("THEY ARE USED AS ANOTHER DEVELOPMENT TOOL AND THEY ***ARE NOT*** MEANT\n");
 	printf("TO BE EFFICIENT OR STABLE. THEY ARE MEANT TO GUARANTEE THAT THE TP CAN WORK\n");
 	
-//	cstring_test();
-	sem_test();
+	cstring_test();
+//	sem_test();
 	return 0;
 }

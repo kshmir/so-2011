@@ -1,7 +1,8 @@
 #include "sim_common_reqs.h"
-
 #include <signal.h>
+
 int main(int argc, char ** params) { 
+	srand(time(NULL));
 	signal(SIGINT, &_catch_child);
 	signal(SIGKILL, &_catch_child);
 	if (argc == 4) {	

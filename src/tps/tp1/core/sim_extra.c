@@ -29,7 +29,12 @@ sim_keypair sim_keypair_deserialize(cstring line) {
 		int _ret = 0;
 		int weight = cstring_parseInt(array[1],&_ret);
 		if (_ret == 1) {
-			return sim_keypair_init(array[0],weight);
+			sim_keypair kp = sim_keypair_init(array[0],weight);
+			for(; i >= 0; i--) {
+				free(array[i]);
+			}
+			free(array);
+			return kp;
 		} else {
 			for(; i >= 0; i--) {
 				free(array[i]);
@@ -85,7 +90,12 @@ sim_map_relation sim_map_relation_deserialize(cstring line) {
 		int _ret = 0;
 		int weight = cstring_parseInt(array[2],&_ret);
 		if (_ret == 1) {
-			return sim_relation_init(array[0], array[1], weight);
+			sim_map_relation rel = sim_relation_init(array[0], array[1], weight);
+			for(; i >= 0; i--) {
+				free(array[i]);
+			}
+			free(array);
+			return rel;
 		} else {
 			for(; i >= 0; i--) {
 				free(array[i]);
