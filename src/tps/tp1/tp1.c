@@ -9,6 +9,7 @@
 
 
 int main(int argc, char ** params) {
+	srand(time(NULL));
 	signal(SIGKILL, &_catch);
 	signal(SIGINT, &_catch);
 	list args = list_from_ptrarray_w_count(argc, sizeof(char**), params);
@@ -22,8 +23,8 @@ int main(int argc, char ** params) {
 	printf("Freein' tmp...\n");
 	free_prints_sem();
 	nftw("./tmp",  (void_p) unlink_cb, 64, 0);
-	shm_delete();
-	
+	shm_delete();	
+	clear_msgq();
 	list_free(args);
 	killpg(0, SIGINT);  
 	return 0;

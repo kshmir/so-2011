@@ -189,15 +189,45 @@ void_p sim_client_copy_single_airline(sim_client c, int object_id) {
 /**
  * Fills a point with medicine.
  */
-int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cstring medicine, int amount) {
+int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cstring medicine, int plane_id, int amount) {
 	cstring header = cstring_fromInt(object_id); 
 	header = cstring_write(header, cstring_copy(" MEDF"));
 	cstring get = cstring_copy(city);
+	cstring am = cstring_fromInt(amount);
+	cstring id = cstring_fromInt(plane_id);
 	get = cstring_write(get, " ");
 	get = cstring_write(get, medicine);	
 	get = cstring_write(get, " ");
-	get = cstring_write(get, cstring_fromInt(amount));
+	get = cstring_write(get, am);
+	get = cstring_write(get, " ");
+	get = cstring_write(get, id);
 	sim_message request = sim_message_init(c->t, header, get);
+	sim_message response = sim_message_send(request);
+	
+	cstring rsp = sim_message_read(response);
+	int noerror = 0;
+	int val = cstring_parseInt(rsp, &noerror);
+	free(get);
+	free(am);
+	// Rebuild response
+	// Response should be... RES {object_id} MEDF;{value}
+	// Where value is -1 if there's an error, or the remaining amount of medicine.
+	return val;
+}
+
+/**
+ * Makes a move from a plane to another point
+ */
+int sim_client_post_plane_move(sim_client c, int object_id, int plane_id, cstring city_from, cstring city_to) {
+	cstring header = cstring_fromInt(object_id); 
+	header = cstring_write(header, cstring_copy(" PMOV"));
+	cstring get = cstring_fromInt(plane_id);
+	get = cstring_write(get, " ");
+	get = cstring_write(get, city_from);	
+	get = cstring_write(get, " ");
+	get = cstring_write(get, city_to);
+	sim_message request = sim_message_init(c->t, header, get);
+
 	sim_message response = sim_message_send(request);
 	
 	cstring rsp = sim_message_read(response);

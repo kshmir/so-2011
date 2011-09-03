@@ -46,7 +46,7 @@ void_p sim_client_copy_single_airline(sim_client c, int object_id);
 /**
  * Fills a point with medicine.
  */
-int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cstring medicine, int amount);
+int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cstring medicine, int plane_id, int amount);
 
 /**
  * Sends a print message to a server.

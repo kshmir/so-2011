@@ -16,6 +16,8 @@
 
 #include "sim_msg_q_transporter.h"
 
+extern int msgq_id;
+
 /**
  *	Structure used to send messages through the queue.
  */
@@ -44,6 +46,8 @@ sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int clien
 		//IPCSDebug(MSGQ_DEBUG,"Error while registering at message queue with key: %d\n",t->key);
 		return NULL;
 	}
+	
+		msgq_id = t->msgq_id;
 	t->client			= client_id + 1;
 	t->server			= server_id + 1;
 	t->write_buf.mtype	= t->server;
@@ -58,10 +62,13 @@ sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int clien
 	t->msgq_id = msgget(t->key, 0600);
 
 
+
 	if ((t->msgq_id = msgget(t->key, 0600 | IPC_CREAT)) == -1) { /* connect to the queue */
 		//IPCSDebug(MSGQ_DEBUG,"Error while registering at message queue with key: %d\n",t->key);
 		return NULL;
 	}
+	
+	msgq_id = t->msgq_id;
 	t->client			= client_id + 1;
 	t->server			= server_id + 1;
 	t->write_buf.mtype	= t->client ;

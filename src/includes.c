@@ -15,12 +15,24 @@
 #include "utils/colors.h"
 #include <stdarg.h>
 
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <string.h>
 #include <pthread.h>
 
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+int msgq_id = 0;
+
+void clear_msgq() {
+	msgctl(msgq_id, IPC_RMID, NULL);	
+}
 
 int pointer_comparer(void_p int1, void_p int2) {
 	return (int*)int1 - (int*)int2;
@@ -179,13 +191,17 @@ void _catch(int sig)
 	}
 	killpg(0, sig);  
 	nftw("./tmp", (void_p)  unlink_cb, 64, 0);
+	shm_delete();
+	clear_msgq();
 	exit(0);
 }
 
 void _catch_child(int sig)
 {
-	printf(" ");
+
 	nftw("./tmp", (void_p) unlink_cb, 64, 0);
+	shm_delete();
+	clear_msgq();
 	exit(0);
 }
 

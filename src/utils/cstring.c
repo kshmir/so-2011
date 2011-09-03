@@ -121,6 +121,12 @@ cstring cstring_replace(cstring original, cstring substr, cstring replacer) {
 
 
 cstring cstring_join_list(list strings, cstring s) {
+	if (list_size(strings) == 0) {
+		return cstring_copy("");
+	} else if (list_size(strings) == 1) {
+		return cstring_copy(list_get(strings,0));
+	}
+
 	int i = 0;
 	cstring sub = cstring_init(0);
 	foreach(cstring, str, strings)  {

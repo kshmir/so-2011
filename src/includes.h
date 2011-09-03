@@ -36,6 +36,7 @@
 // it'd be cool to have this as a variable
 #define USE_COLORS 1
 
+
 typedef enum {
 	NEGRO        ,
 	ROJO         ,

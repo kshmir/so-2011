@@ -2,6 +2,7 @@
 #include <signal.h>
 
 int main(int argc, char ** params) { 
+	srand(time(NULL));
 	signal(SIGKILL, &_catch_child);
 	signal(SIGINT, &_catch_child);
 	if (argc == 4) {	

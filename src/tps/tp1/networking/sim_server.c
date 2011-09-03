@@ -170,7 +170,7 @@ static void sim_server_listener(sim_server s) {
 					sim_transporter_dequeue(s->listen_transporter);
 				}
 				
-				
+
 				list params = cstring_split_list(msg, ";");
 				list header_values = cstring_split_list((cstring)list_get(params,0)," ");
 				int ok = 1;
@@ -183,6 +183,7 @@ static void sim_server_listener(sim_server s) {
 				list_free(params);
 				list_free_with_data(header_values);
 				fail = 0;
+				break;
 			}
 			free(safe_key);
 		}
