@@ -107,10 +107,10 @@ sim_level sim_level_deserialize(cstring s) {
 				city_name = cstring_copy(line);
 				map medicines = map_init(cstring_comparer, NULL);
 				graph_add_node(l->level, city_name, medicines);
-			
 				foreach_next(line);
 				while(line != NULL && strlen(line) > 0 && !error) {
 					sim_keypair kp = sim_keypair_deserialize(line);
+
 					if (kp != NULL) {
 						int * value = calloc(sizeof(int), 1);
 						*value = kp->amount;
@@ -133,6 +133,7 @@ sim_level sim_level_deserialize(cstring s) {
 					else {
 						error = 1;
 					}
+					free(r);
 					foreach_next(line);
 				}
 			}
@@ -143,8 +144,9 @@ sim_level sim_level_deserialize(cstring s) {
 		}
 		i++;
 	}
-	list_free(lines);	
+	list_free_with_data(lines);	
 	if (error) {	
+		
 		graph_free(l->level);
 		free(l);
 		return NULL;

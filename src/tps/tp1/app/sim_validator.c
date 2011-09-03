@@ -117,7 +117,14 @@ sim_airline sim_validator_airline(cstring path, sim_level lev) {
 	}
 	
 	sim_airline air = sim_airline_deserialize(file_data, -1);
+
+	
 	free(file_data);	
+	if (air == NULL) {
+		return NULL;
+	}
+	
+
 	
 
 	foreach(sim_plane, plane, sim_airline_planes(air)) {

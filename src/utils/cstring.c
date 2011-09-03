@@ -264,7 +264,7 @@ cstring cstring_from_file(cstring path)	{
 	int i = 0;
 	while(read(fd, buffer, BUFF_SIZE)>0){
 		string = cstring_write(string, buffer);
-		for (; i < BUFF_SIZE; i++) {
+		for (i = 0; i <= BUFF_SIZE; i++) {
 			buffer[i] = 0;
 		}
 	}
