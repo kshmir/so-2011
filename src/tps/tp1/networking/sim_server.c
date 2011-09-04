@@ -257,7 +257,6 @@ void sim_server_broadcast_query(sim_server s, cstring message) {
 
 	list transporters = map_values(s->clients_transporters);
 	foreach(sim_transporter, t, transporters) {
-		cprintf("SERV: I SEND :%s;%s\n", ROJO, header, msg);
 		sim_message m = sim_message_init(t, cstring_copy(header), cstring_copy(msg));
 		sim_message_respond(m);
 		sim_message_free(m);

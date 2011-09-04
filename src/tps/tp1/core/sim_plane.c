@@ -185,13 +185,13 @@ void sim_plane_main(struct sim_plane_data * d) {
 
 	sim_airline_set_planes_waiting(airline, sim_airline_planes_waiting(airline) + 1);
 	pthread_cond_broadcast(sim_airline_waiting_cond(airline));
-	cprintf("I WAIT %d %d %s\n", ROJO, plane->id, plane->must_think, (plane->id >= 300) ? "!!!!!" : "");
+//	cprintf("I WAIT %d %d %s\n", ROJO, plane->id, plane->must_think, (plane->id >= 300) ? "!!!!!" : "");
 	pthread_cond_wait(sim_airline_planes_cond(airline), sim_airline_mutex(airline));
 
 	
 	while (!plane->set_dead) {
 
-		cprintf("I THINK %d %d %s\n", ROJO, plane->id, plane->must_think, (plane->id >= 300) ? "!!!!!" : "");
+//		cprintf("I THINK %d %d %s\n", ROJO, plane->id, plane->must_think, (plane->id >= 300) ? "!!!!!" : "");
 		if (plane->must_think) {
 			int action_taken = sim_plane_make_fill(airline, plane, level, 0);
 			
@@ -206,7 +206,7 @@ void sim_plane_main(struct sim_plane_data * d) {
 		sim_airline_set_planes_running(airline, sim_airline_planes_running(airline) - 1);
 		sim_airline_set_planes_waiting(airline, sim_airline_planes_waiting(airline) + 1);
 		plane->turn_counter++;
-		cprintf(">>> I WAIT %d %d %s\n", ROJO, plane->id, plane->must_think, (plane->id >= 300) ? "!!!!!" : "");
+//		cprintf(">>> I WAIT %d %d %s\n", ROJO, plane->id, plane->must_think, (plane->id >= 300) ? "!!!!!" : "");
 		pthread_cond_broadcast(sim_airline_waiting_cond(airline));
 		pthread_cond_wait(sim_airline_planes_cond(airline), sim_airline_mutex(airline));
 
