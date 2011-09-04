@@ -21,7 +21,7 @@ int		   level_sem = 0;
 
 
 void sim_frontend_print(cstring data) {
-	printf("%s\n",data);
+	cprintf("FRONTEND: %s\n", ROJO,data);
 }
 
 /*
@@ -36,6 +36,7 @@ void sim_frontend_receiver(sim_message mes) {
 
 
 void sim_frontend_copy_level(sim_message mes) {
+	cprintf("COPYING LEVEL ...\n", ROJO);
 	sim_message_write(mes, sim_level_serialize(level));
 	sim_message_respond(mes);
 }
@@ -85,6 +86,7 @@ int sim_frontend_start_server(connection_type t) {
 
 int sim_frontend_start_processes(sim_level lev, list airlines) {
 	sim_server_spawn_child(print_server);
+	cprintf("Time to spawn", ROJO);
 	cprintf("FRONTEND: Going down to spawn\n", VERDE);
 	sem_down(frontend_sem, 1);					
 	cprintf("FRONTEND: SHUTDOWN\n", VERDE);
@@ -120,6 +122,7 @@ int sim_frontend_main(list params) {
 				sim_frontend_start_server(*c_type);
 				level = lev;
 				airlines = _airlines;
+
 				sim_frontend_start_processes(lev, airlines);
 
 			}

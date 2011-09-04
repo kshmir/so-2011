@@ -1,0 +1,85 @@
+10
+
+Shanghai
+Nolotil 10
+
+Pyongyang
+Ventoln 10
+Enantyum 10
+
+Surat
+Ventoln 10
+Nolotil 10
+Viscofresh 10
+
+Ankara
+Gelocatil 10
+
+HongKong
+Enantyum 10
+
+Berlin
+Viscofresh 10
+
+Jakarta
+Nolotil 10
+Gelocatil 10
+Ventoln 10
+Viscofresh 10
+
+Bangalore
+Viscofresh 10
+Gelocatil 10
+
+Santiago
+Ventoln 10
+Enantyum 10
+Nolotil 10
+Viscofresh 10
+
+Istanbul
+Viscofresh 10
+Nolotil 10
+
+Shanghai Pyongyang 95
+Shanghai Surat 10
+Shanghai Ankara 5
+Shanghai HongKong 60
+Shanghai Berlin 70
+Shanghai Jakarta 40
+Shanghai Bangalore 35
+Shanghai Santiago 15
+Shanghai Istanbul 20
+
+Pyongyang Surat 80
+Pyongyang Ankara 30
+Pyongyang HongKong 90
+Pyongyang Bangalore 30
+Pyongyang Santiago 45
+Pyongyang Istanbul 70
+
+Surat Jakarta 75
+Surat Bangalore 60
+Surat Santiago 65
+
+Ankara Surat 45
+Ankara Istanbul 90
+
+HongKong Surat 35
+HongKong Berlin 90
+HongKong Istanbul 40
+
+Berlin Pyongyang 85
+Berlin Jakarta 35
+Berlin Istanbul 30
+
+Jakarta Pyongyang 65
+Jakarta Ankara 5
+
+Bangalore Berlin 95
+Bangalore Jakarta 75
+Bangalore Santiago 80
+
+Santiago Berlin 20
+
+Istanbul Bangalore 90

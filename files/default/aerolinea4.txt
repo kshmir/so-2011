@@ -1,0 +1,121 @@
+10
+
+Seoul
+Lexatn 900
+Ventoln 640
+Almax 900
+Viscofresh 40
+Neobrufen 800
+Adiro100 740
+Sintrom 190
+Flumil 810
+Termalgin 780
+Dianben 170
+
+Lagos
+Ventoln 300
+Neobrufen 260
+Flumil 580
+Cardyl 200
+Lexatn 160
+Dianben 810
+Sintrom 10
+Adiro100 780
+Gelocatil 640
+Termalgin 750
+
+RioDeJaneiro
+Almax 920
+Ventoln 40
+Lexatn 830
+VoltarenEmulgel 660
+Neobrufen 460
+Flumil 220
+Cardyl 800
+Sintrom 950
+Dianben 270
+Adiro100 740
+
+CapeTown
+Ventoln 250
+VoltarenEmulgel 330
+Adiro100 140
+Gelocatil 550
+Almax 150
+Augmentine 490
+Cardyl 60
+Neobrufen 970
+Dianben 520
+Flumil 510
+
+Berlin
+Sintrom 950
+Gelocatil 860
+Lexatn 440
+Viscofresh 80
+Almax 510
+Orfidal 150
+Augmentine 420
+Flumil 370
+Cardyl 720
+VoltarenEmulgel 30
+
+Mumbai
+Lexatn 600
+Sintrom 270
+Viscofresh 380
+Orfidal 120
+Almax 820
+Dianben 920
+Adiro100 270
+Neobrufen 100
+VoltarenEmulgel 630
+Gelocatil 970
+
+MexicoCity
+Termalgin 360
+Adiro100 980
+Almax 980
+Orfidal 450
+Viscofresh 640
+Flumil 490
+VoltarenEmulgel 750
+Gelocatil 900
+Lexatn 840
+Neobrufen 890
+
+Dongguan
+Almax 210
+Cardyl 990
+Termalgin 400
+Viscofresh 100
+VoltarenEmulgel 640
+Flumil 630
+Neobrufen 830
+Gelocatil 200
+Orfidal 270
+Sintrom 490
+
+Shanghai
+Lexatn 730
+Augmentine 250
+Dianben 770
+Cardyl 150
+Adiro100 600
+VoltarenEmulgel 910
+Almax 630
+Flumil 150
+Termalgin 460
+Ventoln 660
+
+Bogota
+Termalgin 350
+Almax 600
+Viscofresh 90
+Augmentine 50
+VoltarenEmulgel 30
+Dianben 420
+Neobrufen 610
+Cardyl 120
+Flumil 390
+Sintrom 780

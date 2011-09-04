@@ -67,7 +67,7 @@ struct sim_transporter {
 	function			listen;							// Listen handler
 	function			free;							// Free handler
 	
-	
+	int					write_lock;
 	
 	queue				messages;						// Queue of received messages.
 };	
@@ -118,9 +118,16 @@ static void_p sim_transporter_listener(sim_transporter t) {
 		// This helps us to only care about sending zero ending strings as messages.
 		len = 0;
 		char * data = (char *) t->listen(t->data, &len);
+		
+		pthread_cond_broadcast(t->listener_received);
+		if (sck_override == 1) {
+			pthread_cond_broadcast(&sck_override_received);			
+		}
 		i = 0;
-		for (; i < len; i++) {
+		
+		for (; len > 0 && i < len; i++) {			
 			builder = cstring_write_c(builder, data[i]);
+			
 			if (data[i] == 0) {
 				if (cstring_len(builder) > 0) {
 					queue_poll(t->messages, builder);
@@ -129,10 +136,13 @@ static void_p sim_transporter_listener(sim_transporter t) {
 						queue_poll(sck_override_queue, cstring_copy(builder));
 						pthread_cond_broadcast(&sck_override_received);
 					}
+					sem_up(t->write_lock, 1);
 					
 					builder = cstring_init(0);
+					break;
 				}
 			}
+			
 		}
 		if (data != NULL) {
 			free(data);
@@ -149,22 +159,41 @@ static void_p sim_transporter_listener(sim_transporter t) {
  */
 void sim_transporter_dequeue(sim_transporter t) {
 	queue_pull(t->messages);
+	pthread_cond_broadcast(t->listener_received);
 }
+
+
 
 /**
  Listens and locks until there is something to read.
  It *** might *** always return the same string until another process has read it successfully. 
  It would be great to improve this.
  */
-cstring sim_transporter_listen(sim_transporter t) {
+cstring sim_transporter_listen(sim_transporter t, cstring avoid) {
 	int value_found = 0;
 	cstring data = NULL;
 	
 	while(!value_found) {
 		pthread_mutex_lock(t->listener_mutex);
-		while (queue_empty(t->messages)) {
+		
+		while (queue_empty(t->messages) || (avoid != NULL && cstring_compare(queue_peek(t->messages), avoid) == 0)) {
+			
+			struct timespec {
+				long ts_sec; /* seconds */
+				long ts_nsec; /* nanoseconds */
+			} to;
+
+			to.ts_sec = time(NULL);
+			to.ts_nsec = 1000 * 1000 * 200;
 			pthread_cond_wait(t->listener_received, t->listener_mutex);
 		}
+		
+		if (!queue_empty(t->messages)) {
+			pthread_cond_broadcast(t->listener_received);
+		}
+
+		
+
 		
 
 		
@@ -197,6 +226,8 @@ static sim_transporter sim_transporter_start() {
 	pthread_cond_init(received, NULL);
 	
 	
+	tr->write_lock = sem_create_typed("tr_write_lock");
+	sem_set_value(tr->write_lock, 1);
 	tr->listener = thread;
 	tr->messages = queue_init();
 	tr->listener_mutex = mutex;
@@ -355,7 +386,12 @@ sim_transporter sim_transporter_init(connection_type type,
  Writes a message to the current transporter.
  */
 void sim_transporter_write(sim_transporter sim, cstring message) {
+//	cprintf("TO WRITE: LEN: %d\n", ROJO, strlen(message));
+
+	sem_down(sim->write_lock, 1);
 	sim->write(sim->data, message);
+
+//	cprintf("WRITTEN: LEN: %d\n", ROJO, strlen(message));
 }
 
 /**

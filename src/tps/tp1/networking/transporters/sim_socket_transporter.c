@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#define SOCKET_READ_SIZE 64
+#define SOCKET_READ_SIZE (1024 * 8)
 
 static map server_descriptors = NULL;
 
@@ -22,8 +22,8 @@ struct sim_socket_transporter {
 
 	int					listen_fd;
 	int					write_fd;
-
-	pthread_t		*	startup_thread;
+	
+	int					write_sem;
 
 	struct sockaddr_un 	server_add;
 	struct sockaddr_un 	client_add;
@@ -37,6 +37,7 @@ sim_socket_transporter sim_socket_transporter_init_client(int server_id, int cli
 	t->client_id = client_id;
 	t->server_id = server_id;
 	t->is_client = 1;
+	t->write_sem = sem_create(server_id);
 
 	t->server_fd = socket(AF_UNIX, SOCK_STREAM, 0);
 	int server_len = sizeof(struct sockaddr_un);
@@ -64,6 +65,10 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 	t->client_id = client_id;
 	t->server_id = server_id;
 
+	t->write_sem = sem_create(server_id);
+	sem_set_value(t->write_sem,1);
+	
+	
 	if (server_descriptors == NULL) {
 		server_descriptors = map_init(int_comparer, NULL);
 	}
@@ -125,7 +130,10 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 
 void sim_socket_transporter_write(sim_socket_transporter t, cstring data){
 
-	if (write(t->write_fd, data, cstring_len(data) + 1) == -1) {
+//	sem_down(t->write_sem, 1);
+//	cprintf("WRITE RAW DATA: %s\n", ROJO, data);
+	if (send(t->write_fd, data, cstring_len(data) + 1, MSG_WAITALL) == -1) {
+//		cprintf("WRITE ERROR!!!\n", ROJO);
 		//IPCSDebug(SOCK_DEBUG&WRITE,"Error while writting by write_fd:%d\n",t->write_fd);
 	}else {
 		//IPCSDebug(SOCK_DEBUG&READ,"SOCK sent: %s",data);
@@ -134,11 +142,22 @@ void sim_socket_transporter_write(sim_socket_transporter t, cstring data){
 
 
 cstring sim_socket_transporter_listen(sim_socket_transporter t, int * len){
-	cstring data = cstring_init(SOCKET_READ_SIZE + 1);
+	
+	cstring data = cstring_init(SOCKET_READ_SIZE);
+//	cprintf("IM READING!!!!\n", ROJO, data);
 	if (read(t->listen_fd, data, SOCKET_READ_SIZE) == -1) {
+		* len = 0;
+		return data;
 		//IPCSDebug(SOCK_DEBUG&READ,"I am %d (client=1, server=0), listen_fd: %d\n", t->is_client,t->listen_fd);
-	}else
-		//IPCSDebug(SOCK_DEBUG&READ,"SOCK received: %s",data);
+	}
+	
+	int i= 0;
+	//sem_down(t->write_sem, 1);
+	//cprintf("IM READING!!!!\n", ROJO, data);		
+//	for(; i < SOCKET_READ_SIZE; i++) {
+//		cprintf("%c", ROJO, data[i]);
+//	}	
+//	//sem_up(t->write_sem, 1);
 	* len = SOCKET_READ_SIZE; 
 
 	return data;

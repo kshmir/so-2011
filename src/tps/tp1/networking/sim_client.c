@@ -53,8 +53,9 @@ static void_p sim_client_listener(sim_client r) {
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
 	
+	cstring last_msg = NULL;
 	while(TRUE) {
-		cstring msg = sim_transporter_listen(r->t);
+		cstring msg = sim_transporter_listen(r->t, last_msg);
 
 		pthread_testcancel();
 		
@@ -63,19 +64,26 @@ static void_p sim_client_listener(sim_client r) {
 
 		cstring header = cstring_copy_until_char(msg, ';');
 		
+//s		cprintf("GOT HEADER: %s\n", ROJO, header);
 		if (cstring_compare(header,"QUERY ") == 0) {
 
 			cstring no_resp = cstring_replace(msg, "QUERY ", "");
 			list splitted = cstring_split_list(no_resp, ";");
 
+//			cprintf("CLI: I TAKE HEADER :%s\n", ROJO, header);
 			if (list_size(splitted) == 2) {
 				r->r(sim_message_init(r->t,list_get(splitted, 0), list_get(splitted, 1)));
 				sim_transporter_dequeue(r->t);
 			}
 			
+			
+			last_msg = NULL;
 			list_free(splitted);
 			free(no_resp);
+		} else {
+			last_msg = msg;
 		}
+
 		free(header);
 	}
 	
@@ -191,10 +199,12 @@ void_p sim_client_copy_single_airline(sim_client c, int object_id) {
  */
 int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cstring medicine, int plane_id, int amount) {
 	cstring header = cstring_fromInt(object_id); 
-	header = cstring_write(header, cstring_copy(" MEDF"));
+	cstring id = cstring_fromInt(plane_id);
+	header = cstring_write(header, cstring_copy(" MEDF "));
+	header = cstring_write(header, id);
 	cstring get = cstring_copy(city);
 	cstring am = cstring_fromInt(amount);
-	cstring id = cstring_fromInt(plane_id);
+
 	get = cstring_write(get, " ");
 	get = cstring_write(get, medicine);	
 	get = cstring_write(get, " ");
@@ -205,6 +215,7 @@ int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cst
 	sim_message response = sim_message_send(request);
 	
 	cstring rsp = sim_message_read(response);
+//	cprintf("MEDICINE FILL: %s\n", ROJO, rsp);
 	int noerror = 0;
 	int val = cstring_parseInt(rsp, &noerror);
 	free(get);
@@ -212,6 +223,7 @@ int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cst
 	// Rebuild response
 	// Response should be... RES {object_id} MEDF;{value}
 	// Where value is -1 if there's an error, or the remaining amount of medicine.
+//	cprintf("MEDICINE FILL INT: %d\n", ROJO, val);
 	return val;
 }
 

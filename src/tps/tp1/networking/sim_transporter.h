@@ -89,7 +89,7 @@ void sim_transporter_dequeue(sim_transporter t);
  It *** might *** always return the same string until another process has read it successfully. 
  It would be great to improve this.
  */
-cstring sim_transporter_listen(sim_transporter t);
+cstring sim_transporter_listen(sim_transporter t, cstring avoid);
 
 /**
  Writes a message to the current transporter.
