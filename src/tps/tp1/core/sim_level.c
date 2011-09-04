@@ -14,24 +14,24 @@ struct sim_level {
 	////// int *    as: values		# Amount of medicine.
 	// stores distances	 as: arcs   # Distance between cities
 	graph level;
-	
+
 	map	  plane_location;
 	map	  plane_distance;
-	
-		
+
+
 	sim_client frontend_client;
 	sim_server airlines_server;
-	
+
 	int	  level_id;
-	
+
 	int	  turn;
-	
-	
+
+
 	int	  frontend_sem;
 	int	  airline_sem;
 	int	  level_sem;
-	
-	
+
+
 };
 
 graph sim_level_graph(sim_level lev) {
@@ -45,7 +45,7 @@ int sim_level_has_city(sim_level lev, cstring city) {
 cstring sim_level_serialize(sim_level level) {
 	int n = list_size(graph_keys(level->level));
 	cstring s = cstring_fromInt(n);
-    s =  cstring_write(s, "\n\n");
+	s =  cstring_write(s, "\n\n");
 	int i = 0, j = 0;
 	for (i=0; i<n; i++) {
 		cstring city = list_get(graph_keys(level->level),i);
@@ -92,7 +92,7 @@ sim_level sim_level_deserialize_line_error(cstring s,int* err_line) {
 	int error = 0;
 	int line_number=0;
 	list lines = cstring_split_list(s, "\n");
-	
+
 	foreach(cstring, line, lines) {
 		line_number++;
 		if (strlen(line) > 0) {
@@ -115,10 +115,10 @@ sim_level sim_level_deserialize_line_error(cstring s,int* err_line) {
 				foreach_next(line);
 				line_number++;
 				while(line != NULL && strlen(line) > 0 && !error) {
-					line_number++;
 					sim_keypair kp = sim_keypair_deserialize(line);
 
 					if (kp != NULL) {
+						line_number++;
 						int * value = calloc(sizeof(int), 1);
 						*value = kp->amount;
 						cstring n = cstring_copy(kp->name);
@@ -135,6 +135,7 @@ sim_level sim_level_deserialize_line_error(cstring s,int* err_line) {
 				while(line != NULL && strlen(line) > 0 && !error) {
 					sim_map_relation r = sim_map_relation_deserialize(line);
 					if (r != NULL) {
+					line_number++;
 						graph_add_arc(l->level, r->from, r->to, r->weight);
 					}
 					else {
@@ -142,7 +143,6 @@ sim_level sim_level_deserialize_line_error(cstring s,int* err_line) {
 					}
 					free(r);
 					foreach_next(line);
-					line_number++;
 				}
 			}
 
@@ -170,9 +170,9 @@ void sim_level_free(sim_level lev) {
 	if (lev->airlines_server != NULL) {
 		sim_server_free(lev->airlines_server);
 	}
-	
+
 	list keys = graph_keys(lev->level);
-	
+
 	foreach(cstring, key, keys) {
 		graph_node n = graph_get_node(lev->level,key);
 		if (graph_node_value(n) != NULL) {
@@ -180,9 +180,9 @@ void sim_level_free(sim_level lev) {
 		}
 	}
 	list_free(keys);
-//	sem_free_typed(lev->level_sem, "level");
-//	sem_free_typed(lev->airline_sem, "airline");
-	
+	//	sem_free_typed(lev->level_sem, "level");
+	//	sem_free_typed(lev->airline_sem, "airline");
+
 	free(lev->level);
 }
 
@@ -202,14 +202,14 @@ void sim_level_query_receiver(sim_message s) {
 void sim_level_print_receiver(sim_message s) {
 	cstring data = sim_message_read(s);
 	list header = cstring_split_list(sim_message_header(s), " ");
-	
-	
+
+
 	int noerr = 0;
 	int sender_id = cstring_parseInt(list_get(header,1), &noerr);
 	if (noerr == 0) {
 		sender_id = current_level->level_id;
 	}
-	
+
 	sim_client_print(current_level->frontend_client, data, sender_id);
 
 	list_free_with_data(header);
@@ -237,7 +237,7 @@ void sim_level_copy_single_airline(sim_message s){
 
 	if (noerror) {
 		cstring resp = cstring_init(0);
-		
+
 		if (air != NULL) {
 			resp = cstring_write(resp, sim_airline_serialize(air, FALSE));
 		}
@@ -252,7 +252,7 @@ void sim_level_copy_single_airline(sim_message s){
 }
 
 void sim_level_med_fill_transaction(sim_message msg) {
-	
+
 	cstring data = sim_message_read(msg);
 	list splitted = cstring_split_list(data, " ");
 	cstring city = list_get(splitted, 0);
@@ -267,7 +267,7 @@ void sim_level_med_fill_transaction(sim_message msg) {
 		map city_data = graph_node_value(city_data_node);
 		if (map_get(city_data, medicine) != NULL) {
 			int * med = (int *) map_get(city_data, medicine);
-			
+
 			if (*med != 0) {
 				int old_val = *med ;
 				if (value > * med) {
@@ -301,10 +301,10 @@ void sim_level_set_path_transaction(sim_message msg) {
 	cstring city_from = list_get(splitted, 1);
 	cstring city_to = list_get(splitted, 2);
 
-	
+
 	int error = 0;
 	int id = cstring_parseInt(id_string, &error);
-	
+
 	int found = 0;
 	list ids = map_keys(current_level->plane_distance);
 	foreach(int *, key, ids) {
@@ -314,22 +314,22 @@ void sim_level_set_path_transaction(sim_message msg) {
 			break;
 		}
 	}
-	
+
 	if (found) {
 
 		cstring plane_city_from = map_get(current_level->plane_location, &id);
 		int * distance = map_get(current_level->plane_distance, &id);
 		if (plane_city_from != NULL && cstring_compare(plane_city_from, city_from) == 0
-			&& distance != NULL && * distance == 0) {
-			
+				&& distance != NULL && * distance == 0) {
+
 			free(map_remove(current_level->plane_location, &id));
 			plane_city_from = NULL;
-			
+
 			cstring _city_to = cstring_copy(city_to);
 			map_set(current_level->plane_location, &id, _city_to);
-			
+
 			graph_node city_node = graph_get_node(current_level->level, city_from);
-			
+
 			int error = 1;
 			list n_arcs = graph_node_arcs(city_node);
 			foreach_(graph_arc, arc, n_arcs) {
@@ -341,13 +341,13 @@ void sim_level_set_path_transaction(sim_message msg) {
 			}
 			cprintf("LEVEL: Plane %d moving from %s to %s takes %d turns \n", ROJO, id, city_from, city_to, *distance);
 			cstring response = cstring_fromInt((error == 0) ? 1 : -1);
-			
+
 			sim_message_write(msg, response);
 			sim_message_respond(msg);
 			free(response);
 		} else {
 			cstring response = cstring_fromInt((error == 0) ? 1 : -1);
-			
+
 			sim_message_write(msg, response);
 			sim_message_respond(msg);
 			free(response);
@@ -361,7 +361,7 @@ void sim_level_set_path_transaction(sim_message msg) {
 		free(response);
 	}
 
-	
+
 }
 
 void sim_level_med_get_value(sim_message msg) {
@@ -369,9 +369,9 @@ void sim_level_med_get_value(sim_message msg) {
 	list splitted = cstring_split_list(data, " ");
 	cstring city = list_get(splitted, 0);
 	cstring medicine = list_get(splitted, 1);	
-	
+
 	int ret_value = -1;
-	
+
 	graph_node city_data_node = graph_get_node(current_level->level, city);
 	if (city_data_node != NULL) {
 		map city_data = graph_node_value(city_data_node);
@@ -379,7 +379,7 @@ void sim_level_med_get_value(sim_message msg) {
 			ret_value = * (int *) map_get(city_data, medicine);
 		}
 	}
-	
+
 	cstring response = cstring_fromInt(ret_value);
 	sim_message_write(msg, response);
 	sim_message_respond(msg);
@@ -390,7 +390,7 @@ void sim_level_med_get_value(sim_message msg) {
 
 void sim_level_start_server(int connection_t, int to_id) {
 
-	
+
 	current_level->airlines_server = sim_server_init(connection_t, P_AIRLINE, to_id);
 
 
@@ -436,7 +436,7 @@ cstring planes_update_moves() {
 	}	
 	data = cstring_join_list(valids, ",");
 	list_free_with_data(valids);
-	
+
 	return data;
 }
 
@@ -447,24 +447,24 @@ void send_turn_tick() {
 	msg = cstring_write(msg, cstring_fromInt(current_level->turn));
 
 
-	
+
 	msg = cstring_write(msg, " ");
 	msg = cstring_write(msg, valid_planes);
-	
+
 
 	sem_set_value(current_level->airline_sem, 0);
-	
+
 	sim_server_broadcast_query(current_level->airlines_server, msg);
 
 	sem_up(current_level->airline_sem, list_size(airlines));
-	
+
 	free(valid_planes);
 	free(msg);
 }
 
 int sim_level_alive() {
 	int alive = 0;
-	
+
 	list cities = graph_keys(current_level->level);
 	foreach(cstring, city, cities) {
 		graph_node n = graph_get_node(current_level->level, city);
@@ -525,13 +525,13 @@ void sim_level_main(int connection_t, int from_id, int to_id) {
 
 
 	current_level = l;
-	
+
 	l->frontend_client = c;
 
 	l->airline_sem = sem_create_typed("airline");
 	l->frontend_sem = sem_create_typed("frontend");
 	l->level_sem = sem_create_typed("level");
-	
+
 	l->level_id = to_id;
 	l->turn = 0;
 
@@ -543,16 +543,16 @@ void sim_level_main(int connection_t, int from_id, int to_id) {
 
 	sim_level_spawn_airlines();
 
-	
 
-	
+
+
 
 	sim_level_game();
 
 
-	
+
 	sim_server_broadcast_query(current_level->airlines_server, "END");
-	
+
 
 
 	cprintf("LEVEL: Game end\n", CELESTE);
@@ -560,6 +560,6 @@ void sim_level_main(int connection_t, int from_id, int to_id) {
 	sem_up(l->level_sem, list_size(airlines));
 	sem_down(l->airline_sem, list_size(airlines));
 	sem_up(l->frontend_sem, 1);	
-	
+
 	sim_level_free(l);
 }
