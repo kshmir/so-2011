@@ -81,16 +81,21 @@ cstring sim_level_serialize(sim_level level) {
 	}
 	return s;
 }
-
 sim_level sim_level_deserialize(cstring s) {
+	int aux=0;
+	return sim_level_deserialize_line_error(s,&aux);
+}
+sim_level sim_level_deserialize_line_error(cstring s,int* err_line) {
 	sim_level l = calloc(sizeof(struct sim_level), 1);
 	l->level = graph_init((comparer)cstring_comparer, (cloner)cstring_copy);
 	int i = 0;
 	int amount = 0;
 	int error = 0;
+	int line_number=0;
 	list lines = cstring_split_list(s, "\n");
 	
 	foreach(cstring, line, lines) {
+		line_number++;
 		if (strlen(line) > 0) {
 			if (i == 0) {
 				int _err = 1;
@@ -109,7 +114,9 @@ sim_level sim_level_deserialize(cstring s) {
 				map medicines = map_init(cstring_comparer, NULL);
 				graph_add_node(l->level, city_name, medicines);
 				foreach_next(line);
+				line_number++;
 				while(line != NULL && strlen(line) > 0 && !error) {
+					line_number++;
 					sim_keypair kp = sim_keypair_deserialize(line);
 
 					if (kp != NULL) {
@@ -136,6 +143,7 @@ sim_level sim_level_deserialize(cstring s) {
 					}
 					free(r);
 					foreach_next(line);
+					line_number++;
 				}
 			}
 
@@ -147,12 +155,12 @@ sim_level sim_level_deserialize(cstring s) {
 	}
 	list_free_with_data(lines);	
 	if (error) {	
-		
+		*err_line=line_number;
 		graph_free(l->level);
 		free(l);
 		return NULL;
 	}
-	
+	*err_line=0;
 	return l;
 }
 

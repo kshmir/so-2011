@@ -15,6 +15,7 @@ cstring sim_level_serialize(sim_level lev);
 
 sim_level sim_level_deserialize(cstring s);
 
+sim_level sim_level_deserialize_line_error(cstring s,int* err_line);
 
 int sim_level_has_city(sim_level lev, cstring city);
 

@@ -14,6 +14,8 @@ list sim_airline_planes(sim_airline air);
 
 sim_airline sim_airline_deserialize(cstring s, int airline_id);
 
+sim_airline sim_airline_deserialize_line_error(cstring s, int airline_id, int *err_line);
+
 cstring sim_airline_serialize(sim_airline s, int hasId);
 
 void sim_airline_main(int connection_t, int from_id, int to_id);

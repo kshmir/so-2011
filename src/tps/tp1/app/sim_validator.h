@@ -6,8 +6,8 @@
 
 int sim_validator_params(list args, cstring * return_level, list return_airline, cstring * error, connection_type * c_type);
 
-sim_level sim_validator_level(cstring path);
+sim_level sim_validator_level(cstring path,int * line_error);
 
-sim_airline sim_validator_airline(cstring path, sim_level level);
+sim_airline sim_validator_airline(cstring path, sim_level level, int* line_error);
 
 #endif
