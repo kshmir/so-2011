@@ -21,6 +21,8 @@ struct sim_airline {
 	int					end_order;
 	int					current_turn;
 	
+	int					waiting_for_level;
+	
 	int					planes_waiting;
 	int					planes_running;
 	
@@ -28,6 +30,10 @@ struct sim_airline {
 	pthread_mutex_t	*	unlock_mutex;			// Cond used to unlock.
 	pthread_cond_t	*	unlock_planes_moving;			// Cond used to unlock.
 	pthread_cond_t	*	unlock_airline_waiting;			// Cond used to unlock.
+	
+	pthread_mutex_t	*	level_mutex;			// Cond used to unlock.
+	pthread_cond_t	*	level_wait;			// Cond used to unlock.
+	pthread_cond_t	*	level_message;			// Cond used to unlock.
 };
 
 
@@ -189,7 +195,9 @@ void sim_airline_query_receiver(sim_message resp) {
 		airline->planes_running = 0;
 		airline->planes_waiting = list_size(airline->planes);
 		pthread_cond_broadcast(airline->unlock_airline_waiting);
-		sem_up(airline->internal_sem, 1);
+		do {
+			pthread_cond_broadcast(airline->level_wait);
+		} while(!airline->waiting_for_level);
 	} else if (cstring_matches(data, "TURN")) {				// TURN changes the turn inside the airline.
 															// And unlocks it in order to think
 		list params = cstring_split_list(data, " ");
@@ -201,7 +209,21 @@ void sim_airline_query_receiver(sim_message resp) {
 			set_planes_to_think(list_get(params,2));
 		//	cprintf("LEVEL TO AIRLINE: Setting airline UP %d\n", AZUL_CLARO, airline->id);
 
-			sem_up(airline->internal_sem, 1);
+
+//			do {
+//			pthread_cond_wait(airline->level_message,airl
+			pthread_mutex_lock(airline->level_mutex);
+//			while (!airline->waiting_for_level) {
+				//cprintf("SENDING AIRLINE %d UP\n", ROJO, airline->id);
+				pthread_cond_broadcast(airline->level_wait);
+//			}
+
+			pthread_mutex_unlock(airline->level_mutex);
+			//	cprintf("SIGNAL TO: %d\n", ROJO, airline->id);
+//				airline->waiting_for_level--;
+//			} while(!airline->waiting_for_level);
+ 
+			
 //			sem_down(airline->airline_sem, 1);
 
 		//	cprintf("AIRLINE: I UNLOCK\n", ROSA);
@@ -212,23 +234,42 @@ void sim_airline_query_receiver(sim_message resp) {
 
 }
 
+void magic() {
+	
+}
+
 void sim_airline_game() {
+	
+	
 	while (!airline->end_order) {
-		sem_down(airline->internal_sem, 1);
-		if (airline->end_order) {
-			return;
+		
+
+		
+		cprintf("WAITING PLANES TO BE READY: %d\n", ROJO, airline->id);
+		while (airline->planes_waiting < list_size(airline->planes)) {
+			pthread_cond_wait(airline->unlock_airline_waiting, airline->unlock_mutex);
 		}
-		while (airline->planes_waiting < list_size(airline->planes));
+
+		cprintf("TELLING PLANES TO MOVE: %d\n", ROJO, airline->id);
 		airline->planes_running = list_size(airline->planes);
 		pthread_cond_broadcast(airline->unlock_planes_moving);
+		airline->waiting_for_level = 0;
 
 		
 		while(airline->planes_running > 0) { 
 			pthread_cond_wait(airline->unlock_airline_waiting, airline->unlock_mutex);
-		}
+		}		
 
-		sem_up(airline->level_sem, 1);						// Unlock #5
+
+		cprintf("SENDING LEVEL UP %d AIRLINE: %d\n", ROJO, sem_value(airline->level_sem), airline->id);
+
+		cprintf("WAITING FOR LEVEL AIRLINE: %d\n", ROJO, airline->id);
+		sem_up(airline->level_sem, 1);					
+		pthread_cond_wait(airline->level_wait,airline->level_mutex);
+		airline->waiting_for_level = 1;
 	}
+
+
 }
 
 
@@ -251,23 +292,30 @@ void sim_airline_main(int connection_t, int from_id, int to_id) {
 	air->current_turn = 0;
 	air->planes_waiting = 0;
 	air->planes_running = 0;
+	air->waiting_for_level = 0;
 	
 	sem_set_value(air->internal_sem, 0);
-	
+
+	air->level_mutex = (pthread_mutex_t *) calloc(sizeof(pthread_mutex_t), 1);
 	air->unlock_mutex = (pthread_mutex_t *) calloc(sizeof(pthread_mutex_t), 1);
 	air->unlock_planes_moving = (pthread_cond_t *) calloc(sizeof(pthread_cond_t), 1);
 	air->unlock_airline_waiting = (pthread_cond_t *) calloc(sizeof(pthread_cond_t), 1);
+	air->level_wait = (pthread_cond_t *) calloc(sizeof(pthread_cond_t), 1);
+	air->level_message = (pthread_cond_t *) calloc(sizeof(pthread_cond_t), 1);
 	air->p_threads = (pthread_t *) calloc(sizeof(pthread_t), list_size(air->planes) * 16);
 	
 	
+	pthread_mutex_init(air->level_mutex, NULL);
 	pthread_mutex_init(air->unlock_mutex, NULL);
 	pthread_cond_init(air->unlock_planes_moving, NULL);
 	pthread_cond_init(air->unlock_airline_waiting, NULL);
+	pthread_cond_init(air->level_wait, NULL);	
+	pthread_cond_init(air->level_message, NULL);
 	
 	airline->c = c;
 	
 	
-	cprintf("AIRLINE: I'm ready with id: %d\n", AZUL_CLARO, airline->id);
+	
 	
 										 
 	int i = list_size(airline->planes);
@@ -277,16 +325,22 @@ void sim_airline_main(int connection_t, int from_id, int to_id) {
 		dat->airline = airline;
 		dat->level = airline->level;
 		pthread_create(&airline->p_threads[i++], NULL, (void_p) sim_plane_main, (void_p) dat);
-
-		sem_down(air->internal_sem, 1);
 	}		
 
-	sem_up(air->level_sem,1);								// Tells the level we're ready to play.
-	sem_down(air->airline_sem,1);
+	while (airline->planes_waiting < list_size(airline->planes)) {
+		pthread_cond_wait(airline->unlock_airline_waiting, airline->unlock_mutex);
+	}
 	
-	sim_airline_game();
-	
+	// Tells the level we're ready to play.
 
+	
+	pthread_mutex_lock(airline->level_mutex);
+	cprintf("WAITING FOR LEVEL AIRLINE: %d\n", ROJO, airline->id);
+	sem_up(air->level_sem,1);		
+	pthread_cond_wait(airline->level_wait,airline->level_mutex);
+	airline->waiting_for_level = 1;
+	sim_airline_game();
+	pthread_mutex_unlock(airline->level_mutex);
 	sem_down(air->level_sem, 1);
 	
 //	sem_free_typed(air->internal_sem, _internal_sem);

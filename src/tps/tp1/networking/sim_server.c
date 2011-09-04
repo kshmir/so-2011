@@ -143,17 +143,21 @@ static void sim_server_listener(sim_server s) {
 													 MODE_READ, 
 													 FALSE, TRUE);
 	}
-	
+	cstring last_msg = NULL;	
 	while(TRUE) {
+
 		cstring msg = NULL;
 		
 		if (s->c_type == C_SOCKETS) {
-			if (queue_size(sck_override_queue) == 0) {
+			while (queue_size(sck_override_queue) == 0) {
+				
 				pthread_cond_wait(&sck_override_received, &sck_override_mutex);
 			}
+			pthread_cond_broadcast(&sck_override_received);
+
 			msg = queue_pull(sck_override_queue);
 		} else {
-			msg = sim_transporter_listen(s->listen_transporter);
+			msg = sim_transporter_listen(s->listen_transporter, last_msg);
 		}
 		
 		
@@ -163,13 +167,14 @@ static void sim_server_listener(sim_server s) {
 		
 		
 		int fail = 1;		
+
 		foreach(cstring, key, s->responds_to_keys) {
 			cstring safe_key = cstring_copy(key);
 			if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {
 				if (s->c_type != C_SOCKETS) {
 					sim_transporter_dequeue(s->listen_transporter);
 				}
-				
+
 
 				list params = cstring_split_list(msg, ";");
 				list header_values = cstring_split_list((cstring)list_get(params,0)," ");
@@ -182,9 +187,13 @@ static void sim_server_listener(sim_server s) {
 				
 				list_free(params);
 				list_free_with_data(header_values);
+				last_msg = NULL;
 				fail = 0;
 				break;
+			} else {
+				last_msg = msg;
 			}
+
 			free(safe_key);
 		}
 	}
@@ -245,8 +254,10 @@ void sim_server_broadcast_query(sim_server s, cstring message) {
 	cstring header = cstring_copy("QUERY ");
 	cstring msg = cstring_copy(message);
 	
+
 	list transporters = map_values(s->clients_transporters);
 	foreach(sim_transporter, t, transporters) {
+		cprintf("SERV: I SEND :%s;%s\n", ROJO, header, msg);
 		sim_message m = sim_message_init(t, cstring_copy(header), cstring_copy(msg));
 		sim_message_respond(m);
 		sim_message_free(m);

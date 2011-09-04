@@ -134,6 +134,45 @@ typedef struct smem_header_block {
 } smem_header_block;				
 
 
+
+#ifdef __MACH__
+/**
+ Size fo a header block, it's usually just an int.
+ */
+#define	SMEM_HEADER_BLOCK_SIZE	(sizeof(smem_header_block))
+/**
+ Amount of headers.
+ */
+#define	SMEM_HEADER_BLOCK_COUNT	(0x400 / 5)
+/**
+ Actual size of the first block.
+ */
+#define	SMEM_HEADER_SIZE		(SMEM_HEADER_BLOCK_SIZE * SMEM_HEADER_BLOCK_COUNT)
+/** 
+ Amount of blocks in the shmem.
+ */
+#define SMEM_BLOCK_COUNT		(0x400 / 5)
+/**
+ Amount of available blocks (blocks - header block).
+ */
+#define SMEM_BLOCK_AVAIL_COUNT	((0x400 / 5) - 1)
+/**
+ Limit of allocs allowed per write, if more needed, then the write is done with buffering.
+ */
+#define SMEM_BLOCK_MAX_ALLOC	(0x400 / 5)
+/**
+ Size of a mem block
+ */
+#define	SMEM_BLOCK_SIZE			(SMEM_HEADER_SIZE)
+/**
+ Size of the contained data in a block. (SMEM_BLOCK_SIZE - flags - next_id)
+ */
+#define	SMEM_DATA_SIZE			(SMEM_BLOCK_SIZE - sizeof(short) * 2)
+/**
+ Total shared memory space required.
+ */
+#define	SMEM_SPACE_SIZE			(SMEM_BLOCK_COUNT * SMEM_BLOCK_SIZE)
+#else
 /**
 	Size fo a header block, it's usually just an int.
  */
@@ -141,7 +180,7 @@ typedef struct smem_header_block {
 /**
 	Amount of headers.
  */
-#define	SMEM_HEADER_BLOCK_COUNT	(0x400 / 5)
+#define	SMEM_HEADER_BLOCK_COUNT	(0x400)
 /**
 	Actual size of the first block.
  */
@@ -149,15 +188,15 @@ typedef struct smem_header_block {
 /** 
 	Amount of blocks in the shmem.
  */
-#define SMEM_BLOCK_COUNT		(0x400 / 5)
+#define SMEM_BLOCK_COUNT		(0x400)
 /**
 	Amount of available blocks (blocks - header block).
  */
-#define SMEM_BLOCK_AVAIL_COUNT	((0x400 / 5) - 1)
+#define SMEM_BLOCK_AVAIL_COUNT	((0x400) - 1)
 /**
 	Limit of allocs allowed per write, if more needed, then the write is done with buffering.
  */
-#define SMEM_BLOCK_MAX_ALLOC	(0xf)
+#define SMEM_BLOCK_MAX_ALLOC	(0x400)
 /**
 	Size of a mem block
  */
@@ -170,6 +209,8 @@ typedef struct smem_header_block {
 	Total shared memory space required.
  */
 #define	SMEM_SPACE_SIZE			(SMEM_BLOCK_COUNT * SMEM_BLOCK_SIZE)
+#endif
+
 
 /**
 	Block, it's bigger than what's called a header block, it is pointer by them.
@@ -495,13 +536,14 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	block_cur = smem_get_block(s, block_cur_id);
 	
 	
+	////cprintf("DATA TO WRITE: %d %d\n", ROJO, data_qty, SMEM_DATA_SIZE);
 	// set block_available semaphore as blocks_written.
 	while(!end) {
 		// Wait for blocks available.
 		// Now we're malloc'd 
 
 		cstring d = cstring_copy_len(_data_buffer, SMEM_DATA_SIZE);
-		_data_buffer += SMEM_DATA_SIZE + 1;
+		_data_buffer += SMEM_DATA_SIZE;
 //		//IPCSDebug(SMEM_DEBUG&WRITE,"\n\nSTRING LEN: %d, %s\n\n", cstring_len(d), d);
 		end = smem_block_write(block_cur, d);
 		
@@ -512,7 +554,6 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 
 		int oldVal = sem_value(s->sem_header_w);
 		
-		sem_up(s->sem_header_w, 1);
 //		//IPCSDebug(SMEM_DEBUG&WRITE,"UP on write %d\t %d\t old: %d\n END = %d",s->sem_header_w, sem_value(s->sem_header_w), oldVal, end);
 		
 //		//IPCSDebug(SMEM_DEBUG&WRITE,"I send %s to %d, listens %d block_id %d header_id %d ref_sem %d\n", data,  header_b->ref_id, header_b->listens, block_cur_id, ((int)header_b - (int)s->space) / sizeof(smem_header_block),
@@ -529,9 +570,10 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 		}
 
 		data_qty--;
-
+		//cprintf("DATA TO WRITE: %d\n", ROJO, data_qty);
 	}
 	
+	sem_up(s->sem_header_w, blocks_to_write);
 
 	if (end && data_qty != 0) {
 		// //IPCSDebug(SMEM_DEBUG&WRITE,"Amount calculation error!");
@@ -587,14 +629,21 @@ cstring smem_space_read(sim_smem_transporter * s) {
 	int blocks_read = 1;
 	cstring response = cstring_init(0);
 	while (!end) {
-		int block_len = cstring_capped_len(current_block->data, SMEM_DATA_SIZE - 1);
+		int block_len = cstring_capped_len(current_block->data, SMEM_DATA_SIZE);
 		end = block_len != -1;
-		response = (cstring) cstring_copy_len_in(current_block->data, response, (block_len == -1) ? ((int)SMEM_BLOCK_AVAIL_COUNT) : block_len);
+		cstring block = cstring_init(0); 
+		block = (cstring) cstring_copy_len_in(current_block->data, block, (block_len == -1) ? ((int)SMEM_DATA_SIZE) : block_len);
+		response = cstring_write(response, block);
+		//cprintf("BLOCKS READ: %d %d\n", ROJO, blocks_read, block_len);
 		if (!end) {			
 			current_block = smem_get_block(s, current_block->next);
 			blocks_read++;
-		}
+			sem_down(s->sem_header_r, 1);
+		}			
+		
+		free(block);
 	}
+
 	def->available_blocks += blocks_read;
 	def->total_available_blocks += blocks_read;
 	current->listens_c++;
@@ -655,7 +704,7 @@ sim_smem_transporter * sim_smem_transporter_init(int server_id, int client_id, i
 	Write to the shared memoery.
 */
 void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
-//	printf("SMEM: I want to write %s\n", data);
+	//cprintf("SMEM: I want to write %d\n",ROJO, cstring_len(data));
 	smem_space_write(t, data);
 
 }
@@ -666,6 +715,7 @@ void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) {
 	cstring data = smem_space_read(t);
 	*extra_data = strlen(data) + 1;
+	//cprintf("SMEM_READ: len: %d\n", ROJO, *extra_data);
 	return data;
 }
 

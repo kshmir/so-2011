@@ -86,6 +86,7 @@ static int safe_strlen(char* s, int max_size) {
 void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 	cstring _data_buffer = data;
 	int end = 0;
+	int writes = 0;
 
 	//	sem_down(t->write_sem , 1);
 	while(!end) {
@@ -93,13 +94,16 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 		int len = strlen(data);
 		int index = 0;
 		int i = 0;
-		cstring d = cstring_copy_len(_data_buffer, block_len - 1);
+		cstring d = cstring_copy_len(_data_buffer, block_len);
 		d = cstring_expand(d,1);
 		d[block_len] = 0;
 		_data_buffer += block_len;
-		for (; i < block_len; i++) {
-			t->write_buf.mtext[i] = data[i];
-			if (data[i] == 0) {
+		for (i = 0; i < block_len; i++) {
+			t->write_buf.mtext[i] = 0;
+		}
+		for (i = 0; i < block_len; i++) {
+			t->write_buf.mtext[i] = d[i];
+			if (d[i] == 0) {
 				end = 1;
 				break;
 			}
@@ -110,6 +114,7 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 			attempts++;
 		}
 
+		writes++;
 			//IPCSDebug(MSGQ_DEBUG&WRITE,"Total attempts to write: %d\n",attempts);
 		//IPCSDebug(MSGQ_DEBUG&WRITE,"MSGQ sent: %s\n",data);
 
@@ -124,12 +129,18 @@ cstring sim_msg_q_transporter_listen(sim_msg_q_transporter t, int * extra_data){
 		return cstring_copy("");
 	}
 	
+	int i= 0;
+	for (; i < sizeof(struct msgq_buf) - sizeof(long); i++) {
+		t->read_buf.mtext[i] = 0;
+	}
+	
 	if (msgrcv(t->msgq_id, &(t->read_buf), sizeof(struct msgq_buf) - sizeof(long), t->read_buf.mtype, 0) == -1) {
 		//IPCSDebug(MSGQ_DEBUG&READ,"Message could not be received\n");
 	}else
 		//IPCSDebug(MSGQ_DEBUG&READ,"MSGQ received: %s\n",t->read_buf.mtext);
 
-	*extra_data = safe_strlen(t->read_buf.mtext, sizeof(struct msgq_buf) - sizeof(long));
+
+	*extra_data = sizeof(struct msgq_buf) - sizeof(long);
 
 	return cstring_copy(t->read_buf.mtext);
 }

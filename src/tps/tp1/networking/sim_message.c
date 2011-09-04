@@ -109,14 +109,16 @@ static void_p sim_message_listen(struct listener_data * data) {
 	sim_message r			= data->r;
 	int found = 0;
 	cstring old_msg = r->message;
+	cstring last_msg = NULL;
+//	cprintf("MESS: I WAIT FOR %s\n", ROJO, r->header);
 	while (!found) {
-		cstring msg = sim_transporter_listen(r->t);
+		cstring msg = sim_transporter_listen(r->t, last_msg);
 		cstring header = cstring_copy_until_char(msg, ';');
 		
 		if (msg[0] == 0) {
 			return NULL; 
 		}
-		
+
 		if (cstring_matches(header,"RES ")) {
 			cstring no_resp = cstring_replace(msg, "RES ", "");
 			list splitted = cstring_split_list(no_resp, ";");
@@ -125,16 +127,26 @@ static void_p sim_message_listen(struct listener_data * data) {
 			
 			if (list_size(splitted) == 2)
 			{
+
+			
 				if (cstring_compare(list_get(splitted, 0), r->header) == 0) {
+			
+			//		cprintf("MESS: I GOT %s\n", ROJO, list_get(splitted, 0));
 					found = 1;
 					data->m = sim_message_init(r->t,list_get(splitted, 0), list_get(splitted, 1));
 					sim_transporter_dequeue(r->t);
+		
+					return 0;
 				}
 			}
-			list_free(splitted);
-			free(no_resp);
-		} 
-		free(header);
+			last_msg = NULL;
+//			list_free(splitted);
+//			free(no_resp);
+		}  else {
+			last_msg = msg;
+		}
+
+//		free(header);
 //		if (msg != NULL) {
 //			free(msg);
 //		}
@@ -152,18 +164,21 @@ sim_message sim_message_send(sim_message r) {
 	struct listener_data data;
 	data.r = r;
 	
+	
 	// Starts the listener of the message.
 	pthread_create(&r->thread, &r->attr, (void_p) sim_message_listen, (void_p) &data);
 	
 	// Sends the message.
 	sim_message_respond(r);
-	
+
 	// Waits for the data.
 	pthread_join(r->thread, NULL);
+
 	
 	// Clears the message and returns the response.
 	sim_message_free(r);
 	sim_message response = data.m;
+
 	return response;
 }
 

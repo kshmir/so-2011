@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#define PIPE_READ_SIZE 1024
+#define PIPE_READ_SIZE (1024 * 8)
 
 struct sim_pipe_transporter {
 	cstring				write_fifo;			// Fifo to which the transporter writes.
@@ -25,6 +25,8 @@ struct sim_pipe_transporter {
 	int					client_id;
 	int					server_id;
 
+	
+	
 	transporter_mode	mode;				// Transporter mode.
 
 	int					sem;
@@ -43,6 +45,8 @@ static sim_pipe_transporter create_pipe_transporter(cstring write_fifo, cstring 
 	pipe->read_fifo = read_fifo;	
 	pipe->client = client;
 	pipe->mode = mode;
+	pipe->sem = sem_create_typed("pipes");
+	sem_set_value(pipe->sem, 1);
 	// MacOSX doesn't seem to like going blocked, and it fails misserably.
 	// So this solves it, making the right call when not on a Mach Kernel system (Mac OS, MacOSX, NextSTEP, etc).
 	// We currently tested it only on Mac OSX 10.6.8, but in the worst case it'll only be porly performant.
@@ -138,11 +142,14 @@ sim_pipe_transporter sim_pipe_transporter_init_server(int server_id, int client_
 
 void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data) {
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
+//		cprintf("I WRITE: %s\n", ROJO,data);
+//		sem_down(t->sem, 1);
 		if(write(t->write_ptr, data, cstring_len(data) + 1)==-1){
 			//IPCSDebug(PIPE_DEBUG&WRITE,"Error while writting with write_ptr: %d",t->write_ptr);
 		}else {
 			//IPCSDebug(PIPE_DEBUG&WRITE,"PIPE sent: %s",data);
 		}
+
 	}
 }
 
@@ -155,6 +162,16 @@ cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 		}else
 		//IPCSDebug(PIPE_DEBUG&READ,"PIPE rcvd: %s",str);
 		* length = PIPE_READ_SIZE;
+		
+//		sem_up(t->sem, 1);	
+		int i = 0;
+		for (; i < *length + 1; i++) {
+			if (str[i] == 0) {
+
+				break;
+			}
+		}
+
 		return str;
 	}
 	else{

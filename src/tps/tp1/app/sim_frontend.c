@@ -21,7 +21,7 @@ int		   level_sem = 0;
 
 
 void sim_frontend_print(cstring data) {
-	printf("%s\n",data);
+	cprintf("FRONTEND: %s\n", ROJO,data);
 }
 
 /*
@@ -36,6 +36,7 @@ void sim_frontend_receiver(sim_message mes) {
 
 
 void sim_frontend_copy_level(sim_message mes) {
+	cprintf("COPYING LEVEL ...\n", ROJO);
 	sim_message_write(mes, sim_level_serialize(level));
 	sim_message_respond(mes);
 }
@@ -44,7 +45,7 @@ void sim_frontend_copy_airline(sim_message mes) {
 	cstring data = cstring_copy(sim_message_read(mes));
 	int error = 0;
 	int airline_index = cstring_parseInt(data, &error);
-	
+	cprintf("COPYING AIRLINE ...\n", ROJO);
 
 	if (error) {
 		sim_airline air = list_get(airlines, airline_index);
@@ -71,13 +72,15 @@ void sim_frontend_copy_airline(sim_message mes) {
 int sim_frontend_start_server(connection_type t) {
 	print_server = sim_server_init(t, P_LEVEL, 0);
 	
+	cprintf("Server bindings", ROJO);
 	char * seq = "PRINT";
 	sim_server_add_receiver(print_server, seq, sim_frontend_receiver);
 	char * seq2 = "COPY_LEVEL";
 	sim_server_add_receiver(print_server, seq2, sim_frontend_copy_level);
 	char * seq3 = "COPY_AIR";
 	sim_server_add_receiver(print_server, seq3, sim_frontend_copy_airline);
-	
+
+
 	frontend_sem = sem_create_typed("frontend");
 	level_sem    = sem_create_typed("level");
 }
@@ -85,6 +88,7 @@ int sim_frontend_start_server(connection_type t) {
 
 int sim_frontend_start_processes(sim_level lev, list airlines) {
 	sim_server_spawn_child(print_server);
+	cprintf("Time to spawn", ROJO);
 	cprintf("FRONTEND: Going down to spawn\n", VERDE);
 	sem_down(frontend_sem, 1);					
 	cprintf("FRONTEND: SHUTDOWN\n", VERDE);
@@ -119,8 +123,9 @@ int sim_frontend_main(list params) {
 				sim_frontend_start_server(*c_type);
 				level = lev;
 				airlines = _airlines;
+
 				sim_frontend_start_processes(lev, airlines);
-				
+
 			}
 			else {
 				sim_frontend_print("Error on airline file named:");
