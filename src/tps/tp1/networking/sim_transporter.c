@@ -141,7 +141,9 @@ static void_p sim_transporter_listener(sim_transporter t) {
 						pthread_cond_broadcast(&sck_override_received);
 						pthread_mutex_unlock(&sck_override_mutex);
 					}
-					sem_up(t->write_lock, 1);
+					if (t->type != C_SHARED_MEMORY) {
+						sem_up(t->write_lock, 1);
+					}
 					builder = cstring_init(0);
 					pthread_mutex_unlock(t->listener_mutex);
 					break;
@@ -401,7 +403,9 @@ sim_transporter sim_transporter_init(connection_type type,
 void sim_transporter_write(sim_transporter sim, cstring message) {
 //	cprintf("TO WRITE: LEN: %d\n", ROJO, strlen(message));
 
-	sem_down(sim->write_lock, 1);
+	if (sim->type != C_SHARED_MEMORY) {
+		sem_down(sim->write_lock, 1);
+	}
 	sim->write(sim->data, message);
 
 //	cprintf("WRITTEN: LEN: %d\n", ROJO, strlen(message));

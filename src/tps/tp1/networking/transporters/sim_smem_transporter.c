@@ -159,7 +159,7 @@ typedef struct smem_header_block {
 /**
  Limit of allocs allowed per write, if more needed, then the write is done with buffering.
  */
-#define SMEM_BLOCK_MAX_ALLOC	(0x400 / 5)
+#define SMEM_BLOCK_MAX_ALLOC	(0x400 / 6)
 /**
  Size of a mem block
  */
@@ -172,6 +172,7 @@ typedef struct smem_header_block {
  Total shared memory space required.
  */
 #define	SMEM_SPACE_SIZE			(SMEM_BLOCK_COUNT * SMEM_BLOCK_SIZE)
+
 #else
 /**
 	Size fo a header block, it's usually just an int.
@@ -511,7 +512,6 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 //	//IPCSDebug(SMEM_DEBUG&WRITE,"DATA_SIZE: %d\n", SMEM_DATA_SIZE);
 	int blocks_to_write = data_qty;
 
-	
 
 	smem_header_block * header_b = smem_get_next_header_block(s,&blocks_to_write); // Toma un slot, o espera.
 	smem_header_block * header_cur = header_b;
@@ -529,7 +529,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 
 	
 	
-	
+
 	
 	short block_cur_id = header_b->block_id;
 	int end = 0;
@@ -574,7 +574,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	}
 	
 	sem_up(s->sem_header_w, blocks_to_write);
-
+	cprintf("SMEM: BOUT TO WRITE %d\t %d\t %d\t %d\n",CELESTE, blocks_to_write, sem_value(s->sem_available_blocks), sem_value(s->sem_header_w), sem_value(s->sem_header_r));	
 	if (end && data_qty != 0) {
 		// //IPCSDebug(SMEM_DEBUG&WRITE,"Amount calculation error!");
 	}
@@ -594,7 +594,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 	
 	// TODO: Fix this!!!!!!!!
 //	//IPCSDebug(SMEM_DEBUG&READ,"Read sem value: %d\t %d\n", s->sem_header_r, sem_value(s->sem_header_r));
-	
+	cprintf("SMEM_READ: BOUT TO READ: %d\n", AMARILLO, sem_value(s->sem_header_r));
 	sem_down(s->sem_header_r, 1);
 //	//IPCSDebug(SMEM_DEBUG&READ,"UNLOCK! %d\t %d\n", s->sem_header_r, sem_value(s->sem_header_r));
 
@@ -704,7 +704,8 @@ sim_smem_transporter * sim_smem_transporter_init(int server_id, int client_id, i
 	Write to the shared memoery.
 */
 void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
-	//cprintf("SMEM: I want to write %d\n",ROJO, cstring_len(data));
+	cprintf("SMEM: I want to write %d\n",VERDE, cstring_len(data));
+
 	smem_space_write(t, data);
 
 }
@@ -715,7 +716,7 @@ void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) {
 	cstring data = smem_space_read(t);
 	*extra_data = strlen(data) + 1;
-	//cprintf("SMEM_READ: len: %d\n", ROJO, *extra_data);
+	cprintf("SMEM_READ: len: %d\n", ROJO, *extra_data);
 	return data;
 }
 
