@@ -218,8 +218,10 @@ void sim_level_print_receiver(sim_message s) {
 }
 
 void sim_level_copy_level(sim_message mes) {
-	sim_message_write(mes, sim_level_serialize(current_level));
+	cstring l = sim_level_serialize(current_level);
+	sim_message_write(mes, l);
 	sim_message_respond(mes);
+	free(l);
 }
 
 void sim_level_copy_single_airline(sim_message s){
@@ -248,6 +250,7 @@ void sim_level_copy_single_airline(sim_message s){
 		}
 		sim_message_write(s, resp);
 		sim_message_respond(s);
+		free(resp);
 	}
 
 	free(data);	
@@ -362,8 +365,8 @@ void sim_level_set_path_transaction(sim_message msg) {
 		sim_message_respond(msg);
 		free(response);
 	}
-
-	
+	list_free(ids);
+	list_free_with_data(splitted);
 }
 
 void sim_level_med_get_value(sim_message msg) {
@@ -438,6 +441,7 @@ cstring planes_update_moves() {
 	}	
 	data = cstring_join_list(valids, ",");
 	list_free_with_data(valids);
+	list_free(keys);
 	
 	return data;
 }
@@ -480,9 +484,9 @@ int sim_level_alive() {
 				alive = 1;
 			}
 		}
-		free(medicines);
+		list_free(medicines);
 	}
-	free(cities);
+	list_free(cities);
 	return alive;
 }
 

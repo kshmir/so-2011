@@ -141,7 +141,7 @@ sim_airline sim_airline_deserialize_line_error(cstring s, int airline_id, int *e
 		}
 		i++;
 	}
-	list_free(lines);
+	list_free_with_data(lines);
 	if (error || amount > 0) {
 		if(amount>0)
 			*err_line=1;
@@ -191,6 +191,7 @@ void set_planes_to_think(cstring splitted) {
 			}
 		}
 	}
+	list_free_with_data(splits);
 }
 
 void sim_airline_query_receiver(sim_message resp) {

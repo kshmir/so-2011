@@ -37,8 +37,10 @@ void sim_frontend_receiver(sim_message mes) {
 
 void sim_frontend_copy_level(sim_message mes) {
 	cprintf("COPYING LEVEL ...\n", ROJO);
-	sim_message_write(mes, sim_level_serialize(level));
+	cstring l = sim_level_serialize(level);
+	sim_message_write(mes, l);
 	sim_message_respond(mes);
+	free(l);
 }
 
 void sim_frontend_copy_airline(sim_message mes) {

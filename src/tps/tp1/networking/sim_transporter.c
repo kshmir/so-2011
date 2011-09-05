@@ -69,6 +69,8 @@ struct sim_transporter {
 	
 	int					write_lock;
 	
+	int					reads;
+	
 	queue				messages;						// Queue of received messages.
 };	
 
@@ -137,16 +139,23 @@ static void_p sim_transporter_listener(sim_transporter t) {
 						pthread_cond_broadcast(&sck_override_received);
 					}
 					sem_up(t->write_lock, 1);
-					
 					builder = cstring_init(0);
 					break;
 				}
+				else {
+					if (builder != NULL) {
+						free(builder);
+					}
+
+					builder = NULL;
+				}
+
 			}
 			
 		}
-		if (data != NULL) {
-			free(data);
-		}
+
+		free(data);
+		
 	}
 	// The following is a macro for cancelling the thread
 	pthread_cleanup_pop(0);
@@ -158,7 +167,11 @@ static void_p sim_transporter_listener(sim_transporter t) {
  TWO subscribers shouldn't accept the same message at the same time.
  */
 void sim_transporter_dequeue(sim_transporter t) {
-	queue_pull(t->messages);
+	
+	t->reads--;
+	
+	free(queue_pull(t->messages));
+	
 	pthread_cond_broadcast(t->listener_received);
 }
 
@@ -178,32 +191,26 @@ cstring sim_transporter_listen(sim_transporter t, cstring avoid) {
 		
 		while (queue_empty(t->messages) || (avoid != NULL && cstring_compare(queue_peek(t->messages), avoid) == 0)) {
 			
-			struct timespec {
-				long ts_sec; /* seconds */
-				long ts_nsec; /* nanoseconds */
-			} to;
-
-			to.ts_sec = time(NULL);
-			to.ts_nsec = 1000 * 1000 * 200;
+//			struct timespec {
+//				long ts_sec; /* seconds */
+//				long ts_nsec; /* nanoseconds */
+//			} to;
+//
+//			to.ts_sec = time(NULL);
+//			to.ts_nsec = 1000 * 1000 * 200;
 			pthread_cond_wait(t->listener_received, t->listener_mutex);
 		}
 		
 		if (!queue_empty(t->messages)) {
 			pthread_cond_broadcast(t->listener_received);
 		}
-
-		
-
-		
-
-		
-
-		data = queue_peek(t->messages);
-		if (data != NULL) {
+		if (queue_peek(t->messages) != NULL) {
+			data = cstring_copy(queue_peek(t->messages));
 			value_found = 1;	
+			t->reads++;
 		}
 		
-		
+
 		pthread_mutex_unlock(t->listener_mutex);
 	}
 	return data;
@@ -302,7 +309,7 @@ sim_transporter sim_transporter_init(connection_type type,
 
 	sim_transporter t = sim_transporter_start();
 	t->mode = mode;
-	
+	t->reads = 0;
 	
 	if (is_server) {
 		t->server_id = from_id;

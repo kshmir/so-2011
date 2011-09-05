@@ -566,9 +566,9 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 			block_cur_id = next_id;
 			block_cur = smem_get_block(s, next_id);
 //			//IPCSDebug(SMEM_DEBUG&WRITE,"%d vs %d", next_id, block_cur_id);
-			
 		}
 
+		free(d);
 		data_qty--;
 		//cprintf("DATA TO WRITE: %d\n", ROJO, data_qty);
 	}

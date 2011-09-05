@@ -158,6 +158,7 @@ int sim_plane_make_fill(sim_airline airline, sim_plane plane, sim_level level, i
 				return FILLED;
 			}
 		}
+		list_free(city_m_keys);
 	}
 	else {
 		// For debugging

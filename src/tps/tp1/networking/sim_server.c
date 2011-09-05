@@ -171,31 +171,48 @@ static void sim_server_listener(sim_server s) {
 		foreach(cstring, key, s->responds_to_keys) {
 			cstring safe_key = cstring_copy(key);
 			if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {
-				if (s->c_type != C_SOCKETS) {
-					sim_transporter_dequeue(s->listen_transporter);
-				}
-
-
 				list params = cstring_split_list(msg, ";");
 				list header_values = cstring_split_list((cstring)list_get(params,0)," ");
 				int ok = 1;
 				int id = cstring_parseInt((cstring)list_get(header_values,0), &ok);
-				sim_message _m = sim_message_init((sim_transporter)map_get(s->clients_transporters,&id), 
-												  cstring_write(cstring_copy("RES "),list_get(params,0)), 
-												  list_get(params,1));
+				
+				sim_transporter t = NULL ;
+				
+				while(t == NULL) {
+					t = (sim_transporter)map_get(s->clients_transporters,&id);
+				}
+				
+				cstring _msg = cstring_copy("RES ");
+				_msg = cstring_write(_msg, list_get(params,0));
+				sim_message _m = sim_message_init(t, _msg, cstring_copy(list_get(params,1)));
 				((function)map_get(s->responds_to, safe_key))(_m);
 				
-				list_free(params);
+				list_free_with_data(params);
 				list_free_with_data(header_values);
+				sim_message_free(_m);
+				if (last_msg != NULL) {
+					free(last_msg);
+				}
 				last_msg = NULL;
 				fail = 0;
+				if (s->c_type != C_SOCKETS) {
+					sim_transporter_dequeue(s->listen_transporter);
+				} else {
+					free(msg);
+				}
+
+				free(safe_key);
 				break;
 			} else {
-				last_msg = msg;
+				if (s->c_type != C_SOCKETS) {
+					last_msg = msg;
+				}
+
 			}
 
 			free(safe_key);
 		}
+		free(header);
 	}
 	
 	pthread_cleanup_pop(0);
@@ -287,13 +304,16 @@ int sim_server_spawn_child(sim_server s) {
 												   TRUE, 
 												   TRUE);
 	int key = s->client_id_seed * s->client_id_multiplier;
+	map_set(s->clients_transporters, &key, child_t);	
+	sem_down(s->spawn_sem, 1);
+
 	
 //	cprintf("I spawn my child %d\n", OK, key);
 	
-	map_set(s->clients_transporters, &key, child_t);
+
 	
 	s->client_id_multiplier++;
-	sem_down(s->spawn_sem, 1);
+
 }
 
 /**

@@ -112,9 +112,6 @@ void list_free_with_data(list p) {
 	}
 	pthread_mutex_unlock(mutex);
 	list_free(p);
-	pthread_mutex_destroy(mutex);
-	free(mutex);
-	
 }
 
 void list_free(list p) {
@@ -131,6 +128,8 @@ void list_free(list p) {
 		actual = aux;
 	}
 	pthread_mutex_unlock(mutex);
+	pthread_mutex_destroy(mutex);
+	free(mutex);
 }
 
 int list_size(list l) {

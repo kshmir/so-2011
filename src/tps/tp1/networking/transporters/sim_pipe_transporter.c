@@ -45,8 +45,8 @@ static sim_pipe_transporter create_pipe_transporter(cstring write_fifo, cstring 
 	pipe->read_fifo = read_fifo;	
 	pipe->client = client;
 	pipe->mode = mode;
-	pipe->sem = sem_create_typed("pipes");
-	sem_set_value(pipe->sem, 1);
+//	pipe->sem = sem_create_typed("pipes");
+//	sem_set_value(pipe->sem, 1);
 	// MacOSX doesn't seem to like going blocked, and it fails misserably.
 	// So this solves it, making the right call when not on a Mach Kernel system (Mac OS, MacOSX, NextSTEP, etc).
 	// We currently tested it only on Mac OSX 10.6.8, but in the worst case it'll only be porly performant.
@@ -192,11 +192,6 @@ void sim_pipe_transporter_free(sim_pipe_transporter t) {
 			//IPCSDebug(PIPE_DEBUG&WRITE,"Error while closing fd: %d",t->write_ptr);
 		unlink(t->write_fifo);
 		free(t->write_fifo);
-	}
-	if (t->client) {
-		sem_free(t->sem, t->client_id);
-	} else {
-		sem_free(t->sem, t->server_id);
 	}
 
 	

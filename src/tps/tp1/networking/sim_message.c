@@ -91,6 +91,8 @@ int sim_message_write(sim_message r, cstring data) {
 }
 
 int sim_message_free(sim_message r) {
+	free(r->message);
+	free(r->header);
 	free(r);
 }
 
@@ -127,29 +129,30 @@ static void_p sim_message_listen(struct listener_data * data) {
 			
 			if (list_size(splitted) == 2)
 			{
-
-			
 				if (cstring_compare(list_get(splitted, 0), r->header) == 0) {
 			
-			//		cprintf("MESS: I GOT %s\n", ROJO, list_get(splitted, 0));
 					found = 1;
-					data->m = sim_message_init(r->t,list_get(splitted, 0), list_get(splitted, 1));
+					cstring _header = cstring_copy(list_get(splitted, 0));
+					cstring	_message = cstring_copy(list_get(splitted, 1));
+					data->m = sim_message_init(r->t, _header, _message);
 					sim_transporter_dequeue(r->t);
-		
+					list_free_with_data(splitted);
+					free(no_resp);					
+					free(header);
+					free(msg);
 					return 0;
 				}
 			}
+			if (last_msg != NULL) {
+				free(last_msg);
+			}
 			last_msg = NULL;
-//			list_free(splitted);
-//			free(no_resp);
+			list_free_with_data(splitted);
+			free(no_resp);
 		}  else {
 			last_msg = msg;
 		}
-
-//		free(header);
-//		if (msg != NULL) {
-//			free(msg);
-//		}
+		free(header);
 	}
 	return 0;
 }
@@ -168,8 +171,14 @@ sim_message sim_message_send(sim_message r) {
 	// Starts the listener of the message.
 	pthread_create(&r->thread, &r->attr, (void_p) sim_message_listen, (void_p) &data);
 	
-	// Sends the message.
-	sim_message_respond(r);
+
+	cstring array[3];
+	array[0] = r->header;
+	array[1] = r->message;
+	array[2] = NULL;
+	cstring joined = cstring_join(array, ";");
+	sim_transporter_write(r->t, joined);
+	free(joined);
 
 	// Waits for the data.
 	pthread_join(r->thread, NULL);
