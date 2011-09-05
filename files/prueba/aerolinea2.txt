@@ -1,0 +1,25 @@
+4
+
+Shenyang
+Adiro100 120
+Neobrufen 400
+Lexatn 270
+Viscofresh 570
+
+Tehran
+Adiro100 20
+Trankimazn 290
+Nolotil 690
+Gelocatil 80
+
+Seoul
+Neobrufen 700
+Trankimazn 450
+Nolotil 840
+Lexatn 50
+
+Kinshasa
+Cardyl 730
+Adiro100 630
+Lexatn 300
+VoltarenEmulgel 90

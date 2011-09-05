@@ -1,0 +1,98 @@
+10
+
+Kinshasa
+VoltarenEmulgel 930
+Neobrufen 540
+Viscofresh 690
+
+Jeddah
+Adiro100 80
+Gelocatil 640
+Nolotil 140
+Dianben 630
+Lexatn 200
+
+Bangalore
+Cardyl 470
+Neobrufen 240
+Trankimazn 780
+Dianben 490
+Gelocatil 490
+Lexatn 980
+Viscofresh 980
+
+Jaipur
+Trankimazn 480
+Viscofresh 200
+Cardyl 950
+Dianben 220
+
+Tehran
+Adiro100 930
+Dianben 380
+VoltarenEmulgel 960
+Cardyl 780
+Lexatn 750
+Nolotil 310
+Neobrufen 10
+Gelocatil 820
+
+Shenyang
+Nolotil 50
+Neobrufen 320
+Lexatn 610
+Dianben 310
+
+Seoul
+Nolotil 630
+Lexatn 990
+Dianben 40
+VoltarenEmulgel 390
+Trankimazn 240
+Gelocatil 420
+Viscofresh 160
+Neobrufen 80
+Cardyl 330
+
+NewYorkCity
+Gelocatil 410
+Lexatn 50
+
+Tokyo
+Cardyl 140
+Gelocatil 320
+Trankimazn 700
+Dianben 170
+VoltarenEmulgel 700
+Adiro100 740
+Neobrufen 680
+Viscofresh 920
+
+SaoPaulo
+Dianben 930
+Cardyl 80
+Trankimazn 470
+Gelocatil 40
+
+Kinshasa Jeddah 20
+Kinshasa Bangalore 20
+Kinshasa Jaipur 25
+Kinshasa Tehran 15
+Kinshasa Shenyang 15
+Kinshasa Seoul 20
+Kinshasa NewYorkCity 10
+Kinshasa Tokyo 20
+Kinshasa SaoPaulo 15
+
+
+
+
+Tehran Jeddah 15
+
+
+Seoul Bangalore 10
+
+
+Tokyo Jeddah 20
+Tokyo SaoPaulo 15
+

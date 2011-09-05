@@ -1,0 +1,25 @@
+4
+
+Seoul
+Neobrufen 270
+Gelocatil 230
+Viscofresh 570
+Cardyl 290
+
+Tokyo
+Nolotil 470
+VoltarenEmulgel 210
+Viscofresh 670
+Dianben 820
+
+Kinshasa
+Neobrufen 520
+Viscofresh 710
+Trankimazn 890
+VoltarenEmulgel 530
+
+Bangalore
+Dianben 680
+Gelocatil 260
+Neobrufen 960
+Cardyl 660

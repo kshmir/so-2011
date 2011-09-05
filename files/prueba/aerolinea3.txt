@@ -1,0 +1,25 @@
+4
+
+Tokyo
+Adiro100 140
+Dianben 920
+Neobrufen 10
+Gelocatil 100
+
+SaoPaulo
+Cardyl 690
+Gelocatil 480
+Neobrufen 700
+Dianben 230
+
+NewYorkCity
+Gelocatil 70
+Cardyl 140
+Viscofresh 530
+Dianben 880
+
+Jaipur
+Viscofresh 170
+Nolotil 380
+Lexatn 690
+Gelocatil 460

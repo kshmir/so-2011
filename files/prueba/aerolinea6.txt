@@ -1,0 +1,25 @@
+4
+
+Tehran
+Gelocatil 740
+Nolotil 760
+Trankimazn 60
+Viscofresh 500
+
+Bangalore
+Adiro100 510
+Nolotil 160
+Gelocatil 820
+Lexatn 400
+
+SaoPaulo
+Dianben 550
+VoltarenEmulgel 410
+Adiro100 410
+Cardyl 530
+
+Jeddah
+Lexatn 900
+VoltarenEmulgel 760
+Viscofresh 860
+Nolotil 200

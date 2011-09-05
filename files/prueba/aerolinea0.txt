@@ -1,0 +1,25 @@
+4
+
+SaoPaulo
+Cardyl 20
+Viscofresh 590
+Gelocatil 10
+Lexatn 460
+
+Bangalore
+Neobrufen 540
+VoltarenEmulgel 620
+Nolotil 970
+Gelocatil 620
+
+Jaipur
+Trankimazn 550
+Neobrufen 900
+Viscofresh 880
+Gelocatil 250
+
+Seoul
+Gelocatil 810
+Neobrufen 70
+Trankimazn 160
+Lexatn 650
