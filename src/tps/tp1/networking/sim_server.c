@@ -149,6 +149,7 @@ static void sim_server_listener(sim_server s) {
 		cstring msg = NULL;
 		
 		if (s->c_type == C_SOCKETS) {
+			pthread_mutex_lock(&sck_override_mutex);
 			while (queue_size(sck_override_queue) == 0) {
 				
 				pthread_cond_wait(&sck_override_received, &sck_override_mutex);
@@ -156,8 +157,9 @@ static void sim_server_listener(sim_server s) {
 			pthread_cond_broadcast(&sck_override_received);
 
 			msg = queue_pull(sck_override_queue);
+			pthread_mutex_unlock(&sck_override_mutex);
 		} else {
-			msg = sim_transporter_listen(s->listen_transporter, last_msg);
+			msg = sim_transporter_listen(s->listen_transporter, NULL);
 		}
 		
 		
@@ -168,6 +170,7 @@ static void sim_server_listener(sim_server s) {
 		
 		int fail = 1;		
 
+		cprintf("SERVER: I CHECK HEADER :%s\n", VIOLETA, msg);
 		foreach(cstring, key, s->responds_to_keys) {
 			cstring safe_key = cstring_copy(key);
 			if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {
@@ -182,6 +185,7 @@ static void sim_server_listener(sim_server s) {
 					t = (sim_transporter)map_get(s->clients_transporters,&id);
 				}
 				
+				cprintf("SERVER: I TAKE HEADER :%s\n", VIOLETA, msg);
 				cstring _msg = cstring_copy("RES ");
 				_msg = cstring_write(_msg, list_get(params,0));
 				sim_message _m = sim_message_init(t, _msg, cstring_copy(list_get(params,1)));
