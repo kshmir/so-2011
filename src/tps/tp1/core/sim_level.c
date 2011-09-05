@@ -44,12 +44,13 @@ int sim_level_has_city(sim_level lev, cstring city) {
 }
 
 cstring sim_level_serialize(sim_level level) {
-	int n = list_size(graph_keys(level->level));
+	list g_k = graph_keys(level->level);
+	int n = list_size(g_k);
 	cstring s = cstring_fromInt(n);
 	s =  cstring_write(s, "\n\n");
 	int i = 0, j = 0;
 	for (i=0; i<n; i++) {
-		cstring city = list_get(graph_keys(level->level),i);
+		cstring city = list_get(g_k,i);
 		s = cstring_write(s, city);
 		s = cstring_write(s, "\n");
 		map meds = (map)(graph_node_value(graph_get_node(level->level, city)));
@@ -65,20 +66,23 @@ cstring sim_level_serialize(sim_level level) {
 		s = cstring_write(s, "\n");
 	}
 	for (i=0; i<n; i++) {
-		cstring from = list_get(graph_keys(level->level), i);
+		cstring from = list_get(g_k, i);
 		list tos = graph_node_arcs(graph_get_node(level->level, from));
 		for (j=0; j<list_size(tos); j++){
 			cstring to = graph_node_key(graph_arc_to(list_get(tos, j)));
 			int weight = graph_arc_weight(list_get(tos, j));
+			cstring aux = cstring_fromInt(weight);
 			s = cstring_write(s, from);
 			s = cstring_write(s, " ");
 			s = cstring_write(s, to);
 			s = cstring_write(s, " ");
-			s = cstring_write(s, cstring_fromInt(weight));
+			s = cstring_write(s, aux);
 			s = cstring_write(s, "\n");
+			free(aux);
 		}
 		s = cstring_write(s, "\n");
 	}
+	list_free(g_k);
 	return s;
 }
 sim_level sim_level_deserialize(cstring s) {
@@ -105,7 +109,7 @@ sim_level sim_level_deserialize_line_error(cstring s,int* err_line) {
 					break;
 				}
 			} else if (amount > 0) {
-				cstring city_name = (cstring) malloc(sizeof(cstring));
+				cstring city_name;
 				if (cstring_matches(line, " ")) {
 					error = 1;
 					break;
@@ -426,7 +430,7 @@ void sim_level_spawn_airlines() {
 // Updates all the data of distances of each plane and sends all the ones which must update in numbers
 // Separated by a comma.
 cstring planes_update_moves() {
-	cstring data = cstring_init(0);
+	cstring data = NULL;
 	list keys = map_keys(current_level->plane_distance);
 	list valids = list_init();
 	foreach(int *, key, keys) {
@@ -449,9 +453,10 @@ cstring planes_update_moves() {
 
 
 void send_turn_tick() {
+	cstring aux = cstring_fromInt(current_level->turn);
 	cstring msg = cstring_copy("TURN ");
 	cstring valid_planes = planes_update_moves();
-	msg = cstring_write(msg, cstring_fromInt(current_level->turn));
+	msg = cstring_write(msg, aux);
 
 
 
@@ -466,7 +471,7 @@ void send_turn_tick() {
 
 	sem_up(current_level->airline_sem, list_size(airlines));
 
-
+	free(aux);
 	free(valid_planes);
 	free(msg);
 }

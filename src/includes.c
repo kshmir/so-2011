@@ -208,19 +208,19 @@ void _catch_child(int sig)
 
 int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftwbuf)
 {
+	list values;
 	if (cstring_matches((cstring)fpath, "sem_typed_")) {
-		list values = cstring_split_list((cstring)fpath, "sem_typed_");
+		values = cstring_split_list((cstring)fpath, "sem_typed_");
 		int sem = sem_create_typed(list_get(values,1));
 		sem_free_typed(sem, list_get(values, 1));
 	} else if (cstring_matches((cstring)fpath, "sem_")) {
-		list values = cstring_split_list((cstring)fpath, "sem_");
+		values = cstring_split_list((cstring)fpath, "sem_");
 		int noerror = 0;
 		int sem = cstring_parseInt(list_get(values, 1), &noerror);
 		int id = sem_create(sem);
 		sem_free(id, 0);
 	}
     int rv = unlink(fpath);
-	
-	
+	free(values);
     return 0;
 }

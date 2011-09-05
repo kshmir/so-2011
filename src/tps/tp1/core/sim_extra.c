@@ -11,12 +11,13 @@ sim_keypair sim_keypair_init(cstring name, int weight) {
 
 cstring sim_keypair_serialize(sim_keypair c) {		
 	cstring params[3];
-	
+	cstring aux;
 	params[0] = c->name;
 	params[1] = cstring_fromInt(c->amount);
 	params[2] = NULL; // BEWARE! ;)
-
-	return cstring_join(params, " ");
+	aux=cstring_join(params, " ");
+	free(params[1]);
+	return aux;
 }
 
 sim_keypair sim_keypair_deserialize(cstring line) {
