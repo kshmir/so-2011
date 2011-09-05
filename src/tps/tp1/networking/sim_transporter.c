@@ -168,11 +168,13 @@ static void_p sim_transporter_listener(sim_transporter t) {
  */
 void sim_transporter_dequeue(sim_transporter t) {
 	
+	pthread_mutex_lock(t->listener_mutex);
 	t->reads--;
 	
 	free(queue_pull(t->messages));
 	
 	pthread_cond_broadcast(t->listener_received);
+	pthread_mutex_unlock(t->listener_mutex);
 }
 
 
