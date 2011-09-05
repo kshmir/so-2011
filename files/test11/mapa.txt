@@ -1,0 +1,1382 @@
+50
+
+HongKong
+Termalgin 5650
+Nolotil 7640
+Lexatn 5230
+Neobrufen 330
+
+Lagos
+Orfidal 7410
+
+Dongguan
+Nolotil 770
+Termalgin 5070
+Neobrufen 5850
+Orfidal 3810
+
+Abidjan
+Nolotil 9250
+
+Lahore
+Neobrufen 7670
+Nolotil 9300
+Lexatn 5420
+Orfidal 5130
+
+Busan
+Termalgin 1230
+Lexatn 2960
+
+Shenzhen
+Lexatn 6810
+Nolotil 3310
+Neobrufen 1120
+Orfidal 1330
+
+Kolkata
+Orfidal 980
+Termalgin 2150
+Neobrufen 4920
+
+Hanoi
+Orfidal 170
+
+Nairobi
+Neobrufen 5950
+
+Berlin
+Nolotil 3690
+Lexatn 5010
+
+Shanghai
+Termalgin 9730
+Neobrufen 9280
+Lexatn 420
+Nolotil 2020
+
+Kinshasa
+Termalgin 4420
+Orfidal 4490
+
+Madrid
+Termalgin 8950
+Lexatn 4590
+Nolotil 8030
+Neobrufen 2990
+
+Lima
+Nolotil 9350
+Lexatn 8200
+
+Mumbai
+Lexatn 660
+Neobrufen 4040
+
+Beijing
+Orfidal 9240
+Neobrufen 860
+Termalgin 9090
+Nolotil 4240
+
+Jeddah
+Lexatn 5840
+Termalgin 3740
+Nolotil 750
+
+Tianjin
+Lexatn 7810
+Neobrufen 6000
+Termalgin 8790
+
+LosAngeles
+Nolotil 4270
+Lexatn 480
+Termalgin 4270
+
+Wuhan
+Orfidal 7930
+
+Kanpur
+Nolotil 8390
+
+Pune
+Nolotil 6230
+Termalgin 8210
+
+Yangon
+Neobrufen 9380
+Termalgin 1520
+Lexatn 8900
+
+Hyderabad
+Termalgin 9500
+Orfidal 6140
+Lexatn 8930
+Nolotil 9380
+
+RioDeJaneiro
+Nolotil 90
+Orfidal 5970
+Lexatn 490
+Neobrufen 7940
+
+Karachi
+Neobrufen 3020
+
+Ahmedabad
+Nolotil 1390
+
+London
+Lexatn 7680
+
+SaintPetersburg
+Neobrufen 7910
+Nolotil 7760
+Lexatn 3480
+Termalgin 8120
+
+Surat
+Termalgin 2810
+Neobrufen 4670
+Lexatn 7070
+Orfidal 2790
+
+Bangkok
+Orfidal 2780
+Lexatn 2510
+Nolotil 5940
+Termalgin 3310
+
+Ankara
+Orfidal 6380
+Neobrufen 40
+Termalgin 5200
+
+Pyongyang
+Nolotil 1010
+
+Chongqing
+Lexatn 2300
+Nolotil 6740
+Neobrufen 2920
+Orfidal 9790
+
+Guangzhou
+Lexatn 9010
+Nolotil 4540
+Neobrufen 8860
+
+Riyadh
+Nolotil 8130
+Termalgin 4680
+
+Seoul
+Termalgin 8380
+Orfidal 9300
+
+Johannesburg
+Termalgin 6230
+Lexatn 2890
+Orfidal 5540
+Neobrufen 7110
+
+Jaipur
+Lexatn 1090
+Nolotil 2560
+Orfidal 6150
+
+Shenyang
+Lexatn 4490
+Neobrufen 7220
+Termalgin 6550
+
+Alexandria
+Orfidal 5600
+Lexatn 5420
+Neobrufen 7510
+
+MexicoCity
+Nolotil 6550
+Lexatn 6420
+
+Tehran
+Neobrufen 2180
+Orfidal 3840
+Lexatn 3130
+Nolotil 2500
+
+Tokyo
+Termalgin 6190
+Neobrufen 3620
+Nolotil 8730
+
+Santiago
+Nolotil 9030
+
+Cairo
+Lexatn 1470
+Termalgin 5010
+Nolotil 1390
+Orfidal 6340
+
+Dhaka
+Nolotil 7610
+Neobrufen 5130
+Termalgin 8770
+
+CapeTown
+Nolotil 1480
+
+Baghdad
+Lexatn 1310
+
+HongKong Lagos 1075
+HongKong Dongguan 1030
+HongKong Abidjan 1895
+HongKong Lahore 295
+HongKong Busan 210
+HongKong Shenzhen 105
+HongKong Kolkata 2765
+HongKong Hanoi 1570
+HongKong Nairobi 2105
+HongKong Berlin 1720
+HongKong Shanghai 880
+HongKong Kinshasa 720
+HongKong Madrid 2415
+HongKong Lima 1370
+HongKong Mumbai 1150
+HongKong Beijing 580
+HongKong Jeddah 2745
+HongKong Tianjin 2640
+HongKong LosAngeles 2830
+HongKong Wuhan 2365
+HongKong Kanpur 150
+HongKong Pune 1060
+HongKong Yangon 25
+HongKong Hyderabad 2925
+HongKong RioDeJaneiro 405
+HongKong Karachi 1430
+HongKong Ahmedabad 1680
+HongKong London 2115
+HongKong SaintPetersburg 1240
+HongKong Surat 255
+HongKong Bangkok 2315
+HongKong Ankara 2275
+HongKong Pyongyang 920
+HongKong Chongqing 380
+HongKong Guangzhou 2535
+HongKong Riyadh 2940
+HongKong Seoul 70
+HongKong Johannesburg 145
+HongKong Jaipur 150
+HongKong Shenyang 2450
+HongKong Alexandria 385
+HongKong MexicoCity 2500
+HongKong Tehran 265
+HongKong Tokyo 1950
+HongKong Santiago 595
+HongKong Cairo 40
+HongKong Dhaka 1850
+HongKong CapeTown 2680
+HongKong Baghdad 1970
+
+Lagos Dongguan 2460
+Lagos Abidjan 560
+Lagos Busan 1955
+Lagos Shenzhen 2860
+Lagos Kolkata 1130
+Lagos Hanoi 410
+Lagos Nairobi 2285
+Lagos Berlin 2755
+Lagos Shanghai 1815
+Lagos Kinshasa 1215
+Lagos Madrid 2545
+Lagos Lima 2530
+Lagos Beijing 1365
+Lagos Jeddah 2860
+Lagos Tianjin 450
+Lagos Wuhan 2895
+Lagos Kanpur 495
+Lagos Pune 215
+Lagos Yangon 850
+Lagos Hyderabad 2265
+Lagos Karachi 695
+Lagos SaintPetersburg 1840
+Lagos Surat 2435
+Lagos Bangkok 310
+Lagos Chongqing 1035
+Lagos Riyadh 1970
+Lagos Seoul 1040
+Lagos Johannesburg 1790
+Lagos Alexandria 1310
+Lagos MexicoCity 735
+Lagos Tokyo 1500
+Lagos Cairo 2745
+Lagos Baghdad 2015
+
+Dongguan Abidjan 1635
+Dongguan Lahore 1305
+Dongguan Busan 2055
+Dongguan Shenzhen 755
+Dongguan Kolkata 1040
+Dongguan Nairobi 1030
+Dongguan Shanghai 1975
+Dongguan Madrid 265
+Dongguan Lima 1335
+Dongguan Tianjin 1720
+Dongguan LosAngeles 2340
+Dongguan Kanpur 1630
+Dongguan Pune 2295
+Dongguan Yangon 2510
+Dongguan Hyderabad 570
+Dongguan RioDeJaneiro 1915
+Dongguan London 515
+Dongguan SaintPetersburg 1635
+Dongguan Bangkok 2930
+Dongguan Pyongyang 1945
+Dongguan Guangzhou 740
+Dongguan Riyadh 1060
+Dongguan Seoul 1635
+Dongguan Johannesburg 1765
+Dongguan Jaipur 2600
+Dongguan Shenyang 1080
+Dongguan Santiago 640
+Dongguan Cairo 125
+Dongguan CapeTown 450
+Dongguan Baghdad 2760
+
+Abidjan Busan 2080
+Abidjan Shenzhen 965
+Abidjan Hanoi 160
+Abidjan Kinshasa 1520
+Abidjan Madrid 1030
+Abidjan Lima 2805
+Abidjan Beijing 90
+Abidjan Jeddah 2200
+Abidjan Tianjin 835
+Abidjan Wuhan 1610
+Abidjan Kanpur 720
+Abidjan Pune 2675
+Abidjan Yangon 710
+Abidjan Hyderabad 245
+Abidjan RioDeJaneiro 1105
+Abidjan Ahmedabad 1100
+Abidjan London 1125
+Abidjan SaintPetersburg 140
+Abidjan Bangkok 705
+Abidjan Chongqing 15
+Abidjan Guangzhou 85
+Abidjan Riyadh 2290
+Abidjan Seoul 950
+Abidjan Johannesburg 1195
+Abidjan Jaipur 2120
+Abidjan Shenyang 1560
+Abidjan Alexandria 970
+Abidjan MexicoCity 2410
+Abidjan Santiago 2595
+Abidjan Cairo 1655
+Abidjan Dhaka 360
+Abidjan Baghdad 2740
+
+Lahore Lagos 1290
+Lahore Abidjan 660
+Lahore Shenzhen 85
+Lahore Kolkata 2700
+Lahore Hanoi 590
+Lahore Madrid 945
+Lahore Lima 2450
+Lahore Jeddah 2815
+Lahore LosAngeles 2800
+Lahore Kanpur 1360
+Lahore Yangon 1250
+Lahore Hyderabad 2920
+Lahore RioDeJaneiro 1025
+Lahore Karachi 980
+Lahore SaintPetersburg 370
+Lahore Surat 1750
+Lahore Bangkok 2705
+Lahore Pyongyang 1945
+Lahore Chongqing 2970
+Lahore Guangzhou 2755
+Lahore Riyadh 1905
+Lahore Seoul 205
+Lahore Johannesburg 55
+Lahore Shenyang 695
+Lahore Alexandria 25
+Lahore Santiago 1955
+Lahore Cairo 1755
+Lahore Baghdad 2355
+
+Busan Shenzhen 975
+Busan Kolkata 240
+Busan Hanoi 315
+Busan Berlin 2000
+Busan Shanghai 2680
+Busan Kinshasa 2520
+Busan Lima 835
+Busan Mumbai 2050
+Busan Beijing 1455
+Busan LosAngeles 1570
+Busan Wuhan 2965
+Busan Kanpur 550
+Busan Yangon 1905
+Busan Hyderabad 950
+Busan Karachi 2450
+Busan London 1795
+Busan SaintPetersburg 1390
+Busan Ankara 1430
+Busan Pyongyang 1605
+Busan Guangzhou 255
+Busan Riyadh 690
+Busan Seoul 1610
+Busan Johannesburg 810
+Busan Jaipur 860
+Busan Shenyang 2535
+Busan MexicoCity 1275
+Busan Tehran 1525
+Busan Tokyo 2845
+Busan Santiago 2440
+Busan Cairo 770
+Busan CapeTown 2440
+Busan Baghdad 2415
+
+Shenzhen Kolkata 2335
+Shenzhen Hanoi 1690
+Shenzhen Nairobi 125
+Shenzhen Berlin 1785
+Shenzhen Shanghai 1185
+Shenzhen Kinshasa 2000
+Shenzhen Madrid 110
+Shenzhen Lima 790
+Shenzhen Beijing 1530
+Shenzhen Jeddah 2950
+Shenzhen Tianjin 2565
+Shenzhen LosAngeles 380
+Shenzhen Wuhan 2550
+Shenzhen Yangon 580
+Shenzhen Hyderabad 2620
+Shenzhen RioDeJaneiro 920
+Shenzhen Ahmedabad 1970
+Shenzhen SaintPetersburg 2350
+Shenzhen Surat 1785
+Shenzhen Bangkok 2390
+Shenzhen Ankara 2115
+Shenzhen Pyongyang 1895
+Shenzhen Chongqing 1400
+Shenzhen Guangzhou 1990
+Shenzhen Seoul 1120
+Shenzhen Johannesburg 2680
+Shenzhen Jaipur 1175
+Shenzhen Alexandria 420
+Shenzhen MexicoCity 2015
+Shenzhen Tehran 2835
+Shenzhen Tokyo 1200
+Shenzhen Santiago 730
+Shenzhen Cairo 2755
+Shenzhen Dhaka 1040
+Shenzhen CapeTown 2805
+Shenzhen Baghdad 1220
+
+Kolkata Abidjan 2285
+Kolkata Nairobi 2500
+Kolkata Kinshasa 1170
+Kolkata Madrid 380
+Kolkata Lima 2865
+Kolkata Mumbai 2430
+Kolkata Jeddah 470
+Kolkata Tianjin 1800
+Kolkata LosAngeles 100
+Kolkata Wuhan 2410
+Kolkata Kanpur 2485
+Kolkata Pune 2970
+Kolkata Yangon 2005
+Kolkata Hyderabad 235
+Kolkata Karachi 1985
+Kolkata Ahmedabad 1595
+Kolkata London 1735
+Kolkata SaintPetersburg 1000
+Kolkata Surat 2225
+Kolkata Pyongyang 2985
+Kolkata Guangzhou 590
+Kolkata Seoul 515
+Kolkata Johannesburg 1865
+Kolkata Jaipur 10
+Kolkata Shenyang 425
+Kolkata Alexandria 2885
+Kolkata Tokyo 2605
+Kolkata Dhaka 2270
+
+Hanoi Kolkata 2950
+Hanoi Nairobi 725
+Hanoi Berlin 895
+Hanoi Shanghai 140
+Hanoi Madrid 715
+Hanoi Lima 965
+Hanoi Mumbai 1995
+Hanoi Tianjin 1545
+Hanoi LosAngeles 770
+Hanoi Wuhan 2400
+Hanoi Kanpur 890
+Hanoi Pune 450
+Hanoi Yangon 905
+Hanoi Hyderabad 1195
+Hanoi RioDeJaneiro 1325
+Hanoi Karachi 1340
+Hanoi Ahmedabad 2460
+Hanoi London 2890
+Hanoi Bangkok 1675
+Hanoi Pyongyang 2505
+Hanoi Guangzhou 710
+Hanoi Seoul 2100
+Hanoi Johannesburg 1610
+Hanoi Shenyang 2440
+Hanoi Alexandria 1825
+Hanoi MexicoCity 2745
+Hanoi Tehran 1070
+Hanoi Tokyo 470
+Hanoi Santiago 690
+Hanoi Cairo 2230
+Hanoi Dhaka 305
+Hanoi CapeTown 2760
+Hanoi Baghdad 585
+
+Nairobi Abidjan 2510
+Nairobi Lahore 2015
+Nairobi Berlin 1170
+Nairobi Shanghai 430
+Nairobi Kinshasa 1970
+Nairobi Madrid 195
+Nairobi Lima 2905
+Nairobi Mumbai 2960
+Nairobi Jeddah 1045
+Nairobi Tianjin 390
+Nairobi Pune 10
+Nairobi Yangon 2540
+Nairobi Hyderabad 760
+Nairobi RioDeJaneiro 1660
+Nairobi Karachi 620
+Nairobi London 2520
+Nairobi SaintPetersburg 1985
+Nairobi Ankara 1680
+Nairobi Pyongyang 2050
+Nairobi Chongqing 2165
+Nairobi Guangzhou 750
+Nairobi Riyadh 1365
+Nairobi Johannesburg 2370
+Nairobi Shenyang 190
+Nairobi Alexandria 1300
+Nairobi MexicoCity 2985
+Nairobi Tokyo 330
+Nairobi Santiago 2355
+Nairobi Cairo 955
+Nairobi Dhaka 2695
+Nairobi CapeTown 935
+
+Berlin Dongguan 855
+Berlin Abidjan 2765
+Berlin Lahore 1045
+Berlin Shanghai 1655
+Berlin Kinshasa 1405
+Berlin Madrid 2890
+Berlin Mumbai 955
+Berlin Beijing 565
+Berlin Jeddah 1790
+Berlin Tianjin 2670
+Berlin Wuhan 2890
+Berlin Kanpur 1815
+Berlin Yangon 1385
+Berlin Hyderabad 2510
+Berlin RioDeJaneiro 2540
+Berlin Karachi 2255
+Berlin Ahmedabad 2540
+Berlin London 1300
+Berlin Surat 1560
+Berlin Bangkok 1955
+Berlin Ankara 905
+Berlin Chongqing 2640
+Berlin Guangzhou 2895
+Berlin Riyadh 780
+Berlin Seoul 1480
+Berlin Johannesburg 120
+Berlin Jaipur 1325
+Berlin Shenyang 820
+Berlin Alexandria 675
+Berlin MexicoCity 2670
+Berlin Tehran 2050
+Berlin Tokyo 2240
+Berlin Santiago 60
+Berlin Cairo 730
+Berlin Baghdad 545
+
+Shanghai Abidjan 2825
+Shanghai Lahore 2050
+Shanghai Kolkata 2290
+Shanghai Kinshasa 595
+Shanghai Madrid 315
+Shanghai Lima 1440
+Shanghai Beijing 1415
+Shanghai Jeddah 2825
+Shanghai Tianjin 1040
+Shanghai Kanpur 1370
+Shanghai Pune 2210
+Shanghai Yangon 1350
+Shanghai RioDeJaneiro 1065
+Shanghai Karachi 65
+Shanghai Ahmedabad 1435
+Shanghai London 925
+Shanghai SaintPetersburg 1705
+Shanghai Pyongyang 1110
+Shanghai Chongqing 745
+Shanghai Guangzhou 1020
+Shanghai Riyadh 580
+Shanghai Seoul 105
+Shanghai Johannesburg 1060
+Shanghai Alexandria 2785
+Shanghai MexicoCity 1480
+Shanghai Tehran 60
+Shanghai Tokyo 1570
+Shanghai Cairo 2300
+Shanghai Baghdad 400
+
+Kinshasa Dongguan 2960
+Kinshasa Hanoi 30
+Kinshasa Madrid 1170
+Kinshasa Lima 1950
+Kinshasa Tianjin 690
+Kinshasa LosAngeles 1835
+Kinshasa Wuhan 530
+Kinshasa Kanpur 1340
+Kinshasa Pune 1905
+Kinshasa Yangon 375
+Kinshasa Hyderabad 385
+Kinshasa RioDeJaneiro 2310
+Kinshasa Ahmedabad 1075
+Kinshasa SaintPetersburg 1580
+Kinshasa Surat 2450
+Kinshasa Bangkok 1105
+Kinshasa Ankara 1375
+Kinshasa Guangzhou 1445
+Kinshasa Seoul 70
+Kinshasa Johannesburg 2990
+Kinshasa Jaipur 2875
+Kinshasa Alexandria 1765
+Kinshasa MexicoCity 570
+Kinshasa Tehran 460
+Kinshasa Santiago 2070
+Kinshasa Cairo 2955
+Kinshasa Dhaka 225
+Kinshasa CapeTown 2520
+Kinshasa Baghdad 1655
+
+Madrid Busan 1080
+Madrid Mumbai 715
+Madrid Beijing 2940
+Madrid Jeddah 1590
+Madrid Wuhan 855
+Madrid Kanpur 380
+Madrid Karachi 1380
+Madrid Ahmedabad 205
+Madrid London 1595
+Madrid SaintPetersburg 445
+Madrid Surat 240
+Madrid Bangkok 2440
+Madrid Ankara 745
+Madrid Pyongyang 540
+Madrid Johannesburg 2880
+Madrid Jaipur 815
+Madrid Shenyang 395
+Madrid Alexandria 2675
+Madrid MexicoCity 2935
+Madrid Tehran 1370
+Madrid Santiago 1720
+Madrid Cairo 670
+Madrid Dhaka 495
+Madrid Baghdad 205
+
+Lima Berlin 2600
+Lima Madrid 260
+Lima Beijing 1985
+Lima Jeddah 25
+Lima Tianjin 825
+Lima LosAngeles 340
+Lima Wuhan 1410
+Lima Pune 2455
+Lima Yangon 1540
+Lima Hyderabad 2015
+Lima RioDeJaneiro 1910
+Lima Karachi 2045
+Lima Ahmedabad 845
+Lima SaintPetersburg 685
+Lima Surat 1000
+Lima Bangkok 2720
+Lima Ankara 1205
+Lima Pyongyang 2230
+Lima Chongqing 810
+Lima Guangzhou 1550
+Lima Seoul 2735
+Lima Johannesburg 2905
+Lima Jaipur 2500
+Lima Shenyang 1400
+Lima Tehran 2795
+Lima Tokyo 1330
+Lima Dhaka 2570
+Lima Baghdad 1150
+
+Mumbai Dongguan 2655
+Mumbai Abidjan 1465
+Mumbai Lahore 1125
+Mumbai Shenzhen 645
+Mumbai Jeddah 1680
+Mumbai LosAngeles 1165
+Mumbai Wuhan 655
+Mumbai Kanpur 2705
+Mumbai Hyderabad 905
+Mumbai RioDeJaneiro 2630
+Mumbai London 1110
+Mumbai SaintPetersburg 845
+Mumbai Ankara 1455
+Mumbai Chongqing 2055
+Mumbai Guangzhou 2190
+Mumbai Seoul 130
+Mumbai Johannesburg 185
+Mumbai Jaipur 1395
+Mumbai Shenyang 985
+Mumbai MexicoCity 120
+Mumbai Tokyo 1635
+Mumbai Dhaka 2245
+Mumbai CapeTown 1840
+Mumbai Baghdad 2135
+
+Beijing Lahore 2705
+Beijing Kolkata 695
+Beijing Hanoi 2590
+Beijing Kinshasa 1255
+Beijing Tianjin 1145
+Beijing LosAngeles 2855
+Beijing Wuhan 2425
+Beijing Kanpur 2340
+Beijing Pune 1380
+Beijing Yangon 770
+Beijing Karachi 385
+Beijing London 635
+Beijing Surat 245
+Beijing Bangkok 2805
+Beijing Ankara 1090
+Beijing Pyongyang 2405
+Beijing Chongqing 575
+Beijing Seoul 2015
+Beijing Johannesburg 2510
+Beijing Alexandria 1785
+Beijing MexicoCity 2925
+Beijing Tehran 350
+Beijing Tokyo 2885
+Beijing Santiago 1140
+Beijing Cairo 2550
+Beijing Dhaka 1575
+Beijing Baghdad 1385
+
+Jeddah Dongguan 880
+Jeddah Hanoi 1365
+Jeddah Kinshasa 2550
+Jeddah Beijing 1780
+Jeddah Tianjin 1430
+Jeddah LosAngeles 605
+Jeddah Wuhan 1075
+Jeddah Kanpur 550
+Jeddah Pune 825
+Jeddah Yangon 380
+Jeddah RioDeJaneiro 2590
+Jeddah Karachi 210
+Jeddah SaintPetersburg 1775
+Jeddah Bangkok 1995
+Jeddah Ankara 1605
+Jeddah Pyongyang 2800
+Jeddah Seoul 1830
+Jeddah Jaipur 2205
+Jeddah Shenyang 1620
+Jeddah Alexandria 1660
+Jeddah MexicoCity 1815
+Jeddah Tehran 1620
+Jeddah Tokyo 470
+Jeddah Santiago 280
+Jeddah Dhaka 1760
+Jeddah Baghdad 1880
+
+Tianjin Wuhan 65
+Tianjin Kanpur 1905
+Tianjin Pune 1305
+Tianjin Yangon 495
+Tianjin Hyderabad 2990
+Tianjin RioDeJaneiro 2870
+Tianjin Karachi 2690
+Tianjin Ahmedabad 1110
+Tianjin London 2545
+Tianjin Surat 440
+Tianjin Bangkok 2055
+Tianjin Ankara 1160
+Tianjin Chongqing 2735
+Tianjin Guangzhou 2080
+Tianjin Riyadh 2100
+Tianjin Shenyang 1890
+Tianjin Alexandria 1260
+Tianjin MexicoCity 1075
+Tianjin Tokyo 1050
+Tianjin Santiago 2875
+Tianjin Cairo 335
+Tianjin Dhaka 2615
+Tianjin CapeTown 2235
+Tianjin Baghdad 675
+
+LosAngeles Lagos 2225
+LosAngeles Abidjan 1520
+LosAngeles Nairobi 1295
+LosAngeles Berlin 1035
+LosAngeles Shanghai 1315
+LosAngeles Madrid 2615
+LosAngeles Wuhan 1990
+LosAngeles Kanpur 400
+LosAngeles Pune 450
+LosAngeles Yangon 2970
+LosAngeles Hyderabad 900
+LosAngeles RioDeJaneiro 35
+LosAngeles Ahmedabad 880
+LosAngeles SaintPetersburg 2915
+LosAngeles Surat 2640
+LosAngeles Bangkok 2530
+LosAngeles Ankara 1990
+LosAngeles Pyongyang 40
+LosAngeles Chongqing 640
+LosAngeles Guangzhou 1950
+LosAngeles Seoul 520
+LosAngeles Johannesburg 1205
+LosAngeles Jaipur 2060
+LosAngeles Shenyang 1260
+LosAngeles Alexandria 1405
+LosAngeles MexicoCity 500
+LosAngeles Tehran 2560
+LosAngeles Santiago 2760
+LosAngeles Cairo 2900
+LosAngeles Dhaka 1760
+LosAngeles CapeTown 1990
+
+Wuhan Nairobi 2545
+Wuhan Shanghai 1485
+Wuhan Pune 905
+Wuhan Hyderabad 2915
+Wuhan RioDeJaneiro 50
+Wuhan Ahmedabad 640
+Wuhan London 355
+Wuhan SaintPetersburg 100
+Wuhan Surat 1565
+Wuhan Bangkok 2395
+Wuhan Chongqing 2520
+Wuhan Guangzhou 2805
+Wuhan Johannesburg 2325
+Wuhan Jaipur 750
+Wuhan Shenyang 365
+Wuhan Alexandria 2080
+Wuhan MexicoCity 2850
+Wuhan Tehran 960
+Wuhan Tokyo 1245
+Wuhan Santiago 1380
+Wuhan Cairo 2060
+Wuhan CapeTown 1395
+Wuhan Baghdad 615
+
+Kanpur Wuhan 1230
+Kanpur Pune 2235
+Kanpur Hyderabad 2230
+Kanpur RioDeJaneiro 370
+Kanpur SaintPetersburg 2235
+Kanpur Bangkok 1060
+Kanpur Ankara 2935
+Kanpur Pyongyang 350
+Kanpur Chongqing 940
+Kanpur Guangzhou 2860
+Kanpur Seoul 2545
+Kanpur Johannesburg 1505
+Kanpur Jaipur 1475
+Kanpur Alexandria 940
+Kanpur Cairo 2330
+Kanpur Dhaka 1120
+Kanpur CapeTown 2285
+Kanpur Baghdad 1155
+
+Pune Lahore 90
+Pune Shenzhen 1185
+Pune Berlin 2905
+Pune Mumbai 1965
+Pune Yangon 1355
+Pune RioDeJaneiro 1550
+Pune Ahmedabad 1235
+Pune London 1175
+Pune SaintPetersburg 2600
+Pune Bangkok 2305
+Pune Ankara 40
+Pune Pyongyang 2145
+Pune Chongqing 395
+Pune Guangzhou 1205
+Pune Riyadh 2025
+Pune Seoul 2400
+Pune Johannesburg 2010
+Pune Shenyang 2340
+Pune Alexandria 605
+Pune MexicoCity 395
+Pune Santiago 1085
+Pune Dhaka 1730
+Pune Baghdad 2395
+
+Yangon Madrid 615
+Yangon Mumbai 2320
+Yangon Wuhan 1605
+Yangon Hyderabad 2440
+Yangon RioDeJaneiro 2650
+Yangon Karachi 1955
+Yangon London 2270
+Yangon SaintPetersburg 850
+Yangon Surat 2270
+Yangon Bangkok 2090
+Yangon Ankara 1250
+Yangon Guangzhou 1570
+Yangon Riyadh 380
+Yangon Seoul 1515
+Yangon Johannesburg 80
+Yangon Shenyang 1325
+Yangon MexicoCity 535
+Yangon Tokyo 455
+Yangon Santiago 615
+Yangon Dhaka 525
+Yangon CapeTown 1795
+Yangon Baghdad 2535
+
+Hyderabad Beijing 2945
+Hyderabad RioDeJaneiro 1050
+Hyderabad Karachi 585
+Hyderabad Ahmedabad 1255
+Hyderabad London 440
+Hyderabad SaintPetersburg 2030
+Hyderabad Ankara 2510
+Hyderabad Pyongyang 45
+Hyderabad Chongqing 615
+Hyderabad Riyadh 2270
+Hyderabad Seoul 1120
+Hyderabad Johannesburg 1650
+Hyderabad Jaipur 260
+Hyderabad Shenyang 1145
+Hyderabad Alexandria 1515
+Hyderabad MexicoCity 195
+Hyderabad Tehran 2615
+Hyderabad Tokyo 2435
+Hyderabad Santiago 2190
+Hyderabad Dhaka 2705
+Hyderabad CapeTown 1365
+Hyderabad Baghdad 2165
+
+RioDeJaneiro Lagos 1115
+RioDeJaneiro Busan 2245
+RioDeJaneiro Kolkata 2825
+RioDeJaneiro Madrid 340
+RioDeJaneiro Beijing 1125
+RioDeJaneiro Ahmedabad 2635
+RioDeJaneiro London 1440
+RioDeJaneiro Surat 2175
+RioDeJaneiro Ankara 2270
+RioDeJaneiro Pyongyang 1015
+RioDeJaneiro Chongqing 230
+RioDeJaneiro Guangzhou 2095
+RioDeJaneiro Riyadh 2095
+RioDeJaneiro Seoul 2530
+RioDeJaneiro Johannesburg 200
+RioDeJaneiro Jaipur 1885
+RioDeJaneiro Shenyang 1530
+RioDeJaneiro Alexandria 2440
+RioDeJaneiro MexicoCity 1700
+RioDeJaneiro Tehran 340
+RioDeJaneiro Tokyo 2410
+RioDeJaneiro Santiago 2795
+RioDeJaneiro CapeTown 2565
+
+Karachi Dongguan 2410
+Karachi Abidjan 2850
+Karachi Shenzhen 2425
+Karachi Mumbai 1020
+Karachi LosAngeles 1655
+Karachi Wuhan 2375
+Karachi London 855
+Karachi Surat 2055
+Karachi Ankara 90
+Karachi Pyongyang 2040
+Karachi Riyadh 1910
+Karachi Seoul 1850
+Karachi Johannesburg 1190
+Karachi Jaipur 115
+Karachi Shenyang 1315
+Karachi Alexandria 520
+Karachi MexicoCity 2685
+Karachi Tehran 1415
+Karachi Tokyo 1245
+Karachi Santiago 1295
+Karachi Dhaka 2375
+Karachi CapeTown 1710
+Karachi Baghdad 2215
+
+Ahmedabad Dongguan 870
+Ahmedabad Nairobi 1670
+Ahmedabad Mumbai 1095
+Ahmedabad Jeddah 100
+Ahmedabad Yangon 240
+Ahmedabad Karachi 2730
+Ahmedabad London 2495
+Ahmedabad Bangkok 610
+Ahmedabad Ankara 2425
+Ahmedabad Pyongyang 435
+Ahmedabad Chongqing 565
+Ahmedabad Guangzhou 2115
+Ahmedabad Riyadh 895
+Ahmedabad Johannesburg 2660
+Ahmedabad Jaipur 2260
+Ahmedabad Alexandria 2625
+Ahmedabad MexicoCity 2220
+Ahmedabad Tehran 2810
+Ahmedabad Tokyo 1235
+Ahmedabad Santiago 1540
+Ahmedabad Dhaka 315
+Ahmedabad CapeTown 2180
+Ahmedabad Baghdad 890
+
+London Lagos 1195
+London Lahore 545
+London Shenzhen 640
+London Lima 555
+London Jeddah 2350
+London LosAngeles 225
+London Kanpur 2890
+London SaintPetersburg 1145
+London Surat 1690
+London Bangkok 1525
+London Pyongyang 2975
+London Chongqing 1740
+London Guangzhou 2825
+London Riyadh 2720
+London Seoul 2880
+London Johannesburg 910
+London Jaipur 2050
+London Shenyang 240
+London MexicoCity 2560
+London Tehran 305
+London Tokyo 330
+London Santiago 1485
+London Baghdad 1340
+
+SaintPetersburg Beijing 1315
+SaintPetersburg Tianjin 1155
+SaintPetersburg RioDeJaneiro 1675
+SaintPetersburg Karachi 280
+SaintPetersburg Surat 340
+SaintPetersburg Ankara 2155
+SaintPetersburg Pyongyang 255
+SaintPetersburg Guangzhou 1780
+SaintPetersburg Seoul 1715
+SaintPetersburg Johannesburg 400
+SaintPetersburg Shenyang 2505
+SaintPetersburg Alexandria 1960
+SaintPetersburg Tehran 1515
+SaintPetersburg Tokyo 1860
+SaintPetersburg Santiago 1645
+SaintPetersburg Dhaka 225
+SaintPetersburg Baghdad 1770
+
+Surat Dongguan 215
+Surat Abidjan 165
+Surat Nairobi 795
+Surat Shanghai 2340
+Surat Pune 1245
+Surat Hyderabad 1750
+Surat Ahmedabad 920
+Surat Bangkok 530
+Surat Ankara 85
+Surat Pyongyang 1350
+Surat Guangzhou 2510
+Surat Riyadh 1770
+Surat Johannesburg 60
+Surat CapeTown 2895
+
+Bangkok Busan 2285
+Bangkok Nairobi 2030
+Bangkok Shanghai 2790
+Bangkok Hyderabad 825
+Bangkok RioDeJaneiro 1965
+Bangkok Karachi 895
+Bangkok SaintPetersburg 1030
+Bangkok Ankara 220
+Bangkok Chongqing 2490
+Bangkok Guangzhou 2745
+Bangkok Riyadh 55
+Bangkok Seoul 1285
+Bangkok Jaipur 1950
+Bangkok Shenyang 1080
+Bangkok Alexandria 715
+Bangkok Tokyo 1250
+Bangkok Santiago 1990
+Bangkok Cairo 2695
+Bangkok Dhaka 340
+Bangkok Baghdad 2110
+
+Ankara Abidjan 265
+Ankara Lahore 1850
+Ankara Kolkata 1150
+Ankara Shanghai 965
+Ankara Wuhan 2375
+Ankara Pyongyang 330
+Ankara Guangzhou 2360
+Ankara Johannesburg 2455
+Ankara Jaipur 1045
+Ankara Shenyang 1670
+Ankara MexicoCity 1675
+Ankara Tokyo 1855
+Ankara Santiago 2440
+Ankara Dhaka 70
+Ankara CapeTown 575
+Ankara Baghdad 920
+
+Pyongyang Lagos 505
+Pyongyang Abidjan 1355
+Pyongyang Berlin 2775
+Pyongyang Mumbai 1650
+Pyongyang Tianjin 2190
+Pyongyang Wuhan 740
+Pyongyang Yangon 505
+Pyongyang Bangkok 10
+Pyongyang Chongqing 880
+Pyongyang Riyadh 915
+Pyongyang Seoul 2495
+Pyongyang Shenyang 2530
+Pyongyang Alexandria 310
+Pyongyang MexicoCity 1480
+Pyongyang Tehran 1825
+Pyongyang Tokyo 1180
+Pyongyang Santiago 2710
+Pyongyang Cairo 1485
+Pyongyang Baghdad 2505
+
+Chongqing Dongguan 1380
+Chongqing Busan 2540
+Chongqing Kolkata 2810
+Chongqing Hanoi 1740
+Chongqing Kinshasa 2335
+Chongqing Madrid 585
+Chongqing Jeddah 1400
+Chongqing Yangon 2115
+Chongqing SaintPetersburg 2945
+Chongqing Surat 755
+Chongqing Riyadh 680
+Chongqing Jaipur 1845
+Chongqing Shenyang 2445
+Chongqing MexicoCity 2725
+Chongqing Tehran 885
+Chongqing Santiago 2370
+Chongqing Cairo 745
+Chongqing Dhaka 980
+Chongqing CapeTown 1460
+
+Guangzhou Lagos 1850
+Guangzhou Madrid 1735
+Guangzhou Jeddah 2350
+Guangzhou Hyderabad 680
+Guangzhou Karachi 1510
+Guangzhou Pyongyang 285
+Guangzhou Chongqing 575
+Guangzhou Seoul 1325
+Guangzhou Jaipur 715
+Guangzhou Shenyang 2425
+Guangzhou Tehran 2415
+Guangzhou Santiago 565
+Guangzhou Dhaka 970
+Guangzhou CapeTown 2225
+Guangzhou Baghdad 2020
+
+Riyadh Shenzhen 1605
+Riyadh Kolkata 305
+Riyadh Hanoi 2400
+Riyadh Madrid 1475
+Riyadh Mumbai 465
+Riyadh LosAngeles 1290
+Riyadh Kanpur 1255
+Riyadh SaintPetersburg 1335
+Riyadh Ankara 2435
+Riyadh Seoul 935
+Riyadh Johannesburg 2205
+Riyadh Shenyang 2430
+Riyadh Alexandria 1940
+Riyadh Tehran 295
+Riyadh Tokyo 2740
+Riyadh Cairo 715
+Riyadh Dhaka 930
+Riyadh Baghdad 2055
+
+Seoul Nairobi 2585
+Seoul Madrid 2110
+Seoul Tianjin 1855
+Seoul Wuhan 2580
+Seoul Ahmedabad 2455
+Seoul Surat 1440
+Seoul Ankara 1000
+Seoul Johannesburg 2970
+Seoul Jaipur 480
+Seoul Shenyang 410
+Seoul Alexandria 730
+Seoul MexicoCity 855
+Seoul Tokyo 2990
+Seoul Cairo 905
+Seoul Dhaka 1595
+Seoul CapeTown 1715
+
+Johannesburg Guangzhou 2660
+Johannesburg Jaipur 2205
+Johannesburg Alexandria 1080
+Johannesburg MexicoCity 1845
+Johannesburg Tehran 305
+Johannesburg Santiago 765
+Johannesburg Dhaka 1675
+
+Jaipur Lagos 2365
+Jaipur Shanghai 730
+Jaipur Beijing 275
+Jaipur Yangon 2285
+Jaipur SaintPetersburg 1330
+Jaipur Surat 475
+Jaipur Pyongyang 2120
+Jaipur Shenyang 1085
+Jaipur Alexandria 1880
+Jaipur MexicoCity 685
+Jaipur Tokyo 1590
+Jaipur Santiago 2575
+Jaipur Dhaka 2680
+Jaipur Baghdad 1820
+
+Shenyang Lagos 1485
+Shenyang Shenzhen 125
+Shenyang Kinshasa 1100
+Shenyang Beijing 1400
+Shenyang Kanpur 1740
+Shenyang Ahmedabad 1875
+Shenyang Surat 1430
+Shenyang Johannesburg 2030
+Shenyang MexicoCity 2175
+Shenyang Tokyo 785
+Shenyang Santiago 1370
+Shenyang Dhaka 855
+Shenyang CapeTown 975
+Shenyang Baghdad 375
+
+Alexandria Dongguan 1365
+Alexandria Mumbai 200
+Alexandria London 2440
+Alexandria Surat 2060
+Alexandria Chongqing 2575
+Alexandria Guangzhou 1650
+Alexandria Shenyang 2000
+Alexandria Tokyo 435
+Alexandria Santiago 485
+Alexandria Cairo 2460
+Alexandria Dhaka 805
+Alexandria CapeTown 2050
+Alexandria Baghdad 1555
+
+MexicoCity SaintPetersburg 2605
+MexicoCity Surat 60
+MexicoCity Bangkok 490
+MexicoCity Guangzhou 20
+MexicoCity Riyadh 1110
+MexicoCity Alexandria 2795
+MexicoCity Tehran 1715
+MexicoCity Santiago 320
+MexicoCity Cairo 2890
+MexicoCity Dhaka 765
+MexicoCity Baghdad 1765
+
+Tehran Abidjan 1350
+Tehran Lahore 930
+Tehran Kolkata 2105
+Tehran Mumbai 1120
+Tehran Kanpur 915
+Tehran Pune 25
+Tehran Yangon 2680
+Tehran Bangkok 2965
+Tehran Santiago 755
+Tehran Dhaka 2090
+Tehran CapeTown 440
+Tehran Baghdad 2610
+
+Tokyo Dongguan 2425
+Tokyo Lahore 2950
+Tokyo Kinshasa 775
+Tokyo LosAngeles 2150
+Tokyo Kanpur 2920
+Tokyo Pune 2050
+Tokyo Surat 745
+Tokyo Chongqing 425
+Tokyo Guangzhou 215
+Tokyo Johannesburg 1680
+Tokyo MexicoCity 2245
+Tokyo Cairo 1990
+Tokyo Dhaka 2230
+Tokyo Baghdad 1565
+
+Santiago Kolkata 1840
+Santiago Shanghai 150
+Santiago Lima 2565
+Santiago Mumbai 2075
+Santiago Surat 2075
+Santiago Riyadh 660
+Santiago Seoul 2650
+Santiago Dhaka 865
+Santiago CapeTown 2680
+
+Cairo Lima 575
+Cairo Mumbai 1155
+Cairo Jeddah 2875
+Cairo Hyderabad 2715
+Cairo RioDeJaneiro 1395
+Cairo Karachi 195
+Cairo Ahmedabad 2170
+Cairo London 1905
+Cairo Surat 685
+Cairo Ankara 1050
+Cairo Guangzhou 305
+Cairo Santiago 2575
+Cairo Dhaka 1440
+Cairo CapeTown 2135
+
+Dhaka Lagos 2460
+Dhaka Busan 2410
+Dhaka RioDeJaneiro 2420
+Dhaka London 2300
+Dhaka Surat 315
+Dhaka Pyongyang 970
+Dhaka CapeTown 2725
+Dhaka Baghdad 1625
+
+CapeTown Lagos 465
+CapeTown Lahore 2760
+CapeTown Berlin 2175
+CapeTown Shanghai 2585
+CapeTown Madrid 955
+CapeTown Lima 1270
+CapeTown Beijing 2705
+CapeTown Jeddah 2445
+CapeTown London 2055
+CapeTown Bangkok 1915
+CapeTown Pyongyang 2735
+CapeTown MexicoCity 1905
+CapeTown Tokyo 2480
+CapeTown Baghdad 660
+
+Baghdad Kolkata 625
+Baghdad LosAngeles 1050
+Baghdad RioDeJaneiro 995
+Baghdad Surat 240
+Baghdad Seoul 1495
+Baghdad Santiago 1270
+Baghdad Cairo 2970

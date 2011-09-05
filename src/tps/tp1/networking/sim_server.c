@@ -241,6 +241,7 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 
 	
 	s->spawn_sem = sem_create_typed("spawn");
+	sem_set_value(s->spawn_sem, 1);
 	s->server_id = server_id;
 
 

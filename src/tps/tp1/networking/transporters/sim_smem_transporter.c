@@ -143,7 +143,7 @@ typedef struct smem_header_block {
 /**
  Amount of headers.
  */
-#define	SMEM_HEADER_BLOCK_COUNT	(0x400 / 2)
+#define	SMEM_HEADER_BLOCK_COUNT	(0x400 / 5)
 /**
  Actual size of the first block.
  */
@@ -151,15 +151,15 @@ typedef struct smem_header_block {
 /** 
  Amount of blocks in the shmem.
  */
-#define SMEM_BLOCK_COUNT		(0x400 / 2)
+#define SMEM_BLOCK_COUNT		(0x400 / 5)
 /**
  Amount of available blocks (blocks - header block).
  */
-#define SMEM_BLOCK_AVAIL_COUNT	((0x400 / 2) - 1)
+#define SMEM_BLOCK_AVAIL_COUNT	((0x400 / 5) - 1)
 /**
  Limit of allocs allowed per write, if more needed, then the write is done with buffering.
  */
-#define SMEM_BLOCK_MAX_ALLOC	(0x400 / 2)
+#define SMEM_BLOCK_MAX_ALLOC	(0x400 / 5)
 /**
  Size of a mem block
  */
@@ -172,7 +172,6 @@ typedef struct smem_header_block {
  Total shared memory space required.
  */
 #define	SMEM_SPACE_SIZE			(SMEM_BLOCK_COUNT * SMEM_BLOCK_SIZE)
-
 #else
 /**
 	Size fo a header block, it's usually just an int.
@@ -292,7 +291,7 @@ void smem_init_space(sim_smem_transporter * s) {
 		
 		// You don't actually want this little ones to be different than this.
 		sem_up(s->sem_available_blocks, def->available_blocks + 1);
-		sem_set_value(s->sem_header_r,1);	
+		sem_set_value(s->sem_header_r,0);	
 
 		sem_up(s->sem_alloc, 1);
 	}
@@ -457,10 +456,10 @@ short smem_get_next_block_and_alloc(sim_smem_transporter * s, int * block_qty) {
 	while(qty > 0) {
 		if (smem_get_block_allocd(s, index) == 0) {
 			smem_set_block_allocd(s, index, 1);
-			smem_set_block_broadcast(s, index, 0);
-			smem_set_block_burst(s, index, 0);
-			smem_set_block_written(s, index, 0);
-			smem_set_block_reading(s, index, 0);
+//			smem_set_block_broadcast(s, index, 0);
+//			smem_set_block_burst(s, index, 0);
+//			smem_set_block_written(s, index, 0);
+//			smem_set_block_reading(s, index, 0);
 			if (!start_id_set) {
 				start_id_set = 1;
 				start_id = index;
@@ -512,6 +511,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 //	//IPCSDebug(SMEM_DEBUG&WRITE,"DATA_SIZE: %d\n", SMEM_DATA_SIZE);
 	int blocks_to_write = data_qty;
 
+	
 
 	smem_header_block * header_b = smem_get_next_header_block(s,&blocks_to_write); // Toma un slot, o espera.
 	smem_header_block * header_cur = header_b;
@@ -529,7 +529,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 
 	
 	
-
+	
 	
 	short block_cur_id = header_b->block_id;
 	int end = 0;
@@ -574,7 +574,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	}
 	
 	sem_up(s->sem_header_w, blocks_to_write);
-	cprintf("SMEM: BOUT TO WRITE %d\t %d\t %d\t %d\n",CELESTE, blocks_to_write, sem_value(s->sem_available_blocks), sem_value(s->sem_header_w), s->sem_header_w);	
+
 	if (end && data_qty != 0) {
 		// //IPCSDebug(SMEM_DEBUG&WRITE,"Amount calculation error!");
 	}
@@ -594,10 +594,10 @@ cstring smem_space_read(sim_smem_transporter * s) {
 	
 	// TODO: Fix this!!!!!!!!
 //	//IPCSDebug(SMEM_DEBUG&READ,"Read sem value: %d\t %d\n", s->sem_header_r, sem_value(s->sem_header_r));
-
-	cprintf("SMEM_READ: locking ..... %d\t %d\n", AMARILLO, sem_value(s->sem_header_r), s->sem_header_r);
+	
+	cprintf("SMEM_READ_LOCK\n", ROJO);
 	sem_down(s->sem_header_r, 1);
-	cprintf("SMEM_READ: UNLOCKD %d\t %d\n", AMARILLO, sem_value(s->sem_header_r), s->sem_header_r);
+	cprintf("SMEM_READ_UNLOCK\n", AMARILLO);
 //	//IPCSDebug(SMEM_DEBUG&READ,"UNLOCK! %d\t %d\n", s->sem_header_r, sem_value(s->sem_header_r));
 
 	
@@ -706,8 +706,7 @@ sim_smem_transporter * sim_smem_transporter_init(int server_id, int client_id, i
 	Write to the shared memoery.
 */
 void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
-	cprintf("SMEM: I want to write %d\n",VERDE, cstring_len(data));
-
+	//cprintf("SMEM: I want to write %d\n",ROJO, cstring_len(data));
 	smem_space_write(t, data);
 
 }
@@ -718,7 +717,7 @@ void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) {
 	cstring data = smem_space_read(t);
 	*extra_data = strlen(data) + 1;
-	cprintf("SMEM_READ: len: %d\n", ROJO, *extra_data);
+	//cprintf("SMEM_READ: len: %d\n", ROJO, *extra_data);
 	return data;
 }
 

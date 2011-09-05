@@ -1,0 +1,36 @@
+5
+
+Beijing
+Termalgin 8670
+Neobrufen 3620
+Lexatn 2360
+Nolotil 5050
+Orfidal 1490
+
+Berlin
+Lexatn 1270
+Nolotil 2820
+Orfidal 1300
+Neobrufen 5740
+Termalgin 2840
+
+Madrid
+Orfidal 1560
+Termalgin 1340
+Neobrufen 9590
+Nolotil 5670
+Lexatn 4180
+
+Cairo
+Lexatn 2880
+Orfidal 3450
+Termalgin 8520
+Nolotil 4840
+Neobrufen 680
+
+Chongqing
+Termalgin 7340
+Orfidal 6730
+Neobrufen 5980
+Nolotil 8510
+Lexatn 4970

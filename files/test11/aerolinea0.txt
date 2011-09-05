@@ -1,0 +1,36 @@
+5
+
+Abidjan
+Termalgin 2530
+Neobrufen 2240
+Orfidal 4100
+Lexatn 6380
+Nolotil 7080
+
+Seoul
+Neobrufen 6380
+Termalgin 1890
+Nolotil 8560
+Orfidal 9080
+Lexatn 180
+
+Lima
+Termalgin 6970
+Orfidal 8250
+Neobrufen 3510
+Lexatn 3450
+Nolotil 2920
+
+London
+Termalgin 1060
+Orfidal 6210
+Lexatn 7630
+Neobrufen 3710
+Nolotil 470
+
+Johannesburg
+Nolotil 2320
+Termalgin 4190
+Orfidal 4560
+Lexatn 6730
+Neobrufen 1760

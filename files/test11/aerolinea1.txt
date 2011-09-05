@@ -1,0 +1,36 @@
+5
+
+Mumbai
+Orfidal 9140
+Nolotil 3840
+Neobrufen 6070
+Lexatn 9910
+Termalgin 1170
+
+Pyongyang
+Orfidal 9690
+Termalgin 6410
+Nolotil 5500
+Neobrufen 2680
+Lexatn 2620
+
+Hanoi
+Orfidal 3540
+Neobrufen 1600
+Nolotil 3690
+Termalgin 9550
+Lexatn 8820
+
+HongKong
+Lexatn 5380
+Orfidal 2780
+Nolotil 2580
+Termalgin 8700
+Neobrufen 7120
+
+Tianjin
+Lexatn 8850
+Nolotil 540
+Neobrufen 9500
+Termalgin 6060
+Orfidal 9190
