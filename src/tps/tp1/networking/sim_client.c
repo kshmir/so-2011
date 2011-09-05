@@ -55,7 +55,7 @@ static void_p sim_client_listener(sim_client r) {
 	
 	cstring last_msg = NULL;
 	while(TRUE) {
-		cstring msg = sim_transporter_listen(r->t, NULL);
+		cstring msg = sim_transporter_listen(r->t, last_msg);
 
 		pthread_testcancel();
 		
@@ -64,13 +64,12 @@ static void_p sim_client_listener(sim_client r) {
 
 		cstring header = cstring_copy_until_char(msg, ';');
 		
-		cprintf("GOT HEADER: %s\n", VERDE, header);
 		if (cstring_compare(header,"QUERY ") == 0) {
 
 			cstring no_resp = cstring_replace(msg, "QUERY ", "");
 			list splitted = cstring_split_list(no_resp, ";");
 
-			cprintf("CLI: I TAKE HEADER :%s\n", VERDE, header);
+	
 			if (list_size(splitted) == 2) {
 				sim_message m = sim_message_init(r->t,list_get(splitted, 0), list_get(splitted, 1));
 				r->r(m);

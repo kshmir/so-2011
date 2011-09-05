@@ -112,9 +112,8 @@ static void_p sim_message_listen(struct listener_data * data) {
 	int found = 0;
 	cstring old_msg = r->message;
 	cstring last_msg = NULL;
-	cprintf("MESS: BEGIN: I WAIT FOR %s\n", CELESTE, r->header);
 	while (!found) {
-		cstring msg = sim_transporter_listen(r->t, NULL);
+		cstring msg = sim_transporter_listen(r->t, last_msg);
 		cstring header = cstring_copy_until_char(msg, ';');
 		
 		if (msg[0] == 0) {
@@ -131,8 +130,6 @@ static void_p sim_message_listen(struct listener_data * data) {
 			{
 				
 				if (cstring_compare(list_get(splitted, 0), r->header) == 0) {
-			
-					cprintf("MESS: I GET RESPONSE %s\n", CELESTE_CLARO, list_get(splitted,0));
 					found = 1;
 					cstring _header = cstring_copy(list_get(splitted, 0));
 					cstring	_message = cstring_copy(list_get(splitted, 1));
