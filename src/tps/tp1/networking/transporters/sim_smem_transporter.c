@@ -143,7 +143,7 @@ typedef struct smem_header_block {
 /**
  Amount of headers.
  */
-#define	SMEM_HEADER_BLOCK_COUNT	(0x400 / 5)
+#define	SMEM_HEADER_BLOCK_COUNT	(0x400 / 2)
 /**
  Actual size of the first block.
  */
@@ -151,15 +151,15 @@ typedef struct smem_header_block {
 /** 
  Amount of blocks in the shmem.
  */
-#define SMEM_BLOCK_COUNT		(0x400 / 5)
+#define SMEM_BLOCK_COUNT		(0x400 / 2)
 /**
  Amount of available blocks (blocks - header block).
  */
-#define SMEM_BLOCK_AVAIL_COUNT	((0x400 / 5) - 1)
+#define SMEM_BLOCK_AVAIL_COUNT	((0x400 / 2) - 1)
 /**
  Limit of allocs allowed per write, if more needed, then the write is done with buffering.
  */
-#define SMEM_BLOCK_MAX_ALLOC	(0x400 / 6)
+#define SMEM_BLOCK_MAX_ALLOC	(0x400 / 2)
 /**
  Size of a mem block
  */
@@ -292,7 +292,7 @@ void smem_init_space(sim_smem_transporter * s) {
 		
 		// You don't actually want this little ones to be different than this.
 		sem_up(s->sem_available_blocks, def->available_blocks + 1);
-		sem_set_value(s->sem_header_r,0);	
+		sem_set_value(s->sem_header_r,1);	
 
 		sem_up(s->sem_alloc, 1);
 	}
@@ -574,7 +574,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	}
 	
 	sem_up(s->sem_header_w, blocks_to_write);
-	cprintf("SMEM: BOUT TO WRITE %d\t %d\t %d\t %d\n",CELESTE, blocks_to_write, sem_value(s->sem_available_blocks), sem_value(s->sem_header_w), sem_value(s->sem_header_r));	
+	cprintf("SMEM: BOUT TO WRITE %d\t %d\t %d\t %d\n",CELESTE, blocks_to_write, sem_value(s->sem_available_blocks), sem_value(s->sem_header_w), s->sem_header_w);	
 	if (end && data_qty != 0) {
 		// //IPCSDebug(SMEM_DEBUG&WRITE,"Amount calculation error!");
 	}
@@ -594,8 +594,10 @@ cstring smem_space_read(sim_smem_transporter * s) {
 	
 	// TODO: Fix this!!!!!!!!
 //	//IPCSDebug(SMEM_DEBUG&READ,"Read sem value: %d\t %d\n", s->sem_header_r, sem_value(s->sem_header_r));
-	cprintf("SMEM_READ: BOUT TO READ: %d\n", AMARILLO, sem_value(s->sem_header_r));
+
+	cprintf("SMEM_READ: locking ..... %d\t %d\n", AMARILLO, sem_value(s->sem_header_r), s->sem_header_r);
 	sem_down(s->sem_header_r, 1);
+	cprintf("SMEM_READ: UNLOCKD %d\t %d\n", AMARILLO, sem_value(s->sem_header_r), s->sem_header_r);
 //	//IPCSDebug(SMEM_DEBUG&READ,"UNLOCK! %d\t %d\n", s->sem_header_r, sem_value(s->sem_header_r));
 
 	
