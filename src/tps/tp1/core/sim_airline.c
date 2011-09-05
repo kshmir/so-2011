@@ -103,10 +103,10 @@ sim_airline sim_airline_deserialize_line_error(cstring s, int airline_id, int *e
 	int i = 0;
 	int amount = 0;
 	int error = 0;
-	int line_number=0;
+	*err_line=0;
 	list lines = cstring_split_list(s, "\n");
 	foreach(cstring, line, lines) {
-		line_number++;
+		(*err_line)++;
 		if (strlen(line) > 0) {
 			if (i == 0) {
 				int _err = 1;
@@ -123,14 +123,15 @@ sim_airline sim_airline_deserialize_line_error(cstring s, int airline_id, int *e
 					sim_plane_set_dead(p, FALSE);
 				}
 				foreach_next(line);
-				line_number++;
+				(*err_line)++;
 				while(strlen(line) > 0 && !error) {
 					sim_keypair kp = sim_keypair_deserialize(line);
 					if (kp != NULL) {
+						(*err_line)++;
 						sim_plane_set_medicines(p, cstring_copy(kp->name), kp->amount);
-						line_number++;
 					} else {
 						error = 1;
+						break;
 					}
 					sim_keypair_free(kp);
 					foreach_next(line);
@@ -145,12 +146,9 @@ sim_airline sim_airline_deserialize_line_error(cstring s, int airline_id, int *e
 	if (error || amount > 0) {
 		if(amount>0)
 			*err_line=1;
-		else
-			*err_line=line_number;
 		return NULL;
 	}
-
-
+	*err_line=0;
 	return airline;
 }
 
@@ -173,7 +171,7 @@ cstring sim_airline_serialize(sim_airline air, int hasId) {
 
 void set_planes_to_think(cstring splitted) {
 	list splits = cstring_split_list(splitted, ",");
-	
+
 	list planes = airline->planes;
 	int i = 0;
 	for (; i < list_size(planes); i++) {

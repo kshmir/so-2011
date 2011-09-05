@@ -129,18 +129,18 @@ int sim_frontend_main(list params) {
 
 			}
 			else {
-				sim_frontend_print("Error on airline file named:");
-				sim_frontend_print(error_file);
-				cstring aux=cstring_copy(" at line number: ");
+				cstring aux=cstring_copy("Error on airline file named: ");
+				aux=cstring_write(aux,error_file);
+				aux=cstring_write(aux," at line number: ");
 				aux=cstring_write(aux,cstring_fromInt(line_error));
 				sim_frontend_print(aux);
 			}
 
 
 		} else {
-			sim_frontend_print("Error on level file named:");
-			sim_frontend_print(level_file);
-			cstring aux=cstring_copy(" at line number: ");
+			cstring aux=cstring_copy("Error on level file named:");
+			aux=cstring_write(aux,level_file);
+			aux=cstring_write(aux," at line number: ");
 			aux=cstring_write(aux,cstring_fromInt(line_error));
 			sim_frontend_print(aux);
 		}
