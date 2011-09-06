@@ -43,6 +43,7 @@
 
 int shm_lock = 0;
 
+
 int					sck_override = 0;
 queue				sck_override_queue = NULL;
 pthread_mutex_t		sck_override_mutex;
@@ -108,6 +109,8 @@ static void sim_transporter_cleanup(sim_transporter t) {
 	return;
 }
 
+
+
 /**
  Listens constantly to the underlying IPC, builds cstrings out of it, and pushes them to the main queue.
  */
@@ -120,6 +123,7 @@ static void_p sim_transporter_listener(sim_transporter t) {
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
 
 	while(TRUE) {
+		
 		// This loops enqueues as many messages as built by the char * array.
 		// This helps us to only care about sending zero ending strings as messages.
 		len = 0;
@@ -147,7 +151,7 @@ static void_p sim_transporter_listener(sim_transporter t) {
 						pthread_mutex_unlock(&sck_override_mutex);
 					}
 
-					sem_up(t->write_lock, 1);
+//					sem_up(t->write_lock, 1);
 					
 					
 					
@@ -238,7 +242,7 @@ cstring sim_transporter_listen(sim_transporter t, cstring avoid) {
 static sim_transporter sim_transporter_start() {
 	sim_transporter tr = (sim_transporter) malloc(sizeof(struct sim_transporter));
 	
-	shm_lock = sem_create(250);
+	shm_lock = sem_create(240);
 	sem_set_value(shm_lock, 1);
 	
 	pthread_mutex_t * mutex		= (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
@@ -250,12 +254,12 @@ static sim_transporter sim_transporter_start() {
 	pthread_mutex_init(mutex, NULL);
 	pthread_cond_init(received, NULL);
 	
+	shm_lock = sem_create_typed("shm_lock");
+	sem_set_value(shm_lock, 1);
 	
-	tr->write_lock = sem_create_typed("tr_write_lock");
-	sem_set_value(tr->write_lock, 1);
-	
-	tr->read_lock = sem_create_typed("tr_read_lock");
-	sem_set_value(tr->read_lock, 1);
+	tr->write_lock = sem_create_valued(100999, 1);
+
+	tr->read_lock = sem_create_valued(100998, 1);
 	
 	
 	tr->listener = thread;
@@ -416,12 +420,9 @@ sim_transporter sim_transporter_init(connection_type type,
  Writes a message to the current transporter.
  */
 void sim_transporter_write(sim_transporter sim, cstring message) {
-
 //	cprintf("TO WRITE: LEN: %d\n", ROJO, strlen(message));
-	sem_down(sim->write_lock, 1);
-	sem_down(shm_lock, 1);
+//	sem_down(sim->write_lock, 1);
 	sim->write(sim->data, message);
-	sem_up(shm_lock, 1);
 
 }
 

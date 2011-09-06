@@ -269,10 +269,11 @@ int rd_lock = 0;
 void smem_init_space(sim_smem_transporter * s) {
 	
 	
-	s->sem_alloc = sem_create(254);
-	s->sem_header_r  = sem_create(s->from_id);	
-	s->sem_header_w  = sem_create(s->to_id);	
-	s->sem_available_blocks = sem_create(255);
+	
+	s->sem_alloc = sem_create_valued(254,1);
+	s->sem_header_r  = sem_create_valued(s->from_id, 0);	
+	s->sem_header_w  = sem_create_valued(s->to_id, 0);	
+
 
 
 
@@ -291,14 +292,15 @@ void smem_init_space(sim_smem_transporter * s) {
 		def->total_available_blocks = SMEM_BLOCK_AVAIL_COUNT;
 
 		// You don't actually want this little ones to be different than this.
-		sem_up(s->sem_available_blocks, def->available_blocks + 1);
-		sem_set_value(s->sem_header_r,0);	
-		sem_set_value(s->sem_header_w,0);	
+
 
 		rd_lock = sem_create_typed("rd_lock");
 		sem_set_value(rd_lock, 1);
-		sem_set_value(s->sem_alloc, 1);
+//		sem_set_value(s->sem_alloc, 1);
+
 	}
+	s->sem_available_blocks = sem_create_valued(10099,def->available_blocks + 1);
+	cprintf("SETTING SEM TO %d %d %d\n", ROJO, sem_value(s->sem_alloc), s->from_id, s->to_id);
 
 
 	//IPCSDebug(SMEM_DEBUG,"Starting shared memory reference: from: %d, to: %d\
@@ -362,7 +364,7 @@ smem_header_block * smem_get_next_header_block(sim_smem_transporter * s, int * b
 	}
 
 	while (next->listens > 0 && next->listens > next->listens_c) {
-		next = smem_get_header_block(s,index + 1);
+		next = smem_get_header_block(s,index);
 		index++;
 		if (index == SMEM_BLOCK_AVAIL_COUNT) {
 			index = 0;
@@ -667,6 +669,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 		int block_id = current->block_id;
 		int c_block_id = -1;
 		current_block = smem_get_block(s, current->block_id);
+		current->ref_id = 0;
 		while (c_block_id != current->block_id) {
 			if (c_block_id == -1) {
 				c_block_id = block_id;
@@ -684,7 +687,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 		
 	}
 //	cprintf("SMEM STATUS: %d\t %d\t %d\t %d\t %d\n", AZUL, def->available_blocks, def->total_available_blocks, def->current_block_index, def->current_header_index, read_index);
-	s->read_index = read_index;
+	s->read_index = read_index + 1;
 	return response;
 }
 
@@ -720,7 +723,6 @@ void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 //	cprintf("SMEM: I HAVE WRITTEN  %d TO SEM %d %d\n",ROJO, cstring_len(data), t->sem_header_w, t->to_id);
 
 	sem_up(t->sem_header_w, 1);
-	sem_up(t->sem_alloc, 1);
 }
 
 /**
@@ -729,10 +731,9 @@ void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) {
 
 	sem_down(t->sem_header_r, 1);
-	sem_down(rd_lock, 1);
 	cstring data = smem_space_read(t);
 	*extra_data = strlen(data) + 1;
-	sem_up(rd_lock, 1);
+	sem_up(t->sem_alloc, 1);
 //	cprintf("SMEM_READ: %s\n", BLANCO, data);	
 	return data;
 }

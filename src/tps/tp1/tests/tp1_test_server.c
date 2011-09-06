@@ -26,10 +26,14 @@ int quit = 0;
 pthread_cond_t	conds;
 pthread_mutex_t mutex;
 
+int _to_id;
+
 void networking_test_receiver(sim_message mes) {
 	cstring message = sim_message_read(mes);
 	assert(cstring_compare(message, "hello client") == 0);
-	sim_message_set_header(mes, "0 PRINT ");
+	cstring head = cstring_fromInt(_to_id);
+	head = cstring_write(head," PRINT ");
+	sim_message_set_header(mes, head);
 	sim_message_write(mes, "hello server");
 	sim_message_respond(mes);
 	pthread_cond_signal(&conds);
@@ -40,7 +44,7 @@ void networking_test_receiver(sim_message mes) {
 void networking_test(connection_type conn, int from_id, int to_id) {
 	srand(time(NULL));
 	// Starts a client and makes a lot of noise.
-	
+	_to_id = to_id;
 	pthread_mutex_init(&mutex,NULL);
 	pthread_cond_init(&conds,NULL);
 	sim_client c = sim_client_init(conn, 0, from_id, to_id, networking_test_receiver);
@@ -54,7 +58,7 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 
 //	sleep(j);
 	glob = c;
-	sim_client_print(c,text, -1); 
+	sim_client_print(c,text, to_id); 
 	
 
 	pthread_cond_wait(&conds, &mutex);
