@@ -156,7 +156,9 @@ static void sim_server_listener(sim_server s) {
 			}
 			pthread_cond_broadcast(&sck_override_received);
 
-			msg = queue_pull(sck_override_queue);
+			cstring data = queue_pull(sck_override_queue);
+			msg = cstring_copy(data);
+			free(data);
 			pthread_mutex_unlock(&sck_override_mutex);
 		} else {
 			msg = sim_transporter_listen(s->listen_transporter, last_msg);
@@ -170,49 +172,55 @@ static void sim_server_listener(sim_server s) {
 		
 		int fail = 1;		
 
-		foreach(cstring, key, s->responds_to_keys) {
-			cstring safe_key = cstring_copy(key);
-			if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {
-				list params = cstring_split_list(msg, ";");
-				list header_values = cstring_split_list((cstring)list_get(params,0)," ");
-				int ok = 1;
-				int id = cstring_parseInt((cstring)list_get(header_values,0), &ok);
-				
-				sim_transporter t = NULL ;
-				
-				while(t == NULL) {
+		cprintf("CHECKING %s\n", VERDE, header);
+		if (cstring_matches(header, "RES") == 1) {
+			cprintf("CATCHING RES ERROR\n", ROJO);
+			sim_transporter_dequeue(s->listen_transporter);
+		}
+		else {
+			foreach(cstring, key, s->responds_to_keys) {
+				cstring safe_key = cstring_copy(key);
+				if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {
+					list params = cstring_split_list(msg, ";");
+					list header_values = cstring_split_list((cstring)list_get(params,0)," ");
+					int ok = 1;
+					int id = cstring_parseInt((cstring)list_get(header_values,0), &ok);
+					
+					sim_transporter t = NULL ;
+					cstring _msg = cstring_copy("RES ");
+					_msg = cstring_write(_msg, list_get(params,0));
+					cprintf("GOT DATA %s;%s\n", ROJO, header, cstring_copy(list_get(params,1)));					
 					t = (sim_transporter)map_get(s->clients_transporters,&id);
-				}
-				
-				cstring _msg = cstring_copy("RES ");
-				_msg = cstring_write(_msg, list_get(params,0));
-				sim_message _m = sim_message_init(t, _msg, cstring_copy(list_get(params,1)));
-				((function)map_get(s->responds_to, safe_key))(_m);
-				
-				list_free_with_data(params);
-				list_free_with_data(header_values);
-				sim_message_free(_m);
-				if (last_msg != NULL) {
-					free(last_msg);
-				}
-				last_msg = NULL;
-				fail = 0;
-				if (s->c_type != C_SOCKETS) {
-					sim_transporter_dequeue(s->listen_transporter);
+					
+
+					sim_message _m = sim_message_init(t, _msg, cstring_copy(list_get(params,1)));
+					((function)map_get(s->responds_to, safe_key))(_m);
+					
+					list_free_with_data(params);
+					list_free_with_data(header_values);
+					sim_message_free(_m);
+					if (last_msg != NULL) {
+						free(last_msg);
+					}
+					last_msg = NULL;
+					fail = 0;
+					if (s->c_type != C_SOCKETS) {
+						sim_transporter_dequeue(s->listen_transporter);
+					} else {
+						free(msg);
+					}
+
+					free(safe_key);
+					break;
 				} else {
-					free(msg);
+					if (s->c_type != C_SOCKETS) {
+						last_msg = msg;
+					}
+
 				}
 
 				free(safe_key);
-				break;
-			} else {
-				if (s->c_type != C_SOCKETS) {
-					last_msg = msg;
-				}
-
 			}
-
-			free(safe_key);
 		}
 		free(header);
 	}

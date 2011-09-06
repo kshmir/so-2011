@@ -47,7 +47,7 @@ sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int clien
 		return NULL;
 	}
 	
-		msgq_id = t->msgq_id;
+	msgq_id = t->msgq_id;
 	t->client			= client_id + 1;
 	t->server			= server_id + 1;
 	t->write_buf.mtype	= t->server;

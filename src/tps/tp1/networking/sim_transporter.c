@@ -41,6 +41,8 @@
 #include <signal.h>
 
 
+int shm_lock = 0;
+
 int					sck_override = 0;
 queue				sck_override_queue = NULL;
 pthread_mutex_t		sck_override_mutex;
@@ -122,21 +124,19 @@ static void_p sim_transporter_listener(sim_transporter t) {
 		// This helps us to only care about sending zero ending strings as messages.
 		len = 0;
 
-		cprintf("I READ...\n", CELESTE);
 		char * data = (char *) t->listen(t->data, &len);
+//		sem_up(t->write_lock, 1);
 		pthread_cond_broadcast(t->listener_received);
 		if (sck_override == 1) {
 			pthread_cond_broadcast(&sck_override_received);			
 		}
 		i = 0;
 		
-
 		for (; len > 0 && i < len; i++) {			
 			builder = cstring_write_c(builder, data[i]);
 			
 			if (data[i] == 0) {
 				if (cstring_len(builder) > 0) {
-					cprintf("I READ LEN: %d\n", CELESTE, cstring_len(builder));
 					pthread_mutex_lock(t->listener_mutex);
 					queue_poll(t->messages, builder);
 					pthread_cond_broadcast(t->listener_received);
@@ -145,7 +145,12 @@ static void_p sim_transporter_listener(sim_transporter t) {
 						queue_poll(sck_override_queue, cstring_copy(builder));
 						pthread_cond_broadcast(&sck_override_received);
 						pthread_mutex_unlock(&sck_override_mutex);
-					}	
+					}
+
+					sem_up(t->write_lock, 1);
+					
+					
+					
 					builder = cstring_init(0);
 					pthread_mutex_unlock(t->listener_mutex);
 					break;
@@ -163,8 +168,9 @@ static void_p sim_transporter_listener(sim_transporter t) {
 		}
 
 		free(data);
-		
+
 	}
+
 	// The following is a macro for cancelling the thread
 	pthread_cleanup_pop(0);
 	return NULL;
@@ -232,6 +238,8 @@ cstring sim_transporter_listen(sim_transporter t, cstring avoid) {
 static sim_transporter sim_transporter_start() {
 	sim_transporter tr = (sim_transporter) malloc(sizeof(struct sim_transporter));
 	
+	shm_lock = sem_create(250);
+	sem_set_value(shm_lock, 1);
 	
 	pthread_mutex_t * mutex		= (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
 	pthread_cond_t * received	= (pthread_cond_t *) malloc(sizeof(pthread_cond_t));
@@ -248,6 +256,7 @@ static sim_transporter sim_transporter_start() {
 	
 	tr->read_lock = sem_create_typed("tr_read_lock");
 	sem_set_value(tr->read_lock, 1);
+	
 	
 	tr->listener = thread;
 	tr->messages = queue_init();
@@ -407,13 +416,13 @@ sim_transporter sim_transporter_init(connection_type type,
  Writes a message to the current transporter.
  */
 void sim_transporter_write(sim_transporter sim, cstring message) {
+
 //	cprintf("TO WRITE: LEN: %d\n", ROJO, strlen(message));
-
-	//sem_down(sim->write_lock, 1);
+	sem_down(sim->write_lock, 1);
+	sem_down(shm_lock, 1);
 	sim->write(sim->data, message);
-	//sem_up(sim->write_lock, 1);
+	sem_up(shm_lock, 1);
 
-	cprintf("WRITTEN: LEN: %d\n", ROSA, strlen(message));
 }
 
 /**

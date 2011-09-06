@@ -30,7 +30,7 @@ cstring cstring_fromInt(int number) {
 	if (number == 0) {
 		s = cstring_write_c(s,'0');
 	}
-		
+	
 	if (number < 0) {
 		number *= -1;
 		s = cstring_write_c(s,'-');
@@ -83,7 +83,7 @@ int cstring_compare(cstring s1, cstring s2)
 cstring cstring_write(cstring original, cstring to_append) {
 	int extra_size = cstring_len(to_append);
 	int old_size = cstring_len(original);
-
+	
 	original = cstring_expand(original,extra_size);
 	
 	int i = old_size;
@@ -126,7 +126,7 @@ cstring cstring_join_list(list strings, cstring s) {
 	} else if (list_size(strings) == 1) {
 		return cstring_copy(list_get(strings,0));
 	}
-
+	
 	int i = 0;
 	cstring sub = cstring_init(0);
 	foreach(cstring, str, strings)  {
@@ -181,7 +181,7 @@ cstring * cstring_split(cstring _sub, cstring s) {
 			result[hits][i] = found_cstring[i];
 		}
 		result[hits][i] = 0;
-	
+		
 		index += len + cstring_len(s);
 		hits++;
 	}
@@ -223,7 +223,7 @@ int cstring_parseInt(cstring s, int * return_code) {
 		}
 		i++;
 	}
-
+	
 	if (minus) {
 		ret *= -1;
 	}

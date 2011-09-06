@@ -50,13 +50,10 @@ void print_receiver(sim_message mes) {
 	if (message_counter >= CLIENTS_COUNT) {
 		pthread_cond_broadcast(&conds);
 	}
-
-	sim_message_free(mes);
 }
 
 void receiver(sim_message mes) {
 	buffer = cstring_write(buffer,sim_message_read(mes));
-	sim_message_free(mes);
 }
 
 void networking_test(connection_type c_type) {

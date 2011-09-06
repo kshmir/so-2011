@@ -32,7 +32,7 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	sim_transporter_write(t,"0123456789");
 	
 	sleep(1);
-	cstring data = sim_transporter_listen(t);
+	cstring data = sim_transporter_listen(t, NULL);
 	sim_transporter_dequeue(t);
 	
 	printf("Client got..... %s\n",data);
@@ -44,7 +44,7 @@ void networking_test(connection_type conn, int from_id, int to_id) {
 	// Starts response of message test
 
 	printf("Client waiting for server to say 'Write again'");
-	data = sim_transporter_listen(t);
+	data = sim_transporter_listen(t,NULL);
 	assert(cstring_compare("Write again", data));
 	
 	//////////// This should be a server work

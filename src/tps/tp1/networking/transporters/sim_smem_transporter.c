@@ -72,6 +72,7 @@
 #include <string.h>
 
 
+int lck = 0;
 
 /**
 	smem_space is the declaration of the shared memory space we alloc.
@@ -167,7 +168,7 @@ typedef struct smem_header_block {
 /**
  Size of the contained data in a block. (SMEM_BLOCK_SIZE - flags - next_id)
  */
-#define	SMEM_DATA_SIZE			(SMEM_BLOCK_SIZE - sizeof(short) * 2)
+#define	SMEM_DATA_SIZE			(SMEM_HEADER_SIZE - sizeof(short) * 2)
 /**
  Total shared memory space required.
  */
@@ -273,7 +274,6 @@ void smem_init_space(sim_smem_transporter * s) {
 
 
 
-
 	
 	
 	s->space = (smem_space *)shm_create(sizeof(smem_space));
@@ -287,13 +287,13 @@ void smem_init_space(sim_smem_transporter * s) {
 		def->current_block_index = 0;
 		def->available_blocks = SMEM_BLOCK_AVAIL_COUNT;
 		def->total_available_blocks = SMEM_BLOCK_AVAIL_COUNT;
-		
-		
+
 		// You don't actually want this little ones to be different than this.
 		sem_up(s->sem_available_blocks, def->available_blocks + 1);
 		sem_set_value(s->sem_header_r,0);	
+		sem_set_value(s->sem_header_w,0);	
 
-		sem_up(s->sem_alloc, 1);
+		sem_set_value(s->sem_alloc, 1);
 	}
 
 
@@ -481,7 +481,6 @@ short smem_get_next_block_and_alloc(sim_smem_transporter * s, int * block_qty) {
 	
 	def->current_block_index = index;
 	smem_set_block_next(s, (int)last_id, (int)start_id); // Cierra el buffer circular.
-	
 	return start_id;
 }
 
@@ -509,6 +508,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	cstring _data_buffer = data;
 	int data_qty = 1 + (cstring_len(data) / SMEM_DATA_SIZE);
 //	//IPCSDebug(SMEM_DEBUG&WRITE,"DATA_SIZE: %d\n", SMEM_DATA_SIZE);
+//	cprintf("DATA LEN %d %d %d %d\n", VIOLETA, cstring_len(data), data_qty, SMEM_DATA_SIZE, def->current_block_index);
 	int blocks_to_write = data_qty;
 
 	
@@ -517,7 +517,6 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	smem_header_block * header_cur = header_b;
 	smem_block	* block_cur = NULL;
 
-
 	sem_down(s->sem_alloc, 1);
 	header_b->mode = 0;																// Only works one-to-one now.
 	header_b->ref_id = s->to_id;
@@ -525,7 +524,6 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	header_b->blocks_to_send = data_qty;
 	header_b->listens = 1;
 	header_b->listens_c = 0;
-	sem_up(s->sem_alloc, 1);
 
 	
 	
@@ -535,24 +533,28 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	int end = 0;
 	block_cur = smem_get_block(s, block_cur_id);
 	
-	
+
 	////cprintf("DATA TO WRITE: %d %d\n", ROJO, data_qty, SMEM_DATA_SIZE);
 	// set block_available semaphore as blocks_written.
 	while(!end) {
 		// Wait for blocks available.
 		// Now we're malloc'd 
-
+	//cprintf("SMEM NEXT BLOCK: %d\t %d\t %d\t %d\n", AMARILLO, def->available_blocks, def->total_available_blocks, def->current_header_index, def->current_block_index);
 		cstring d = cstring_copy_len(_data_buffer, SMEM_DATA_SIZE);
 		_data_buffer += SMEM_DATA_SIZE;
 //		//IPCSDebug(SMEM_DEBUG&WRITE,"\n\nSTRING LEN: %d, %s\n\n", cstring_len(d), d);
 		end = smem_block_write(block_cur, d);
 		
+		
+		cprintf("%s\n", CELESTE_CLARO, d);
 		smem_set_block_written(s, block_cur_id, 1);
+		
+		
 //		free(d);
 		
 
 
-		int oldVal = sem_value(s->sem_header_w);
+//		int oldVal = sem_value(s->sem_header_w);
 		
 //		//IPCSDebug(SMEM_DEBUG&WRITE,"UP on write %d\t %d\t old: %d\n END = %d",s->sem_header_w, sem_value(s->sem_header_w), oldVal, end);
 		
@@ -565,6 +567,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 			short next_id = block_cur->next;
 			block_cur_id = next_id;
 			block_cur = smem_get_block(s, next_id);
+//			cprintf("SMEM WRITE: %d\t %d\t %d\t %d\n", ROJO, def->available_blocks, def->total_available_blocks, def->current_header_index, next_id);
 //			//IPCSDebug(SMEM_DEBUG&WRITE,"%d vs %d", next_id, block_cur_id);
 		}
 
@@ -572,15 +575,16 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 		data_qty--;
 		//cprintf("DATA TO WRITE: %d\n", ROJO, data_qty);
 	}
-	
-	sem_up(s->sem_header_w, blocks_to_write);
+//	cprintf(">>SMEM READ UP: %d\t %d %d\n", AMARILLO, sem_value(s->sem_header_w), s->sem_header_w, blocks_to_write);
+//	sem_up(s->sem_header_w, (blocks_to_write <= 0) ? 1 : blocks_to_write);
 
 	if (end && data_qty != 0) {
 		// //IPCSDebug(SMEM_DEBUG&WRITE,"Amount calculation error!");
-	}
+	}	
+	sem_up(s->sem_alloc, 1);
+
 	
-	
-	
+	cprintf("SMEM WRITE STATUS: %d\t %d\t %d\t %d\t %d\t %d\n", VERDE, def->available_blocks, def->total_available_blocks, def->current_block_index, def->current_header_index, block_cur_id, blocks_to_write);
 
 }
 
@@ -592,14 +596,13 @@ cstring smem_space_read(sim_smem_transporter * s) {
 	smem_header_define_block * def = smem_get_header_define(s);
 	
 	
+//	cprintf("!!!!SMEM READ DOWN: %d\t %d\n", CELESTE, sem_value(s->sem_header_r), s->sem_header_r);
 	// TODO: Fix this!!!!!!!!
 //	//IPCSDebug(SMEM_DEBUG&READ,"Read sem value: %d\t %d\n", s->sem_header_r, sem_value(s->sem_header_r));
 	
-	cprintf("SMEM_READ_LOCK\n", ROJO);
-	sem_down(s->sem_header_r, 1);
-	cprintf("SMEM_READ_UNLOCK\n", AMARILLO);
+	//sem_down(s->sem_header_r, 1);
 //	//IPCSDebug(SMEM_DEBUG&READ,"UNLOCK! %d\t %d\n", s->sem_header_r, sem_value(s->sem_header_r));
-
+//	cprintf("EXIT >>> SMEM: %d\t %d\n", AZUL, sem_value(s->sem_header_r), s->sem_header_r);
 	
 
 
@@ -640,7 +643,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 		if (!end) {			
 			current_block = smem_get_block(s, current_block->next);
 			blocks_read++;
-			sem_down(s->sem_header_r, 1);
+			//sem_down(s->sem_header_r, 1);
 		}			
 		
 		free(block);
@@ -676,6 +679,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 		
 		
 	}
+	cprintf("SMEM STATUS: %d\t %d\t %d\t %d\t %d\n", AZUL, def->available_blocks, def->total_available_blocks, def->current_block_index, def->current_header_index, read_index);
 	s->read_index = read_index;
 	return response;
 }
@@ -706,8 +710,11 @@ sim_smem_transporter * sim_smem_transporter_init(int server_id, int client_id, i
 	Write to the shared memoery.
 */
 void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
-	//cprintf("SMEM: I want to write %d\n",ROJO, cstring_len(data));
+	cprintf("SMEM_WRITE: %s\n", CELESTE, data);		
 	smem_space_write(t, data);
+//	cprintf("SMEM: I HAVE WRITTEN  %d TO SEM %d %d\n",ROJO, cstring_len(data), t->sem_header_w, t->to_id);
+
+	sem_up(t->sem_header_w, 1);
 
 }
 
@@ -715,9 +722,11 @@ void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 	Listen to the shared memory.
 */
 cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) {
+
+	sem_down(t->sem_header_r, 1);
 	cstring data = smem_space_read(t);
 	*extra_data = strlen(data) + 1;
-	//cprintf("SMEM_READ: len: %d\n", ROJO, *extra_data);
+	cprintf("SMEM_READ: %s\n", BLANCO, data);	
 	return data;
 }
 

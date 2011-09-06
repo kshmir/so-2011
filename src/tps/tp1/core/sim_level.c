@@ -251,14 +251,20 @@ void sim_level_copy_single_airline(sim_message s){
 		sim_message_write(s, resp);
 		sim_message_respond(s);
 		free(resp);
+	} else {
+		cprintf("ERROR WITH DATA %s\n", AMARILLO, data);
 	}
+
 
 	free(data);	
 }
 
 void sim_level_med_fill_transaction(sim_message msg) {
 
+	
 	cstring data = sim_message_read(msg);
+
+	cprintf("MEDFILL: %s;%s\n", AMARILLO, sim_message_header(msg), data);
 	list splitted = cstring_split_list(data, " ");
 	cstring city = list_get(splitted, 0);
 	cstring medicine = list_get(splitted, 1);
@@ -266,15 +272,14 @@ void sim_level_med_fill_transaction(sim_message msg) {
 	int ret_value = -1;
 	int value =  cstring_parseInt(list_get(splitted, 2), &error);
 	int plane_id =  cstring_parseInt(list_get(splitted, 3), &error);
-
 	graph_node city_data_node = graph_get_node(current_level->level, city);
 	if (city_data_node != NULL) {
 		map city_data = graph_node_value(city_data_node);
 		if (map_get(city_data, medicine) != NULL) {
 			int * med = (int *) map_get(city_data, medicine);
 
-			if (*med != 0) {
-				int old_val = *med ;
+			if (* med != 0) {
+				int old_val = * med ;
 				if (value > * med) {
 					ret_value = value - * med;
 					* med = 0;
@@ -301,6 +306,7 @@ void sim_level_med_fill_transaction(sim_message msg) {
 
 void sim_level_set_path_transaction(sim_message msg) {
 	cstring data = sim_message_read(msg);	
+	cprintf("PATHT: %s;%s\n", ROSA, sim_message_header(msg), data);
 	list splitted = cstring_split_list(data, " ");
 	cstring id_string = list_get(splitted, 0);
 	cstring city_from = list_get(splitted, 1);
