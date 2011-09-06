@@ -517,7 +517,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	smem_header_block * header_cur = header_b;
 	smem_block	* block_cur = NULL;
 
-	sem_down(s->sem_alloc, 1);
+	
 	header_b->mode = 0;																// Only works one-to-one now.
 	header_b->ref_id = s->to_id;
 	header_b->block_id = smem_get_next_block_and_alloc(s, &blocks_to_write);		// Toma sus slots para escribir.
@@ -581,7 +581,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	if (end && data_qty != 0) {
 		// //IPCSDebug(SMEM_DEBUG&WRITE,"Amount calculation error!");
 	}	
-	sem_up(s->sem_alloc, 1);
+
 
 	
 //	cprintf("SMEM WRITE STATUS: %d\t %d\t %d\t %d\t %d\t %d\n", VERDE, def->available_blocks, def->total_available_blocks, def->current_block_index, def->current_header_index, block_cur_id, blocks_to_write);
@@ -711,11 +711,12 @@ sim_smem_transporter * sim_smem_transporter_init(int server_id, int client_id, i
 */
 void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 //	cprintf("SMEM_WRITE: %s\n", CELESTE, data);		
+	sem_down(t->sem_alloc, 1);
 	smem_space_write(t, data);
 //	cprintf("SMEM: I HAVE WRITTEN  %d TO SEM %d %d\n",ROJO, cstring_len(data), t->sem_header_w, t->to_id);
 
 	sem_up(t->sem_header_w, 1);
-
+	sem_up(t->sem_alloc, 1);
 }
 
 /**
