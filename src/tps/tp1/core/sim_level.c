@@ -268,7 +268,7 @@ void sim_level_med_fill_transaction(sim_message msg) {
 	
 	cstring data = sim_message_read(msg);
 
-	cprintf("MEDFILL: %s;%s\n", AMARILLO, sim_message_header(msg), data);
+///	cprintf("MEDFILL: %s;%s\n", AMARILLO, sim_message_header(msg), data);
 	list splitted = cstring_split_list(data, " ");
 	cstring city = list_get(splitted, 0);
 	cstring medicine = list_get(splitted, 1);
@@ -310,7 +310,7 @@ void sim_level_med_fill_transaction(sim_message msg) {
 
 void sim_level_set_path_transaction(sim_message msg) {
 	cstring data = sim_message_read(msg);	
-	cprintf("PATHT: %s;%s\n", ROSA, sim_message_header(msg), data);
+//	cprintf("PATHT: %s;%s\n", ROSA, sim_message_header(msg), data);
 	list splitted = cstring_split_list(data, " ");
 	cstring id_string = list_get(splitted, 0);
 	cstring city_from = list_get(splitted, 1);

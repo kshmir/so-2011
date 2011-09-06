@@ -198,7 +198,6 @@ void _catch(int sig)
 
 void _catch_child(int sig)
 {
-
 	nftw("./tmp", (void_p) unlink_cb, 64, 0);
 	shm_delete();
 	clear_msgq();
@@ -221,6 +220,5 @@ int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftw
 		sem_free(id, 0);
 	}
     int rv = unlink(fpath);
-	free(values);
     return 0;
 }

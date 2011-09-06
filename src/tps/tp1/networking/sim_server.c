@@ -172,7 +172,7 @@ static void sim_server_listener(sim_server s) {
 		
 		int fail = 1;		
 
-		cprintf("CHECKING %s\n", VERDE, header);
+//		cprintf("CHECKING %s\n", VERDE, header);
 		if (cstring_matches(header, "RES") == 1) {
 			cprintf("CATCHING RES ERROR\n", ROJO);
 			sim_transporter_dequeue(s->listen_transporter);
@@ -189,7 +189,7 @@ static void sim_server_listener(sim_server s) {
 					sim_transporter t = NULL ;
 					cstring _msg = cstring_copy("RES ");
 					_msg = cstring_write(_msg, list_get(params,0));
-					cprintf("GOT DATA %s;%s\n", ROJO, header, cstring_copy(list_get(params,1)));					
+//					cprintf("GOT DATA %s;%s\n", ROJO, header, cstring_copy(list_get(params,1)));					
 					t = (sim_transporter)map_get(s->clients_transporters,&id);
 					
 

@@ -16,7 +16,6 @@ cstring sim_keypair_serialize(sim_keypair c) {
 	params[1] = cstring_fromInt(c->amount);
 	params[2] = NULL; // BEWARE! ;)
 	aux=cstring_join(params, " ");
-	free(params[1]);
 	return aux;
 }
 

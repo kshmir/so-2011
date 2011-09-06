@@ -546,7 +546,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 		end = smem_block_write(block_cur, d);
 		
 		
-		cprintf("%s\n", CELESTE_CLARO, d);
+//		cprintf("%s\n", CELESTE_CLARO, d);
 		smem_set_block_written(s, block_cur_id, 1);
 		
 		
@@ -584,7 +584,7 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 	sem_up(s->sem_alloc, 1);
 
 	
-	cprintf("SMEM WRITE STATUS: %d\t %d\t %d\t %d\t %d\t %d\n", VERDE, def->available_blocks, def->total_available_blocks, def->current_block_index, def->current_header_index, block_cur_id, blocks_to_write);
+//	cprintf("SMEM WRITE STATUS: %d\t %d\t %d\t %d\t %d\t %d\n", VERDE, def->available_blocks, def->total_available_blocks, def->current_block_index, def->current_header_index, block_cur_id, blocks_to_write);
 
 }
 
@@ -679,7 +679,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 		
 		
 	}
-	cprintf("SMEM STATUS: %d\t %d\t %d\t %d\t %d\n", AZUL, def->available_blocks, def->total_available_blocks, def->current_block_index, def->current_header_index, read_index);
+//	cprintf("SMEM STATUS: %d\t %d\t %d\t %d\t %d\n", AZUL, def->available_blocks, def->total_available_blocks, def->current_block_index, def->current_header_index, read_index);
 	s->read_index = read_index;
 	return response;
 }
@@ -710,7 +710,7 @@ sim_smem_transporter * sim_smem_transporter_init(int server_id, int client_id, i
 	Write to the shared memoery.
 */
 void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
-	cprintf("SMEM_WRITE: %s\n", CELESTE, data);		
+//	cprintf("SMEM_WRITE: %s\n", CELESTE, data);		
 	smem_space_write(t, data);
 //	cprintf("SMEM: I HAVE WRITTEN  %d TO SEM %d %d\n",ROJO, cstring_len(data), t->sem_header_w, t->to_id);
 
@@ -726,7 +726,7 @@ cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) 
 	sem_down(t->sem_header_r, 1);
 	cstring data = smem_space_read(t);
 	*extra_data = strlen(data) + 1;
-	cprintf("SMEM_READ: %s\n", BLANCO, data);	
+//	cprintf("SMEM_READ: %s\n", BLANCO, data);	
 	return data;
 }
 
