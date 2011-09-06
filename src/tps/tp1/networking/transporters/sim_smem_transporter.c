@@ -621,7 +621,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 		
 		
 		// Update this.
-		if (current->ref_id == s->from_id && current->listens > 0 && current->listens > current->listens_c && current->mode == 0) {
+		if (current->ref_id == s->from_id && current->listens > 0 && current->listens > current->listens_c && current->mode == 0 && current->ref_id != 30001) {
 			found = 1;
 		} else {
 			read_index++;
@@ -669,7 +669,7 @@ cstring smem_space_read(sim_smem_transporter * s) {
 		int block_id = current->block_id;
 		int c_block_id = -1;
 		current_block = smem_get_block(s, current->block_id);
-		current->ref_id = 0;
+		current->ref_id = 30001;
 		while (c_block_id != current->block_id) {
 			if (c_block_id == -1) {
 				c_block_id = block_id;
