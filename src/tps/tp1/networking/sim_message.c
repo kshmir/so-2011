@@ -120,7 +120,7 @@ static void_p sim_message_listen(struct listener_data * data) {
 //			return NULL; 
 //		}
 		
-		cprintf("MSG GETS: %s expects %s\n", AMARILLO, msg, r->header);
+//		cprintf("MSG GETS: %s expects %s\n", AMARILLO, msg, r->header);
 		if (cstring_matches(header,"RES ")) {
 			cstring no_resp = cstring_replace(msg, "RES ", "");
 			list splitted = cstring_split_list(no_resp, ";");
@@ -176,7 +176,7 @@ sim_message sim_message_send(sim_message r) {
 	array[0] = r->header;
 	array[1] = r->message;
 	array[2] = NULL;
-	cprintf("MSG SENDS: %s\n", VIOLETA, r->header);
+//	cprintf("MSG SENDS: %s\n", VIOLETA, r->header);
 	cstring joined = cstring_join(array, ";");
 
 	sim_transporter_write(r->t, joined);
@@ -198,8 +198,8 @@ sim_message sim_message_send(sim_message r) {
  */
 void sim_message_respond(sim_message r) {	
 	cstring array[3];
-	array[0] = r->header;
-	array[1] = r->message;
+	array[0] = cstring_copy(r->header);
+	array[1] = cstring_copy(r->message);
 	array[2] = NULL;
 
 	cstring joined = cstring_join(array, ";");

@@ -88,15 +88,13 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 	int end = 0;
 	int writes = 0;
 
-	//	sem_down(t->write_sem , 1);
+	//sem_down(t->write_sem , 1);
 	while(!end) {
 		int block_len = sizeof(struct msgq_buf) - sizeof(long);
 		int len = strlen(data);
 		int index = 0;
 		int i = 0;
 		cstring d = cstring_copy_len(_data_buffer, block_len);
-		d = cstring_expand(d,1);
-		d[block_len] = 0;
 		_data_buffer += block_len;
 		for (i = 0; i < block_len; i++) {
 			t->write_buf.mtext[i] = 0;

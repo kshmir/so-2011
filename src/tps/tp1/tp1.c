@@ -24,6 +24,7 @@ void handler(int sig) {
 
 
 int main(int argc, char ** params) {
+	signal(SIGBUS, handler);   
 	signal(SIGSEGV, handler);   
 	srand(time(NULL));
 	signal(SIGKILL, &_catch);

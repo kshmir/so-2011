@@ -151,7 +151,7 @@ static void_p sim_transporter_listener(sim_transporter t) {
 						pthread_mutex_unlock(&sck_override_mutex);
 					}
 
-//					sem_up(t->write_lock, 1);
+					//sem_up(t->write_lock, 1);
 					
 					
 					
@@ -423,7 +423,6 @@ void sim_transporter_write(sim_transporter sim, cstring message) {
 //	cprintf("TO WRITE: LEN: %d\n", ROJO, strlen(message));
 //	sem_down(sim->write_lock, 1);
 	sim->write(sim->data, message);
-
 }
 
 /**

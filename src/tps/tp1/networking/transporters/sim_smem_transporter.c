@@ -294,8 +294,7 @@ void smem_init_space(sim_smem_transporter * s) {
 		// You don't actually want this little ones to be different than this.
 
 
-		rd_lock = sem_create_typed("rd_lock");
-		sem_set_value(rd_lock, 1);
+		rd_lock = sem_create_valued(256, 1);
 //		sem_set_value(s->sem_alloc, 1);
 
 	}
@@ -676,7 +675,10 @@ cstring smem_space_read(sim_smem_transporter * s) {
 			}
 			c_block_id = smem_get_block_id(s, current_block);
 			smem_set_block_allocd(s, c_block_id, 0);
+			cstring d = cstring_init(SMEM_DATA_SIZE);
+			smem_block_write(current_block, d);
 			current_block = smem_get_block(s, current_block->next);
+			free(d);
 		}
 
 		
@@ -723,17 +725,23 @@ void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 //	cprintf("SMEM: I HAVE WRITTEN  %d TO SEM %d %d\n",ROJO, cstring_len(data), t->sem_header_w, t->to_id);
 
 	sem_up(t->sem_header_w, 1);
+
 }
+
 
 /**
 	Listen to the shared memory.
 */
 cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) {
 
+
 	sem_down(t->sem_header_r, 1);
+//	sem_down(rd_lock, 1);
 	cstring data = smem_space_read(t);
 	*extra_data = strlen(data) + 1;
+//	sem_up(rd_lock, 1);
 	sem_up(t->sem_alloc, 1);
+
 //	cprintf("SMEM_READ: %s\n", BLANCO, data);	
 	return data;
 }

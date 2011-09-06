@@ -126,11 +126,11 @@ static void sim_server_listener(sim_server s) {
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	
-	pthread_mutex_init(&sck_override_mutex, NULL);
-	pthread_cond_init(&sck_override_received, NULL);	
 	if (s->c_type == C_SOCKETS) {
 		sck_override_queue = queue_init();
-
+		
+		pthread_mutex_init(&sck_override_mutex, NULL);
+		pthread_cond_init(&sck_override_received, NULL);	
 		sck_override = 1;
 		s->listen_transporter = NULL;
 	}
@@ -145,11 +145,11 @@ static void sim_server_listener(sim_server s) {
 	}
 	cstring last_msg = NULL;	
 	while(TRUE) {
-		pthread_mutex_lock(&sck_override_mutex);
+
 		cstring msg = NULL;
 		
 		if (s->c_type == C_SOCKETS) {
-
+			pthread_mutex_lock(&sck_override_mutex);
 			while (queue_size(sck_override_queue) == 0) {
 				
 				pthread_cond_wait(&sck_override_received, &sck_override_mutex);
@@ -159,7 +159,7 @@ static void sim_server_listener(sim_server s) {
 			cstring data = queue_pull(sck_override_queue);
 			msg = cstring_copy(data);
 			free(data);
-
+			pthread_mutex_unlock(&sck_override_mutex);
 		} else {
 			msg = sim_transporter_listen(s->listen_transporter, last_msg);
 		}
@@ -172,12 +172,12 @@ static void sim_server_listener(sim_server s) {
 		
 		int fail = 1;		
 
-		cprintf("CHECKING %s\n", VERDE, msg);
-//		if (cstring_matches(header, "RES") == 1 || cstring_matches(header, "QUERY") == 1) {
+//		cprintf("CHECKING %s\n", VERDE, header);
+		if (cstring_matches(header, "RES") == 1 || cstring_matches(header, "QUERY") == 1) {
 //			cprintf("CATCHING RES|QUERY ERROR\n", ROJO);
-//			sim_transporter_dequeue(s->listen_transporter);
-//		}
-//		else {
+			sim_transporter_dequeue(s->listen_transporter);
+		}
+		else {
 			foreach(cstring, key, s->responds_to_keys) {
 				cstring safe_key = cstring_copy(key);
 				if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {
@@ -221,9 +221,8 @@ static void sim_server_listener(sim_server s) {
 
 				free(safe_key);
 			}
-//		}
+		}
 		free(header);
-		pthread_mutex_unlock(&sck_override_mutex);
 	}
 	
 	pthread_cleanup_pop(0);
@@ -249,8 +248,7 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 	pthread_cond_init(s->listener_freed, NULL);
 
 	
-	s->spawn_sem = sem_create_typed("spawn");
-	sem_set_value(s->spawn_sem, 1);
+	s->spawn_sem = sem_create_valued(1244422, 1);
 	s->server_id = server_id;
 
 
