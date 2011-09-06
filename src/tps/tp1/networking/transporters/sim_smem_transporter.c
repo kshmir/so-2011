@@ -261,6 +261,8 @@ smem_header_define_block * smem_get_header_define(sim_smem_transporter * s) {
 	return ((smem_header_define_block *)s->space);
 }
 
+int rd_lock = 0;
+
 /**
 	Starts the space of a shared memory transporter, with all it's corresponding semaphores.
  */
@@ -293,6 +295,8 @@ void smem_init_space(sim_smem_transporter * s) {
 		sem_set_value(s->sem_header_r,0);	
 		sem_set_value(s->sem_header_w,0);	
 
+		rd_lock = sem_create_typed("rd_lock");
+		sem_set_value(rd_lock, 1);
 		sem_set_value(s->sem_alloc, 1);
 	}
 
@@ -725,8 +729,10 @@ void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) {
 
 	sem_down(t->sem_header_r, 1);
+	sem_down(rd_lock, 1);
 	cstring data = smem_space_read(t);
 	*extra_data = strlen(data) + 1;
+	sem_up(rd_lock, 1);
 //	cprintf("SMEM_READ: %s\n", BLANCO, data);	
 	return data;
 }
