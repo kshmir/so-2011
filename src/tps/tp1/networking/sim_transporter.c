@@ -160,13 +160,13 @@ static void_p sim_transporter_listener(sim_transporter t) {
 						pthread_cond_broadcast(&sck_override_received);
 						pthread_mutex_unlock(&sck_override_mutex);
 					} else {
-						queue_poll(t->messages, builder);
+						queue_poll(t->messages, cstring_copy(builder));
 						pthread_cond_broadcast(t->listener_received);
 					}
 					sem_up(t->write_lock, 1);
 					
 					
-					
+					free(builder);
 					builder = cstring_init(0);
 					pthread_mutex_unlock(t->listener_mutex);
 					break;
@@ -175,7 +175,7 @@ static void_p sim_transporter_listener(sim_transporter t) {
 					if (strlen(builder) == 0) {
 						free(builder);
 					}
-					builder = NULL;
+					builder = cstring_init(0);
 				}
 
 			}
