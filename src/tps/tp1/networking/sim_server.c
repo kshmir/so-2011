@@ -172,12 +172,7 @@ static void sim_server_listener(sim_server s) {
 		
 		int fail = 1;		
 
-		cprintf("CHECKING %s\n", VERDE, header);
-		if ((cstring_matches(header, "RES") == 1 || cstring_matches(header, "QUERY") == 1)) {
-			cprintf("CATCHING RES|QUERY ERROR\n", ROJO);
-			sim_transporter_dequeue(s->listen_transporter);
-		}
-		else {
+		cprintf("CHECKING %s\n", AMARILLO, header);
 			foreach(cstring, key, s->responds_to_keys) {
 				cstring safe_key = cstring_copy(key);
 				if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {
@@ -224,7 +219,6 @@ static void sim_server_listener(sim_server s) {
 				free(last_msg);
 			}
 			last_msg = msg;
-		}
 		free(header);
 	}
 	

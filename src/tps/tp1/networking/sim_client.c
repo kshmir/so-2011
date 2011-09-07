@@ -62,13 +62,13 @@ static void_p sim_client_listener(sim_client r) {
 
 
 		cstring header = cstring_copy_until_char(msg, ';');
-		
+		cprintf("CLIENT: GOT %s\n", CELESTE, msg);		
 		if (cstring_compare(header,"QUERY ") == 0) {
 
 			cstring no_resp = cstring_replace(msg, "QUERY ", "");
 			list splitted = cstring_split_list(no_resp, ";");
 
-	
+
 			if (list_size(splitted) == 2) {
 				sim_message m = sim_message_init(r->t,list_get(splitted, 0), list_get(splitted, 1));
 				r->r(m);
