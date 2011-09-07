@@ -198,6 +198,7 @@ void sim_transporter_dequeue(sim_transporter t) {
 	
 	if (queue_size(t->messages) > 0) {
 		free(queue_pull(t->messages));
+		
 		pthread_cond_broadcast(t->listener_received);
 	}
 
