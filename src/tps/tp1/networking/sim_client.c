@@ -79,6 +79,7 @@ static void_p sim_client_listener(sim_client r) {
 			if (last_msg != NULL) {
 				free(last_msg);
 			}
+			free(msg);
 			last_msg = NULL;
 			list_free(splitted);
 			free(no_resp);
