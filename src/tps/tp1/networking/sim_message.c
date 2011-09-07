@@ -204,5 +204,7 @@ void sim_message_respond(sim_message r) {
 
 	cstring joined = cstring_join(array, ";");
 	sim_transporter_write(r->t, joined);
+	free(array[0]);
+	free(array[1]);
 	free(joined);
 }
