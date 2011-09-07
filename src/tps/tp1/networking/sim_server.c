@@ -174,7 +174,7 @@ static void sim_server_listener(sim_server s) {
 
 //		cprintf("CHECKING %s\n", VERDE, header);
 		if (cstring_matches(header, "RES") == 1 || cstring_matches(header, "QUERY") == 1) {
-//			cprintf("CATCHING RES|QUERY ERROR\n", ROJO);
+			cprintf("CATCHING RES|QUERY ERROR\n", ROJO);
 			sim_transporter_dequeue(s->listen_transporter);
 		}
 		else {
@@ -193,7 +193,7 @@ static void sim_server_listener(sim_server s) {
 					do
 					{
 						t = (sim_transporter)map_get(s->clients_transporters,&id);
-					} while (t == NULL)
+					} while (t == NULL);
 					
 
 					sim_message _m = sim_message_init(t, _msg, cstring_copy(list_get(params,1)));
@@ -216,9 +216,9 @@ static void sim_server_listener(sim_server s) {
 					free(safe_key);
 					break;
 				} else {
-					if (s->c_type != C_SOCKETS) {
-						last_msg = msg;
-					}
+//					if (s->c_type != C_SOCKETS) {
+//						last_msg = msg;
+//					}
 
 				}
 
