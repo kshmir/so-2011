@@ -150,7 +150,7 @@ static void_p sim_transporter_listener(sim_transporter t) {
 			
 			if (data[i] == 0) {
 				if (cstring_len(builder) > 0) {
-				//	cprintf("GOT MESSAGE %s\n", AMARILLO, builder);
+
 					pthread_mutex_lock(t->listener_mutex);
 					queue_poll(t->messages, builder);
 					pthread_cond_broadcast(t->listener_received);
