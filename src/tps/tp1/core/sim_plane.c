@@ -84,35 +84,35 @@ int	sim_plane_make_move(sim_airline airline, sim_plane plane, sim_level level, i
 	graph_node n = graph_get_node(sim_level_graph(level), plane->start_city);
 	list n_arcs = graph_node_arcs(n);
 	cstring selected = NULL;
-
-	foreach(graph_arc, arc, n_arcs) {
-		graph_node to =		graph_arc_to(arc);
-		cstring city =		graph_node_key(to);
-		int		distance =	graph_arc_weight(arc);
-
-		if (TRUE || list_indexOf(plane->visited_places, city, cstring_comparer) == -1) {
-			selected = city;
-			break;
-		}
-	}
-	
-
-	if (selected == NULL) {
-	
-		if (list_size(n_arcs) == 0) {
-
-			return DATA_ERROR;
-		} else {
+	// 
+	// foreach(graph_arc, arc, n_arcs) {
+	// 	graph_node to =		graph_arc_to(arc);
+	// 	cstring city =		graph_node_key(to);
+	// 	int		distance =	graph_arc_weight(arc);
+	// 
+	// 	if (list_indexOf(plane->visited_places, city, cstring_comparer) == -1) {
+	// 		selected = city;
+	// 		break;
+	// 	}
+	// }
+	// 
+	// 
+	// if (selected == NULL) {
+	// 
+	// 	if (list_size(n_arcs) == 0) {
+	// 
+	// 		return DATA_ERROR;
+	// 	} else {
 			int r = rand() % list_size(n_arcs);
 			graph_arc a =list_get(n_arcs, r);
-			graph_node n = graph_arc_to(a);
-			selected = graph_node_key(n);
-		}
-	}
+			graph_node _n = graph_arc_to(a);
+			selected = graph_node_key(_n);
+	// 	}
+	// }
 	list_add(plane->visited_places, selected);
 	int mov = sim_client_post_plane_move(sim_airline_client(airline), sim_airline_id(airline), plane->id, plane->start_city, selected);
-	
-	
+	// 
+	// 
 	if (mov != -1) {
 		plane->start_city = selected;
 		return MOVED;
