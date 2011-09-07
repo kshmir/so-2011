@@ -90,7 +90,7 @@ int	sim_plane_make_move(sim_airline airline, sim_plane plane, sim_level level, i
 	 	cstring city =		graph_node_key(to);
 	 	int		distance =	graph_arc_weight(arc);
 	 
-	 	if (TRUE || list_indexOf(plane->visited_places, city, cstring_comparer) == -1) {
+	 	if (list_indexOf(plane->visited_places, city, cstring_comparer) == -1) {
 	 		selected = city;
 	 		break;
 	 	}
