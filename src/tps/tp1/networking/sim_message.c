@@ -150,6 +150,9 @@ static void_p sim_message_listen(struct listener_data * data) {
 			list_free_with_data(splitted);
 			free(no_resp);
 		}  else {
+			if (last_msg != NULL) {
+				free(last_msg);
+			}
 			last_msg = msg;
 		}
 		free(header);

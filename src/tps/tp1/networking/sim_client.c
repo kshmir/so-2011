@@ -86,6 +86,9 @@ static void_p sim_client_listener(sim_client r) {
 			list_free(splitted);
 			free(no_resp);
 		} else {
+			if (last_msg != NULL) {
+				free(last_msg);
+			}
 			last_msg = msg;
 		}
 
@@ -228,6 +231,7 @@ int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cst
 	int noerror = 0;
 	int val = cstring_parseInt(rsp, &noerror);
 	sim_message_free(response);
+	free(id);
 	free(am);
 	// Rebuild response
 	// Response should be... RES {object_id} MEDF;{value}
@@ -249,11 +253,9 @@ int sim_client_post_plane_move(sim_client c, int object_id, int plane_id, cstrin
 	get = cstring_write(get, city_to);
 	sim_message request = sim_message_init(c->t, header, get);
 	sim_message response = sim_message_send(request);
-	
 	cstring rsp = sim_message_read(response);
 	int noerror = 0;
 	int val = cstring_parseInt(rsp, &noerror);
-	
 	sim_message_free(response);
 	// Rebuild response
 	// Response should be... RES {object_id} MEDF;{value}
