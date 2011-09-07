@@ -73,6 +73,8 @@ struct sim_transporter {
 	int					write_lock;
 	int					read_lock;
 	
+	int					is_server;
+	
 	int					reads;
 	
 	queue				messages;						// Queue of received messages.
@@ -152,15 +154,15 @@ static void_p sim_transporter_listener(sim_transporter t) {
 				if (cstring_len(builder) > 0) {
 
 					pthread_mutex_lock(t->listener_mutex);
-					queue_poll(t->messages, builder);
-					pthread_cond_broadcast(t->listener_received);
-					if (sck_override == 1) {
+					if (t->is_server && sck_override) {
 						pthread_mutex_lock(&sck_override_mutex);
 						queue_poll(sck_override_queue, cstring_copy(builder));
 						pthread_cond_broadcast(&sck_override_received);
 						pthread_mutex_unlock(&sck_override_mutex);
+					} else {
+						queue_poll(t->messages, builder);
+						pthread_cond_broadcast(t->listener_received);
 					}
-
 					sem_up(t->write_lock, 1);
 					
 					
@@ -347,6 +349,7 @@ sim_transporter sim_transporter_init(connection_type type,
 	sim_transporter t = sim_transporter_start();
 	t->mode = mode;
 	t->reads = 0;
+	t->is_server = is_server;
 	
 	if (is_server) {
 		t->server_id = from_id;
