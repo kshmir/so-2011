@@ -173,7 +173,7 @@ static void sim_server_listener(sim_server s) {
 		int fail = 1;		
 
 //		cprintf("CHECKING %s\n", VERDE, header);
-		if (cstring_matches(header, "RES") == 1 || cstring_matches(header, "QUERY") == 1) {
+		if (FALSE && (cstring_matches(header, "RES") == 1 || cstring_matches(header, "QUERY") == 1)) {
 			cprintf("CATCHING RES|QUERY ERROR\n", ROJO);
 			sim_transporter_dequeue(s->listen_transporter);
 		}
