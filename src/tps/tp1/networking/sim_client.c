@@ -214,7 +214,7 @@ int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cst
 	cstring header = cstring_fromInt(object_id); 
 	cstring id = cstring_fromInt(plane_id);
 	cstring _medf = cstring_copy(" MEDF ");
-	header = cstring_write(header, );
+	header = cstring_write(header, _medf);
 	header = cstring_write(header, id);
 	cstring get = cstring_copy(city);
 	cstring am = cstring_fromInt(amount);
