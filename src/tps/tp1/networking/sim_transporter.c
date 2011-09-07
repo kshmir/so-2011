@@ -170,10 +170,9 @@ static void_p sim_transporter_listener(sim_transporter t) {
 					break;
 				}
 				else {
-					if (builder != NULL) {
+					if (strlen(builder) == 0) {
 						free(builder);
 					}
-
 					builder = NULL;
 				}
 
@@ -197,9 +196,11 @@ static void_p sim_transporter_listener(sim_transporter t) {
 void sim_transporter_dequeue(sim_transporter t) {
 	pthread_mutex_lock(t->listener_mutex);
 	
-	free(queue_pull(t->messages));
-	
-	pthread_cond_broadcast(t->listener_received);
+	if (queue_size(t->messages) > 0) {
+		free(queue_pull(t->messages));
+		pthread_cond_broadcast(t->listener_received);
+	}
+
 	pthread_mutex_unlock(t->listener_mutex);
 }
 

@@ -207,11 +207,12 @@ static void sim_server_listener(sim_server s) {
 					}
 					last_msg = NULL;
 					fail = 0;
+
 					if (s->c_type != C_SOCKETS) {
 						sim_transporter_dequeue(s->listen_transporter);
-					} else {
-						free(msg);
 					}
+
+
 
 					free(safe_key);
 					break;
