@@ -111,7 +111,7 @@ sim_client sim_client_from_transporter(sim_transporter t, sim_receiver r) {
 	c->spawn_sem = sem_create_valued(1244422, 1);
 
 	pthread_create(&c->listener_thread, NULL, (void_p) sim_client_listener, (void_p) c);	
-	sem_up(c->spawn_sem, 1);
+//	sem_up(c->spawn_sem, 1);
 	return c;
 }
 

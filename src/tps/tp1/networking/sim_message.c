@@ -113,7 +113,7 @@ static void_p sim_message_listen(struct listener_data * data) {
 	cstring old_msg = r->message;
 	cstring last_msg = NULL;
 	while (!found) {
-		cstring msg = sim_transporter_listen(r->t, last_msg);
+		cstring msg = sim_transporter_listen(r->t, NULL);
 		cstring header = cstring_copy_until_char(msg, ';');
 		
 //		if (msg[0] == 0) {

@@ -30,6 +30,23 @@
 
 int msgq_id = 0;
 
+list declared_threads = NULL;
+
+void declare_thread(pthread_t * t) {
+	if (declared_threads == NULL) {
+		declared_threads = list_init();
+	}
+	
+	list_add(declared_threads, t);
+}
+
+
+void cancel_all_threads() {
+	foreach(pthread_t *, t, declared_threads) {
+		pthread_cancel(* t);
+	}
+}
+
 void clear_msgq() {
 	msgctl(msgq_id, IPC_RMID, NULL);	
 }
@@ -190,6 +207,7 @@ void _catch(int sig)
 		printed = 1;
 	}
 	killpg(0, sig);  
+	cancel_all_threads();
 	nftw("./tmp", (void_p)  unlink_cb, 64, 0);
 	shm_delete();
 	clear_msgq();
@@ -198,6 +216,7 @@ void _catch(int sig)
 
 void _catch_child(int sig)
 {
+	cancel_all_threads();
 	nftw("./tmp", (void_p) unlink_cb, 64, 0);
 	shm_delete();
 	clear_msgq();

@@ -136,11 +136,21 @@ static void_p sim_transporter_listener(sim_transporter t) {
 		}
 		i = 0;
 		
+
+		
+		if (data[0] == 0) {
+			free(data);
+			continue;
+		}
+		
+
+		
 		for (; len > 0 && i < len; i++) {			
 			builder = cstring_write_c(builder, data[i]);
 			
 			if (data[i] == 0) {
 				if (cstring_len(builder) > 0) {
+				//	cprintf("GOT MESSAGE %s\n", AMARILLO, builder);
 					pthread_mutex_lock(t->listener_mutex);
 					queue_poll(t->messages, builder);
 					pthread_cond_broadcast(t->listener_received);
@@ -185,9 +195,7 @@ static void_p sim_transporter_listener(sim_transporter t) {
  TWO subscribers shouldn't accept the same message at the same time.
  */
 void sim_transporter_dequeue(sim_transporter t) {
-	
 	pthread_mutex_lock(t->listener_mutex);
-	t->reads--;
 	
 	free(queue_pull(t->messages));
 	
@@ -359,6 +367,7 @@ sim_transporter sim_transporter_init(connection_type type,
 			else {
 				t->data = sim_pipe_transporter_init_client(from_id, to_id);
 			}
+
 			t->write  = (function) sim_pipe_transporter_write;
 			t->listen = (function) sim_pipe_transporter_listen;
 			t->free   = (function) sim_pipe_transporter_free;

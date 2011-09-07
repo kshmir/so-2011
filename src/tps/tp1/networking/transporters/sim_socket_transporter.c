@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#define SOCKET_READ_SIZE (1024 * 8)
+#define SOCKET_READ_SIZE (1024)
 
 static map server_descriptors = NULL;
 
@@ -132,7 +132,7 @@ void sim_socket_transporter_write(sim_socket_transporter t, cstring data){
 
 //	sem_down(t->write_sem, 1);
 //	cprintf("WRITE RAW DATA: %s\n", ROJO, data);
-	if (send(t->write_fd, data, cstring_len(data) + 1, MSG_WAITALL) == -1) {
+	if (write(t->write_fd, data, cstring_len(data) + 1) == -1) {
 //		cprintf("WRITE ERROR!!!\n", ROJO);
 		//IPCSDebug(SOCK_DEBUG&WRITE,"Error while writting by write_fd:%d\n",t->write_fd);
 	}else {

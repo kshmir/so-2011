@@ -54,7 +54,7 @@ struct sim_server {
 	/**
 	 The thread used to listen to clients.
 	 */
-	pthread_t			listener_thread;
+	pthread_t			* listener_thread;
 	
 	/**
 	 The read only transporter used to listen to clients.
@@ -161,7 +161,7 @@ static void sim_server_listener(sim_server s) {
 			free(data);
 			pthread_mutex_unlock(&sck_override_mutex);
 		} else {
-			msg = sim_transporter_listen(s->listen_transporter, last_msg);
+			msg = sim_transporter_listen(s->listen_transporter, NULL);
 		}
 		
 		
@@ -190,7 +190,10 @@ static void sim_server_listener(sim_server s) {
 					cstring _msg = cstring_copy("RES ");
 					_msg = cstring_write(_msg, list_get(params,0));
 //					cprintf("GOT DATA %s;%s\n", ROJO, header, cstring_copy(list_get(params,1)));					
-					t = (sim_transporter)map_get(s->clients_transporters,&id);
+					do
+					{
+						t = (sim_transporter)map_get(s->clients_transporters,&id);
+					} while (t == NULL);
 					
 
 					sim_message _m = sim_message_init(t, _msg, cstring_copy(list_get(params,1)));
@@ -213,9 +216,9 @@ static void sim_server_listener(sim_server s) {
 					free(safe_key);
 					break;
 				} else {
-					if (s->c_type != C_SOCKETS) {
-						last_msg = msg;
-					}
+//					if (s->c_type != C_SOCKETS) {
+//						last_msg = msg;
+//					}
 
 				}
 
@@ -267,8 +270,11 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 			s->client_id_multiplier = 1;
 	}
 	
+	s->listener_thread = (pthread_t * ) malloc(sizeof(pthread_t));
 	
-	pthread_create(&s->listener_thread, NULL, (void_p) sim_server_listener, (void_p) s);	
+	declare_thread(s->listener_thread);
+	
+	pthread_create(s->listener_thread, NULL, (void_p) sim_server_listener, (void_p) s);	
 	return s;
 }
 
@@ -315,7 +321,7 @@ int sim_server_spawn_child(sim_server s) {
 												   TRUE);
 	int key = s->client_id_seed * s->client_id_multiplier;
 	map_set(s->clients_transporters, &key, child_t);	
-	sem_down(s->spawn_sem, 1);
+//	sem_down(s->spawn_sem, 1);
 
 	
 //	cprintf("I spawn my child %d\n", OK, key);
@@ -333,7 +339,6 @@ int sim_server_free(sim_server s) {
 	pthread_cond_t * freed = s->listener_freed;
 	pthread_mutex_t * mutex = s->mutex;
 	//sem_free_typed(s->spawn_sem, "spawn");
-	pthread_cancel(s->listener_thread);
 	
 	struct timespec {
 		long ts_sec; /* seconds */

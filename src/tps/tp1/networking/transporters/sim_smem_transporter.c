@@ -293,7 +293,6 @@ void smem_init_space(sim_smem_transporter * s) {
 
 		// You don't actually want this little ones to be different than this.
 
-
 		rd_lock = sem_create_valued(256, 1);
 //		sem_set_value(s->sem_alloc, 1);
 
@@ -723,7 +722,6 @@ void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 	sem_down(t->sem_alloc, 1);
 	smem_space_write(t, data);
 //	cprintf("SMEM: I HAVE WRITTEN  %d TO SEM %d %d\n",ROJO, cstring_len(data), t->sem_header_w, t->to_id);
-
 	sem_up(t->sem_header_w, 1);
 
 }

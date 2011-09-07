@@ -272,7 +272,7 @@ void sim_airline_game() {
 		}		
 
 
-//		cprintf("SENDING LEVEL UP %d AIRLINE: %d\n", ROJO, sem_value(airline->level_sem), airline->id);
+	//	cprintf("SENDING LEVEL UP %d AIRLINE: %d\n", CELESTE, sem_value(airline->level_sem), airline->id);
 
 //		cprintf("WAITING FOR LEVEL AIRLINE: %d\n", ROJO, airline->id);
 		sem_up(airline->level_sem, 1);					
