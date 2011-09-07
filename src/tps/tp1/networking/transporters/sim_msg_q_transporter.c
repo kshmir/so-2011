@@ -113,6 +113,7 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 		}
 
 		writes++;
+		free(d);
 			//IPCSDebug(MSGQ_DEBUG&WRITE,"Total attempts to write: %d\n",attempts);
 		//IPCSDebug(MSGQ_DEBUG&WRITE,"MSGQ sent: %s\n",data);
 

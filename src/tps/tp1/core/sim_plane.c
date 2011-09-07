@@ -109,7 +109,10 @@ int	sim_plane_make_move(sim_airline airline, sim_plane plane, sim_level level, i
 			selected = graph_node_key(_n);
 	 	}
 	 }
-	list_add(plane->visited_places, selected);
+	if (list_indexOf(plane->visited_places, selected, cstring_comparer) == -1) {
+		list_add(plane->visited_places, selected);
+	}
+
 	int mov = sim_client_post_plane_move(sim_airline_client(airline), sim_airline_id(airline), plane->id, plane->start_city, selected);
 
 	if (mov != -1) {
