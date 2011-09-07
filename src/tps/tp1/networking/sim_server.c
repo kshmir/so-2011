@@ -216,15 +216,14 @@ static void sim_server_listener(sim_server s) {
 
 					free(safe_key);
 					break;
-				} else {
-//					if (s->c_type != C_SOCKETS) {
-//						last_msg = msg;
-//					}
-
-				}
-
+				} 
 				free(safe_key);
 			}
+			
+			if (last_msg != NULL) {
+				free(last_msg);
+			}
+			last_msg = msg;
 		}
 		free(header);
 	}

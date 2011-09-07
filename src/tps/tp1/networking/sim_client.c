@@ -60,9 +60,6 @@ static void_p sim_client_listener(sim_client r) {
 		pthread_testcancel();
 		
 
-		if (last_msg != NULL) {
-			free(last_msg);
-		}
 
 		cstring header = cstring_copy_until_char(msg, ';');
 		
@@ -78,10 +75,17 @@ static void_p sim_client_listener(sim_client r) {
 				sim_transporter_dequeue(r->t);
 				sim_message_free(m);
 			}
+			
+			if (last_msg != NULL) {
+				free(last_msg);
+			}
 			last_msg = NULL;
 			list_free(splitted);
 			free(no_resp);
 		} else {
+			if (last_msg != NULL) {
+				free(last_msg);
+			}
 			last_msg = msg;
 		}
 
