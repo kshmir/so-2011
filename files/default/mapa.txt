@@ -1,1775 +1,1766 @@
 50
 
-HongKong
-Trankimazn 450
-Gelocatil 260
-Cardyl 190
-Augmentine 850
-Dianben 420
-
-Shenzhen
-Lexatn 670
-Sintrom 810
-Almax 770
-Orfidal 170
-Cardyl 910
-Augmentine 190
-Flumil 760
-Ventoln 810
-Paracetamol 40
-
-Tianjin
-Ventoln 920
-VoltarenEmulgel 840
-Neobrufen 60
-Lexatn 880
-Dianben 900
-Sintrom 950
-Almax 760
-Trankimazn 410
-
-Tehran
-Sintrom 850
-Dianben 30
-Almax 150
-Neobrufen 960
-
-Pyongyang
-Adiro100 660
-Ventoln 370
-Orfidal 970
-Lexatn 860
-
-Shanghai
-Ventoln 330
-Neobrufen 310
-Sintrom 100
-Orfidal 440
-Cardyl 910
-Gelocatil 940
-Flumil 740
-Paracetamol 450
-Trankimazn 180
-Adiro100 90
-
-Karachi
-Trankimazn 360
-Orfidal 130
-Gelocatil 570
-Dianben 430
-VoltarenEmulgel 870
-Augmentine 850
-Cardyl 40
-
-Jeddah
-Orfidal 560
-Augmentine 530
-
-Kolkata
-Gelocatil 60
-Neobrufen 410
-Orfidal 590
-
-Ankara
-Flumil 790
-Dianben 60
-Gelocatil 530
-Lexatn 690
-Ventoln 220
-Augmentine 320
-Cardyl 550
-Paracetamol 730
-Almax 70
-Trankimazn 700
-Sintrom 620
-
-Istanbul
-Ventoln 680
-Trankimazn 960
-Paracetamol 460
-Lexatn 640
-Gelocatil 390
-
-Lima
-Trankimazn 20
-VoltarenEmulgel 300
-Paracetamol 430
-Gelocatil 960
-Orfidal 840
-Lexatn 930
-Cardyl 640
-Almax 80
-
 Riyadh
-Orfidal 710
-VoltarenEmulgel 900
-Ventoln 510
-Augmentine 30
-Gelocatil 330
-Trankimazn 400
-
-Jaipur
-Adiro100 410
-Orfidal 700
-Sintrom 750
-
-Nairobi
-Almax 850
-
-RioDeJaneiro
-Flumil 620
-Orfidal 510
-Paracetamol 950
-Gelocatil 490
-Ventoln 290
-Dianben 880
-VoltarenEmulgel 990
-Cardyl 130
-
-London
-Almax 970
-Paracetamol 820
-Dianben 420
-Gelocatil 990
-Trankimazn 330
-Ventoln 220
-Neobrufen 650
-Cardyl 110
-Flumil 260
-Sintrom 550
-VoltarenEmulgel 780
-
-Johannesburg
-Trankimazn 840
-Gelocatil 50
-Dianben 400
-
-Surat
-Ventoln 510
-Gelocatil 530
-Paracetamol 450
-Trankimazn 300
-Lexatn 930
-Adiro100 130
-Neobrufen 630
-Almax 550
-Cardyl 740
-VoltarenEmulgel 180
-
-Yokohama
-Neobrufen 160
-Lexatn 750
-VoltarenEmulgel 610
-Dianben 730
-Augmentine 470
-
-Wuhan
-Orfidal 570
-Adiro100 270
-Lexatn 450
-Sintrom 190
-VoltarenEmulgel 430
-Dianben 430
-Almax 100
-Trankimazn 900
-Gelocatil 830
-Neobrufen 930
-Ventoln 470
-Paracetamol 700
-
-Lagos
-Neobrufen 650
-VoltarenEmulgel 800
-Ventoln 850
-Flumil 550
-Almax 490
-Paracetamol 550
-Dianben 420
-Orfidal 620
-
-HoChiMinhCity
-Trankimazn 140
-Adiro100 130
-Sintrom 590
-Augmentine 650
-Gelocatil 610
-
-Beijing
-Trankimazn 610
-Dianben 10
-Augmentine 300
-Lexatn 800
-Adiro100 700
-Gelocatil 130
-Ventoln 990
-Cardyl 370
-Paracetamol 620
-Flumil 500
-Almax 110
-Sintrom 150
-
-Moscow
-Paracetamol 800
-Orfidal 370
-VoltarenEmulgel 770
-Flumil 780
-Cardyl 270
-Adiro100 790
-Sintrom 800
-Dianben 500
-Trankimazn 550
-Almax 320
-Gelocatil 870
-Neobrufen 260
-
-MexicoCity
-Orfidal 720
-Augmentine 320
-Paracetamol 70
-VoltarenEmulgel 530
-Ventoln 140
-Neobrufen 850
-Almax 120
-Cardyl 550
-Flumil 340
-Gelocatil 970
-Adiro100 720
-Lexatn 100
-
-Santiago
-Ventoln 800
-Augmentine 850
-Cardyl 620
-Neobrufen 360
-Paracetamol 780
-Dianben 920
-
-Jakarta
-Almax 900
-Cardyl 580
-VoltarenEmulgel 400
-Orfidal 630
-Dianben 250
-Paracetamol 180
-Ventoln 900
-Augmentine 220
-
-Lahore
-Paracetamol 70
-Trankimazn 100
-VoltarenEmulgel 370
-Lexatn 790
-Neobrufen 880
-Sintrom 600
-Almax 940
-Flumil 940
-Augmentine 180
-Ventoln 120
-Gelocatil 350
-Dianben 590
-Orfidal 710
-
-Ahmedabad
-Almax 60
-Paracetamol 810
-Dianben 510
-
-Durban
-Ventoln 520
-Neobrufen 780
-Dianben 110
-Augmentine 160
-Cardyl 200
-Orfidal 940
-Trankimazn 870
-Adiro100 500
-Gelocatil 580
-Paracetamol 300
-Flumil 700
-Almax 840
-VoltarenEmulgel 690
-
-Delhi
-Lexatn 990
-Orfidal 160
-Augmentine 10
-Cardyl 630
-Gelocatil 350
-Paracetamol 270
-Trankimazn 800
-VoltarenEmulgel 180
-Ventoln 700
-Flumil 310
-Almax 70
-
-Bogota
-Trankimazn 910
-Neobrufen 490
-VoltarenEmulgel 250
-Almax 360
-Dianben 910
-Augmentine 90
-Orfidal 290
-Adiro100 570
-Sintrom 600
-Flumil 40
-Ventoln 820
-Gelocatil 380
-Lexatn 180
-
-Madrid
-Sintrom 240
-Lexatn 810
-Trankimazn 380
-Augmentine 330
-Cardyl 720
-Gelocatil 220
-Paracetamol 670
-
-Bangalore
-Trankimazn 600
-Lexatn 140
-
-BuenosAires
-Adiro100 70
-Sintrom 910
-Almax 860
-Flumil 830
-Cardyl 800
-VoltarenEmulgel 20
-Lexatn 260
-Dianben 730
-Paracetamol 290
-Trankimazn 150
-Orfidal 230
-Augmentine 250
-
-Kinshasa
-Cardyl 660
-Neobrufen 720
-Dianben 250
-Gelocatil 290
-Sintrom 590
-Augmentine 970
-Ventoln 680
-Adiro100 340
-
-Yangon
-Sintrom 280
-Dianben 350
-Lexatn 640
-Almax 110
-Orfidal 400
-
-Tokyo
-Paracetamol 300
-Flumil 810
-Almax 130
-Cardyl 270
-Adiro100 110
-Orfidal 220
-VoltarenEmulgel 380
-Ventoln 700
-Lexatn 230
-Augmentine 570
-Gelocatil 590
-Trankimazn 950
-Neobrufen 880
-
-Pune
-Augmentine 160
-Ventoln 340
-Almax 190
-Paracetamol 980
-Sintrom 720
-Cardyl 820
-Neobrufen 780
-Orfidal 730
-Flumil 390
-VoltarenEmulgel 110
-Dianben 470
-Gelocatil 140
-Lexatn 920
-
-CapeTown
-Flumil 230
-Gelocatil 480
-VoltarenEmulgel 910
-Lexatn 610
-Orfidal 380
-Sintrom 240
-Augmentine 530
-Trankimazn 210
-Adiro100 270
-Ventoln 640
-Dianben 90
-Almax 660
-Cardyl 160
-Paracetamol 860
-
-Seoul
-Neobrufen 420
-Sintrom 180
-Trankimazn 840
-
-Cairo
-Ventoln 260
-Augmentine 230
-Sintrom 190
-Dianben 890
-Cardyl 290
-Almax 580
-VoltarenEmulgel 250
-Adiro100 110
-Lexatn 260
-Flumil 190
-Trankimazn 10
-Orfidal 600
-
-Busan
-VoltarenEmulgel 890
-Dianben 240
-Augmentine 290
-Neobrufen 420
-Sintrom 380
-Cardyl 750
-Flumil 40
-Adiro100 650
-Almax 100
-Paracetamol 210
-Gelocatil 260
-Lexatn 450
-Trankimazn 130
-Orfidal 150
+Gelocatil 790
+Sintrom 890
+Enantyum 510
+Orfidal 900
+Ventoln 300
+Neobrufen 900
+Viscofresh 500
+Cardyl 470
+Nolotil 230
 
 Berlin
-Neobrufen 750
-Augmentine 780
-Adiro100 480
+Augmentine 550
+Paracetamol 660
+Almax 970
+VoltarenEmulgel 720
+Viscofresh 340
+Enantyum 40
+Dianben 500
+Flumil 300
+Ventoln 500
+Cardyl 600
+Gelocatil 380
+Orfidal 690
 Sintrom 540
-Flumil 80
-Almax 520
-Orfidal 670
+Neobrufen 810
 
-Chongqing
-Almax 250
-Dianben 860
-VoltarenEmulgel 710
-Cardyl 300
-Sintrom 680
-Gelocatil 10
-Paracetamol 810
-Trankimazn 230
-
-Shenyang
-Paracetamol 710
-Neobrufen 190
-
-Hanoi
-Sintrom 810
+Santiago
+Ventoln 980
+Neobrufen 160
 Paracetamol 290
-VoltarenEmulgel 640
-Lexatn 180
+Sintrom 150
+VoltarenEmulgel 380
+Viscofresh 30
+Orfidal 460
+Augmentine 120
+Cardyl 850
+Nolotil 750
+Gelocatil 930
+
+Guangzhou
+Neobrufen 520
+Flumil 970
+Gelocatil 200
+Almax 550
+Viscofresh 990
+
+MexicoCity
+VoltarenEmulgel 650
+Nolotil 780
+Augmentine 390
+Neobrufen 20
+Viscofresh 450
+Dianben 880
+Almax 50
+
+Bangkok
+Dianben 490
+Sintrom 420
+Almax 210
+Viscofresh 280
 Orfidal 840
-Dianben 130
-Neobrufen 30
-Cardyl 670
-Trankimazn 720
-Ventoln 830
-Gelocatil 690
-Adiro100 180
-Augmentine 260
+
+Seoul
+Augmentine 40
+Almax 650
+Dianben 170
+Orfidal 270
+Paracetamol 910
+Gelocatil 610
+Flumil 90
+
+RioDeJaneiro
+Dianben 330
+VoltarenEmulgel 220
+Augmentine 830
+Gelocatil 60
+Ventoln 940
+Enantyum 920
+Flumil 980
+Sintrom 750
+Cardyl 630
+Viscofresh 630
+Neobrufen 280
+Almax 510
+
+Yangon
+Augmentine 70
+Dianben 790
 
 Alexandria
-Neobrufen 650
+Sintrom 450
+Gelocatil 580
+
+Nairobi
+Viscofresh 460
+Nolotil 410
+Paracetamol 980
+Cardyl 580
+Ventoln 420
+Neobrufen 490
+Sintrom 70
+Flumil 90
+Augmentine 550
+Dianben 50
+Almax 710
+Orfidal 650
+Enantyum 600
+VoltarenEmulgel 500
+
+Shenzhen
+Dianben 850
+Nolotil 330
+Orfidal 930
+Cardyl 900
+Ventoln 480
+
+Shanghai
+Neobrufen 810
+Sintrom 100
+Enantyum 900
+Paracetamol 520
+VoltarenEmulgel 590
+Flumil 170
+Ventoln 450
+Cardyl 550
+Nolotil 270
+Orfidal 40
+
+Cairo
+Enantyum 830
+Sintrom 660
+Viscofresh 580
+Gelocatil 990
+VoltarenEmulgel 510
+Orfidal 400
+Dianben 630
+Augmentine 710
+Neobrufen 350
+Nolotil 880
+Almax 790
+Cardyl 530
+
+Chennai
+Sintrom 120
+Neobrufen 510
+Gelocatil 850
+
+Dhaka
+Enantyum 970
+Cardyl 900
+Paracetamol 910
+Sintrom 630
+Viscofresh 330
+Ventoln 700
+Nolotil 80
+Augmentine 350
+Neobrufen 270
+Dianben 480
+Gelocatil 860
+Flumil 110
+Almax 910
+
+Tehran
+Almax 410
+Paracetamol 360
+Flumil 100
+Orfidal 160
+Gelocatil 730
+Dianben 830
 VoltarenEmulgel 570
-Dianben 10
-Sintrom 580
-Paracetamol 650
-Lexatn 850
-Ventoln 270
+Viscofresh 720
+Ventoln 230
+Nolotil 50
+Augmentine 280
+Cardyl 800
+Neobrufen 350
+Enantyum 770
+
+CapeTown
+Paracetamol 910
+VoltarenEmulgel 620
+Neobrufen 510
+Flumil 800
+Ventoln 180
+Dianben 850
+Enantyum 160
+
+SaintPetersburg
+Paracetamol 300
+Cardyl 860
+VoltarenEmulgel 940
+Gelocatil 650
+Ventoln 760
+
+Tokyo
+Orfidal 760
+Enantyum 650
+Almax 910
+Paracetamol 320
+Neobrufen 400
+Augmentine 320
+Flumil 180
+VoltarenEmulgel 900
+Viscofresh 910
+
+Chongqing
+Dianben 70
+Gelocatil 500
+Augmentine 850
+Enantyum 590
+Almax 720
+Cardyl 850
+Viscofresh 860
+Neobrufen 310
+Sintrom 830
+Orfidal 150
+Nolotil 910
+VoltarenEmulgel 810
+
+Moscow
+Gelocatil 770
+VoltarenEmulgel 60
+Almax 680
+Sintrom 990
+Dianben 220
+
+Yokohama
+Gelocatil 930
+Ventoln 90
+Neobrufen 950
+Augmentine 850
+Viscofresh 900
+Cardyl 740
+
+Baghdad
+Flumil 770
+Dianben 670
+Ventoln 690
+Cardyl 20
+Sintrom 490
+Enantyum 970
+VoltarenEmulgel 920
+Almax 30
+Gelocatil 40
+
+London
+Sintrom 660
+Enantyum 660
+Cardyl 850
+Neobrufen 240
+Dianben 710
+Augmentine 140
+Gelocatil 570
+
+HongKong
+Augmentine 800
+Enantyum 340
+VoltarenEmulgel 30
+
+Bangalore
+Orfidal 280
+Gelocatil 340
+VoltarenEmulgel 710
+Augmentine 580
+Flumil 520
+Neobrufen 530
+Enantyum 810
+Cardyl 620
+Paracetamol 40
+
+Lima
+Neobrufen 340
+VoltarenEmulgel 490
+Sintrom 260
+
+Dongguan
+Ventoln 970
+Nolotil 220
+Enantyum 480
+Flumil 40
+Augmentine 920
+
+Wuhan
+Cardyl 620
+Orfidal 610
+Gelocatil 880
+Ventoln 540
+Neobrufen 910
+Flumil 780
 Augmentine 360
-Trankimazn 400
-Adiro100 330
-Cardyl 970
-Orfidal 770
+Almax 100
+Nolotil 520
+Enantyum 50
+
+Abidjan
+Cardyl 700
+Orfidal 500
+Nolotil 860
+Almax 50
+Enantyum 560
+VoltarenEmulgel 120
+Viscofresh 870
+
+Lagos
+Orfidal 510
+Gelocatil 190
+Viscofresh 720
+Neobrufen 450
+Flumil 210
 
 SaoPaulo
-Paracetamol 240
-VoltarenEmulgel 210
-Neobrufen 700
+Flumil 170
+Almax 290
+Viscofresh 760
 
-HongKong Shenzhen 15
-HongKong Tianjin 25
-HongKong Tehran 25
-HongKong Pyongyang 15
-HongKong Shanghai 15
-HongKong Karachi 10
-HongKong Jeddah 10
-HongKong Kolkata 25
-HongKong Ankara 20
-HongKong Istanbul 15
-HongKong Lima 25
-HongKong Riyadh 20
-HongKong Jaipur 10
-HongKong Nairobi 15
-HongKong RioDeJaneiro 20
-HongKong London 15
-HongKong Johannesburg 25
-HongKong Surat 10
-HongKong Yokohama 25
-HongKong Wuhan 25
-HongKong Lagos 25
-HongKong HoChiMinhCity 25
-HongKong Beijing 20
-HongKong Moscow 25
-HongKong MexicoCity 20
-HongKong Santiago 25
-HongKong Jakarta 15
-HongKong Lahore 10
-HongKong Ahmedabad 25
-HongKong Durban 25
-HongKong Delhi 20
-HongKong Bogota 25
-HongKong Madrid 15
-HongKong Bangalore 25
-HongKong BuenosAires 25
-HongKong Kinshasa 15
-HongKong Yangon 20
-HongKong Tokyo 20
-HongKong Pune 25
-HongKong CapeTown 10
-HongKong Seoul 20
-HongKong Cairo 10
-HongKong Busan 20
-HongKong Berlin 25
-HongKong Chongqing 10
-HongKong Shenyang 20
-HongKong Hanoi 15
-HongKong Alexandria 10
-HongKong SaoPaulo 10
+Pyongyang
+Ventoln 500
+Almax 30
+Augmentine 710
+Sintrom 80
+Flumil 910
+VoltarenEmulgel 900
 
-Shenzhen Tianjin 15
-Shenzhen Tehran 25
-Shenzhen Pyongyang 10
-Shenzhen Shanghai 20
-Shenzhen Karachi 20
-Shenzhen Jeddah 20
-Shenzhen Kolkata 25
-Shenzhen Ankara 10
-Shenzhen Istanbul 15
-Shenzhen Lima 10
-Shenzhen Riyadh 25
-Shenzhen Jaipur 10
-Shenzhen Nairobi 20
-Shenzhen RioDeJaneiro 15
-Shenzhen London 20
-Shenzhen Johannesburg 20
-Shenzhen Surat 25
-Shenzhen Yokohama 25
-Shenzhen Wuhan 20
-Shenzhen Lagos 25
-Shenzhen HoChiMinhCity 15
-Shenzhen Beijing 10
-Shenzhen Moscow 10
-Shenzhen MexicoCity 10
-Shenzhen Santiago 15
-Shenzhen Jakarta 20
-Shenzhen Lahore 15
-Shenzhen Ahmedabad 25
-Shenzhen Durban 25
-Shenzhen Delhi 20
-Shenzhen Bogota 25
-Shenzhen Madrid 25
-Shenzhen Bangalore 20
-Shenzhen BuenosAires 10
-Shenzhen Kinshasa 25
-Shenzhen Yangon 20
-Shenzhen Tokyo 20
-Shenzhen Pune 15
-Shenzhen CapeTown 15
-Shenzhen Seoul 20
-Shenzhen Cairo 25
-Shenzhen Busan 10
-Shenzhen Berlin 20
-Shenzhen Chongqing 25
-Shenzhen Shenyang 10
-Shenzhen Hanoi 15
-Shenzhen Alexandria 15
-Shenzhen SaoPaulo 15
+Surat
+Flumil 210
+Orfidal 310
+Gelocatil 10
+Ventoln 50
+Cardyl 160
+Nolotil 540
 
-Tianjin Tehran 25
-Tianjin Pyongyang 10
-Tianjin Shanghai 20
-Tianjin Karachi 10
-Tianjin Jeddah 15
-Tianjin Kolkata 25
-Tianjin Ankara 15
-Tianjin Istanbul 15
-Tianjin Lima 10
-Tianjin Riyadh 20
-Tianjin Jaipur 10
-Tianjin Nairobi 10
-Tianjin RioDeJaneiro 25
-Tianjin London 10
-Tianjin Johannesburg 10
-Tianjin Surat 15
-Tianjin Yokohama 15
-Tianjin Wuhan 10
-Tianjin Lagos 20
-Tianjin HoChiMinhCity 20
-Tianjin Beijing 10
-Tianjin Moscow 10
-Tianjin MexicoCity 20
-Tianjin Santiago 10
-Tianjin Jakarta 15
-Tianjin Lahore 15
-Tianjin Ahmedabad 25
-Tianjin Durban 15
-Tianjin Delhi 10
-Tianjin Bogota 10
-Tianjin Madrid 25
-Tianjin Bangalore 25
-Tianjin BuenosAires 25
-Tianjin Kinshasa 10
-Tianjin Yangon 15
-Tianjin Tokyo 10
-Tianjin Pune 10
-Tianjin CapeTown 25
-Tianjin Seoul 20
-Tianjin Cairo 15
-Tianjin Busan 10
-Tianjin Berlin 10
-Tianjin Chongqing 25
-Tianjin Shenyang 15
-Tianjin Hanoi 15
-Tianjin Alexandria 20
-Tianjin SaoPaulo 10
+NewYorkCity
+Sintrom 990
+Viscofresh 840
+VoltarenEmulgel 40
+Ventoln 640
+Almax 30
+Augmentine 630
+Dianben 820
+Cardyl 40
+Gelocatil 720
+Orfidal 470
+Enantyum 830
+Neobrufen 960
+Nolotil 90
 
-Tehran Pyongyang 10
-Tehran Shanghai 20
-Tehran Karachi 15
-Tehran Jeddah 10
-Tehran Kolkata 15
-Tehran Ankara 25
-Tehran Istanbul 15
-Tehran Lima 10
-Tehran Riyadh 15
-Tehran Jaipur 25
-Tehran Nairobi 25
-Tehran RioDeJaneiro 10
-Tehran London 20
-Tehran Johannesburg 25
-Tehran Surat 25
-Tehran Yokohama 15
-Tehran Wuhan 20
-Tehran Lagos 10
-Tehran HoChiMinhCity 25
-Tehran Beijing 25
-Tehran Moscow 25
-Tehran MexicoCity 20
-Tehran Santiago 20
-Tehran Jakarta 20
-Tehran Lahore 15
-Tehran Ahmedabad 25
-Tehran Durban 15
-Tehran Delhi 15
-Tehran Bogota 15
-Tehran Madrid 20
-Tehran Bangalore 15
-Tehran BuenosAires 25
-Tehran Kinshasa 20
-Tehran Yangon 10
-Tehran Tokyo 15
-Tehran Pune 15
-Tehran CapeTown 20
-Tehran Seoul 25
-Tehran Cairo 25
-Tehran Busan 25
-Tehran Berlin 25
-Tehran Chongqing 25
-Tehran Shenyang 10
-Tehran Hanoi 25
-Tehran Alexandria 20
-Tehran SaoPaulo 20
+Jakarta
+Gelocatil 930
+Orfidal 920
+Almax 710
+VoltarenEmulgel 120
+Flumil 410
+Enantyum 820
+Neobrufen 520
+Paracetamol 780
+Cardyl 690
+Nolotil 860
+Augmentine 860
 
-Pyongyang Shanghai 15
-Pyongyang Karachi 25
-Pyongyang Jeddah 15
-Pyongyang Kolkata 10
-Pyongyang Ankara 15
-Pyongyang Istanbul 25
-Pyongyang Lima 25
-Pyongyang Riyadh 20
-Pyongyang Jaipur 25
-Pyongyang Nairobi 15
-Pyongyang RioDeJaneiro 20
-Pyongyang London 10
-Pyongyang Johannesburg 20
-Pyongyang Surat 15
-Pyongyang Yokohama 15
-Pyongyang Wuhan 20
-Pyongyang Lagos 15
-Pyongyang HoChiMinhCity 10
-Pyongyang Beijing 15
-Pyongyang Moscow 20
-Pyongyang MexicoCity 10
-Pyongyang Santiago 15
-Pyongyang Jakarta 15
-Pyongyang Lahore 20
-Pyongyang Ahmedabad 10
-Pyongyang Durban 20
-Pyongyang Delhi 15
-Pyongyang Bogota 25
-Pyongyang Madrid 15
-Pyongyang Bangalore 10
-Pyongyang BuenosAires 15
-Pyongyang Kinshasa 15
-Pyongyang Yangon 15
-Pyongyang Tokyo 20
-Pyongyang Pune 15
-Pyongyang CapeTown 20
-Pyongyang Seoul 10
-Pyongyang Cairo 25
-Pyongyang Busan 20
-Pyongyang Berlin 10
-Pyongyang Chongqing 10
-Pyongyang Shenyang 20
-Pyongyang Hanoi 20
-Pyongyang Alexandria 15
-Pyongyang SaoPaulo 10
+Lahore
+Enantyum 600
+Ventoln 500
+VoltarenEmulgel 240
+Viscofresh 260
+Sintrom 450
+Paracetamol 210
+Dianben 930
+Orfidal 350
+Augmentine 50
+Flumil 800
 
-Shanghai Karachi 15
-Shanghai Jeddah 15
-Shanghai Kolkata 25
-Shanghai Ankara 10
-Shanghai Istanbul 15
-Shanghai Lima 15
-Shanghai Riyadh 15
-Shanghai Jaipur 10
-Shanghai Nairobi 10
-Shanghai RioDeJaneiro 10
-Shanghai London 20
-Shanghai Johannesburg 20
-Shanghai Surat 10
-Shanghai Yokohama 20
-Shanghai Wuhan 10
-Shanghai Lagos 10
-Shanghai HoChiMinhCity 15
-Shanghai Beijing 20
-Shanghai Moscow 10
-Shanghai MexicoCity 20
-Shanghai Santiago 25
-Shanghai Jakarta 25
-Shanghai Lahore 25
-Shanghai Ahmedabad 20
-Shanghai Durban 15
-Shanghai Delhi 20
-Shanghai Bogota 10
-Shanghai Madrid 10
-Shanghai Bangalore 25
-Shanghai BuenosAires 10
-Shanghai Kinshasa 25
-Shanghai Yangon 25
-Shanghai Tokyo 20
-Shanghai Pune 15
-Shanghai CapeTown 20
-Shanghai Seoul 20
-Shanghai Cairo 15
-Shanghai Busan 20
-Shanghai Berlin 20
-Shanghai Chongqing 15
-Shanghai Shenyang 15
-Shanghai Hanoi 25
-Shanghai Alexandria 20
-Shanghai SaoPaulo 10
+Beijing
+VoltarenEmulgel 770
+Paracetamol 20
+Cardyl 50
+Gelocatil 120
+Nolotil 650
+Viscofresh 480
+Flumil 580
+Sintrom 210
+Almax 860
+Orfidal 110
+Neobrufen 950
+Enantyum 610
+Dianben 40
+Augmentine 500
 
-Karachi Jeddah 10
-Karachi Kolkata 10
-Karachi Ankara 10
-Karachi Istanbul 10
-Karachi Lima 20
-Karachi Riyadh 10
-Karachi Jaipur 20
-Karachi Nairobi 15
-Karachi RioDeJaneiro 10
-Karachi London 10
-Karachi Johannesburg 20
-Karachi Surat 10
-Karachi Yokohama 10
-Karachi Wuhan 20
-Karachi Lagos 10
-Karachi HoChiMinhCity 20
-Karachi Beijing 25
-Karachi Moscow 20
-Karachi MexicoCity 10
-Karachi Santiago 10
-Karachi Jakarta 25
-Karachi Lahore 15
-Karachi Ahmedabad 25
-Karachi Durban 15
-Karachi Delhi 15
-Karachi Bogota 15
-Karachi Madrid 20
-Karachi Bangalore 10
-Karachi BuenosAires 15
-Karachi Kinshasa 10
-Karachi Yangon 15
-Karachi Tokyo 25
-Karachi Pune 20
-Karachi CapeTown 10
-Karachi Seoul 15
-Karachi Cairo 25
-Karachi Busan 25
-Karachi Berlin 25
-Karachi Chongqing 25
-Karachi Shenyang 15
-Karachi Hanoi 25
-Karachi Alexandria 20
-Karachi SaoPaulo 15
+Ahmedabad
+Neobrufen 100
+Flumil 380
+Sintrom 830
+Almax 120
 
-Jeddah Kolkata 10
-Jeddah Ankara 25
-Jeddah Istanbul 10
-Jeddah Lima 25
-Jeddah Riyadh 20
-Jeddah Jaipur 15
-Jeddah Nairobi 20
-Jeddah RioDeJaneiro 25
-Jeddah London 15
-Jeddah Johannesburg 10
-Jeddah Surat 25
-Jeddah Yokohama 15
-Jeddah Wuhan 25
-Jeddah Lagos 20
-Jeddah HoChiMinhCity 10
-Jeddah Beijing 10
-Jeddah Moscow 20
-Jeddah MexicoCity 20
-Jeddah Santiago 10
-Jeddah Jakarta 15
-Jeddah Lahore 20
-Jeddah Ahmedabad 25
-Jeddah Durban 10
-Jeddah Delhi 10
-Jeddah Bogota 20
-Jeddah Madrid 10
-Jeddah Bangalore 25
-Jeddah BuenosAires 25
-Jeddah Kinshasa 15
-Jeddah Yangon 15
-Jeddah Tokyo 10
-Jeddah Pune 10
-Jeddah CapeTown 25
-Jeddah Seoul 15
-Jeddah Cairo 10
-Jeddah Busan 25
-Jeddah Berlin 25
-Jeddah Chongqing 20
-Jeddah Shenyang 25
-Jeddah Hanoi 15
-Jeddah Alexandria 15
-Jeddah SaoPaulo 15
+HoChiMinhCity
+Paracetamol 800
+Almax 290
+Cardyl 140
+Dianben 510
+Flumil 450
+Ventoln 430
+Augmentine 550
+Sintrom 130
+Orfidal 910
+Gelocatil 500
+VoltarenEmulgel 400
+Nolotil 750
 
-Kolkata Ankara 25
-Kolkata Istanbul 20
-Kolkata Lima 15
-Kolkata Riyadh 25
-Kolkata Jaipur 15
-Kolkata Nairobi 20
-Kolkata RioDeJaneiro 25
-Kolkata London 20
-Kolkata Johannesburg 25
-Kolkata Surat 15
-Kolkata Yokohama 20
-Kolkata Wuhan 20
-Kolkata Lagos 20
-Kolkata HoChiMinhCity 10
-Kolkata Beijing 25
-Kolkata Moscow 25
-Kolkata MexicoCity 20
-Kolkata Santiago 10
-Kolkata Jakarta 15
-Kolkata Lahore 25
-Kolkata Ahmedabad 25
-Kolkata Durban 15
-Kolkata Delhi 25
-Kolkata Bogota 25
-Kolkata Madrid 15
-Kolkata Bangalore 20
-Kolkata BuenosAires 10
-Kolkata Kinshasa 20
-Kolkata Yangon 25
-Kolkata Tokyo 25
-Kolkata Pune 20
-Kolkata CapeTown 25
-Kolkata Seoul 20
-Kolkata Cairo 25
-Kolkata Busan 15
-Kolkata Berlin 15
-Kolkata Chongqing 10
-Kolkata Shenyang 25
-Kolkata Hanoi 20
-Kolkata Alexandria 10
-Kolkata SaoPaulo 15
+Istanbul
+Flumil 70
+Paracetamol 890
+Neobrufen 860
 
-Ankara Istanbul 20
-Ankara Lima 15
-Ankara Riyadh 25
-Ankara Jaipur 15
-Ankara Nairobi 20
-Ankara RioDeJaneiro 10
-Ankara London 20
-Ankara Johannesburg 25
-Ankara Surat 20
-Ankara Yokohama 10
-Ankara Wuhan 10
-Ankara Lagos 10
-Ankara HoChiMinhCity 20
-Ankara Beijing 20
-Ankara Moscow 25
-Ankara MexicoCity 10
-Ankara Santiago 10
-Ankara Jakarta 15
-Ankara Lahore 10
-Ankara Ahmedabad 15
-Ankara Durban 15
-Ankara Delhi 10
-Ankara Bogota 15
-Ankara Madrid 15
-Ankara Bangalore 20
-Ankara BuenosAires 15
-Ankara Kinshasa 15
-Ankara Yangon 20
-Ankara Tokyo 15
-Ankara Pune 25
-Ankara CapeTown 25
-Ankara Seoul 10
-Ankara Cairo 15
-Ankara Busan 10
-Ankara Berlin 15
-Ankara Chongqing 10
-Ankara Shenyang 10
-Ankara Hanoi 15
-Ankara Alexandria 10
-Ankara SaoPaulo 15
+Delhi
+Paracetamol 130
 
-Istanbul Lima 15
-Istanbul Riyadh 10
-Istanbul Jaipur 25
-Istanbul Nairobi 20
-Istanbul RioDeJaneiro 25
-Istanbul London 10
-Istanbul Johannesburg 10
-Istanbul Surat 10
-Istanbul Yokohama 10
-Istanbul Wuhan 15
-Istanbul Lagos 15
-Istanbul HoChiMinhCity 25
-Istanbul Beijing 10
-Istanbul Moscow 20
-Istanbul MexicoCity 20
-Istanbul Santiago 10
-Istanbul Jakarta 20
-Istanbul Lahore 15
-Istanbul Ahmedabad 25
-Istanbul Durban 10
-Istanbul Delhi 15
-Istanbul Bogota 10
-Istanbul Madrid 15
-Istanbul Bangalore 10
-Istanbul BuenosAires 20
-Istanbul Kinshasa 20
-Istanbul Yangon 25
-Istanbul Tokyo 10
-Istanbul Pune 10
-Istanbul CapeTown 10
-Istanbul Seoul 20
-Istanbul Cairo 20
-Istanbul Busan 15
-Istanbul Berlin 25
-Istanbul Chongqing 20
-Istanbul Shenyang 20
-Istanbul Hanoi 10
-Istanbul Alexandria 25
-Istanbul SaoPaulo 15
+Tianjin
+Augmentine 660
+Orfidal 970
 
-Lima Riyadh 15
-Lima Jaipur 10
-Lima Nairobi 25
-Lima RioDeJaneiro 10
-Lima London 10
-Lima Johannesburg 20
-Lima Surat 25
-Lima Yokohama 25
-Lima Wuhan 15
-Lima Lagos 15
-Lima HoChiMinhCity 25
-Lima Beijing 20
-Lima Moscow 10
-Lima MexicoCity 15
-Lima Santiago 25
-Lima Jakarta 25
-Lima Lahore 25
-Lima Ahmedabad 20
-Lima Durban 20
-Lima Delhi 20
-Lima Bogota 10
-Lima Madrid 10
-Lima Bangalore 25
-Lima BuenosAires 10
-Lima Kinshasa 10
-Lima Yangon 10
-Lima Tokyo 25
-Lima Pune 25
-Lima CapeTown 10
-Lima Seoul 10
-Lima Cairo 25
-Lima Busan 20
-Lima Berlin 20
-Lima Chongqing 15
-Lima Shenyang 10
-Lima Hanoi 10
-Lima Alexandria 10
-Lima SaoPaulo 10
+Jaipur
+VoltarenEmulgel 400
+Dianben 640
+Nolotil 120
+Orfidal 150
+Augmentine 80
+Almax 600
+Flumil 640
 
-Riyadh Jaipur 25
-Riyadh Nairobi 20
-Riyadh RioDeJaneiro 25
-Riyadh London 25
-Riyadh Johannesburg 20
-Riyadh Surat 10
-Riyadh Yokohama 15
-Riyadh Wuhan 25
-Riyadh Lagos 25
-Riyadh HoChiMinhCity 25
-Riyadh Beijing 15
-Riyadh Moscow 25
+Ankara
+Nolotil 250
+Dianben 760
+Almax 960
+Paracetamol 600
+Augmentine 330
+Enantyum 660
+Sintrom 510
+Gelocatil 910
+Flumil 670
+Cardyl 610
+Ventoln 880
+Viscofresh 300
+Neobrufen 690
+Orfidal 440
+
+Kolkata
+Orfidal 840
+VoltarenEmulgel 220
+Viscofresh 360
+Sintrom 180
+Paracetamol 660
+Augmentine 740
+Nolotil 570
+Neobrufen 380
+
+Madrid
+Viscofresh 160
+Neobrufen 540
+Cardyl 640
+Paracetamol 660
+VoltarenEmulgel 130
+Dianben 100
+Flumil 750
+
+Bogota
+Orfidal 980
+Sintrom 970
+Enantyum 460
+Paracetamol 640
+Flumil 870
+Almax 790
+VoltarenEmulgel 170
+Nolotil 860
+Dianben 740
+Ventoln 40
+Gelocatil 960
+
+Kanpur
+Almax 490
+Flumil 860
+Viscofresh 970
+Gelocatil 170
+Cardyl 290
+Sintrom 370
+Dianben 960
+Enantyum 50
+Ventoln 130
+Nolotil 320
+Neobrufen 380
+
+Riyadh Berlin 15
+Riyadh Santiago 25
+Riyadh Guangzhou 15
 Riyadh MexicoCity 10
-Riyadh Santiago 15
-Riyadh Jakarta 15
-Riyadh Lahore 10
-Riyadh Ahmedabad 20
-Riyadh Durban 10
-Riyadh Delhi 10
-Riyadh Bogota 25
-Riyadh Madrid 20
-Riyadh Bangalore 15
-Riyadh BuenosAires 25
-Riyadh Kinshasa 10
-Riyadh Yangon 25
-Riyadh Tokyo 25
-Riyadh Pune 25
-Riyadh CapeTown 10
+Riyadh Bangkok 10
 Riyadh Seoul 25
-Riyadh Cairo 10
-Riyadh Busan 20
-Riyadh Berlin 20
-Riyadh Chongqing 15
-Riyadh Shenyang 10
-Riyadh Hanoi 25
-Riyadh Alexandria 10
-Riyadh SaoPaulo 15
+Riyadh RioDeJaneiro 15
+Riyadh Yangon 20
+Riyadh Alexandria 20
+Riyadh Nairobi 20
+Riyadh Shenzhen 25
+Riyadh Shanghai 20
+Riyadh Cairo 25
+Riyadh Chennai 10
+Riyadh Dhaka 15
+Riyadh Tehran 25
+Riyadh CapeTown 10
+Riyadh SaintPetersburg 10
+Riyadh Tokyo 20
+Riyadh Chongqing 10
+Riyadh Moscow 20
+Riyadh Yokohama 25
+Riyadh Baghdad 15
+Riyadh London 15
+Riyadh HongKong 10
+Riyadh Bangalore 20
+Riyadh Lima 10
+Riyadh Dongguan 15
+Riyadh Wuhan 10
+Riyadh Abidjan 15
+Riyadh Lagos 25
+Riyadh SaoPaulo 20
+Riyadh Pyongyang 25
+Riyadh Surat 10
+Riyadh NewYorkCity 25
+Riyadh Jakarta 15
+Riyadh Lahore 20
+Riyadh Beijing 15
+Riyadh Ahmedabad 20
+Riyadh HoChiMinhCity 20
+Riyadh Istanbul 20
+Riyadh Delhi 20
+Riyadh Tianjin 20
+Riyadh Jaipur 15
+Riyadh Ankara 20
+Riyadh Kolkata 10
+Riyadh Madrid 10
+Riyadh Bogota 10
+Riyadh Kanpur 10
 
-Jaipur Nairobi 25
-Jaipur RioDeJaneiro 20
-Jaipur London 25
-Jaipur Johannesburg 25
-Jaipur Surat 15
-Jaipur Yokohama 15
-Jaipur Wuhan 15
-Jaipur Lagos 15
-Jaipur HoChiMinhCity 15
-Jaipur Beijing 25
-Jaipur Moscow 20
-Jaipur MexicoCity 10
-Jaipur Santiago 20
-Jaipur Jakarta 25
-Jaipur Lahore 15
-Jaipur Ahmedabad 10
-Jaipur Durban 25
-Jaipur Delhi 20
-Jaipur Bogota 15
-Jaipur Madrid 25
-Jaipur Bangalore 20
-Jaipur BuenosAires 25
-Jaipur Kinshasa 10
-Jaipur Yangon 20
-Jaipur Tokyo 20
-Jaipur Pune 25
-Jaipur CapeTown 10
-Jaipur Seoul 25
-Jaipur Cairo 10
-Jaipur Busan 25
-Jaipur Berlin 25
-Jaipur Chongqing 10
-Jaipur Shenyang 25
-Jaipur Hanoi 15
-Jaipur Alexandria 10
-Jaipur SaoPaulo 25
+Berlin Santiago 25
+Berlin Guangzhou 10
+Berlin MexicoCity 10
+Berlin Bangkok 25
+Berlin Seoul 25
+Berlin RioDeJaneiro 10
+Berlin Yangon 25
+Berlin Alexandria 10
+Berlin Nairobi 20
+Berlin Shenzhen 10
+Berlin Shanghai 10
+Berlin Cairo 10
+Berlin Chennai 15
+Berlin Dhaka 20
+Berlin Tehran 20
+Berlin CapeTown 20
+Berlin SaintPetersburg 20
+Berlin Tokyo 15
+Berlin Chongqing 25
+Berlin Moscow 10
+Berlin Yokohama 10
+Berlin Baghdad 25
+Berlin London 20
+Berlin HongKong 20
+Berlin Bangalore 15
+Berlin Lima 15
+Berlin Dongguan 20
+Berlin Wuhan 15
+Berlin Abidjan 20
+Berlin Lagos 15
+Berlin SaoPaulo 25
+Berlin Pyongyang 20
+Berlin Surat 25
+Berlin NewYorkCity 10
+Berlin Jakarta 10
+Berlin Lahore 20
+Berlin Beijing 15
+Berlin Ahmedabad 15
+Berlin HoChiMinhCity 20
+Berlin Istanbul 25
+Berlin Delhi 20
+Berlin Tianjin 15
+Berlin Jaipur 25
+Berlin Ankara 25
+Berlin Kolkata 10
+Berlin Madrid 20
+Berlin Bogota 25
+Berlin Kanpur 10
 
-Nairobi RioDeJaneiro 25
-Nairobi London 25
-Nairobi Johannesburg 25
-Nairobi Surat 25
-Nairobi Yokohama 15
-Nairobi Wuhan 15
-Nairobi Lagos 10
-Nairobi HoChiMinhCity 25
-Nairobi Beijing 20
-Nairobi Moscow 10
-Nairobi MexicoCity 20
-Nairobi Santiago 15
-Nairobi Jakarta 15
-Nairobi Lahore 10
-Nairobi Ahmedabad 25
-Nairobi Durban 10
-Nairobi Delhi 25
-Nairobi Bogota 10
-Nairobi Madrid 15
-Nairobi Bangalore 20
-Nairobi BuenosAires 15
-Nairobi Kinshasa 25
-Nairobi Yangon 15
-Nairobi Tokyo 25
-Nairobi Pune 25
-Nairobi CapeTown 20
-Nairobi Seoul 10
-Nairobi Cairo 25
-Nairobi Busan 15
-Nairobi Berlin 20
-Nairobi Chongqing 15
-Nairobi Shenyang 15
-Nairobi Hanoi 20
-Nairobi Alexandria 25
-Nairobi SaoPaulo 10
+Santiago Guangzhou 10
+Santiago MexicoCity 10
+Santiago Bangkok 25
+Santiago Seoul 15
+Santiago RioDeJaneiro 20
+Santiago Yangon 15
+Santiago Alexandria 15
+Santiago Nairobi 15
+Santiago Shenzhen 25
+Santiago Shanghai 15
+Santiago Cairo 25
+Santiago Chennai 10
+Santiago Dhaka 10
+Santiago Tehran 25
+Santiago CapeTown 25
+Santiago SaintPetersburg 25
+Santiago Tokyo 25
+Santiago Chongqing 25
+Santiago Moscow 20
+Santiago Yokohama 25
+Santiago Baghdad 25
+Santiago London 15
+Santiago HongKong 15
+Santiago Bangalore 10
+Santiago Lima 20
+Santiago Dongguan 10
+Santiago Wuhan 15
+Santiago Abidjan 25
+Santiago Lagos 15
+Santiago SaoPaulo 10
+Santiago Pyongyang 20
+Santiago Surat 20
+Santiago NewYorkCity 10
+Santiago Jakarta 10
+Santiago Lahore 20
+Santiago Beijing 20
+Santiago Ahmedabad 10
+Santiago HoChiMinhCity 20
+Santiago Istanbul 15
+Santiago Delhi 25
+Santiago Tianjin 15
+Santiago Jaipur 20
+Santiago Ankara 20
+Santiago Kolkata 20
+Santiago Madrid 25
+Santiago Bogota 15
+Santiago Kanpur 10
 
-RioDeJaneiro London 10
-RioDeJaneiro Johannesburg 20
-RioDeJaneiro Surat 10
-RioDeJaneiro Yokohama 15
-RioDeJaneiro Wuhan 25
-RioDeJaneiro Lagos 20
-RioDeJaneiro HoChiMinhCity 20
-RioDeJaneiro Beijing 25
-RioDeJaneiro Moscow 10
-RioDeJaneiro MexicoCity 25
-RioDeJaneiro Santiago 10
-RioDeJaneiro Jakarta 20
-RioDeJaneiro Lahore 10
-RioDeJaneiro Ahmedabad 20
-RioDeJaneiro Durban 15
-RioDeJaneiro Delhi 25
-RioDeJaneiro Bogota 10
-RioDeJaneiro Madrid 10
-RioDeJaneiro Bangalore 20
-RioDeJaneiro BuenosAires 10
-RioDeJaneiro Kinshasa 25
-RioDeJaneiro Yangon 15
-RioDeJaneiro Tokyo 15
-RioDeJaneiro Pune 20
-RioDeJaneiro CapeTown 25
-RioDeJaneiro Seoul 10
-RioDeJaneiro Cairo 15
-RioDeJaneiro Busan 10
-RioDeJaneiro Berlin 20
-RioDeJaneiro Chongqing 15
-RioDeJaneiro Shenyang 10
-RioDeJaneiro Hanoi 25
-RioDeJaneiro Alexandria 25
-RioDeJaneiro SaoPaulo 25
+Guangzhou MexicoCity 20
+Guangzhou Bangkok 10
+Guangzhou Seoul 20
+Guangzhou RioDeJaneiro 20
+Guangzhou Yangon 10
+Guangzhou Alexandria 10
+Guangzhou Nairobi 25
+Guangzhou Shenzhen 10
+Guangzhou Shanghai 20
+Guangzhou Cairo 25
+Guangzhou Chennai 20
+Guangzhou Dhaka 15
+Guangzhou Tehran 25
+Guangzhou CapeTown 20
+Guangzhou SaintPetersburg 10
+Guangzhou Tokyo 25
+Guangzhou Chongqing 25
+Guangzhou Moscow 10
+Guangzhou Yokohama 10
+Guangzhou Baghdad 15
+Guangzhou London 10
+Guangzhou HongKong 20
+Guangzhou Bangalore 10
+Guangzhou Lima 20
+Guangzhou Dongguan 25
+Guangzhou Wuhan 25
+Guangzhou Abidjan 20
+Guangzhou Lagos 10
+Guangzhou SaoPaulo 15
+Guangzhou Pyongyang 15
+Guangzhou Surat 15
+Guangzhou NewYorkCity 25
+Guangzhou Jakarta 25
+Guangzhou Lahore 10
+Guangzhou Beijing 25
+Guangzhou Ahmedabad 20
+Guangzhou HoChiMinhCity 25
+Guangzhou Istanbul 15
+Guangzhou Delhi 15
+Guangzhou Tianjin 20
+Guangzhou Jaipur 20
+Guangzhou Ankara 15
+Guangzhou Kolkata 10
+Guangzhou Madrid 20
+Guangzhou Bogota 10
+Guangzhou Kanpur 20
 
-London Johannesburg 25
-London Surat 25
-London Yokohama 20
-London Wuhan 25
-London Lagos 10
-London HoChiMinhCity 20
-London Beijing 20
-London Moscow 20
-London MexicoCity 10
-London Santiago 25
-London Jakarta 10
-London Lahore 10
-London Ahmedabad 15
-London Durban 10
-London Delhi 20
-London Bogota 25
-London Madrid 15
-London Bangalore 10
-London BuenosAires 15
-London Kinshasa 25
-London Yangon 25
-London Tokyo 20
-London Pune 20
-London CapeTown 20
-London Seoul 25
-London Cairo 25
-London Busan 15
-London Berlin 15
-London Chongqing 25
-London Shenyang 10
-London Hanoi 10
-London Alexandria 15
-London SaoPaulo 25
-
-Johannesburg Surat 25
-Johannesburg Yokohama 20
-Johannesburg Wuhan 15
-Johannesburg Lagos 15
-Johannesburg HoChiMinhCity 10
-Johannesburg Beijing 10
-Johannesburg Moscow 10
-Johannesburg MexicoCity 20
-Johannesburg Santiago 20
-Johannesburg Jakarta 10
-Johannesburg Lahore 15
-Johannesburg Ahmedabad 20
-Johannesburg Durban 15
-Johannesburg Delhi 15
-Johannesburg Bogota 10
-Johannesburg Madrid 20
-Johannesburg Bangalore 25
-Johannesburg BuenosAires 10
-Johannesburg Kinshasa 10
-Johannesburg Yangon 20
-Johannesburg Tokyo 20
-Johannesburg Pune 25
-Johannesburg CapeTown 15
-Johannesburg Seoul 15
-Johannesburg Cairo 20
-Johannesburg Busan 10
-Johannesburg Berlin 15
-Johannesburg Chongqing 20
-Johannesburg Shenyang 20
-Johannesburg Hanoi 10
-Johannesburg Alexandria 15
-Johannesburg SaoPaulo 25
-
-Surat Yokohama 20
-Surat Wuhan 25
-Surat Lagos 15
-Surat HoChiMinhCity 25
-Surat Beijing 15
-Surat Moscow 10
-Surat MexicoCity 15
-Surat Santiago 25
-Surat Jakarta 20
-Surat Lahore 10
-Surat Ahmedabad 20
-Surat Durban 15
-Surat Delhi 25
-Surat Bogota 15
-Surat Madrid 20
-Surat Bangalore 20
-Surat BuenosAires 25
-Surat Kinshasa 20
-Surat Yangon 15
-Surat Tokyo 10
-Surat Pune 25
-Surat CapeTown 10
-Surat Seoul 20
-Surat Cairo 15
-Surat Busan 20
-Surat Berlin 10
-Surat Chongqing 15
-Surat Shenyang 25
-Surat Hanoi 15
-Surat Alexandria 20
-Surat SaoPaulo 20
-
-Yokohama Wuhan 20
-Yokohama Lagos 15
-Yokohama HoChiMinhCity 15
-Yokohama Beijing 10
-Yokohama Moscow 25
-Yokohama MexicoCity 25
-Yokohama Santiago 10
-Yokohama Jakarta 10
-Yokohama Lahore 15
-Yokohama Ahmedabad 15
-Yokohama Durban 25
-Yokohama Delhi 20
-Yokohama Bogota 15
-Yokohama Madrid 25
-Yokohama Bangalore 15
-Yokohama BuenosAires 25
-Yokohama Kinshasa 15
-Yokohama Yangon 25
-Yokohama Tokyo 25
-Yokohama Pune 20
-Yokohama CapeTown 25
-Yokohama Seoul 25
-Yokohama Cairo 10
-Yokohama Busan 10
-Yokohama Berlin 20
-Yokohama Chongqing 15
-Yokohama Shenyang 15
-Yokohama Hanoi 10
-Yokohama Alexandria 15
-Yokohama SaoPaulo 10
-
-Wuhan Lagos 15
-Wuhan HoChiMinhCity 10
-Wuhan Beijing 25
-Wuhan Moscow 15
-Wuhan MexicoCity 25
-Wuhan Santiago 25
-Wuhan Jakarta 15
-Wuhan Lahore 15
-Wuhan Ahmedabad 20
-Wuhan Durban 10
-Wuhan Delhi 15
-Wuhan Bogota 25
-Wuhan Madrid 25
-Wuhan Bangalore 10
-Wuhan BuenosAires 10
-Wuhan Kinshasa 25
-Wuhan Yangon 25
-Wuhan Tokyo 25
-Wuhan Pune 15
-Wuhan CapeTown 10
-Wuhan Seoul 20
-Wuhan Cairo 20
-Wuhan Busan 15
-Wuhan Berlin 15
-Wuhan Chongqing 15
-Wuhan Shenyang 20
-Wuhan Hanoi 20
-Wuhan Alexandria 10
-Wuhan SaoPaulo 10
-
-Lagos HoChiMinhCity 20
-Lagos Beijing 10
-Lagos Moscow 20
-Lagos MexicoCity 15
-Lagos Santiago 20
-Lagos Jakarta 15
-Lagos Lahore 10
-Lagos Ahmedabad 25
-Lagos Durban 10
-Lagos Delhi 20
-Lagos Bogota 15
-Lagos Madrid 15
-Lagos Bangalore 25
-Lagos BuenosAires 20
-Lagos Kinshasa 15
-Lagos Yangon 25
-Lagos Tokyo 20
-Lagos Pune 25
-Lagos CapeTown 15
-Lagos Seoul 20
-Lagos Cairo 20
-Lagos Busan 25
-Lagos Berlin 25
-Lagos Chongqing 15
-Lagos Shenyang 15
-Lagos Hanoi 10
-Lagos Alexandria 15
-Lagos SaoPaulo 25
-
-HoChiMinhCity Beijing 20
-HoChiMinhCity Moscow 10
-HoChiMinhCity MexicoCity 25
-HoChiMinhCity Santiago 15
-HoChiMinhCity Jakarta 15
-HoChiMinhCity Lahore 15
-HoChiMinhCity Ahmedabad 25
-HoChiMinhCity Durban 20
-HoChiMinhCity Delhi 10
-HoChiMinhCity Bogota 25
-HoChiMinhCity Madrid 15
-HoChiMinhCity Bangalore 20
-HoChiMinhCity BuenosAires 20
-HoChiMinhCity Kinshasa 15
-HoChiMinhCity Yangon 20
-HoChiMinhCity Tokyo 10
-HoChiMinhCity Pune 20
-HoChiMinhCity CapeTown 10
-HoChiMinhCity Seoul 10
-HoChiMinhCity Cairo 15
-HoChiMinhCity Busan 10
-HoChiMinhCity Berlin 25
-HoChiMinhCity Chongqing 20
-HoChiMinhCity Shenyang 15
-HoChiMinhCity Hanoi 15
-HoChiMinhCity Alexandria 15
-HoChiMinhCity SaoPaulo 20
-
-Beijing Moscow 25
-Beijing MexicoCity 15
-Beijing Santiago 20
-Beijing Jakarta 15
-Beijing Lahore 25
-Beijing Ahmedabad 25
-Beijing Durban 25
-Beijing Delhi 15
-Beijing Bogota 25
-Beijing Madrid 10
-Beijing Bangalore 10
-Beijing BuenosAires 10
-Beijing Kinshasa 25
-Beijing Yangon 25
-Beijing Tokyo 15
-Beijing Pune 20
-Beijing CapeTown 25
-Beijing Seoul 10
-Beijing Cairo 10
-Beijing Busan 20
-Beijing Berlin 20
-Beijing Chongqing 10
-Beijing Shenyang 25
-Beijing Hanoi 15
-Beijing Alexandria 25
-Beijing SaoPaulo 10
-
-Moscow MexicoCity 25
-Moscow Santiago 25
-Moscow Jakarta 15
-Moscow Lahore 15
-Moscow Ahmedabad 15
-Moscow Durban 25
-Moscow Delhi 15
-Moscow Bogota 25
-Moscow Madrid 20
-Moscow Bangalore 25
-Moscow BuenosAires 20
-Moscow Kinshasa 10
-Moscow Yangon 25
-Moscow Tokyo 10
-Moscow Pune 20
-Moscow CapeTown 20
-Moscow Seoul 15
-Moscow Cairo 25
-Moscow Busan 15
-Moscow Berlin 10
-Moscow Chongqing 10
-Moscow Shenyang 10
-Moscow Hanoi 20
-Moscow Alexandria 20
-Moscow SaoPaulo 10
-
-MexicoCity Santiago 20
+MexicoCity Bangkok 25
+MexicoCity Seoul 20
+MexicoCity RioDeJaneiro 10
+MexicoCity Yangon 10
+MexicoCity Alexandria 10
+MexicoCity Nairobi 20
+MexicoCity Shenzhen 20
+MexicoCity Shanghai 25
+MexicoCity Cairo 25
+MexicoCity Chennai 10
+MexicoCity Dhaka 10
+MexicoCity Tehran 25
+MexicoCity CapeTown 25
+MexicoCity SaintPetersburg 10
+MexicoCity Tokyo 10
+MexicoCity Chongqing 15
+MexicoCity Moscow 10
+MexicoCity Yokohama 10
+MexicoCity Baghdad 20
+MexicoCity London 10
+MexicoCity HongKong 15
+MexicoCity Bangalore 20
+MexicoCity Lima 15
+MexicoCity Dongguan 20
+MexicoCity Wuhan 15
+MexicoCity Abidjan 15
+MexicoCity Lagos 25
+MexicoCity SaoPaulo 20
+MexicoCity Pyongyang 25
+MexicoCity Surat 20
+MexicoCity NewYorkCity 10
 MexicoCity Jakarta 10
 MexicoCity Lahore 15
+MexicoCity Beijing 10
 MexicoCity Ahmedabad 15
-MexicoCity Durban 20
-MexicoCity Delhi 20
-MexicoCity Bogota 15
-MexicoCity Madrid 25
-MexicoCity Bangalore 25
-MexicoCity BuenosAires 20
-MexicoCity Kinshasa 10
-MexicoCity Yangon 25
-MexicoCity Tokyo 20
-MexicoCity Pune 10
-MexicoCity CapeTown 10
-MexicoCity Seoul 15
-MexicoCity Cairo 25
-MexicoCity Busan 25
-MexicoCity Berlin 25
-MexicoCity Chongqing 10
-MexicoCity Shenyang 10
-MexicoCity Hanoi 25
-MexicoCity Alexandria 20
-MexicoCity SaoPaulo 15
+MexicoCity HoChiMinhCity 10
+MexicoCity Istanbul 15
+MexicoCity Delhi 10
+MexicoCity Tianjin 25
+MexicoCity Jaipur 25
+MexicoCity Ankara 10
+MexicoCity Kolkata 10
+MexicoCity Madrid 20
+MexicoCity Bogota 25
+MexicoCity Kanpur 15
 
-Santiago Jakarta 25
-Santiago Lahore 25
-Santiago Ahmedabad 20
-Santiago Durban 10
-Santiago Delhi 15
-Santiago Bogota 25
-Santiago Madrid 25
-Santiago Bangalore 25
-Santiago BuenosAires 15
-Santiago Kinshasa 20
-Santiago Yangon 25
-Santiago Tokyo 20
-Santiago Pune 15
-Santiago CapeTown 15
-Santiago Seoul 25
-Santiago Cairo 25
-Santiago Busan 25
-Santiago Berlin 20
-Santiago Chongqing 10
-Santiago Shenyang 20
-Santiago Hanoi 10
-Santiago Alexandria 25
-Santiago SaoPaulo 10
+Bangkok Seoul 20
+Bangkok RioDeJaneiro 20
+Bangkok Yangon 25
+Bangkok Alexandria 25
+Bangkok Nairobi 10
+Bangkok Shenzhen 25
+Bangkok Shanghai 15
+Bangkok Cairo 25
+Bangkok Chennai 25
+Bangkok Dhaka 15
+Bangkok Tehran 20
+Bangkok CapeTown 20
+Bangkok SaintPetersburg 10
+Bangkok Tokyo 15
+Bangkok Chongqing 20
+Bangkok Moscow 20
+Bangkok Yokohama 25
+Bangkok Baghdad 25
+Bangkok London 10
+Bangkok HongKong 25
+Bangkok Bangalore 10
+Bangkok Lima 20
+Bangkok Dongguan 25
+Bangkok Wuhan 10
+Bangkok Abidjan 10
+Bangkok Lagos 25
+Bangkok SaoPaulo 25
+Bangkok Pyongyang 15
+Bangkok Surat 15
+Bangkok NewYorkCity 20
+Bangkok Jakarta 15
+Bangkok Lahore 20
+Bangkok Beijing 15
+Bangkok Ahmedabad 20
+Bangkok HoChiMinhCity 20
+Bangkok Istanbul 20
+Bangkok Delhi 25
+Bangkok Tianjin 25
+Bangkok Jaipur 10
+Bangkok Ankara 15
+Bangkok Kolkata 15
+Bangkok Madrid 20
+Bangkok Bogota 15
+Bangkok Kanpur 15
+
+Seoul RioDeJaneiro 20
+Seoul Yangon 25
+Seoul Alexandria 25
+Seoul Nairobi 10
+Seoul Shenzhen 15
+Seoul Shanghai 25
+Seoul Cairo 15
+Seoul Chennai 20
+Seoul Dhaka 10
+Seoul Tehran 20
+Seoul CapeTown 25
+Seoul SaintPetersburg 25
+Seoul Tokyo 20
+Seoul Chongqing 20
+Seoul Moscow 20
+Seoul Yokohama 10
+Seoul Baghdad 25
+Seoul London 15
+Seoul HongKong 15
+Seoul Bangalore 20
+Seoul Lima 15
+Seoul Dongguan 25
+Seoul Wuhan 25
+Seoul Abidjan 20
+Seoul Lagos 25
+Seoul SaoPaulo 15
+Seoul Pyongyang 15
+Seoul Surat 10
+Seoul NewYorkCity 10
+Seoul Jakarta 15
+Seoul Lahore 25
+Seoul Beijing 20
+Seoul Ahmedabad 20
+Seoul HoChiMinhCity 20
+Seoul Istanbul 20
+Seoul Delhi 15
+Seoul Tianjin 25
+Seoul Jaipur 10
+Seoul Ankara 10
+Seoul Kolkata 20
+Seoul Madrid 10
+Seoul Bogota 15
+Seoul Kanpur 25
+
+RioDeJaneiro Yangon 10
+RioDeJaneiro Alexandria 15
+RioDeJaneiro Nairobi 25
+RioDeJaneiro Shenzhen 10
+RioDeJaneiro Shanghai 20
+RioDeJaneiro Cairo 15
+RioDeJaneiro Chennai 15
+RioDeJaneiro Dhaka 20
+RioDeJaneiro Tehran 10
+RioDeJaneiro CapeTown 20
+RioDeJaneiro SaintPetersburg 10
+RioDeJaneiro Tokyo 10
+RioDeJaneiro Chongqing 10
+RioDeJaneiro Moscow 10
+RioDeJaneiro Yokohama 15
+RioDeJaneiro Baghdad 15
+RioDeJaneiro London 15
+RioDeJaneiro HongKong 20
+RioDeJaneiro Bangalore 25
+RioDeJaneiro Lima 20
+RioDeJaneiro Dongguan 15
+RioDeJaneiro Wuhan 20
+RioDeJaneiro Abidjan 20
+RioDeJaneiro Lagos 20
+RioDeJaneiro SaoPaulo 20
+RioDeJaneiro Pyongyang 25
+RioDeJaneiro Surat 15
+RioDeJaneiro NewYorkCity 15
+RioDeJaneiro Jakarta 10
+RioDeJaneiro Lahore 25
+RioDeJaneiro Beijing 25
+RioDeJaneiro Ahmedabad 25
+RioDeJaneiro HoChiMinhCity 20
+RioDeJaneiro Istanbul 20
+RioDeJaneiro Delhi 15
+RioDeJaneiro Tianjin 20
+RioDeJaneiro Jaipur 25
+RioDeJaneiro Ankara 20
+RioDeJaneiro Kolkata 25
+RioDeJaneiro Madrid 20
+RioDeJaneiro Bogota 15
+RioDeJaneiro Kanpur 10
+
+Yangon Alexandria 10
+Yangon Nairobi 10
+Yangon Shenzhen 15
+Yangon Shanghai 10
+Yangon Cairo 10
+Yangon Chennai 15
+Yangon Dhaka 20
+Yangon Tehran 25
+Yangon CapeTown 15
+Yangon SaintPetersburg 10
+Yangon Tokyo 25
+Yangon Chongqing 25
+Yangon Moscow 20
+Yangon Yokohama 20
+Yangon Baghdad 10
+Yangon London 20
+Yangon HongKong 10
+Yangon Bangalore 15
+Yangon Lima 15
+Yangon Dongguan 10
+Yangon Wuhan 15
+Yangon Abidjan 15
+Yangon Lagos 15
+Yangon SaoPaulo 15
+Yangon Pyongyang 20
+Yangon Surat 10
+Yangon NewYorkCity 25
+Yangon Jakarta 10
+Yangon Lahore 10
+Yangon Beijing 25
+Yangon Ahmedabad 15
+Yangon HoChiMinhCity 15
+Yangon Istanbul 25
+Yangon Delhi 20
+Yangon Tianjin 15
+Yangon Jaipur 10
+Yangon Ankara 25
+Yangon Kolkata 25
+Yangon Madrid 15
+Yangon Bogota 20
+Yangon Kanpur 15
+
+Alexandria Nairobi 15
+Alexandria Shenzhen 25
+Alexandria Shanghai 15
+Alexandria Cairo 25
+Alexandria Chennai 20
+Alexandria Dhaka 15
+Alexandria Tehran 25
+Alexandria CapeTown 15
+Alexandria SaintPetersburg 10
+Alexandria Tokyo 15
+Alexandria Chongqing 10
+Alexandria Moscow 25
+Alexandria Yokohama 15
+Alexandria Baghdad 25
+Alexandria London 10
+Alexandria HongKong 25
+Alexandria Bangalore 15
+Alexandria Lima 15
+Alexandria Dongguan 25
+Alexandria Wuhan 15
+Alexandria Abidjan 25
+Alexandria Lagos 15
+Alexandria SaoPaulo 10
+Alexandria Pyongyang 10
+Alexandria Surat 25
+Alexandria NewYorkCity 10
+Alexandria Jakarta 15
+Alexandria Lahore 10
+Alexandria Beijing 15
+Alexandria Ahmedabad 20
+Alexandria HoChiMinhCity 20
+Alexandria Istanbul 10
+Alexandria Delhi 20
+Alexandria Tianjin 25
+Alexandria Jaipur 10
+Alexandria Ankara 20
+Alexandria Kolkata 25
+Alexandria Madrid 25
+Alexandria Bogota 10
+Alexandria Kanpur 15
+
+Nairobi Shenzhen 25
+Nairobi Shanghai 25
+Nairobi Cairo 20
+Nairobi Chennai 10
+Nairobi Dhaka 10
+Nairobi Tehran 20
+Nairobi CapeTown 10
+Nairobi SaintPetersburg 10
+Nairobi Tokyo 10
+Nairobi Chongqing 10
+Nairobi Moscow 15
+Nairobi Yokohama 20
+Nairobi Baghdad 25
+Nairobi London 25
+Nairobi HongKong 10
+Nairobi Bangalore 15
+Nairobi Lima 25
+Nairobi Dongguan 10
+Nairobi Wuhan 10
+Nairobi Abidjan 10
+Nairobi Lagos 25
+Nairobi SaoPaulo 20
+Nairobi Pyongyang 15
+Nairobi Surat 25
+Nairobi NewYorkCity 10
+Nairobi Jakarta 10
+Nairobi Lahore 25
+Nairobi Beijing 20
+Nairobi Ahmedabad 20
+Nairobi HoChiMinhCity 25
+Nairobi Istanbul 15
+Nairobi Delhi 25
+Nairobi Tianjin 20
+Nairobi Jaipur 20
+Nairobi Ankara 25
+Nairobi Kolkata 20
+Nairobi Madrid 15
+Nairobi Bogota 10
+Nairobi Kanpur 10
+
+Shenzhen Shanghai 10
+Shenzhen Cairo 20
+Shenzhen Chennai 15
+Shenzhen Dhaka 10
+Shenzhen Tehran 20
+Shenzhen CapeTown 10
+Shenzhen SaintPetersburg 20
+Shenzhen Tokyo 10
+Shenzhen Chongqing 10
+Shenzhen Moscow 10
+Shenzhen Yokohama 25
+Shenzhen Baghdad 20
+Shenzhen London 25
+Shenzhen HongKong 15
+Shenzhen Bangalore 10
+Shenzhen Lima 25
+Shenzhen Dongguan 20
+Shenzhen Wuhan 25
+Shenzhen Abidjan 10
+Shenzhen Lagos 25
+Shenzhen SaoPaulo 25
+Shenzhen Pyongyang 15
+Shenzhen Surat 10
+Shenzhen NewYorkCity 20
+Shenzhen Jakarta 25
+Shenzhen Lahore 15
+Shenzhen Beijing 20
+Shenzhen Ahmedabad 20
+Shenzhen HoChiMinhCity 20
+Shenzhen Istanbul 20
+Shenzhen Delhi 10
+Shenzhen Tianjin 25
+Shenzhen Jaipur 25
+Shenzhen Ankara 25
+Shenzhen Kolkata 15
+Shenzhen Madrid 15
+Shenzhen Bogota 15
+Shenzhen Kanpur 15
+
+Shanghai Cairo 20
+Shanghai Chennai 15
+Shanghai Dhaka 10
+Shanghai Tehran 20
+Shanghai CapeTown 25
+Shanghai SaintPetersburg 25
+Shanghai Tokyo 25
+Shanghai Chongqing 10
+Shanghai Moscow 10
+Shanghai Yokohama 10
+Shanghai Baghdad 15
+Shanghai London 10
+Shanghai HongKong 20
+Shanghai Bangalore 25
+Shanghai Lima 20
+Shanghai Dongguan 10
+Shanghai Wuhan 25
+Shanghai Abidjan 25
+Shanghai Lagos 25
+Shanghai SaoPaulo 10
+Shanghai Pyongyang 25
+Shanghai Surat 15
+Shanghai NewYorkCity 10
+Shanghai Jakarta 10
+Shanghai Lahore 15
+Shanghai Beijing 20
+Shanghai Ahmedabad 20
+Shanghai HoChiMinhCity 25
+Shanghai Istanbul 15
+Shanghai Delhi 25
+Shanghai Tianjin 10
+Shanghai Jaipur 20
+Shanghai Ankara 25
+Shanghai Kolkata 15
+Shanghai Madrid 20
+Shanghai Bogota 20
+Shanghai Kanpur 20
+
+Cairo Chennai 20
+Cairo Dhaka 25
+Cairo Tehran 25
+Cairo CapeTown 15
+Cairo SaintPetersburg 10
+Cairo Tokyo 20
+Cairo Chongqing 20
+Cairo Moscow 25
+Cairo Yokohama 15
+Cairo Baghdad 10
+Cairo London 15
+Cairo HongKong 15
+Cairo Bangalore 15
+Cairo Lima 15
+Cairo Dongguan 10
+Cairo Wuhan 15
+Cairo Abidjan 10
+Cairo Lagos 25
+Cairo SaoPaulo 25
+Cairo Pyongyang 15
+Cairo Surat 10
+Cairo NewYorkCity 20
+Cairo Jakarta 15
+Cairo Lahore 15
+Cairo Beijing 15
+Cairo Ahmedabad 15
+Cairo HoChiMinhCity 25
+Cairo Istanbul 25
+Cairo Delhi 20
+Cairo Tianjin 25
+Cairo Jaipur 15
+Cairo Ankara 15
+Cairo Kolkata 15
+Cairo Madrid 10
+Cairo Bogota 15
+Cairo Kanpur 20
+
+Chennai Dhaka 20
+Chennai Tehran 10
+Chennai CapeTown 20
+Chennai SaintPetersburg 15
+Chennai Tokyo 20
+Chennai Chongqing 15
+Chennai Moscow 10
+Chennai Yokohama 25
+Chennai Baghdad 10
+Chennai London 25
+Chennai HongKong 10
+Chennai Bangalore 25
+Chennai Lima 25
+Chennai Dongguan 20
+Chennai Wuhan 10
+Chennai Abidjan 25
+Chennai Lagos 20
+Chennai SaoPaulo 10
+Chennai Pyongyang 10
+Chennai Surat 25
+Chennai NewYorkCity 15
+Chennai Jakarta 10
+Chennai Lahore 15
+Chennai Beijing 15
+Chennai Ahmedabad 25
+Chennai HoChiMinhCity 15
+Chennai Istanbul 10
+Chennai Delhi 20
+Chennai Tianjin 25
+Chennai Jaipur 20
+Chennai Ankara 10
+Chennai Kolkata 10
+Chennai Madrid 25
+Chennai Bogota 15
+Chennai Kanpur 15
+
+Dhaka Tehran 10
+Dhaka CapeTown 20
+Dhaka SaintPetersburg 10
+Dhaka Tokyo 20
+Dhaka Chongqing 20
+Dhaka Moscow 25
+Dhaka Yokohama 20
+Dhaka Baghdad 15
+Dhaka London 15
+Dhaka HongKong 25
+Dhaka Bangalore 15
+Dhaka Lima 20
+Dhaka Dongguan 20
+Dhaka Wuhan 15
+Dhaka Abidjan 10
+Dhaka Lagos 25
+Dhaka SaoPaulo 15
+Dhaka Pyongyang 20
+Dhaka Surat 15
+Dhaka NewYorkCity 20
+Dhaka Jakarta 25
+Dhaka Lahore 20
+Dhaka Beijing 10
+Dhaka Ahmedabad 10
+Dhaka HoChiMinhCity 20
+Dhaka Istanbul 15
+Dhaka Delhi 10
+Dhaka Tianjin 20
+Dhaka Jaipur 10
+Dhaka Ankara 15
+Dhaka Kolkata 10
+Dhaka Madrid 25
+Dhaka Bogota 10
+Dhaka Kanpur 15
+
+Tehran CapeTown 10
+Tehran SaintPetersburg 25
+Tehran Tokyo 20
+Tehran Chongqing 15
+Tehran Moscow 20
+Tehran Yokohama 25
+Tehran Baghdad 25
+Tehran London 10
+Tehran HongKong 20
+Tehran Bangalore 20
+Tehran Lima 10
+Tehran Dongguan 20
+Tehran Wuhan 20
+Tehran Abidjan 20
+Tehran Lagos 15
+Tehran SaoPaulo 25
+Tehran Pyongyang 15
+Tehran Surat 25
+Tehran NewYorkCity 10
+Tehran Jakarta 15
+Tehran Lahore 10
+Tehran Beijing 20
+Tehran Ahmedabad 15
+Tehran HoChiMinhCity 25
+Tehran Istanbul 10
+Tehran Delhi 10
+Tehran Tianjin 20
+Tehran Jaipur 25
+Tehran Ankara 10
+Tehran Kolkata 25
+Tehran Madrid 25
+Tehran Bogota 10
+Tehran Kanpur 20
+
+CapeTown SaintPetersburg 20
+CapeTown Tokyo 10
+CapeTown Chongqing 20
+CapeTown Moscow 10
+CapeTown Yokohama 10
+CapeTown Baghdad 10
+CapeTown London 20
+CapeTown HongKong 20
+CapeTown Bangalore 15
+CapeTown Lima 25
+CapeTown Dongguan 10
+CapeTown Wuhan 15
+CapeTown Abidjan 25
+CapeTown Lagos 15
+CapeTown SaoPaulo 15
+CapeTown Pyongyang 15
+CapeTown Surat 10
+CapeTown NewYorkCity 15
+CapeTown Jakarta 25
+CapeTown Lahore 20
+CapeTown Beijing 15
+CapeTown Ahmedabad 25
+CapeTown HoChiMinhCity 20
+CapeTown Istanbul 25
+CapeTown Delhi 25
+CapeTown Tianjin 15
+CapeTown Jaipur 10
+CapeTown Ankara 25
+CapeTown Kolkata 15
+CapeTown Madrid 10
+CapeTown Bogota 15
+CapeTown Kanpur 10
+
+SaintPetersburg Tokyo 10
+SaintPetersburg Chongqing 10
+SaintPetersburg Moscow 25
+SaintPetersburg Yokohama 15
+SaintPetersburg Baghdad 25
+SaintPetersburg London 15
+SaintPetersburg HongKong 15
+SaintPetersburg Bangalore 15
+SaintPetersburg Lima 15
+SaintPetersburg Dongguan 15
+SaintPetersburg Wuhan 10
+SaintPetersburg Abidjan 20
+SaintPetersburg Lagos 10
+SaintPetersburg SaoPaulo 10
+SaintPetersburg Pyongyang 25
+SaintPetersburg Surat 10
+SaintPetersburg NewYorkCity 15
+SaintPetersburg Jakarta 10
+SaintPetersburg Lahore 10
+SaintPetersburg Beijing 15
+SaintPetersburg Ahmedabad 25
+SaintPetersburg HoChiMinhCity 25
+SaintPetersburg Istanbul 20
+SaintPetersburg Delhi 20
+SaintPetersburg Tianjin 25
+SaintPetersburg Jaipur 20
+SaintPetersburg Ankara 25
+SaintPetersburg Kolkata 25
+SaintPetersburg Madrid 25
+SaintPetersburg Bogota 20
+SaintPetersburg Kanpur 15
+
+Tokyo Chongqing 10
+Tokyo Moscow 25
+Tokyo Yokohama 10
+Tokyo Baghdad 10
+Tokyo London 25
+Tokyo HongKong 25
+Tokyo Bangalore 15
+Tokyo Lima 15
+Tokyo Dongguan 20
+Tokyo Wuhan 10
+Tokyo Abidjan 20
+Tokyo Lagos 15
+Tokyo SaoPaulo 25
+Tokyo Pyongyang 20
+Tokyo Surat 10
+Tokyo NewYorkCity 25
+Tokyo Jakarta 15
+Tokyo Lahore 25
+Tokyo Beijing 20
+Tokyo Ahmedabad 25
+Tokyo HoChiMinhCity 25
+Tokyo Istanbul 15
+Tokyo Delhi 20
+Tokyo Tianjin 15
+Tokyo Jaipur 25
+Tokyo Ankara 15
+Tokyo Kolkata 20
+Tokyo Madrid 10
+Tokyo Bogota 25
+Tokyo Kanpur 15
+
+Chongqing Moscow 20
+Chongqing Yokohama 25
+Chongqing Baghdad 25
+Chongqing London 20
+Chongqing HongKong 15
+Chongqing Bangalore 15
+Chongqing Lima 20
+Chongqing Dongguan 10
+Chongqing Wuhan 10
+Chongqing Abidjan 20
+Chongqing Lagos 20
+Chongqing SaoPaulo 15
+Chongqing Pyongyang 25
+Chongqing Surat 15
+Chongqing NewYorkCity 20
+Chongqing Jakarta 10
+Chongqing Lahore 15
+Chongqing Beijing 10
+Chongqing Ahmedabad 10
+Chongqing HoChiMinhCity 10
+Chongqing Istanbul 15
+Chongqing Delhi 20
+Chongqing Tianjin 25
+Chongqing Jaipur 10
+Chongqing Ankara 10
+Chongqing Kolkata 10
+Chongqing Madrid 15
+Chongqing Bogota 25
+Chongqing Kanpur 15
+
+Moscow Yokohama 15
+Moscow Baghdad 10
+Moscow London 15
+Moscow HongKong 20
+Moscow Bangalore 25
+Moscow Lima 20
+Moscow Dongguan 15
+Moscow Wuhan 15
+Moscow Abidjan 20
+Moscow Lagos 25
+Moscow SaoPaulo 10
+Moscow Pyongyang 20
+Moscow Surat 10
+Moscow NewYorkCity 20
+Moscow Jakarta 10
+Moscow Lahore 20
+Moscow Beijing 20
+Moscow Ahmedabad 10
+Moscow HoChiMinhCity 20
+Moscow Istanbul 15
+Moscow Delhi 20
+Moscow Tianjin 25
+Moscow Jaipur 20
+Moscow Ankara 20
+Moscow Kolkata 20
+Moscow Madrid 25
+Moscow Bogota 20
+Moscow Kanpur 10
+
+Yokohama Baghdad 15
+Yokohama London 20
+Yokohama HongKong 25
+Yokohama Bangalore 20
+Yokohama Lima 10
+Yokohama Dongguan 15
+Yokohama Wuhan 20
+Yokohama Abidjan 15
+Yokohama Lagos 15
+Yokohama SaoPaulo 10
+Yokohama Pyongyang 25
+Yokohama Surat 15
+Yokohama NewYorkCity 25
+Yokohama Jakarta 10
+Yokohama Lahore 10
+Yokohama Beijing 10
+Yokohama Ahmedabad 15
+Yokohama HoChiMinhCity 25
+Yokohama Istanbul 25
+Yokohama Delhi 20
+Yokohama Tianjin 15
+Yokohama Jaipur 25
+Yokohama Ankara 10
+Yokohama Kolkata 10
+Yokohama Madrid 25
+Yokohama Bogota 10
+Yokohama Kanpur 20
+
+Baghdad London 15
+Baghdad HongKong 10
+Baghdad Bangalore 10
+Baghdad Lima 15
+Baghdad Dongguan 20
+Baghdad Wuhan 10
+Baghdad Abidjan 25
+Baghdad Lagos 15
+Baghdad SaoPaulo 20
+Baghdad Pyongyang 15
+Baghdad Surat 15
+Baghdad NewYorkCity 20
+Baghdad Jakarta 15
+Baghdad Lahore 25
+Baghdad Beijing 25
+Baghdad Ahmedabad 10
+Baghdad HoChiMinhCity 20
+Baghdad Istanbul 15
+Baghdad Delhi 20
+Baghdad Tianjin 15
+Baghdad Jaipur 25
+Baghdad Ankara 20
+Baghdad Kolkata 15
+Baghdad Madrid 20
+Baghdad Bogota 15
+Baghdad Kanpur 10
+
+London HongKong 10
+London Bangalore 15
+London Lima 10
+London Dongguan 10
+London Wuhan 10
+London Abidjan 25
+London Lagos 15
+London SaoPaulo 25
+London Pyongyang 25
+London Surat 20
+London NewYorkCity 25
+London Jakarta 15
+London Lahore 10
+London Beijing 15
+London Ahmedabad 20
+London HoChiMinhCity 25
+London Istanbul 15
+London Delhi 15
+London Tianjin 25
+London Jaipur 10
+London Ankara 25
+London Kolkata 15
+London Madrid 25
+London Bogota 10
+London Kanpur 15
+
+HongKong Bangalore 10
+HongKong Lima 20
+HongKong Dongguan 25
+HongKong Wuhan 20
+HongKong Abidjan 20
+HongKong Lagos 20
+HongKong SaoPaulo 10
+HongKong Pyongyang 25
+HongKong Surat 20
+HongKong NewYorkCity 20
+HongKong Jakarta 25
+HongKong Lahore 15
+HongKong Beijing 15
+HongKong Ahmedabad 25
+HongKong HoChiMinhCity 15
+HongKong Istanbul 10
+HongKong Delhi 25
+HongKong Tianjin 10
+HongKong Jaipur 20
+HongKong Ankara 15
+HongKong Kolkata 20
+HongKong Madrid 10
+HongKong Bogota 25
+HongKong Kanpur 15
+
+Bangalore Lima 15
+Bangalore Dongguan 15
+Bangalore Wuhan 25
+Bangalore Abidjan 20
+Bangalore Lagos 25
+Bangalore SaoPaulo 25
+Bangalore Pyongyang 20
+Bangalore Surat 25
+Bangalore NewYorkCity 10
+Bangalore Jakarta 20
+Bangalore Lahore 25
+Bangalore Beijing 20
+Bangalore Ahmedabad 20
+Bangalore HoChiMinhCity 15
+Bangalore Istanbul 25
+Bangalore Delhi 15
+Bangalore Tianjin 20
+Bangalore Jaipur 15
+Bangalore Ankara 25
+Bangalore Kolkata 25
+Bangalore Madrid 20
+Bangalore Bogota 25
+Bangalore Kanpur 10
+
+Lima Dongguan 25
+Lima Wuhan 20
+Lima Abidjan 25
+Lima Lagos 10
+Lima SaoPaulo 25
+Lima Pyongyang 15
+Lima Surat 10
+Lima NewYorkCity 15
+Lima Jakarta 20
+Lima Lahore 15
+Lima Beijing 25
+Lima Ahmedabad 10
+Lima HoChiMinhCity 15
+Lima Istanbul 25
+Lima Delhi 15
+Lima Tianjin 15
+Lima Jaipur 15
+Lima Ankara 10
+Lima Kolkata 10
+Lima Madrid 10
+Lima Bogota 20
+Lima Kanpur 10
+
+Dongguan Wuhan 15
+Dongguan Abidjan 20
+Dongguan Lagos 25
+Dongguan SaoPaulo 20
+Dongguan Pyongyang 20
+Dongguan Surat 10
+Dongguan NewYorkCity 15
+Dongguan Jakarta 15
+Dongguan Lahore 20
+Dongguan Beijing 10
+Dongguan Ahmedabad 20
+Dongguan HoChiMinhCity 15
+Dongguan Istanbul 25
+Dongguan Delhi 25
+Dongguan Tianjin 10
+Dongguan Jaipur 10
+Dongguan Ankara 15
+Dongguan Kolkata 20
+Dongguan Madrid 10
+Dongguan Bogota 10
+Dongguan Kanpur 25
+
+Wuhan Abidjan 20
+Wuhan Lagos 15
+Wuhan SaoPaulo 10
+Wuhan Pyongyang 25
+Wuhan Surat 15
+Wuhan NewYorkCity 20
+Wuhan Jakarta 25
+Wuhan Lahore 15
+Wuhan Beijing 10
+Wuhan Ahmedabad 20
+Wuhan HoChiMinhCity 15
+Wuhan Istanbul 20
+Wuhan Delhi 10
+Wuhan Tianjin 15
+Wuhan Jaipur 15
+Wuhan Ankara 20
+Wuhan Kolkata 15
+Wuhan Madrid 25
+Wuhan Bogota 25
+Wuhan Kanpur 10
+
+Abidjan Lagos 25
+Abidjan SaoPaulo 25
+Abidjan Pyongyang 20
+Abidjan Surat 20
+Abidjan NewYorkCity 25
+Abidjan Jakarta 10
+Abidjan Lahore 10
+Abidjan Beijing 15
+Abidjan Ahmedabad 15
+Abidjan HoChiMinhCity 20
+Abidjan Istanbul 15
+Abidjan Delhi 25
+Abidjan Tianjin 20
+Abidjan Jaipur 25
+Abidjan Ankara 10
+Abidjan Kolkata 25
+Abidjan Madrid 15
+Abidjan Bogota 20
+Abidjan Kanpur 25
+
+Lagos SaoPaulo 15
+Lagos Pyongyang 10
+Lagos Surat 20
+Lagos NewYorkCity 10
+Lagos Jakarta 15
+Lagos Lahore 20
+Lagos Beijing 10
+Lagos Ahmedabad 25
+Lagos HoChiMinhCity 20
+Lagos Istanbul 20
+Lagos Delhi 20
+Lagos Tianjin 20
+Lagos Jaipur 10
+Lagos Ankara 15
+Lagos Kolkata 15
+Lagos Madrid 20
+Lagos Bogota 25
+Lagos Kanpur 25
+
+SaoPaulo Pyongyang 15
+SaoPaulo Surat 25
+SaoPaulo NewYorkCity 15
+SaoPaulo Jakarta 20
+SaoPaulo Lahore 20
+SaoPaulo Beijing 25
+SaoPaulo Ahmedabad 25
+SaoPaulo HoChiMinhCity 20
+SaoPaulo Istanbul 10
+SaoPaulo Delhi 25
+SaoPaulo Tianjin 20
+SaoPaulo Jaipur 25
+SaoPaulo Ankara 20
+SaoPaulo Kolkata 15
+SaoPaulo Madrid 20
+SaoPaulo Bogota 15
+SaoPaulo Kanpur 10
+
+Pyongyang Surat 20
+Pyongyang NewYorkCity 20
+Pyongyang Jakarta 20
+Pyongyang Lahore 20
+Pyongyang Beijing 15
+Pyongyang Ahmedabad 25
+Pyongyang HoChiMinhCity 10
+Pyongyang Istanbul 20
+Pyongyang Delhi 20
+Pyongyang Tianjin 15
+Pyongyang Jaipur 20
+Pyongyang Ankara 10
+Pyongyang Kolkata 20
+Pyongyang Madrid 20
+Pyongyang Bogota 15
+Pyongyang Kanpur 25
+
+Surat NewYorkCity 20
+Surat Jakarta 15
+Surat Lahore 25
+Surat Beijing 15
+Surat Ahmedabad 15
+Surat HoChiMinhCity 15
+Surat Istanbul 20
+Surat Delhi 15
+Surat Tianjin 20
+Surat Jaipur 25
+Surat Ankara 15
+Surat Kolkata 25
+Surat Madrid 10
+Surat Bogota 20
+Surat Kanpur 25
+
+NewYorkCity Jakarta 15
+NewYorkCity Lahore 10
+NewYorkCity Beijing 25
+NewYorkCity Ahmedabad 15
+NewYorkCity HoChiMinhCity 25
+NewYorkCity Istanbul 25
+NewYorkCity Delhi 15
+NewYorkCity Tianjin 25
+NewYorkCity Jaipur 25
+NewYorkCity Ankara 25
+NewYorkCity Kolkata 15
+NewYorkCity Madrid 10
+NewYorkCity Bogota 15
+NewYorkCity Kanpur 15
 
 Jakarta Lahore 10
+Jakarta Beijing 20
 Jakarta Ahmedabad 25
-Jakarta Durban 25
+Jakarta HoChiMinhCity 15
+Jakarta Istanbul 20
 Jakarta Delhi 15
-Jakarta Bogota 10
-Jakarta Madrid 10
-Jakarta Bangalore 20
-Jakarta BuenosAires 20
-Jakarta Kinshasa 15
-Jakarta Yangon 25
-Jakarta Tokyo 25
-Jakarta Pune 25
-Jakarta CapeTown 10
-Jakarta Seoul 10
-Jakarta Cairo 25
-Jakarta Busan 25
-Jakarta Berlin 20
-Jakarta Chongqing 10
-Jakarta Shenyang 10
-Jakarta Hanoi 10
-Jakarta Alexandria 10
-Jakarta SaoPaulo 20
+Jakarta Tianjin 25
+Jakarta Jaipur 25
+Jakarta Ankara 10
+Jakarta Kolkata 15
+Jakarta Madrid 15
+Jakarta Bogota 15
+Jakarta Kanpur 10
 
+Lahore Beijing 25
 Lahore Ahmedabad 25
-Lahore Durban 10
-Lahore Delhi 20
-Lahore Bogota 10
+Lahore HoChiMinhCity 25
+Lahore Istanbul 25
+Lahore Delhi 10
+Lahore Tianjin 10
+Lahore Jaipur 20
+Lahore Ankara 25
+Lahore Kolkata 25
 Lahore Madrid 20
-Lahore Bangalore 10
-Lahore BuenosAires 15
-Lahore Kinshasa 25
-Lahore Yangon 10
-Lahore Tokyo 15
-Lahore Pune 25
-Lahore CapeTown 20
-Lahore Seoul 15
-Lahore Cairo 25
-Lahore Busan 25
-Lahore Berlin 10
-Lahore Chongqing 20
-Lahore Shenyang 10
-Lahore Hanoi 25
-Lahore Alexandria 20
-Lahore SaoPaulo 15
+Lahore Bogota 25
+Lahore Kanpur 15
 
-Ahmedabad Durban 10
-Ahmedabad Delhi 10
-Ahmedabad Bogota 10
-Ahmedabad Madrid 10
-Ahmedabad Bangalore 10
-Ahmedabad BuenosAires 25
-Ahmedabad Kinshasa 10
-Ahmedabad Yangon 15
-Ahmedabad Tokyo 10
-Ahmedabad Pune 15
-Ahmedabad CapeTown 25
-Ahmedabad Seoul 15
-Ahmedabad Cairo 20
-Ahmedabad Busan 15
-Ahmedabad Berlin 15
-Ahmedabad Chongqing 25
-Ahmedabad Shenyang 25
-Ahmedabad Hanoi 20
-Ahmedabad Alexandria 20
-Ahmedabad SaoPaulo 20
+Beijing Ahmedabad 25
+Beijing HoChiMinhCity 20
+Beijing Istanbul 10
+Beijing Delhi 15
+Beijing Tianjin 25
+Beijing Jaipur 25
+Beijing Ankara 25
+Beijing Kolkata 15
+Beijing Madrid 25
+Beijing Bogota 20
+Beijing Kanpur 20
 
-Durban Delhi 10
-Durban Bogota 20
-Durban Madrid 10
-Durban Bangalore 20
-Durban BuenosAires 25
-Durban Kinshasa 25
-Durban Yangon 15
-Durban Tokyo 25
-Durban Pune 10
-Durban CapeTown 20
-Durban Seoul 10
-Durban Cairo 10
-Durban Busan 15
-Durban Berlin 20
-Durban Chongqing 10
-Durban Shenyang 20
-Durban Hanoi 10
-Durban Alexandria 25
-Durban SaoPaulo 20
+Ahmedabad HoChiMinhCity 25
+Ahmedabad Istanbul 10
+Ahmedabad Delhi 15
+Ahmedabad Tianjin 25
+Ahmedabad Jaipur 25
+Ahmedabad Ankara 10
+Ahmedabad Kolkata 15
+Ahmedabad Madrid 15
+Ahmedabad Bogota 25
+Ahmedabad Kanpur 15
 
-Delhi Bogota 25
-Delhi Madrid 25
-Delhi Bangalore 10
-Delhi BuenosAires 25
-Delhi Kinshasa 20
-Delhi Yangon 10
-Delhi Tokyo 10
-Delhi Pune 25
-Delhi CapeTown 10
-Delhi Seoul 15
-Delhi Cairo 25
-Delhi Busan 10
-Delhi Berlin 25
-Delhi Chongqing 10
-Delhi Shenyang 15
-Delhi Hanoi 20
-Delhi Alexandria 15
-Delhi SaoPaulo 15
+HoChiMinhCity Istanbul 25
+HoChiMinhCity Delhi 15
+HoChiMinhCity Tianjin 25
+HoChiMinhCity Jaipur 25
+HoChiMinhCity Ankara 25
+HoChiMinhCity Kolkata 10
+HoChiMinhCity Madrid 10
+HoChiMinhCity Bogota 15
+HoChiMinhCity Kanpur 20
 
-Bogota Madrid 15
-Bogota Bangalore 10
-Bogota BuenosAires 15
-Bogota Kinshasa 15
-Bogota Yangon 25
-Bogota Tokyo 15
-Bogota Pune 10
-Bogota CapeTown 20
-Bogota Seoul 15
-Bogota Cairo 20
-Bogota Busan 25
-Bogota Berlin 15
-Bogota Chongqing 20
-Bogota Shenyang 20
-Bogota Hanoi 20
-Bogota Alexandria 15
-Bogota SaoPaulo 15
+Istanbul Delhi 20
+Istanbul Tianjin 25
+Istanbul Jaipur 20
+Istanbul Ankara 15
+Istanbul Kolkata 25
+Istanbul Madrid 10
+Istanbul Bogota 20
+Istanbul Kanpur 15
 
-Madrid Bangalore 20
-Madrid BuenosAires 15
-Madrid Kinshasa 10
-Madrid Yangon 15
-Madrid Tokyo 20
-Madrid Pune 25
-Madrid CapeTown 10
-Madrid Seoul 25
-Madrid Cairo 25
-Madrid Busan 25
-Madrid Berlin 25
-Madrid Chongqing 25
-Madrid Shenyang 10
-Madrid Hanoi 25
-Madrid Alexandria 20
-Madrid SaoPaulo 10
+Delhi Tianjin 20
+Delhi Jaipur 15
+Delhi Ankara 20
+Delhi Kolkata 10
+Delhi Madrid 20
+Delhi Bogota 15
+Delhi Kanpur 25
 
-Bangalore BuenosAires 10
-Bangalore Kinshasa 20
-Bangalore Yangon 10
-Bangalore Tokyo 15
-Bangalore Pune 25
-Bangalore CapeTown 15
-Bangalore Seoul 20
-Bangalore Cairo 25
-Bangalore Busan 25
-Bangalore Berlin 20
-Bangalore Chongqing 15
-Bangalore Shenyang 15
-Bangalore Hanoi 20
-Bangalore Alexandria 15
-Bangalore SaoPaulo 20
+Tianjin Jaipur 20
+Tianjin Ankara 20
+Tianjin Kolkata 10
+Tianjin Madrid 20
+Tianjin Bogota 20
+Tianjin Kanpur 20
 
-BuenosAires Kinshasa 20
-BuenosAires Yangon 25
-BuenosAires Tokyo 20
-BuenosAires Pune 20
-BuenosAires CapeTown 20
-BuenosAires Seoul 10
-BuenosAires Cairo 15
-BuenosAires Busan 25
-BuenosAires Berlin 15
-BuenosAires Chongqing 15
-BuenosAires Shenyang 25
-BuenosAires Hanoi 10
-BuenosAires Alexandria 20
-BuenosAires SaoPaulo 20
+Jaipur Ankara 15
+Jaipur Kolkata 20
+Jaipur Madrid 10
+Jaipur Bogota 20
+Jaipur Kanpur 20
 
-Kinshasa Yangon 25
-Kinshasa Tokyo 25
-Kinshasa Pune 15
-Kinshasa CapeTown 10
-Kinshasa Seoul 15
-Kinshasa Cairo 20
-Kinshasa Busan 25
-Kinshasa Berlin 10
-Kinshasa Chongqing 10
-Kinshasa Shenyang 25
-Kinshasa Hanoi 25
-Kinshasa Alexandria 20
-Kinshasa SaoPaulo 25
+Ankara Kolkata 15
+Ankara Madrid 10
+Ankara Bogota 10
+Ankara Kanpur 20
 
-Yangon Tokyo 10
-Yangon Pune 15
-Yangon CapeTown 25
-Yangon Seoul 10
-Yangon Cairo 15
-Yangon Busan 15
-Yangon Berlin 20
-Yangon Chongqing 15
-Yangon Shenyang 10
-Yangon Hanoi 15
-Yangon Alexandria 15
-Yangon SaoPaulo 20
+Kolkata Madrid 15
+Kolkata Bogota 20
+Kolkata Kanpur 10
 
-Tokyo Pune 10
-Tokyo CapeTown 15
-Tokyo Seoul 15
-Tokyo Cairo 10
-Tokyo Busan 10
-Tokyo Berlin 15
-Tokyo Chongqing 10
-Tokyo Shenyang 10
-Tokyo Hanoi 25
-Tokyo Alexandria 25
-Tokyo SaoPaulo 10
+Madrid Bogota 10
+Madrid Kanpur 25
 
-Pune CapeTown 15
-Pune Seoul 20
-Pune Cairo 10
-Pune Busan 10
-Pune Berlin 15
-Pune Chongqing 25
-Pune Shenyang 20
-Pune Hanoi 20
-Pune Alexandria 20
-Pune SaoPaulo 10
-
-CapeTown Seoul 20
-CapeTown Cairo 10
-CapeTown Busan 20
-CapeTown Berlin 25
-CapeTown Chongqing 20
-CapeTown Shenyang 15
-CapeTown Hanoi 20
-CapeTown Alexandria 20
-CapeTown SaoPaulo 10
-
-Seoul Cairo 15
-Seoul Busan 15
-Seoul Berlin 25
-Seoul Chongqing 25
-Seoul Shenyang 20
-Seoul Hanoi 20
-Seoul Alexandria 20
-Seoul SaoPaulo 25
-
-Cairo Busan 15
-Cairo Berlin 15
-Cairo Chongqing 15
-Cairo Shenyang 15
-Cairo Hanoi 20
-Cairo Alexandria 20
-Cairo SaoPaulo 15
-
-Busan Berlin 20
-Busan Chongqing 10
-Busan Shenyang 25
-Busan Hanoi 20
-Busan Alexandria 20
-Busan SaoPaulo 20
-
-Berlin Chongqing 10
-Berlin Shenyang 15
-Berlin Hanoi 25
-Berlin Alexandria 20
-Berlin SaoPaulo 15
-
-Chongqing Shenyang 25
-Chongqing Hanoi 25
-Chongqing Alexandria 15
-Chongqing SaoPaulo 10
-
-Shenyang Hanoi 15
-Shenyang Alexandria 10
-Shenyang SaoPaulo 10
-
-Hanoi Alexandria 20
-Hanoi SaoPaulo 10
-
-Alexandria SaoPaulo 15
+Bogota Kanpur 25
 

@@ -62,7 +62,7 @@ static void_p sim_client_listener(sim_client r) {
 
 
 		cstring header = cstring_copy_until_char(msg, ';');
-		cprintf("CLIENT: GOT %s\n", CELESTE, msg);		
+	//	cprintf("CLIENT: GOT %s\n", CELESTE, msg);		
 		if (cstring_compare(header,"QUERY ") == 0) {
 
 			cstring no_resp = cstring_replace(msg, "QUERY ", "");

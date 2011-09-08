@@ -206,7 +206,7 @@ void sim_message_respond(sim_message r) {
 	array[2] = NULL;
 
 	cstring joined = cstring_join(array, ";");
-	cprintf("SERVER: SEND %s\n", ROJO, joined);
+//	cprintf("SERVER: SEND %s\n", ROJO, joined);
 	sim_transporter_write(r->t, joined);
 	free(array[0]);
 	free(array[1]);

@@ -124,8 +124,9 @@ static void_p sim_transporter_listener(sim_transporter t) {
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
 
+
 	while(TRUE) {
-		
+
 		// This loops enqueues as many messages as built by the char * array.
 		// This helps us to only care about sending zero ending strings as messages.
 		len = 0;
@@ -144,16 +145,16 @@ static void_p sim_transporter_listener(sim_transporter t) {
 			free(data);
 			continue;
 		}
-		
 
-		
+
+
 		for (; len > 0 && i < len; i++) {			
 			builder = cstring_write_c(builder, data[i]);
 			
 			if (data[i] == 0) {
 				if (cstring_len(builder) > 0) {
+					pthread_mutex_lock(t->listener_mutex);					
 
-					pthread_mutex_lock(t->listener_mutex);
 					if (t->is_server && sck_override) {
 						pthread_mutex_lock(&sck_override_mutex);
 						queue_poll(sck_override_queue, cstring_copy(builder));
@@ -163,12 +164,12 @@ static void_p sim_transporter_listener(sim_transporter t) {
 						queue_poll(t->messages, cstring_copy(builder));
 						pthread_cond_broadcast(t->listener_received);
 					}
-					sem_up(t->write_lock, 1);
-					
-					
+									
+					pthread_mutex_unlock(t->listener_mutex);		
 					free(builder);
 					builder = cstring_init(0);
-					pthread_mutex_unlock(t->listener_mutex);
+
+				//	sem_up(t->write_lock, 1);
 					break;
 				}
 				else {
@@ -180,7 +181,8 @@ static void_p sim_transporter_listener(sim_transporter t) {
 
 			}
 			
-		}
+		}		
+
 
 		free(data);
 
@@ -219,6 +221,7 @@ cstring sim_transporter_listen(sim_transporter t, cstring avoid) {
 	cstring data = NULL;
 	
 	while(!value_found) {
+		
 		pthread_mutex_lock(t->listener_mutex);
 		
 		while (queue_empty(t->messages) || (avoid != NULL && cstring_compare(queue_peek(t->messages), avoid) == 0)) {
@@ -435,7 +438,8 @@ sim_transporter sim_transporter_init(connection_type type,
  */
 void sim_transporter_write(sim_transporter sim, cstring message) {
 //	cprintf("TO WRITE: LEN: %d\n", ROJO, strlen(message));
-	sem_down(sim->write_lock, 1);
+	
+	//sem_down(sim->write_lock, 1);
 	sim->write(sim->data, message);
 }
 

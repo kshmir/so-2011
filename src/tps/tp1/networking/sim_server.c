@@ -172,7 +172,7 @@ static void sim_server_listener(sim_server s) {
 		
 		int fail = 1;		
 
-		cprintf("CHECKING %s\n", AMARILLO, header);
+		//cprintf("CHECKING %s\n", AMARILLO, header);
 			foreach(cstring, key, s->responds_to_keys) {
 				cstring safe_key = cstring_copy(key);
 				if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {

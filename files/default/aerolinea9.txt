@@ -1,121 +1,121 @@
 10
 
-Pyongyang
-Flumil 220
-Gelocatil 600
-Augmentine 410
-VoltarenEmulgel 710
-Sintrom 330
-Cardyl 270
-Paracetamol 720
-Neobrufen 380
-Adiro100 140
-Dianben 30
-
-Jakarta
-Dianben 760
-Sintrom 890
-Paracetamol 670
-Gelocatil 60
-Ventoln 730
-Neobrufen 430
-Flumil 30
-Augmentine 630
-Adiro100 710
-Lexatn 230
-
-Moscow
-VoltarenEmulgel 150
-Trankimazn 170
-Sintrom 860
-Flumil 600
-Orfidal 830
-Augmentine 640
-Paracetamol 410
-Neobrufen 390
-Almax 830
-Dianben 60
-
-Delhi
-Almax 660
-Adiro100 560
-Sintrom 920
-Cardyl 730
-Paracetamol 200
-Augmentine 840
-Flumil 230
-Lexatn 410
-Trankimazn 160
-Dianben 440
-
-Lima
-Trankimazn 510
-Almax 800
-Adiro100 20
-Orfidal 930
-Paracetamol 470
-Lexatn 940
-Augmentine 100
-Ventoln 750
-Neobrufen 600
-Sintrom 820
+Tianjin
+Cardyl 170
+Almax 420
+Neobrufen 110
+VoltarenEmulgel 750
+Nolotil 900
+Enantyum 80
+Gelocatil 900
+Flumil 720
+Viscofresh 360
+Dianben 530
 
 Seoul
-Neobrufen 650
-VoltarenEmulgel 480
-Adiro100 750
-Lexatn 950
-Gelocatil 250
-Sintrom 450
-Paracetamol 500
-Flumil 480
-Almax 680
+Paracetamol 860
+Augmentine 800
 Cardyl 990
+Viscofresh 810
+Dianben 310
+Flumil 510
+Sintrom 650
+Enantyum 590
+Nolotil 870
+Gelocatil 990
 
 Shenzhen
+VoltarenEmulgel 820
+Paracetamol 110
+Gelocatil 760
+Viscofresh 750
+Nolotil 230
+Flumil 90
+Orfidal 580
+Augmentine 180
+Sintrom 620
+Enantyum 40
+
+Nairobi
+Augmentine 790
+Cardyl 890
+Dianben 350
+Neobrufen 650
+Orfidal 150
+Nolotil 490
+Flumil 70
+Enantyum 550
+VoltarenEmulgel 800
+Paracetamol 240
+
+Ahmedabad
+Ventoln 300
+Viscofresh 300
+Flumil 250
+Almax 730
+Orfidal 800
+Enantyum 920
+VoltarenEmulgel 350
+Nolotil 330
+Sintrom 840
+Neobrufen 900
+
+Tehran
+VoltarenEmulgel 230
+Gelocatil 320
+Enantyum 410
+Paracetamol 340
+Sintrom 840
+Cardyl 810
+Orfidal 880
+Almax 920
+Ventoln 100
+Flumil 110
+
+Bangkok
+Nolotil 520
+Cardyl 520
+Viscofresh 690
+Gelocatil 520
+Sintrom 360
+Neobrufen 580
+Almax 260
+Paracetamol 620
+VoltarenEmulgel 470
+Augmentine 640
+
+Kanpur
+Orfidal 60
+VoltarenEmulgel 210
+Sintrom 700
+Enantyum 380
+Neobrufen 560
+Viscofresh 230
+Gelocatil 760
+Flumil 360
+Augmentine 250
+Nolotil 620
+
+Alexandria
+Cardyl 870
+Gelocatil 360
+VoltarenEmulgel 460
+Orfidal 660
+Sintrom 520
+Almax 220
+Nolotil 580
+Augmentine 890
+Viscofresh 500
+Dianben 910
+
+Istanbul
 Augmentine 100
-Trankimazn 430
-Ventoln 520
-Adiro100 360
-Paracetamol 880
-Orfidal 170
-Neobrufen 850
-Dianben 800
-Flumil 10
-Gelocatil 930
-
-Surat
-Trankimazn 440
-Lexatn 290
-Sintrom 410
-Neobrufen 420
-Gelocatil 270
-Flumil 850
-Paracetamol 990
-Dianben 880
-Ventoln 480
-Almax 330
-
-London
-Ventoln 410
-Sintrom 120
-Flumil 860
-Neobrufen 300
-Augmentine 550
-Orfidal 290
-Cardyl 570
-Trankimazn 400
-Gelocatil 640
-Adiro100 150
-
-Karachi
-VoltarenEmulgel 220
-Paracetamol 610
-Almax 30
-Trankimazn 960
-Neobrufen 730
-Ventoln 500
-Lexatn 750
-Sintrom 50
-Flumil 810
-Adiro100 810
+Orfidal 430
+Neobrufen 430
+Enantyum 550
+Cardyl 240
+Flumil 880
+Ventoln 380
+Nolotil 340
+Dianben 160
+Paracetamol 330

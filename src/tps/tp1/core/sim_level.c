@@ -471,11 +471,10 @@ void send_turn_tick() {
 
 
 
-	sem_set_value(current_level->airline_sem, 0);
+
 
 	sim_server_broadcast_query(current_level->airlines_server, msg);
 
-	sem_up(current_level->airline_sem, list_size(airlines));
 
 	free(aux);
 	free(valid_planes);

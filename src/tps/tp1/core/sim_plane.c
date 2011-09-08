@@ -90,7 +90,7 @@ int	sim_plane_make_move(sim_airline airline, sim_plane plane, sim_level level, i
 	 	cstring city =		graph_node_key(to);
 	 	int		distance =	graph_arc_weight(arc);
 	 
-	 	if (TRUE || list_indexOf(plane->visited_places, city, cstring_comparer) == -1) {
+	 	if (list_indexOf(plane->visited_places, city, cstring_comparer) == -1) {
 	 		selected = city;
 	 		break;
 	 	}
@@ -209,7 +209,7 @@ void sim_plane_main(struct sim_plane_data * d) {
 		sim_airline_set_planes_running(airline, sim_airline_planes_running(airline) - 1);
 		sim_airline_set_planes_waiting(airline, sim_airline_planes_waiting(airline) + 1);
 		plane->turn_counter++;
-//		cprintf(">>> I WAIT %d %d %s\n", ROJO, plane->id, plane->must_think, (plane->id >= 300) ? "!!!!!" : "");
+	//	cprintf(">>> I WAIT %d %d %s %d %d\n", VERDE_CLARO, plane->id, plane->must_think, (plane->id >= 300) ? "!!!!!" : "", sim_airline_planes_waiting(airline),sim_airline_planes_running(airline));
 		pthread_cond_broadcast(sim_airline_waiting_cond(airline));
 		pthread_cond_wait(sim_airline_planes_cond(airline), sim_airline_mutex(airline));
 

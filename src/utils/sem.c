@@ -8,6 +8,7 @@
  */
 
 #include "sem.h"
+#include "../includes.h"
 #include <stdio.h>
 
 int sem_create_typed(char * type) {
@@ -89,12 +90,15 @@ int sem_up(int sem, int amount) {
 	struct sembuf sops;
 	sops.sem_num = 0;
 	sops.sem_op = amount; /* semaphore operation */
-	sops.sem_flg = SEM_UNDO;
+	sops.sem_flg = 0;
 	
 	if (semop(sem, &sops, 1) == -1) {
-	//	perror("Semaphore fail on UP");
 		return -1;
 	}
+
+
+
+
 	return 1;
 }
 

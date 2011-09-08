@@ -164,13 +164,7 @@ cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 		* length = PIPE_READ_SIZE;
 		
 //		sem_up(t->sem, 1);	
-		int i = 0;
-		for (; i < *length + 1; i++) {
-			if (str[i] == 0) {
 
-				break;
-			}
-		}
 
 		return str;
 	}
