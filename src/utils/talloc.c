@@ -15,7 +15,7 @@ void * root_mem_context = NULL;
 
 int mem_freed = 0;
 
-static void init_mutex() {
+void init_mutex() {
 	mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	pthread_mutex_init(mutex, NULL);
 }
