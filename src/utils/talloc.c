@@ -165,18 +165,13 @@ static void __tfree ( void** mem ) {
  */
 void tfree ( void* mem ) {
 	if ( !mem ) return;
-	
-	if (mutex == NULL) {
-		init_mutex();
-	}
-	pthread_mutex_lock(mutex);
+
 
 	talloc_set_parent( mem, NULL );
 
 	__tfree( ((void**)mem)[-3] );
 
 	free( (void**)mem - 3 );
-	pthread_mutex_unlock(mutex);
 	
 }
 
