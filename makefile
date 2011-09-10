@@ -247,7 +247,7 @@ sim_tp1_test_server:
 	$(cc) -o bin/tp1_test_server.o -c src/tps/tp1/tests/tp1_test_server.c
 	
 talloc:
-	$(cc) -o bin/talloc.o -c src/talloc/talloc.c
+	$(cc) -o bin/talloc.o -c src/utils/talloc.c
 
 colors: 
 	$(cc) -o bin/colors.o -c src/utils/colors.c
