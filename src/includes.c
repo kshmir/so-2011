@@ -222,6 +222,7 @@ void _catch(int sig)
 	shm_delete();
 	clear_msgq();
 	
+	
 	exit(0);
 }
 

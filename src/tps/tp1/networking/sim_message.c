@@ -91,9 +91,9 @@ int sim_message_write(sim_message r, cstring data) {
 }
 
 int sim_message_free(sim_message r) {
-//	free(r->message);
-//	free(r->header);
-//	free(r);
+	free(r->message);
+	free(r->header);
+	free(r);
 }
 
 /**
