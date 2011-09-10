@@ -24,9 +24,14 @@
 #include <string.h>
 #include <pthread.h>
 
+#include <time.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+
+	
+
 
 int msgq_id = 0;
 
@@ -36,14 +41,17 @@ void declare_thread(pthread_t * t) {
 	if (declared_threads == NULL) {
 		declared_threads = list_init();
 	}
-	
 	list_add(declared_threads, t);
 }
 
 
 void cancel_all_threads() {
-	foreach(pthread_t *, t, declared_threads) {
-		pthread_cancel(* t);
+	if (declared_threads != NULL) {
+		foreach(pthread_t *, t, declared_threads) {
+			pthread_detach(* t);
+			pthread_cancel(* t);
+		}
+		usleep(100 * 1000);
 	}
 }
 
@@ -207,19 +215,28 @@ void _catch(int sig)
 		printed = 1;
 	}
 	killpg(0, sig);  
+	
 	cancel_all_threads();
 	nftw("./tmp", (void_p)  unlink_cb, 64, 0);
+	usleep(200 * 1000);
 	shm_delete();
 	clear_msgq();
+	
 	exit(0);
 }
 
 void _catch_child(int sig)
 {
 	cancel_all_threads();
-	nftw("./tmp", (void_p) unlink_cb, 64, 0);
+	
+	nftw("./tmp", (void_p)  unlink_cb, 64, 0);
+	usleep(200 * 1000);
 	shm_delete();
 	clear_msgq();
+	
+
+	
+	
 	exit(0);
 }
 
@@ -240,4 +257,14 @@ int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftw
 	}
     int rv = unlink(fpath);
     return 0;
+}
+
+void clean_exit() {
+	cancel_all_threads();
+	free_prints_sem();
+    nftw("./tmp",  (void_p) unlink_cb, 64, 0);
+	usleep(200 * 1000);
+	shm_delete();	
+	clear_msgq();
+	free_root();	
 }

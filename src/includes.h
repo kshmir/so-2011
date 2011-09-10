@@ -37,6 +37,12 @@
 #define USE_COLORS 1
 
 
+#define malloc(p)			g_talloc(p)
+#define calloc(p,k)			g_tcalloc(p,k)
+#define realloc(p,k)		trealloc(p,k)
+#define free(p)				tfree(p)
+
+
 typedef enum {
 	NEGRO        ,
 	ROJO         ,
@@ -138,5 +144,7 @@ int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftw
 void _catch(int sig);
 
 void _catch_child(int sig);
+
+void clean_exit();
 
 #endif

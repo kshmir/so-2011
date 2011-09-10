@@ -53,7 +53,7 @@ int compare_data(void_p id, void_p data_struct) {
 
 // Starts the map and stores the cloner and comparer
 map map_init(comparer comp, cloner clon_function) {
-	map m = malloc(sizeof(struct map));
+	map m = (map) malloc(sizeof(struct map));
 	tree t = tree_init(compare_data);
 	m->t = t;
 	m->comparer_index = comparers;

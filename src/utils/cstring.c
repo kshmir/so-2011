@@ -66,7 +66,7 @@ cstring cstring_reverse(cstring s) {
 }
 
 cstring cstring_expand(cstring s, int extraSize){
-	cstring aux = realloc(s, (cstring_len(s) + extraSize + 10) * sizeof(char));
+	cstring aux = (cstring) realloc(s, (cstring_len(s) + extraSize + 10) * sizeof(char));
 	int i = cstring_len(aux);
 	int len = cstring_len(aux) + extraSize;
 	for (; i < len + 1; i++) {

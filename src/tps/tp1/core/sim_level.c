@@ -590,6 +590,4 @@ void sim_level_main(int connection_t, int from_id, int to_id) {
 	sem_up(l->level_sem, list_size(airlines));
 	sem_down(l->airline_sem, list_size(airlines));
 	sem_up(l->frontend_sem, 1);	
-
-	sim_level_free(l);
 }

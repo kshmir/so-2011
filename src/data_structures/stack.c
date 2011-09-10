@@ -24,7 +24,7 @@ stack stack_init(size_t start_size) {
 	stack pila = (stack) malloc(sizeof(struct stack));
 	pila->size = start_size;
 	pila->index = 0;
-	pila->data = malloc(start_size * sizeof(void_p));
+	pila->data = (void_p) malloc(start_size * sizeof(void_p));
 	
 	return pila;
 }
@@ -35,7 +35,7 @@ stack stack_init(size_t start_size) {
 static void stack_expand(stack pila) {
 	int i = 0;
 	
-	char * space = malloc(pila->size * 2 * sizeof(void_p));
+	char * space = (char *) malloc(pila->size * 2 * sizeof(void_p));
 	
 	for (i = 0; i < pila->size * sizeof(void_p); i++) {
 		space[i] = ((char*)pila->data)[i];

@@ -157,6 +157,7 @@ int sim_plane_make_fill(sim_airline airline, sim_plane plane, sim_level level, i
 			
 			if (fill_done) {
 //				cprintf("RETURN FILLED\n", ROJO);
+				list_free(city_m_keys);
 				return FILLED;
 			}
 		}

@@ -68,7 +68,7 @@ struct sim_transporter {
 	
 	function			write;							// Write handler
 	function			listen;							// Listen handler
-	function			free;							// Free handler
+	function			_free;							// Free handler
 	
 	int					write_lock;
 	int					read_lock;
@@ -102,14 +102,16 @@ int sim_transporter_server_id(sim_transporter t) {
  Cleans up a transporter, after stopping the listener, or directly if it's writeonly.
  */
 static void sim_transporter_cleanup(sim_transporter t) {
-	free(t->listener_mutex);
-	free(t->listener_received);
-	free(t->listener);
-	t->free(t->data);
-	queue_free(t->messages);
-	free(t);
-	return;
+	if (!is_mem_freed()) {
+//		free(t->listener_mutex);
+//		free(t->listener_received);
+//		free(t->listener);
+//		t->_free(t->data);
+//		queue_free(t->messages);
+//		free(t);
+	}
 }
+
 
 
 
@@ -169,7 +171,7 @@ static void_p sim_transporter_listener(sim_transporter t) {
 					free(builder);
 					builder = cstring_init(0);
 
-				//	sem_up(t->write_lock, 1);
+					sem_up(t->write_lock, 1);
 					break;
 				}
 				else {
@@ -190,7 +192,7 @@ static void_p sim_transporter_listener(sim_transporter t) {
 
 	// The following is a macro for cancelling the thread
 	pthread_cleanup_pop(0);
-	return NULL;
+	pthread_exit(NULL);
 }
 
 /**
@@ -378,7 +380,7 @@ sim_transporter sim_transporter_init(connection_type type,
 
 			t->write  = (function) sim_pipe_transporter_write;
 			t->listen = (function) sim_pipe_transporter_listen;
-			t->free   = (function) sim_pipe_transporter_free;
+			t->_free   = (function) sim_pipe_transporter_free;
 			t->type = C_PIPE;
 			break;
 		case C_SHARED_MEMORY:
@@ -389,7 +391,7 @@ sim_transporter sim_transporter_init(connection_type type,
 			t->data = sim_smem_transporter_init(from_id, to_id, is_server);
 			t->write = (function) sim_smem_transporter_write;
 			t->listen = (function) sim_smem_transporter_listen;
-			t->free   = (function) sim_smem_transporter_free;
+			t->_free   = (function) sim_smem_transporter_free;
 			t->type = C_SHARED_MEMORY;
 			break;
 		case C_SOCKETS:
@@ -405,7 +407,7 @@ sim_transporter sim_transporter_init(connection_type type,
 			}
 			t->write  = (function) sim_socket_transporter_write;
 			t->listen = (function) sim_socket_transporter_listen;
-			t->free   = (function) sim_socket_transporter_free;
+			t->_free   = (function) sim_socket_transporter_free;
 			t->type = C_SOCKETS;
 			break;
 		case C_M_QUEUES:
@@ -418,7 +420,7 @@ sim_transporter sim_transporter_init(connection_type type,
 			}
 			t->write  = (function) sim_msg_q_transporter_write;
 			t->listen = (function) sim_msg_q_transporter_listen;
-			t->free   = (function) sim_msg_q_transporter_free;
+			t->_free   = (function) sim_msg_q_transporter_free;
 			t->type = C_M_QUEUES;
 			if (is_server && forks_child) {
 				exec_process(proc, type, from_id, to_id);
@@ -429,6 +431,7 @@ sim_transporter sim_transporter_init(connection_type type,
 	}
 	if (mode != MODE_WRITE || type == C_SOCKETS) {
 		pthread_create(t->listener, NULL, (void_p) sim_transporter_listener, (void_p) t);
+		declare_thread(t->listener);
 	}
 	return t;
 }
@@ -439,7 +442,7 @@ sim_transporter sim_transporter_init(connection_type type,
 void sim_transporter_write(sim_transporter sim, cstring message) {
 //	cprintf("TO WRITE: LEN: %d\n", ROJO, strlen(message));
 	
-	//sem_down(sim->write_lock, 1);
+	sem_down(sim->write_lock, 1);
 	sim->write(sim->data, message);
 }
 

@@ -50,7 +50,7 @@ static int compare_data(void_p id, void_p data_struct) {
 
 
 graph_node node_init(void_p key, void_p value){
-	graph_node ret = malloc(sizeof(struct graph_node));
+	graph_node ret = (graph_node) malloc(sizeof(struct graph_node));
 	ret->key = key;
 	ret->value = value;
 	ret->arcs = list_init();
@@ -59,14 +59,14 @@ graph_node node_init(void_p key, void_p value){
 }
 
 graph_arc arc_init(graph_node to, int weight){
-	graph_arc ret = malloc(sizeof(struct arc));
+	graph_arc ret = (graph_arc) malloc(sizeof(struct arc));
 	ret->to = to;
 	ret->weight = weight;
 	return ret;
 }
 
 graph graph_init(comparer comp, cloner clon){
-	graph ret = malloc(sizeof(struct graph));
+	graph ret = (graph) malloc(sizeof(struct graph));
 	ret->nodes = map_init(compare_data, clon);
 	ret->comparer_index = comparers;
 	ret->mutex = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));

@@ -21,7 +21,7 @@
  *    
  *   _0________________________1________________________2_____________________N___________________
  *  0|smem_header_define_block|smem_block #0:          |smem_block #1:       |smem_block #N - 1:
- *   |------------------------|flags and next_id on    |                     |
+ *   |------------------------|allocd and next_id on    |                     |
  *  1|smem_header_block #0    |first byte. The rest    |                     |
  *   |------------------------|is data data data data d|                     |
  *  2|smem_header_block #1    | data data data data dat|                     |                        ...
@@ -72,7 +72,6 @@
 #include <string.h>
 
 
-int lck = 0;
 
 /**
 	smem_space is the declaration of the shared memory space we alloc.
@@ -166,7 +165,7 @@ typedef struct smem_header_block {
  */
 #define	SMEM_BLOCK_SIZE			(SMEM_HEADER_SIZE)
 /**
- Size of the contained data in a block. (SMEM_BLOCK_SIZE - flags - next_id)
+ Size of the contained data in a block. (SMEM_BLOCK_SIZE - allocd - next_id)
  */
 #define	SMEM_DATA_SIZE			(SMEM_HEADER_SIZE - sizeof(short) * 2)
 /**
@@ -203,7 +202,7 @@ typedef struct smem_header_block {
  */
 #define	SMEM_BLOCK_SIZE			(SMEM_HEADER_SIZE)
 /**
-	Size of the contained data in a block. (SMEM_BLOCK_SIZE - flags - next_id)
+	Size of the contained data in a block. (SMEM_BLOCK_SIZE - allocd - next_id)
  */
 #define	SMEM_DATA_SIZE			(SMEM_BLOCK_SIZE - sizeof(short) * 2)
 /**
@@ -218,16 +217,9 @@ typedef struct smem_header_block {
  */
 typedef struct smem_block {
 	/**
-		Flags for the shared memory block.
-		They act as following.
-			0: Burst bit, not actually used, but it intends to write a lot in a big block.
-			1: Broadcast bit, not used also, but left just to be done some day.
-			2: Written bit, used to say the block has been written, it's actually used!.
-			3: Reading bit, used for buffering IOs.
-			4. Allocd bit, used to make the block available for communications.
-			The other ones are reserver for future use.
+		Tells whether the block is used or not.
 	 */ 
-	short flags; 
+	short allocd; 
 	/*
 		Pointer to the next block.
 	 */
@@ -261,7 +253,6 @@ smem_header_define_block * smem_get_header_define(sim_smem_transporter * s) {
 	return ((smem_header_define_block *)s->space);
 }
 
-int rd_lock = 0;
 
 /**
 	Starts the space of a shared memory transporter, with all it's corresponding semaphores.
@@ -270,10 +261,9 @@ void smem_init_space(sim_smem_transporter * s) {
 	
 	
 	
-	s->sem_alloc = sem_create_valued(254,1);
+	s->sem_alloc = sem_create_valued(54,1);
 	s->sem_header_r  = sem_create_valued(s->from_id, 0);	
 	s->sem_header_w  = sem_create_valued(s->to_id, 0);	
-
 
 
 
@@ -293,12 +283,11 @@ void smem_init_space(sim_smem_transporter * s) {
 
 		// You don't actually want this little ones to be different than this.
 
-		rd_lock = sem_create_valued(256, 1);
 //		sem_set_value(s->sem_alloc, 1);
 
 	}
-	s->sem_available_blocks = sem_create_valued(10099,def->available_blocks + 1);
-	cprintf("SETTING SEM TO %d %d %d\n", ROJO, sem_value(s->sem_alloc), s->from_id, s->to_id);
+	s->sem_available_blocks = sem_create_valued(99,def->available_blocks + 1);
+
 
 
 	//IPCSDebug(SMEM_DEBUG,"Starting shared memory reference: from: %d, to: %d\
@@ -379,73 +368,22 @@ smem_header_block * smem_get_next_header_block(sim_smem_transporter * s, int * b
 }
 
 
-/*
-	Accesors for blocks flags...
-*/
 
-void smem_set_block_burst(sim_smem_transporter * s, int index, int value) {
+void smem_set_block_next(sim_smem_transporter * s, int index, int value) {
 	smem_block * b = smem_get_block(s,index);
-	b->flags |= 0x8000 * value;
+	b->next = value;	
 }
 
-int smem_get_block_burst(sim_smem_transporter * s, int index) {
-	smem_block * b = smem_get_block(s,index);
-	return (b->flags >> 0xf) & 0x1;
-}
-
-void smem_set_block_broadcast(sim_smem_transporter * s, int index, int value) {
-	smem_block * b = smem_get_block(s,index);
-	b->flags |= 0x4000 * value;
-}
-
-int smem_get_block_broadcast(sim_smem_transporter * s, int index) {
-	smem_block * b = smem_get_block(s,index);
-	return (b->flags >> 0xe) & 0x1;
-}
-
-void smem_set_block_written(sim_smem_transporter * s, int index, int value) {
-	smem_block * b = smem_get_block(s,index);
-	b->flags |= 0x2000 * value;
-}
-
-int smem_get_block_written(sim_smem_transporter * s, int index) {
-	smem_block * b = smem_get_block(s,index);
-	return (b->flags >> 0xd) & 0x1;
-}
-
-void smem_set_block_reading(sim_smem_transporter * s, int index, int value) {
-	smem_block * b = smem_get_block(s,index);
-	b->flags |= 0x1000 * value;
-}
-
-int smem_get_block_reading(sim_smem_transporter * s, int index) {
-	smem_block * b = smem_get_block(s,index);
-	return (b->flags >> 0xc) & 0x1;
-}
-
-// Ya fue..........
 void smem_set_block_allocd(sim_smem_transporter * s, int index, int value) {
 	smem_block * b = smem_get_block(s,index);
-	b->flags = value;
+	b->allocd = value;
 }
 
 int smem_get_block_allocd(sim_smem_transporter * s, int index) {
 	smem_block * b = smem_get_block(s,index);
-	return b->flags;
+	return b->allocd;
 }
 
-void smem_set_block_next(sim_smem_transporter * s, int index, short value) {
-	smem_block * b = smem_get_block(s,index);
-	b->next = value;
-}
-
-short smem_get_block_next(sim_smem_transporter * s, int index, short value) {
-	smem_block * b = smem_get_block(s,index);
-	return b->next;
-}
-/*
-	End of accesors for blocks flags.
-*/
 
 /**
 	Finds the next available block(s) and alloc(s) em.
@@ -460,10 +398,6 @@ short smem_get_next_block_and_alloc(sim_smem_transporter * s, int * block_qty) {
 	while(qty > 0) {
 		if (smem_get_block_allocd(s, index) == 0) {
 			smem_set_block_allocd(s, index, 1);
-//			smem_set_block_broadcast(s, index, 0);
-//			smem_set_block_burst(s, index, 0);
-//			smem_set_block_written(s, index, 0);
-//			smem_set_block_reading(s, index, 0);
 			if (!start_id_set) {
 				start_id_set = 1;
 				start_id = index;
@@ -502,9 +436,6 @@ int smem_block_write(smem_block * b, char * data) {
 	return 0;
 }
 
-/**
-	Accesors for blocks flags...
- */
 void smem_space_write(sim_smem_transporter * s, cstring data) {
 	
 	smem_header_define_block * def = smem_get_header_define(s);
@@ -551,7 +482,6 @@ void smem_space_write(sim_smem_transporter * s, cstring data) {
 		
 		
 //		cprintf("%s\n", CELESTE_CLARO, d);
-		smem_set_block_written(s, block_cur_id, 1);
 		
 		
 //		free(d);
@@ -751,10 +681,10 @@ cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) 
 	Free up everything.
  */
 void sim_smem_transporter_free(sim_smem_transporter * transp) {
-//	sem_free(transp->sem_header_w, transp->to_id);
-//	sem_free(transp->sem_header_r, transp->from_id);
-//	sem_free(transp->sem_available_blocks, 255);
-//	sem_free(transp->sem_alloc, 254);
+	sem_free(transp->sem_alloc, 54);
+	sem_free(transp->sem_header_r, transp->from_id);
+	sem_free(transp->sem_header_w, transp->to_id);
+	sem_free(transp->sem_available_blocks, 99);
 
 	shm_delete();
 	free(transp);

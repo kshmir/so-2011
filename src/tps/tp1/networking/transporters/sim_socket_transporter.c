@@ -22,8 +22,6 @@ struct sim_socket_transporter {
 
 	int					listen_fd;
 	int					write_fd;
-	
-	int					write_sem;
 
 	struct sockaddr_un 	server_add;
 	struct sockaddr_un 	client_add;
@@ -37,7 +35,6 @@ sim_socket_transporter sim_socket_transporter_init_client(int server_id, int cli
 	t->client_id = client_id;
 	t->server_id = server_id;
 	t->is_client = 1;
-	t->write_sem = sem_create(server_id);
 
 	t->server_fd = socket(AF_UNIX, SOCK_STREAM, 0);
 	int server_len = sizeof(struct sockaddr_un);
@@ -65,8 +62,6 @@ sim_socket_transporter sim_socket_transporter_init_server(int server_id, int cli
 	t->client_id = client_id;
 	t->server_id = server_id;
 
-	t->write_sem = sem_create(server_id);
-	sem_set_value(t->write_sem,1);
 	
 	
 	if (server_descriptors == NULL) {

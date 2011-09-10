@@ -94,22 +94,24 @@ struct sim_server {
  */
 static void sim_server_listener_cleanup(sim_server s) {
 	
-	pthread_cond_t * freed = s->listener_freed;
-	map_free(s->responds_to);
-	if (s->listen_transporter != NULL) {
-		sim_transporter_free(s->listen_transporter);
+	if (!is_mem_freed()) {
+//		pthread_cond_t * freed = s->listener_freed;
+//		map_free(s->responds_to);
+//		if (s->listen_transporter != NULL) {
+//			sim_transporter_free(s->listen_transporter);
+//		}
+//		
+//		
+//		list keys = map_keys(s->clients_transporters);
+//		int i = 0;
+//		for(; list_get(keys,i); i++) {
+//			sim_transporter_free(map_get(s->clients_transporters, list_get(keys,i)));
+//		}
+//		map_free(s->clients_transporters);
+//		list_free_with_data(keys);
+//		pthread_cond_signal(freed);	
+//		free(s);
 	}
-
-	
-	list keys = map_keys(s->clients_transporters);
-	int i = 0;
-	for(; list_get(keys,i); i++) {
-		sim_transporter_free(map_get(s->clients_transporters, list_get(keys,i)));
-	}
-	map_free(s->clients_transporters);
-	list_free_with_data(keys);
-	pthread_cond_signal(freed);	
-	free(s);
 }
 
 /**
@@ -223,6 +225,7 @@ static void sim_server_listener(sim_server s) {
 	}
 	
 	pthread_cleanup_pop(0);
+	pthread_exit(NULL);
 }
 
 /**
@@ -264,11 +267,12 @@ sim_server sim_server_init(connection_type con, process_type p_type, int server_
 			s->client_id_multiplier = 1;
 	}
 	
-	s->listener_thread = (pthread_t * ) malloc(sizeof(pthread_t));
 	
+	s->listener_thread = (pthread_t * ) malloc(sizeof(pthread_t));
 	declare_thread(s->listener_thread);
 	
 	pthread_create(s->listener_thread, NULL, (void_p) sim_server_listener, (void_p) s);	
+	
 	return s;
 }
 
@@ -330,18 +334,18 @@ int sim_server_spawn_child(sim_server s) {
  Free's the server and it's thread.
  */
 int sim_server_free(sim_server s) {
-	pthread_cond_t * freed = s->listener_freed;
-	pthread_mutex_t * mutex = s->mutex;
-	//sem_free_typed(s->spawn_sem, "spawn");
-	
-	struct timespec {
-		long ts_sec; /* seconds */
-		long ts_nsec; /* nanoseconds */
-	} to;
-	
-	to.ts_sec = time(NULL) + 1;
-	to.ts_nsec = 0;
-	pthread_cond_timedwait(freed, mutex, (void_p) &to);
-	pthread_cond_destroy(freed);
-	pthread_mutex_destroy(mutex);
+//	pthread_cond_t * freed = s->listener_freed;
+//	pthread_mutex_t * mutex = s->mutex;
+//	//sem_free_typed(s->spawn_sem, "spawn");
+//	
+//	struct timespec {
+//		long ts_sec; /* seconds */
+//		long ts_nsec; /* nanoseconds */
+//	} to;
+//	
+//	to.ts_sec = time(NULL) + 1;
+//	to.ts_nsec = 0;
+//	pthread_cond_timedwait(freed, mutex, (void_p) &to);
+//	pthread_cond_destroy(freed);
+//	pthread_mutex_destroy(mutex);
 }

@@ -91,9 +91,9 @@ int sim_message_write(sim_message r, cstring data) {
 }
 
 int sim_message_free(sim_message r) {
-	free(r->message);
-	free(r->header);
-	free(r);
+//	free(r->message);
+//	free(r->header);
+//	free(r);
 }
 
 /**
@@ -173,7 +173,6 @@ sim_message sim_message_send(sim_message r) {
 	
 	// Starts the listener of the message.
 	pthread_create(&r->thread, &r->attr, (void_p) sim_message_listen, (void_p) &data);
-	
 
 	cstring array[3];
 	array[0] = r->header;

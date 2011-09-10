@@ -338,7 +338,8 @@ void sim_airline_main(int connection_t, int from_id, int to_id) {
 		dat->plane = plane;
 		dat->airline = airline;
 		dat->level = airline->level;
-		pthread_create(&airline->p_threads[i++], NULL, (void_p) sim_plane_main, (void_p) dat);
+		pthread_create(&airline->p_threads[i], NULL, (void_p) sim_plane_main, (void_p) dat);
+		declare_thread(&airline->p_threads[i++]);
 	}		
 
 	while (airline->planes_waiting < list_size(airline->planes)) {

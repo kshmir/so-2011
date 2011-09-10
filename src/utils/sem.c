@@ -95,15 +95,18 @@ int sem_up(int sem, int amount) {
 	if (semop(sem, &sops, 1) == -1) {
 		return -1;
 	}
-
-
-
-
 	return 1;
 }
 
 int sem_down(int sem, int amount) {
-	sem_up(sem, -amount);
+	struct sembuf sops;
+	sops.sem_num = 0;
+	sops.sem_op = -amount; /* semaphore operation */
+	sops.sem_flg = 0;
+	
+	if (semop(sem, &sops, 1) == -1) {
+		return -1;
+	}
 }
 
 int sem_free(int sem, int key) {
@@ -119,7 +122,6 @@ int sem_free(int sem, int key) {
 }
 
 int sem_free_typed(int sem, char * type) {
-	
 	if (semctl(sem, 0, IPC_RMID, NULL) == -1) {
 		//perror("ERROR: could not clean up semaphore\n");
 		return -1;

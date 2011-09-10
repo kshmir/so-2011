@@ -37,10 +37,7 @@ struct sim_client {
  * Cleans the client after a callback which stops the thread.
  */
 static void sim_client_listener_cleanup(sim_client r) {
-	pthread_cond_t * freed = r->listener_freed;
-	sim_transporter_free(r->t);
-	pthread_cond_signal(freed);
-	free(r);
+
 
 }
 
@@ -94,6 +91,7 @@ static void_p sim_client_listener(sim_client r) {
 	}
 
 	pthread_cleanup_pop(0);
+	pthread_exit(NULL);
 }
 
 /**
@@ -109,9 +107,12 @@ sim_client sim_client_from_transporter(sim_transporter t, sim_receiver r) {
 	pthread_mutex_init(c->mutex, NULL);
 	pthread_cond_init(c->listener_freed, NULL);
 	
+
+	
 	c->spawn_sem = sem_create_valued(1244422, 1);
 
 	pthread_create(&c->listener_thread, NULL, (void_p) sim_client_listener, (void_p) c);	
+	declare_thread(&c->listener_thread);
 //	sem_up(c->spawn_sem, 1);
 	return c;
 }
@@ -287,22 +288,22 @@ int sim_client_print(sim_client c, cstring message, int _id) {
  * Cleans the client, it's thread and it's data.
  */
 void sim_client_free(sim_client c) {
-	pthread_cond_t * freed = c->listener_freed;
-	pthread_mutex_t * mutex = c->mutex;
-	
-	sem_free_typed(c->spawn_sem, "spawn");
-	pthread_cancel(c->listener_thread);
-	
-	struct timespec {
-		long ts_sec; /* seconds */
-		long ts_nsec; /* nanoseconds */
-	} to;
-	
-	to.ts_sec = time(NULL);
-	to.ts_nsec = 1000 * 1000 * 200;
-	pthread_cond_timedwait(freed, mutex, (void_p)&to);
-	pthread_cond_destroy(freed);
-	pthread_mutex_destroy(mutex);
+//	pthread_cond_t * freed = c->listener_freed;
+//	pthread_mutex_t * mutex = c->mutex;
+//	
+//	sem_free_typed(c->spawn_sem, "spawn");
+//	pthread_cancel(c->listener_thread);
+//	
+//	struct timespec {
+//		long ts_sec; /* seconds */
+//		long ts_nsec; /* nanoseconds */
+//	} to;
+//	
+//	to.ts_sec = time(NULL);
+//	to.ts_nsec = 1000 * 1000 * 200;
+//	pthread_cond_timedwait(freed, mutex, (void_p)&to);
+//	pthread_cond_destroy(freed);
+//	pthread_mutex_destroy(mutex);
 }
 
 

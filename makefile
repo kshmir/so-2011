@@ -45,7 +45,8 @@ tp1 = \
 	bin/sim_smem_transporter.o \
 	bin/sim_socket_transporter.o \
 	bin/sim_frontend.o \
-	bin/sim_validator.o
+	bin/sim_validator.o \
+	bin/talloc.o
 
 
 #//MARK: ----- TP1 Test
@@ -122,7 +123,7 @@ utils = \
 
 UNAME := $(shell uname -s)
 ifeq ($(UNAME),Linux)
-	cc = gcc -m32 -g -lpthread
+	cc = gcc -m32 -g -lpthread -rdynamic
 else
 	cc = gcc -m32 -g 
 endif
@@ -244,6 +245,9 @@ sim_tp1_test_child:
 	
 sim_tp1_test_server: 
 	$(cc) -o bin/tp1_test_server.o -c src/tps/tp1/tests/tp1_test_server.c
+	
+talloc:
+	$(cc) -o bin/talloc.o -c src/talloc/talloc.c
 
 colors: 
 	$(cc) -o bin/colors.o -c src/utils/colors.c
@@ -306,7 +310,7 @@ tp1: build_tp1 \
 	sim_tp1 \
 	sim_tp1_level \
 	sim_tp1_airline \
-	utils_cstring utils_sem utils_shm unixColors
+	utils_cstring utils_sem utils_shm unixColors talloc
 	$(cc) -o tp1 $(tp1) $(data_structures) $(utils) bin/tp1.o
 	$(cc) -o tp1_level $(tp1) $(data_structures) $(utils) bin/tp1_level.o
 	$(cc) -o tp1_airline $(tp1) $(data_structures) $(utils) bin/tp1_airline.o
@@ -315,7 +319,7 @@ tp1_test: build_tp1 \
 	sim_tp1_test \
 	sim_tp1_test_child \
 	sim_tp1_test_server \
-	utils_cstring utils_sem utils_shm unixColors
+	utils_cstring utils_sem utils_shm unixColors talloc
 	$(cc) -o tp1_test_child $(tp1_test_child_files) $(data_structures) $(utils)
 	$(cc) -o tp1_test_server $(tp1_test_server_files) $(data_structures) $(utils)
 	$(cc) -o tp1_test $(tp1_test_files) $(data_structures) $(utils)
