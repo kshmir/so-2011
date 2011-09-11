@@ -72,7 +72,7 @@ void sim_frontend_copy_airline(sim_message mes) {
  */
 
 int sim_frontend_start_server(connection_type t) {
-	print_server = sim_server_init(t, P_LEVEL, 0);
+	print_server = sim_server_init(t, P_LEVEL, 1);
 
 	char * seq = "PRINT";
 	sim_server_add_receiver(print_server, seq, sim_frontend_receiver);

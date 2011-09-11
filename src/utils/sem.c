@@ -23,6 +23,8 @@ int sem_create_typed(char * type) {
 	
 	
 	int sem = semget(k, 1, (IPC_CREAT | 0666)); 
+	
+
 	if (sem < 0) {
 		perror("Semaphore fail!");
 		return -1;
@@ -47,7 +49,6 @@ int sem_create_valued(int key, int val) {
 	}
 
 	
-	
 	if (sem < 0) {
 		perror("Semaphore fail!");
 		return -1;
@@ -61,9 +62,10 @@ int sem_create(int key) {
 	
 	int op = open(path,O_CREAT, 0666);
 	close(op);	
-	
+
 	key_t k = ftok(path, (char) (key));	
 	int sem = semget(k, 1, (IPC_CREAT | 0666)); 
+
 	if (sem < 0) {
 		perror("Semaphore fail!");
 		return -1;

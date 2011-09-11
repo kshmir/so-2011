@@ -265,6 +265,7 @@ int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftw
 		values = cstring_split_list((cstring)fpath, "sem_typed_");
 		int sem = sem_create_typed(list_get(values,1));
 		sem_free_typed(sem, list_get(values, 1));
+		printf("Freeing %s as typed id %d\n", fpath, sem);
 		list_free_with_data(values);
 	} else if (cstring_matches((cstring)fpath, "sem_")) {
 		values = cstring_split_list((cstring)fpath, "sem_");
@@ -272,8 +273,10 @@ int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftw
 		int sem = cstring_parseInt(list_get(values, 1), &noerror);
 		int id = sem_create(sem);
 		sem_free(id, 0);
+		printf("Freeing %s as int id %d\n", fpath, id);
 		list_free_with_data(values);
 	}
+	printf("Deleting %s\n", fpath);
     int rv = unlink(fpath);
     return 0;
 }
@@ -281,11 +284,13 @@ int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftw
 void clean_exit() {
 	cancel_all_threads();
 	free_prints_sem();
+	clear_msgq();
+	shm_delete();	
     nftw("./tmp",  (void_p) unlink_cb, 64, 0);
 	usleep(50 * 1000);
-	shm_delete();	
+	
 	
 	free_root();
 	
-	clear_msgq();
+
 }
