@@ -48,8 +48,10 @@ void declare_thread(pthread_t * t) {
 void cancel_all_threads() {
 	if (declared_threads != NULL) {
 		foreach(pthread_t *, t, declared_threads) {
-			pthread_detach(* t);
-			pthread_cancel(* t);
+			if (t != NULL) {
+				pthread_detach(* t);
+				pthread_cancel(* t);
+			}
 		}
 		usleep(1000 * 1000);
 	}
@@ -216,13 +218,12 @@ void _catch(int sig)
 	}
 	killpg(0, sig);  
 	
-
+	cancel_all_threads();
 	nftw("./tmp", (void_p)  unlink_cb, 64, 0);
 	usleep(200 * 1000);
 	shm_delete();
 	clear_msgq();
 	
-	free_root();
 	
 	exit(0);
 }
@@ -231,7 +232,7 @@ void _catch_child(int sig)
 {
 	killpg(0, sig);  
 	
-
+	cancel_all_threads();
 
 
 	nftw("./tmp", (void_p)  unlink_cb, 64, 0);
@@ -240,7 +241,6 @@ void _catch_child(int sig)
 	clear_msgq();
 	
 
-	free_root();
 	
 	exit(0);
 }
@@ -273,5 +273,4 @@ void clean_exit() {
 	usleep(200 * 1000);
 	shm_delete();	
 	clear_msgq();
-	free_root();	
 }
