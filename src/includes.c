@@ -30,7 +30,7 @@
 #include <stdio.h>
 
 
-	
+
 
 
 int msgq_id = 0;
@@ -53,7 +53,7 @@ void cancel_all_threads() {
 				pthread_cancel(* t);
 			}
 		}
-		usleep(1000 * 1000);
+		usleep(50 * 1000);
 	}
 }
 
@@ -66,10 +66,10 @@ int pointer_comparer(void_p int1, void_p int2) {
 }
 
 int int_comparer(void_p int1, void_p int2) {
-
+	
 	if ((int)int2 == 0)
 		return 1;
-
+	
 	if ((int)int1 == 0)
 		return -1;
 	return *(int*)int1 - *(int*)int2;
@@ -141,21 +141,21 @@ void cprintf(char * format, int color, ...) {
 		c_sem = sem_create_typed("cprintf");
 		sem_set_value(c_sem, 1);
 	}
-
+	
 	sem_down(c_sem, 1);
 	va_list args;
 	va_start (args, color);
 	
 	textcolor(color);
 	
-
+	
 	vprintf (format, args);	
 	
 	textattr(CLEAR);
 	
 	printf("");
 	
-
+	
 	va_end (args);	
 	sem_up(c_sem, 1);
 }
@@ -170,13 +170,13 @@ void IPCSDebug(char * msg, int type, ...) {
 		IPCS_sem = sem_create_typed("IPCSDebug");
 		sem_set_value(IPCS_sem, 1);
 	}
-
+	
 	sem_down(IPCS_sem, 1);
 	va_list args;
 	va_start (args, type);
-
+	
 	vfprintf (stderr,msg, args);
-
+	
 	va_end (args);
 	sem_up(IPCS_sem, 1);
 }
@@ -204,43 +204,55 @@ void tp1_usage() {
 	printf("\t --method (method_name)\n\t\tWhere the method can be 'fifos', 'message_queues', 'shared_memory' or 'sockets'\n");
 	printf("\t --level (file_path)\n\t\tPath to the level file.\n");
 	printf("\t --airline (file_path) (file_path) ...\n\t\tReads files until it reaches something different. It must be the last param\n");
-
+	
 	separator();
 }
 
 
 int printed = 0;
+int freed = 0;
 void _catch(int sig)
 {
+
 	if (!printed) {
 		cprintf("\nFRONTEND: Bye bye :)\n", ROJO);
 		printed = 1;
 	}
 	killpg(0, sig);  
 	
-	cancel_all_threads();
-	nftw("./tmp", (void_p)  unlink_cb, 64, 0);
-	usleep(200 * 1000);
-	shm_delete();
-	clear_msgq();
-	
+	if (!freed) {
+		freed = 1;
+		cancel_all_threads();
+		nftw("./tmp", (void_p)  unlink_cb, 64, 0);
+		usleep(50 * 1000);
+		shm_delete();
+		clear_msgq();
+		
+		free_root();
+	}
 	
 	exit(0);
 }
+
+
 
 void _catch_child(int sig)
 {
 	killpg(0, sig);  
 	
-	cancel_all_threads();
+	if (!freed) {
+		freed = 1;
+		cancel_all_threads();
+		
+		nftw("./tmp", (void_p)  unlink_cb, 64, 0);
+		usleep(50 * 1000);
+		shm_delete();
+		clear_msgq();
+		
+		free_root();
 
-
-	nftw("./tmp", (void_p)  unlink_cb, 64, 0);
-	usleep(200 * 1000);
-	shm_delete();
-	clear_msgq();
+	}
 	
-
 	
 	exit(0);
 }
@@ -270,8 +282,10 @@ void clean_exit() {
 	cancel_all_threads();
 	free_prints_sem();
     nftw("./tmp",  (void_p) unlink_cb, 64, 0);
-	usleep(200 * 1000);
+	usleep(50 * 1000);
 	shm_delete();	
+	
+	free_root();
 	
 	clear_msgq();
 }

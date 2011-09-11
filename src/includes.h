@@ -37,6 +37,11 @@
 #define USE_COLORS 1
 
 
+#define malloc(p)			g_talloc(p)
+#define calloc(p,k)			g_tcalloc(p,k)
+#define realloc(p,k)		trealloc(p,k)
+#define free(p)				tfree(p)
+
 
 typedef enum {
 	NEGRO        ,

@@ -102,12 +102,12 @@ int sim_transporter_server_id(sim_transporter t) {
  Cleans up a transporter, after stopping the listener, or directly if it's writeonly.
  */
 static void sim_transporter_cleanup(sim_transporter t) {
-	free(t->listener_mutex);
-	free(t->listener_received);
-	free(t->listener);
-	t->_free(t->data);
-	queue_free(t->messages);
-	free(t);
+//	free(t->listener_mutex);
+//	free(t->listener_received);
+//	free(t->listener);
+//	t->_free(t->data);
+//	queue_free(t->messages);
+//	free(t);
 }
 
 

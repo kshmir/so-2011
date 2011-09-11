@@ -175,7 +175,13 @@ int sim_plane_make_fill(sim_airline airline, sim_plane plane, sim_level level, i
 	return NOTHING;
 }
 
+void sim_plane_cleanup() {}
+ 
 void sim_plane_main(struct sim_plane_data * d) {
+	pthread_cleanup_push(sim_plane_cleanup, NULL);
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+	
 	pthread_mutex_lock(sim_airline_mutex(d->airline));
 	sim_airline airline = (sim_airline) d->airline;
 	sim_plane plane = (sim_plane) d->plane;
@@ -216,7 +222,7 @@ void sim_plane_main(struct sim_plane_data * d) {
 
 	}		
 	pthread_mutex_unlock(sim_airline_mutex(airline));
-
+	pthread_cleanup_pop(0);
 }
 
 void sim_plane_print(sim_plane p) {
