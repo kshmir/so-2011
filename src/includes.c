@@ -51,7 +51,7 @@ void cancel_all_threads() {
 			pthread_detach(* t);
 			pthread_cancel(* t);
 		}
-		usleep(100 * 1000);
+		usleep(1000 * 1000);
 	}
 }
 
