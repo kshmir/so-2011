@@ -205,9 +205,9 @@ void sim_airline_query_receiver(sim_message resp) {
 		airline->planes_running = 0;
 		airline->planes_waiting = list_size(airline->planes);
 		pthread_cond_broadcast(airline->unlock_airline_waiting);
-		do {
-			pthread_cond_broadcast(airline->level_wait);
-		} while(!airline->waiting_for_level);
+
+		pthread_cond_broadcast(airline->level_wait);
+
 	} else if (cstring_matches(data, "TURN")) {				// TURN changes the turn inside the airline.
 		// And unlocks it in order to think
 		list params = cstring_split_list(data, " ");
