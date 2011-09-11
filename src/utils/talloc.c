@@ -68,7 +68,11 @@ void* talloc ( size_t size, void* parent ) {
 	}
 	pthread_mutex_lock(mutex);
 	void **mem = malloc( size + sizeof( void* ) * 3 );
-	if ( !mem ) return NULL;
+	if ( !mem ) 
+	{
+		pthread_mutex_unlock(mutex);
+		return NULL;
+	}
 
 	mem[0] = mem[1] = mem[2] = NULL;
 
@@ -94,7 +98,10 @@ void* tcalloc ( size_t size, void* parent ) {
 	}
 	pthread_mutex_lock(mutex);
 	void **mem = calloc( 1, size + sizeof( void* ) * 3 );
-	if ( !mem ) return NULL;
+	if ( !mem ) { 
+		pthread_mutex_unlock(mutex);
+		return NULL;
+	}
 
 	talloc_set_parent( mem + 3, parent );
 	pthread_mutex_unlock(mutex);
@@ -118,14 +125,20 @@ void* trealloc ( void* mem, size_t size ) {
 	pthread_mutex_lock(mutex);
 	void **header[3], **aux;
 
-	if ( !mem ) return talloc( size, NULL );
+	if ( !mem ) { 
+		pthread_mutex_unlock(mutex);
+		return talloc( size, NULL );
+	}
 
 	header[0] = ((void**)mem)[-3];
 	header[1] = ((void**)mem)[-2];
 	header[2] = ((void**)mem)[-1];
 
 	aux = realloc( (void**)mem - 3, size + sizeof( void* ) * 3 );
-	if ( !aux ) return NULL;
+	if ( !aux ) { 
+		pthread_mutex_unlock(mutex);
+		return NULL;
+	}
 
 	if ( (void**)mem - 3 != aux ) {
 
@@ -166,12 +179,18 @@ static void __tfree ( void** mem ) {
 void tfree ( void* mem ) {
 	if ( !mem ) return;
 
+	if (mutex == NULL) {
+		init_mutex();
+	}
+	pthread_mutex_lock(mutex);
 
 	talloc_set_parent( mem, NULL );
 
 	__tfree( ((void**)mem)[-3] );
 
 	free( (void**)mem - 3 );
+	
+	pthread_mutex_unlock(mutex);
 	
 }
 
