@@ -267,7 +267,6 @@ int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftw
 }
 
 void clean_exit() {
-	cancel_all_threads();
 	free_prints_sem();
     nftw("./tmp",  (void_p) unlink_cb, 64, 0);
 	usleep(200 * 1000);
