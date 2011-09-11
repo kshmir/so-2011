@@ -216,7 +216,7 @@ void _catch(int sig)
 	}
 	killpg(0, sig);  
 	
-	cancel_all_threads();
+
 	nftw("./tmp", (void_p)  unlink_cb, 64, 0);
 	usleep(200 * 1000);
 	shm_delete();
@@ -231,7 +231,7 @@ void _catch_child(int sig)
 {
 	killpg(0, sig);  
 	
-	cancel_all_threads();
+
 
 
 	nftw("./tmp", (void_p)  unlink_cb, 64, 0);
