@@ -45,8 +45,7 @@ static sim_pipe_transporter create_pipe_transporter(cstring write_fifo, cstring 
 	pipe->read_fifo = read_fifo;	
 	pipe->client = client;
 	pipe->mode = mode;
-//	pipe->sem = sem_create_typed("pipes");
-//	sem_set_value(pipe->sem, 1);
+	
 	// MacOSX doesn't seem to like going blocked, and it fails misserably.
 	// So this solves it, making the right call when not on a Mach Kernel system (Mac OS, MacOSX, NextSTEP, etc).
 	// We currently tested it only on Mac OSX 10.6.8, but in the worst case it'll only be porly performant.
@@ -105,9 +104,6 @@ sim_pipe_transporter sim_pipe_transporter_init_client(int server_id, int client_
 
 	sim_pipe_transporter t = create_pipe_transporter(write_fifo, read_fifo, 1, MODE_READWRITE);
 
-	//t->sem = sem_create(client_id);
-	//sem_up(t->sem, 1);
-	
 	t->server_id = server_id;
 	t->client_id = client_id;
 	return create_pipe_transporter(write_fifo, read_fifo, 1, MODE_READWRITE);
@@ -128,8 +124,6 @@ sim_pipe_transporter sim_pipe_transporter_init_server(int server_id, int client_
 
 	sim_pipe_transporter t = create_pipe_transporter(write_fifo, read_fifo, 0, mode);
 
-	//t->sem = sem_create(client_id);
-//	sem_down(t->sem, 1);
 
 	t->server_id = server_id;
 	t->client_id = client_id;
@@ -142,14 +136,8 @@ sim_pipe_transporter sim_pipe_transporter_init_server(int server_id, int client_
 
 void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data) {
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
-//		cprintf("I WRITE: %s\n", ROJO,data);
-//		sem_down(t->sem, 1);
 		if(write(t->write_ptr, data, cstring_len(data) + 1)==-1){
-			//IPCSDebug(PIPE_DEBUG&WRITE,"Error while writting with write_ptr: %d",t->write_ptr);
-		}else {
-			//IPCSDebug(PIPE_DEBUG&WRITE,"PIPE sent: %s",data);
-		}
-
+			// Handle error.
 	}
 }
 
@@ -157,14 +145,11 @@ cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 
 	if (t->mode == MODE_READ || t->mode == MODE_READWRITE) {
 		t->read_data = cstring_init(PIPE_READ_SIZE);
-		if(read(t->read_ptr, t->read_data, PIPE_READ_SIZE)==-1){
-			//IPCSDebug(PIPE_DEBUG&READ,"Error while reading with read_ptr: %d",t->read_ptr);
-		}else
-		//IPCSDebug(PIPE_DEBUG&READ,"PIPE rcvd: %s",str);
-		* length = PIPE_READ_SIZE;
 		
-//		sem_up(t->sem, 1);	
-
+		if(read(t->read_ptr, t->read_data, PIPE_READ_SIZE)==-1){
+			// Handle error.
+			
+		* length = PIPE_READ_SIZE;
 
 		return t->read_data;
 	}
@@ -176,14 +161,14 @@ cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 void sim_pipe_transporter_free(sim_pipe_transporter t) {
 	if (t->mode == MODE_READ || t->mode == MODE_READWRITE) {
 		if(close(t->read_ptr)==-1)
-			//IPCSDebug(PIPE_DEBUG&WRITE,"Error while closing fd: %d",t->read_ptr);
+		
 		unlink(t->read_fifo);
 		free(t->read_fifo);
 	}
 
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
 		if(close(t->write_ptr)==-1)
-			//IPCSDebug(PIPE_DEBUG&WRITE,"Error while closing fd: %d",t->write_ptr);
+		
 		unlink(t->write_fifo);
 		free(t->write_fifo);
 	}

@@ -25,12 +25,6 @@ typedef int process_type;
 #include "sim_client.h"
 #include "sim_transporter.h"
 
-
-
-
-
-
-
 /**
  Starts the server and it's local listener.
  */

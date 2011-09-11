@@ -1,10 +1,35 @@
+/**
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------
+ *
+ * @file sim_level.c
+ *
+ * @brief Handles the logic of the level server.
+ *
+ * @author Agustin Marseillan
+ * @author Maximo Videla
+ * @author Cristian Pereyra
+ */
 #include "sim_level.h"
 
 #include <time.h>
 
-static sim_level current_level = NULL;
-static list		 airlines = NULL;
+/**
+ *  Current level instance
+ */
+static sim_level current_level		= NULL;
+/**
+ *  List of airlines instance.
+ */
+static list		 airlines			= NULL;
 
+/**
+ *  Structure for the level.
+ */
 struct sim_level {
 	// level_distances
 	//	stores cstrings  as: keys	# Name of the city
@@ -15,34 +40,40 @@ struct sim_level {
 	// stores distances	 as: arcs   # Distance between cities
 	graph level;
 
-	map	  plane_location;
-	map	  plane_distance;
+	map	  plane_location;				// Stores the location of each plane
+	map	  plane_distance;				// Stores the distance from each plane to it's pointing location.
 
 
-	sim_client frontend_client;
-	sim_server airlines_server;
+	sim_client frontend_client;			// Frontend client.
+	sim_server airlines_server;			// Server for 'chatting' with the airlines.
 
-	int	  level_id;
+	int	  level_id;						// Id of the level.
 
-	int	  turn;
+	int	  turn;							// Actual turn.
 
 
-	int	  frontend_sem;
-	int	  airline_sem;
-	int	  level_sem;
-
-	int	  tick_sem;
-
+	int	  frontend_sem;					// Semaphore for handling the frontend.
+	int	  airline_sem;					// Semaphore for sleeping for the airlines.
+	int	  level_sem;					// Semaphore for syncronization.
 };
 
+/**
+ *  Getter for the level.
+ */
 graph sim_level_graph(sim_level lev) {
 	return lev->level;
 }
 
+/**
+ *  Checks for the existance of a city.
+ */
 int sim_level_has_city(sim_level lev, cstring city) {
 	return graph_get_node(lev->level, city) != NULL;
 }
 
+/**
+ *  Serializes a level.
+ */
 cstring sim_level_serialize(sim_level level) {
 	list g_k = graph_keys(level->level);
 	int n = list_size(g_k);
@@ -85,10 +116,18 @@ cstring sim_level_serialize(sim_level level) {
 	list_free(g_k);
 	return s;
 }
+
+/**
+ *  Deserializes a level.
+ */
 sim_level sim_level_deserialize(cstring s) {
 	int aux=0;
 	return sim_level_deserialize_line_error(s,&aux);
 }
+
+/**
+ *  Deserializes a level and returns the line it fails on
+ */
 sim_level sim_level_deserialize_line_error(cstring s,int* err_line) {
 	sim_level l = calloc(sizeof(struct sim_level), 1);
 	l->level = graph_init((comparer)cstring_comparer, (cloner)cstring_copy);
@@ -168,6 +207,9 @@ sim_level sim_level_deserialize_line_error(cstring s,int* err_line) {
 	return l;
 }
 
+/**
+ *  Free's a level
+ */
 void sim_level_free(sim_level lev) {
 	if (lev->frontend_client != NULL) {
 		sim_client_free(lev->frontend_client);
@@ -176,19 +218,18 @@ void sim_level_free(sim_level lev) {
 		sim_server_free(lev->airlines_server);
 	}
 
-	//	sem_free_typed(lev->level_sem, "level");
-	//	sem_free_typed(lev->airline_sem, "airline");
-
 	graph_free(lev->level);
 }
 
+/**
+ *  Responds to a query given by the frontend
+ */
 void sim_level_query_receiver(sim_message s) {
 	cstring message = sim_message_read(s);
 	int noerror = 0;
 	if (cstring_compare(message, "INIT_STAT") == 0) {
 		if (current_level == NULL) {
-			cprintf("WTF\n", ROJO);
-//			sleep(1);
+			cprintf("WTF I'm not ready\n", ROJO);
 			sem_up(current_level->frontend_sem,1);
 		} else {
 			sem_up(current_level->frontend_sem,1);
@@ -196,6 +237,10 @@ void sim_level_query_receiver(sim_message s) {
 	}
 }
 
+/**
+ *  Used to print with the frontend.
+ *  Actually deprecated because of performance reasons.
+ */
 void sim_level_print_receiver(sim_message s) {
 	cstring data = sim_message_read(s);
 	list header = cstring_split_list(sim_message_header(s), " ");
@@ -212,6 +257,9 @@ void sim_level_print_receiver(sim_message s) {
 	list_free_with_data(header);
 }
 
+/**
+ *  Sends the level to the client which asks it
+ */
 void sim_level_copy_level(sim_message mes) {
 	cstring l = sim_level_serialize(current_level);
 	sim_message_write(mes, l);
@@ -219,6 +267,9 @@ void sim_level_copy_level(sim_message mes) {
 	free(l);
 }
 
+/**
+ *  Sends the airline to the client which asks it
+ */
 void sim_level_copy_single_airline(sim_message s){
 	cstring data = cstring_copy(sim_message_read(s));
 	int noerror = 0;
@@ -254,6 +305,9 @@ void sim_level_copy_single_airline(sim_message s){
 	free(data);	
 }
 
+/**
+ *  Makes a fill transaction on the given city. It changes the value of the level graph.
+ */
 void sim_level_med_fill_transaction(sim_message msg) {
 
 	
@@ -299,9 +353,11 @@ void sim_level_med_fill_transaction(sim_message msg) {
 	list_free_with_data(splitted);
 }
 
+/**
+ *  Sets a path transaction on the given plane. It changes the direction of the plane.
+ */
 void sim_level_set_path_transaction(sim_message msg) {
 	cstring data = sim_message_read(msg);	
-//	cprintf("PATHT: %s;%s\n", ROSA, sim_message_header(msg), data);
 	list splitted = cstring_split_list(data, " ");
 	cstring id_string = list_get(splitted, 0);
 	cstring city_from = list_get(splitted, 1);
@@ -345,7 +401,7 @@ void sim_level_set_path_transaction(sim_message msg) {
 					error = 0;
 				}
 			}
-			//cprintf("LEVEL: Plane %d moving from %s to %s takes %d turns \n", ROJO, id, city_from, city_to, *distance);
+
 			cstring response = cstring_fromInt((error == 0) ? 1 : -1);
 
 			sim_message_write(msg, response);
@@ -372,6 +428,9 @@ void sim_level_set_path_transaction(sim_message msg) {
 
 }
 
+/**
+ *  Gets the amount of data in the given city, not actually used
+ */
 void sim_level_med_get_value(sim_message msg) {
 	cstring data = sim_message_read(msg);
 	list splitted = cstring_split_list(data, " ");
@@ -396,6 +455,9 @@ void sim_level_med_get_value(sim_message msg) {
 	list_free_with_data(splitted);
 }
 
+/**
+ *  Gets the amount of data in the given city, not actually used
+ */
 void sim_level_start_server(int connection_t, int to_id) {
 
 
@@ -416,6 +478,9 @@ void sim_level_start_server(int connection_t, int to_id) {
 	sim_server_add_receiver(current_level->airlines_server, seq6, sim_level_med_get_value);	
 }
 
+/**
+ *  Spawns all the airlines of the level.
+ */
 void sim_level_spawn_airlines() {
 	foreach(sim_airline, airline, airlines) {
 		sim_server_spawn_child(current_level->airlines_server);
@@ -424,8 +489,9 @@ void sim_level_spawn_airlines() {
 	}
 }
 
-// Updates all the data of distances of each plane and sends all the ones which must update in numbers
-// Separated by a comma.
+/**
+ *  Updates the planes distances and returns a string with the ids of the planes which must think.
+ */
 cstring planes_update_moves() {
 	cstring data = NULL;
 	list keys = map_keys(current_level->plane_distance);
@@ -436,8 +502,6 @@ cstring planes_update_moves() {
 			*val = 0;
 		} else if (*val > 0){
 			*val -= 1;
-//			cprintf("LEVEL: plane %d moving to %s, %d turns ahead.\n", VERDE, *key, map_get(current_level->plane_location, key), *val);
-
 		} else {
 			list_add(valids, cstring_fromInt(*key));
 		}
@@ -448,20 +512,17 @@ cstring planes_update_moves() {
 	return data;
 }
 
-
+/**
+ *  Sends a tick to all the airlines.
+ */
 void send_turn_tick() {
 	cstring aux = cstring_fromInt(current_level->turn);
 	cstring msg = cstring_copy("TURN ");
 	cstring valid_planes = planes_update_moves();
+
 	msg = cstring_write(msg, aux);
-
-
-
 	msg = cstring_write(msg, " ");
 	msg = cstring_write(msg, valid_planes);
-
-
-
 
 
 	sim_server_broadcast_query(current_level->airlines_server, msg);
@@ -472,6 +533,9 @@ void send_turn_tick() {
 	free(msg);
 }
 
+/**
+ * Checks if the level must go on.
+ */
 int sim_level_alive() {
 	int alive = 0;
 
@@ -494,6 +558,9 @@ int sim_level_alive() {
 	return alive;
 }
 
+/**
+ * Starts the maps containing the locations and the distances of each plane.
+ */
 void start_planes_map() {
 	current_level->plane_location = map_init(int_comparer, int_cloner);
 	current_level->plane_distance = map_init(int_comparer, int_cloner);
@@ -513,8 +580,11 @@ void start_planes_map() {
 	}
 }
 
+/**
+ * Makes a turn inside the level.
+ */
 void sim_level_game() {
-	cprintf("LEVEL: Starting game\n", CELESTE);
+	cprintf("LEVEL: Starting simulation\n", CELESTE);
 	start_planes_map();
 	sem_set_value(current_level->level_sem, 0);		
 	sem_up(current_level->airline_sem,list_size(airlines));
@@ -526,18 +596,14 @@ void sim_level_game() {
 	}
 }
 
-
+/**
+ * Starts the level, asks for the data and locks on the logic, while serving for events
+ */
 void sim_level_main(int connection_t, int from_id, int to_id) {
 
 	sim_client c = sim_client_init(connection_t, 0, from_id, to_id, sim_level_query_receiver);
-
-//	cprintf("LEVEL CONNECTED ...\n", ROJO);
 	
 	sim_level l = sim_client_copy_level(c, to_id);
-	if (l == NULL) {
-		cprintf("OMFG %d", ROJO, (int) l);
-	}
-
 
 	current_level = l;
 
@@ -547,33 +613,20 @@ void sim_level_main(int connection_t, int from_id, int to_id) {
 	l->frontend_sem = sem_create_typed("frontend");
 	l->level_sem = sem_create_typed("level");
 
-	l->tick_sem = sem_create_typed("tick");
-	sem_set_value(l->tick_sem, 1);
 	sem_set_value(l->level_sem, 0);
 
 	l->level_id = to_id;
 	l->turn = 0;
 
-	
-	
 	airlines = sim_client_copy_airline(c, to_id);
 	
-
-
 	sim_level_start_server(connection_t, to_id + 1);
 
 	sim_level_spawn_airlines();
 
-
-
-
-
 	sim_level_game();
 
-
-
 	sim_server_broadcast_query(current_level->airlines_server, "END");
-
 
 
 	cprintf("LEVEL: Game end\n", CELESTE);

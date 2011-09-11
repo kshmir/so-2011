@@ -1,4 +1,4 @@
-/*
+/**
  *  SISTEMAS OPERATIVOS - ITBA - 2011  
  *	ALUMNOS:                         
  *		MARSEILLAN 
@@ -6,6 +6,13 @@
  *		VIDELA
  * -----------------------------------
  *
+ * @file sim_frontend.h
+ *
+ * @brief Shows the functions used by the frontend, just the main, all the rest are static.
+ *
+ * @author Agustin Marseillan
+ * @author Maximo Videla
+ * @author Cristian Pereyra
  *
  */
 
@@ -15,6 +22,11 @@
 #ifndef _SIM_FRONTEND_H_
 #define _SIM_FRONTEND_H_
 
-int sim_frontend_main(list params);
+/**
+ * Starts the frontend logic, which validates the data and starts the level.
+ *
+ * @param params	list of executable parameters.
+ */
+void sim_frontend_main(list params);
 
 #endif

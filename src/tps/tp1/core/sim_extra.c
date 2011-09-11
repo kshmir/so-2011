@@ -1,6 +1,25 @@
+/**
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------
+ *
+ * @file sim_extra.c
+ *
+ * @brief Structures used to help the serializing of the structures.
+ *
+ * @author Agustin Marseillan
+ * @author Maximo Videla
+ * @author Cristian Pereyra
+ */
+
 #include "sim_extra.h"
 
-/** Keypair **/
+/**
+ * Starts a keypair of data.
+ */
 sim_keypair sim_keypair_init(cstring name, int weight) {
 	sim_keypair c = (sim_keypair) malloc(sizeof(struct sim_keypair));
 	c->name = cstring_copy(name);
@@ -8,7 +27,9 @@ sim_keypair sim_keypair_init(cstring name, int weight) {
 	return c;
 }
 
-
+/**
+ * Serializes the keypair
+ */
 cstring sim_keypair_serialize(sim_keypair c) {		
 	cstring params[3];
 	cstring aux;
@@ -19,6 +40,9 @@ cstring sim_keypair_serialize(sim_keypair c) {
 	return aux;
 }
 
+/**
+ * Deserializes the keypair, returns NULL if invalid.
+ */
 sim_keypair sim_keypair_deserialize(cstring line) {
 	cstring * array = cstring_split(line," ");
 	int i = 0;
@@ -52,15 +76,18 @@ sim_keypair sim_keypair_deserialize(cstring line) {
 	}
 }
 
+/**
+ * Frees the keypair.
+ */
 void sim_keypair_free(sim_keypair c) {
 	free(c->name);
 	free(c);
 }
 
-/** END Keypair **/
 
-/** Map Relation **/
-
+/**
+ * Starts a relation 
+ */
 static sim_map_relation sim_relation_init(cstring from, cstring to, int weight) {
 	sim_map_relation c = (sim_map_relation) malloc(sizeof(struct sim_map_relation));
 	c->from = cstring_copy(from);
@@ -69,6 +96,9 @@ static sim_map_relation sim_relation_init(cstring from, cstring to, int weight) 
 	return c;
 }
 
+/**
+ * Serializes a relation.
+ */
 cstring sim_map_relation_serialize(sim_map_relation c) {
 	cstring params[4];
 	
@@ -80,6 +110,9 @@ cstring sim_map_relation_serialize(sim_map_relation c) {
 	return cstring_join(params, " ");
 }
 
+/**
+ * Deserializes a relation.
+ */
 sim_map_relation sim_map_relation_deserialize(cstring line) {
 	cstring * array = cstring_split(line," ");
 	int i = 0;
@@ -113,10 +146,11 @@ sim_map_relation sim_map_relation_deserialize(cstring line) {
 	}	
 }
 
+/**
+ * Free's up a relation.
+ */
 void sim_relation_free(sim_map_relation c) { 
 	free(c->from);
 	free(c->to);
 	free(c);
 }
-
-/** End Map Relation **/

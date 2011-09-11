@@ -8,15 +8,9 @@
 #include <signal.h>
 
 
-void handler(int sig) {
-	exit(0);
-}
-
-
-
 int main(int argc, char ** params) {
-	signal(SIGBUS, handler);   
-	signal(SIGSEGV, handler);   
+	signal(SIGBUS, segfault_handler);   
+	signal(SIGSEGV, segfault_handler);   
 	srand(time(NULL));
 	signal(SIGINT, &_catch);
 	list args = list_from_ptrarray_w_count(argc, sizeof(char**), params);

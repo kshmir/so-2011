@@ -90,6 +90,9 @@ int sim_message_write(sim_message r, cstring data) {
 	return 1;
 }
 
+/**
+ * Frees the message.
+ */
 int sim_message_free(sim_message r) {
 	free(r->message);
 	free(r->header);
@@ -116,11 +119,6 @@ static void_p sim_message_listen(struct listener_data * data) {
 		cstring msg = sim_transporter_listen(r->t, NULL);
 		cstring header = cstring_copy_until_char(msg, ';');
 		
-//		if (msg[0] == 0) {
-//			return NULL; 
-//		}
-		
-//		cprintf("MSG GETS: %s expects %s\n", AMARILLO, msg, r->header);
 		if (cstring_matches(header,"RES ")) {
 			cstring no_resp = cstring_replace(msg, "RES ", "");
 			list splitted = cstring_split_list(no_resp, ";");
@@ -162,7 +160,7 @@ static void_p sim_message_listen(struct listener_data * data) {
 
 /**
  * Sends the message in a quirky way... it opens a thread and waits for it to receive the response
- * of the sent message.
+ * of the sent message. It guarantees a blocking operation in which the communication between processes is totally abstracted from the IPC.
  */
 sim_message sim_message_send(sim_message r) {
 	
@@ -178,7 +176,6 @@ sim_message sim_message_send(sim_message r) {
 	array[0] = r->header;
 	array[1] = r->message;
 	array[2] = NULL;
-//	cprintf("MSG SENDS: %s\n", VIOLETA, r->header);
 	cstring joined = cstring_join(array, ";");
 
 	sim_transporter_write(r->t, joined);
@@ -205,7 +202,7 @@ void sim_message_respond(sim_message r) {
 	array[2] = NULL;
 
 	cstring joined = cstring_join(array, ";");
-//	cprintf("SERVER: SEND %s\n", ROJO, joined);
+	
 	sim_transporter_write(r->t, joined);
 	free(array[0]);
 	free(array[1]);

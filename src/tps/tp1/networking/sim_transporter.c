@@ -102,12 +102,7 @@ int sim_transporter_server_id(sim_transporter t) {
  Cleans up a transporter, after stopping the listener, or directly if it's writeonly.
  */
 static void sim_transporter_cleanup(sim_transporter t) {
-//	free(t->listener_mutex);
-//	free(t->listener_received);
-//	free(t->listener);
-//	t->_free(t->data);
-//	queue_free(t->messages);
-//	free(t);
+	// We don't use it since we started using free.
 }
 
 
@@ -119,7 +114,7 @@ static void sim_transporter_cleanup(sim_transporter t) {
 static void_p sim_transporter_listener(sim_transporter t) {
 	int len, i, oldtype;
 	cstring builder = cstring_init(0);
-	// The following is a macro for cancelling the thread
+	
 	pthread_cleanup_push((void_p)sim_transporter_cleanup, t);
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype);
@@ -132,7 +127,7 @@ static void_p sim_transporter_listener(sim_transporter t) {
 		len = 0;
 
 		char * data = (char *) t->listen(t->data, &len);
-//		sem_up(t->write_lock, 1);
+
 		pthread_cond_broadcast(t->listener_received);
 		if (sck_override == 1) {
 			pthread_cond_broadcast(&sck_override_received);			
@@ -183,7 +178,6 @@ static void_p sim_transporter_listener(sim_transporter t) {
 			
 		}		
 
-
 		free(data);
 
 	}
@@ -225,14 +219,7 @@ cstring sim_transporter_listen(sim_transporter t, cstring avoid) {
 		pthread_mutex_lock(t->listener_mutex);
 		
 		while (queue_empty(t->messages) || (avoid != NULL && cstring_compare(queue_peek(t->messages), avoid) == 0)) {
-			
-//			struct timespec {
-//				long ts_sec; /* seconds */
-//				long ts_nsec; /* nanoseconds */
-//			} to;
-//
-//			to.ts_sec = time(NULL);
-//			to.ts_nsec = 1000 * 1000 * 200;
+		
 			pthread_cond_wait(t->listener_received, t->listener_mutex);
 		}
 		
@@ -365,7 +352,6 @@ sim_transporter sim_transporter_init(connection_type type,
 	
 	switch (type) {
 		case C_PIPE:
-//			printf("Starting pipes.....\n");
 			if (is_server && forks_child) {
 				exec_process(proc, type, from_id, to_id);
 			}
@@ -382,7 +368,6 @@ sim_transporter sim_transporter_init(connection_type type,
 			t->type = C_PIPE;
 			break;
 		case C_SHARED_MEMORY:
-//			printf("Starting shared memory.....\n");
 			if (is_server && forks_child) {
 				exec_process(proc, type, from_id, to_id);
 			}
@@ -393,7 +378,6 @@ sim_transporter sim_transporter_init(connection_type type,
 			t->type = C_SHARED_MEMORY;
 			break;
 		case C_SOCKETS:
-//			printf("Starting sockets.....\n");
 			if (is_server && forks_child) {
 				exec_process(proc, type, from_id, to_id);
 			}
@@ -409,7 +393,6 @@ sim_transporter sim_transporter_init(connection_type type,
 			t->type = C_SOCKETS;
 			break;
 		case C_M_QUEUES:
-//			printf("Starting message queues.....\n");
 			if (is_server) {
 				t->data = sim_msg_q_transporter_init_server(from_id, to_id);
 			}
@@ -438,8 +421,6 @@ sim_transporter sim_transporter_init(connection_type type,
  Writes a message to the current transporter.
  */
 void sim_transporter_write(sim_transporter sim, cstring message) {
-//	cprintf("TO WRITE: LEN: %d\n", ROJO, strlen(message));
-	
 	sem_down(sim->write_lock, 1);
 	sim->write(sim->data, message);
 }

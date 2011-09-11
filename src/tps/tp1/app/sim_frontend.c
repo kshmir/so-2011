@@ -1,29 +1,64 @@
-/*
+/**
  *  SISTEMAS OPERATIVOS - ITBA - 2011  
  *	ALUMNOS:                         
  *		MARSEILLAN 
  *		PEREYRA
  *		VIDELA
  * -----------------------------------
+ *
+ * @file sim_frontend.c
+ *
+ * @brief Internal logic of the frontend and it's validator.
+ *
+ * @author Agustin Marseillan
+ * @author Maximo Videla
+ * @author Cristian Pereyra
+ *
  */
 
 #include "sim_frontend.h"
 
+/**
+	Server used to communicate with the level.
+ */
 sim_server print_server;
+
+/**
+	Level built from the file specified
+ */
 sim_level  level;
+
+/**
+	Airlines built from the files specified.
+ */
 list	   airlines;
 
+
+/**
+	Semaphore used to wait for the level.
+ */
 int		   frontend_sem = 0;
+
+/**
+	Semaphore used to sync with the level
+ */
 int		   level_sem = 0;
 
 
-
+/**
+ * Prints the data received from the level.
+ *
+ * @param data cstring to print.
+ */
 void sim_frontend_print(cstring data) {
 	cprintf("FRONTEND: %s\n", ROJO,data);
 }
 
-/*
-	Start Frontend Receivers
+/**
+ * Gets a message and prints it to the frontend
+ * Kinda deprecated... slowed everything up!
+ *
+ * @param sim_message Request data.
  */
 void sim_frontend_receiver(sim_message mes) {
 	cstring data = sim_message_read(mes);
@@ -32,15 +67,23 @@ void sim_frontend_receiver(sim_message mes) {
 	sim_message_free(mes);
 }
 
-
+/**
+ * Sends the level serialized to the level process.
+ *
+ * @param sim_message Request data.
+ */
 void sim_frontend_copy_level(sim_message mes) {
-	cprintf("COPYING LEVEL ...\n", ROJO);
 	cstring l = sim_level_serialize(level);
 	sim_message_write(mes, l);
 	sim_message_respond(mes);
 	free(l);
 }
 
+/**
+ * Sends the requested airline to the level process.
+ *
+ * @param sim_message Request data.
+ */
 void sim_frontend_copy_airline(sim_message mes) {
 	cstring data = cstring_copy(sim_message_read(mes));
 	int error = 0;
@@ -65,11 +108,12 @@ void sim_frontend_copy_airline(sim_message mes) {
 	free(data);
 }
 
-/*
-	End Frontend receivers.
+/**
+ * Binds the server actions and sets ready to talk to it's clients.
+ *
+ * @param t IPC used internally.
  */
-
-int sim_frontend_start_server(connection_type t) {
+void sim_frontend_start_server(connection_type t) {
 	print_server = sim_server_init(t, P_LEVEL, 1);
 
 	char * seq = "PRINT";
@@ -83,21 +127,30 @@ int sim_frontend_start_server(connection_type t) {
 	level_sem    = sem_create_typed("level");
 }
 
-
-int sim_frontend_start_processes(sim_level lev, list airlines) {
+/**
+ * Starts the level process and locks to receive data.
+ */
+void sim_frontend_start_processes() {
 	sim_server_spawn_child(print_server);
-	cprintf("Time to spawn", ROJO);
-	cprintf("FRONTEND: Going down to spawn\n", VERDE);
+	cprintf("FRONTEND: LEVEL STARTED\n", VERDE);
 	sem_down(frontend_sem, 1);					
 	cprintf("FRONTEND: SHUTDOWN\n", VERDE);
 }
 
 
-
-int sim_frontend_main(list params) {
+/**
+ * Starts the frontend logic, which validates the data and starts the level.
+ *
+ * @param params	list of executable parameters.
+ */
+void sim_frontend_main(list params) {
+	
+	// Shows data of the usage and authors of the TP.
 	tp1_disclaimer();
 	tp1_usage();
 
+	
+	// Data for validating
 	connection_type * c_type = (connection_type *) malloc(sizeof(connection_type));
 	* c_type = -1;
 	cstring level_file = NULL;
@@ -105,6 +158,7 @@ int sim_frontend_main(list params) {
 	cstring error_string = NULL;
 	int line_error=0;
 
+	// If the params received are correct then it parses all the files.
 	if (sim_validator_params(params, &level_file, airline_files, &error_string, c_type) == TRUE) {
 		cstring error_file = NULL;
 		sim_level lev = (sim_level) sim_validator_level(level_file,&line_error);
@@ -119,12 +173,11 @@ int sim_frontend_main(list params) {
 				list_add(_airlines, airline);
 			}
 			if (error_file == NULL) {
+				// If there are no parse errors the server starts
 				sim_frontend_start_server(*c_type);
 				level = lev;
 				airlines = _airlines;
-
-				sim_frontend_start_processes(lev, airlines);
-				
+				sim_frontend_start_processes();
 			}
 			else {
 				cstring aux=cstring_copy("Error on airline file named: ");
@@ -157,9 +210,6 @@ int sim_frontend_main(list params) {
 		sim_frontend_print(error_string);
 	}
 
-
-	
-	
 	list_free_with_data(airline_files);
 
 	if (level_file != NULL) {

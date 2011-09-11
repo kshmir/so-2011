@@ -237,7 +237,10 @@ void _catch(int sig)
 	exit(0);
 }
 
-
+void segfault_handler(int sig) {
+	printf("Non cool exit, something wrong happened!");
+	exit(0);
+}
 
 void _catch_child(int sig)
 {

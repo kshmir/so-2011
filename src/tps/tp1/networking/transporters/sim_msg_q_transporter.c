@@ -7,9 +7,6 @@
  * -----------------------------------------------------------------------------------------
  * Message Queue Transporter Implementation.
  * The following implementation complies with the functions sim_transporter requires to work.
- * // TODO: Check if messages arrived sorted (concurrency).
- * // If not: Possible fix: semaphore.
- * //         Another fix:  resort messages. (it's better to use a semaphore :P)
  */
 
 
@@ -43,7 +40,6 @@ sim_msg_q_transporter sim_msg_q_transporter_init_client(int server_id, int clien
 	sim_msg_q_transporter t = malloc(sizeof(struct sim_msg_q_transporter));
 	t->key=ftok("./tmp",'#');
 	if ((t->msgq_id = msgget(t->key, 0600 | IPC_CREAT )) == -1) { /* connect to the queue */
-		//IPCSDebug(MSGQ_DEBUG,"Error while registering at message queue with key: %d\n",t->key);
 		return NULL;
 	}
 	
@@ -60,11 +56,8 @@ sim_msg_q_transporter sim_msg_q_transporter_init_server(int server_id, int clien
 	t->key=ftok("./tmp",'#');
 
 	t->msgq_id = msgget(t->key, 0600);
-
-
-
+	
 	if ((t->msgq_id = msgget(t->key, 0600 | IPC_CREAT)) == -1) { /* connect to the queue */
-		//IPCSDebug(MSGQ_DEBUG,"Error while registering at message queue with key: %d\n",t->key);
 		return NULL;
 	}
 	
@@ -88,7 +81,10 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 	int end = 0;
 	int writes = 0;
 
-	//sem_down(t->write_sem , 1);
+	/**
+		Messages here are sent as chunks, since the message queue might be limited.
+	 */
+	
 	while(!end) {
 		int block_len = sizeof(struct msgq_buf) - sizeof(long);
 		int len = strlen(data);
@@ -109,16 +105,14 @@ void sim_msg_q_transporter_write(sim_msg_q_transporter t, cstring data){
 		int attempts = 0;
 		while (msgsnd(t->msgq_id, &t->write_buf, sizeof(struct msgq_buf) - sizeof(long), 0) == -1 && attempts < 100) /* +1 for '\0' */
 		{
+			// Sometimes it didn't just send it on OSX
 			attempts++;
 		}
 
 		writes++;
 		free(d);
-			//IPCSDebug(MSGQ_DEBUG&WRITE,"Total attempts to write: %d\n",attempts);
-		//IPCSDebug(MSGQ_DEBUG&WRITE,"MSGQ sent: %s\n",data);
 
 	}
-	//	sem_up(t->write_sem, 1);
 
 }
 
@@ -134,9 +128,8 @@ cstring sim_msg_q_transporter_listen(sim_msg_q_transporter t, int * extra_data){
 	}
 	
 	if (msgrcv(t->msgq_id, &(t->read_buf), sizeof(struct msgq_buf) - sizeof(long), t->read_buf.mtype, 0) == -1) {
-		//IPCSDebug(MSGQ_DEBUG&READ,"Message could not be received\n");
-	}else
-		//IPCSDebug(MSGQ_DEBUG&READ,"MSGQ received: %s\n",t->read_buf.mtext);
+		// perror("Not receiving msgqueue");
+	}
 
 
 	*extra_data = sizeof(struct msgq_buf) - sizeof(long);

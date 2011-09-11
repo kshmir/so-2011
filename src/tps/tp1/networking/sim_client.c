@@ -24,21 +24,16 @@ struct sim_client {
 	sim_transporter t;						// Internal transporter used by the client.
 	sim_receiver	r;						// Query receiver.
 	
-	int	spawn_sem;
-	
 	int client_id;							// ID to which it listens.
 	
 	pthread_t		listener_thread;		// Listener thread.
-	pthread_mutex_t * mutex		    ;
-	pthread_cond_t	* listener_freed;
 };
 
 /**
  * Cleans the client after a callback which stops the thread.
  */
 static void sim_client_listener_cleanup(sim_client r) {
-
-
+	// Not used since we use talloc.
 }
 
 /**
@@ -56,10 +51,8 @@ static void_p sim_client_listener(sim_client r) {
 
 		pthread_testcancel();
 		
-
-
 		cstring header = cstring_copy_until_char(msg, ';');
-	//	cprintf("CLIENT: GOT %s\n", CELESTE, msg);		
+		
 		if (cstring_compare(header,"QUERY ") == 0) {
 
 			cstring no_resp = cstring_replace(msg, "QUERY ", "");
@@ -101,19 +94,10 @@ sim_client sim_client_from_transporter(sim_transporter t, sim_receiver r) {
 	sim_client c = (sim_client) malloc(sizeof(struct sim_client));
 	c->t = t;
 	c->r = r;
-	c->mutex = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
-	c->listener_freed = (pthread_cond_t *) malloc(sizeof(pthread_cond_t));
 
-	pthread_mutex_init(c->mutex, NULL);
-	pthread_cond_init(c->listener_freed, NULL);
-	
-
-	
-	c->spawn_sem = sem_create_valued(1244422, 1);
 
 	pthread_create(&c->listener_thread, NULL, (void_p) sim_client_listener, (void_p) c);	
 	declare_thread(&c->listener_thread);
-//	sem_up(c->spawn_sem, 1);
 	return c;
 }
 
@@ -148,7 +132,7 @@ int sim_client_get_distance(sim_client c, int object_id, cstring from, cstring t
 }
 
 /**
- * Gets all the medicines from a point.
+ * Copies a whole level.
  */
 void_p sim_client_copy_level(sim_client c, int object_id) {
 	cstring header = cstring_fromInt(object_id); 
@@ -162,6 +146,9 @@ void_p sim_client_copy_level(sim_client c, int object_id) {
 	return sim_level_deserialize(mes);
 }
 
+/**
+ * Copies all the airlines from a level.
+ */
 list sim_client_copy_airline(sim_client c, int object_id) {
 	cstring header = cstring_fromInt(object_id); 
 	header = cstring_write(header, cstring_copy(" COPY_AIR"));
@@ -186,6 +173,9 @@ list sim_client_copy_airline(sim_client c, int object_id) {
 	return l;
 }
 
+/**
+ * Copies a single airline
+ */
 void_p sim_client_copy_single_airline(sim_client c, int object_id) {
 
 	cstring header = cstring_fromInt(object_id); 
@@ -231,7 +221,6 @@ int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cst
 	sim_message response = sim_message_send(request);
 	
 	cstring rsp = sim_message_read(response);
-//	cprintf("MEDICINE FILL: %s\n", ROJO, rsp);
 	int noerror = 0;
 	int val = cstring_parseInt(rsp, &noerror);
 	sim_message_free(response);
@@ -241,7 +230,6 @@ int sim_client_post_medicine_fill(sim_client c, int object_id, cstring city, cst
 	// Rebuild response
 	// Response should be... RES {object_id} MEDF;{value}
 	// Where value is -1 if there's an error, or the remaining amount of medicine.
-//	cprintf("MEDICINE FILL INT: %d\n", ROJO, val);
 	return val;
 }
 
@@ -288,22 +276,7 @@ int sim_client_print(sim_client c, cstring message, int _id) {
  * Cleans the client, it's thread and it's data.
  */
 void sim_client_free(sim_client c) {
-//	pthread_cond_t * freed = c->listener_freed;
-//	pthread_mutex_t * mutex = c->mutex;
-//	
-//	sem_free_typed(c->spawn_sem, "spawn");
-//	pthread_cancel(c->listener_thread);
-//	
-//	struct timespec {
-//		long ts_sec; /* seconds */
-//		long ts_nsec; /* nanoseconds */
-//	} to;
-//	
-//	to.ts_sec = time(NULL);
-//	to.ts_nsec = 1000 * 1000 * 200;
-//	pthread_cond_timedwait(freed, mutex, (void_p)&to);
-//	pthread_cond_destroy(freed);
-//	pthread_mutex_destroy(mutex);
+	// Not actually used since we use talloc.
 }
 
 

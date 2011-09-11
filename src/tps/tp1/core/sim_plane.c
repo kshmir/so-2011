@@ -146,7 +146,6 @@ int sim_plane_make_fill(sim_airline airline, sim_plane plane, sim_level level, i
 																	   med, plane->id, 
 																	   * val);
 						
-//						cprintf("fill_value: %d vs %d\n", ROJO, fill_value, *val);
 						if (fill_value != -1 && fill_value != *val) {
 							* val = fill_value;
 							fill_done = 1;
@@ -156,7 +155,6 @@ int sim_plane_make_fill(sim_airline airline, sim_plane plane, sim_level level, i
 			}
 			
 			if (fill_done) {
-//				cprintf("RETURN FILLED\n", ROJO);
 				list_free(city_m_keys);
 				return FILLED;
 			}
@@ -164,7 +162,6 @@ int sim_plane_make_fill(sim_airline airline, sim_plane plane, sim_level level, i
 		list_free(city_m_keys);
 	}
 	else {
-		// For debugging
 		list g_keys = graph_keys(sim_level_graph(level));
 		foreach(cstring, key, g_keys) {
 			cprintf("AIRLINE MAP KEY: %s\n", ROSA, key);
@@ -191,17 +188,15 @@ void sim_plane_main(struct sim_plane_data * d) {
 
 	plane->set_dead = 0;
 	plane->turn_counter = 0;
-//	cprintf("PLANE: I'm ready with id %d\n", VERDE_CLARO,plane->id);
+
 
 	sim_airline_set_planes_waiting(airline, sim_airline_planes_waiting(airline) + 1);
 	pthread_cond_broadcast(sim_airline_waiting_cond(airline));
-//	cprintf("I WAIT %d %d %s\n", ROJO, plane->id, plane->must_think, (plane->id >= 300) ? "!!!!!" : "");
 	pthread_cond_wait(sim_airline_planes_cond(airline), sim_airline_mutex(airline));
 
 	
 	while (!plane->set_dead) {
 
-//		cprintf("I THINK %d %d %s\n", ROJO, plane->id, plane->must_think, (plane->id >= 300) ? "!!!!!" : "");
 		if (plane->must_think) {
 			int action_taken = sim_plane_make_fill(airline, plane, level, 0);
 			
@@ -216,7 +211,6 @@ void sim_plane_main(struct sim_plane_data * d) {
 		sim_airline_set_planes_running(airline, sim_airline_planes_running(airline) - 1);
 		sim_airline_set_planes_waiting(airline, sim_airline_planes_waiting(airline) + 1);
 		plane->turn_counter++;
-	//	cprintf(">>> I WAIT %d %d %s %d %d\n", VERDE_CLARO, plane->id, plane->must_think, (plane->id >= 300) ? "!!!!!" : "", sim_airline_planes_waiting(airline),sim_airline_planes_running(airline));
 		pthread_cond_broadcast(sim_airline_waiting_cond(airline));
 		pthread_cond_wait(sim_airline_planes_cond(airline), sim_airline_mutex(airline));
 

@@ -1,100 +1,168 @@
-
+/**
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------
+ *
+ * @file sim_airline.c
+ *
+ * @brief Handles all the logic of all the airlines.
+ *
+ * @author Agustin Marseillan
+ * @author Maximo Videla
+ * @author Cristian Pereyra
+ */
 
 #include "sim_airline.h"
 
+
+/**
+	Airline used by the process.
+ */
 static sim_airline airline;
 
 
-
+/**
+	Airline structure
+ */
 struct sim_airline {
-	int					id;
-	list				planes;
-	sim_client			c;
-	graph				level_graph;
-	sim_level			level;
-
-	int					airline_sem;
-	int					level_sem;
-
-	int					internal_sem;
-
-	int					end_order;
-	int					current_turn;
+	int					id;								// Id of the airline
+	list				planes;							// Planes of the airline
 	
-	int					waiting_for_level;
-	
-	int					planes_waiting;
-	int					planes_running;
+	sim_client			c;								// Client used by the airline to talk to the level.
+	graph				level_graph;					// Level graph used as a read only graph by the airline.
+	sim_level			level;							// Level which contains the graph.
 
-	pthread_t *			p_threads;				// Thread for each plane.
-	pthread_mutex_t	*	unlock_mutex;			// Cond used to unlock.
-	pthread_cond_t	*	unlock_planes_moving;			// Cond used to unlock.
-	pthread_cond_t	*	unlock_airline_waiting;			// Cond used to unlock.
+	int					airline_sem;					// Semaphore used for waiting the level
+	int					level_sem;						// Semaphore used to make the level sleep.
+
+	int					end_order;						// Flag for ending the airline.
+	int					current_turn;					// Current turn we're on.
 	
-	pthread_mutex_t	*	level_mutex;			// Cond used to unlock.
-	pthread_cond_t	*	level_wait;			// Cond used to unlock.
-	pthread_cond_t	*	level_message;			// Cond used to unlock.
+	int					waiting_for_level;				// Flag used when waiting for the level.
+	
+	int					planes_waiting;					// Amount of planes waiting.
+	int					planes_running;					// Amount of planes running.
+
+	pthread_t *			p_threads;						// Thread for each plane.
+	pthread_mutex_t	*	unlock_mutex;					// Lock mutex.
+	pthread_cond_t	*	unlock_planes_moving;			// Planes cond.
+	pthread_cond_t	*	unlock_airline_waiting;			// Airline waiting cond.
+	
+	pthread_mutex_t	*	level_mutex;					// Level mutex.
+	pthread_cond_t	*	level_wait;						// Cond used to wait for the level.
 };
 
-
+/**
+ * Getter for planes_waiting
+ */
 int	sim_airline_planes_waiting(sim_airline air) {
 	return air->planes_waiting;
 }
 
+/**
+ * Setter for planes_waiting
+ */
 void sim_airline_set_planes_waiting(sim_airline air, int value) {
 	air->planes_waiting = value;
 }
 
+/**
+ * Getter for planes_running
+ */
 int	sim_airline_planes_running(sim_airline air) {
 	return air->planes_running;
 }
 
+/**
+ * Setter for planes_running
+ */
 void sim_airline_set_planes_running(sim_airline air, int value) {
 	air->planes_running = value;
 }
 
+/**
+ * Getter for the airline client.
+ */
 sim_client sim_airline_client(sim_airline air) {		
 	return air->c;
 }
 
-int sim_airline_internal_sem(sim_airline air) {
-	return air->internal_sem;
-}
-
+/**
+ * Getter for the airline mutex.
+ */
 pthread_mutex_t * sim_airline_mutex(sim_airline air) {		
 	return air->unlock_mutex;
 }
 
+/**
+ * Getter for the airline waiting cond.
+ */
 pthread_cond_t * sim_airline_waiting_cond(sim_airline air) {		
 	return air->unlock_airline_waiting;
 }
 
+/**
+ * Getter for the planes moving.
+ */
 pthread_cond_t * sim_airline_planes_cond(sim_airline air) {		
 	return air->unlock_planes_moving;
 }
 
+/**
+ * Getter for the airline id.
+ */
 int sim_airline_id(sim_airline air) {
 	return air->id;
 }
 
+/**
+ * Setter for the airline id.
+ */
 void sim_airline_set_id(sim_airline air, int id) {
 	air->id = id;
 }
 
+/**
+ * Airline comparer.
+ */
 int sim_airline_comparer(void_p a1, void_p a2) {		
 	sim_airline _a1 = (sim_airline) a1;
 	sim_airline _a2 = (sim_airline) a2;
 	return _a1->id - _a2->id;
 }
 
+/**
+ * Airline planes.
+ */
 list sim_airline_planes(sim_airline air) {
 	return air->planes;
 }
 
+/**
+ * Deserializes the airline.
+ *
+ * @param s Serialized string
+ * @param airline_id Airline to serialize
+ *
+ * @return Fully built airline.
+ */
 sim_airline sim_airline_deserialize(cstring s, int airline_id) {
 	int aux=0;
 	return sim_airline_deserialize_line_error(s, airline_id, &aux);
 }
+
+/**
+ * Deserializes the airline and tells the line it fails on.
+ *
+ * @param s Serialized string
+ * @param airline_id Airline to serialize
+ * @param err_line Line of the error.
+ *
+ * @return Fully built airline.
+ */
 sim_airline sim_airline_deserialize_line_error(cstring s, int airline_id, int *err_line) {
 	sim_airline airline = calloc(sizeof(struct sim_airline), 1);
 	airline->planes = list_init();
@@ -152,6 +220,14 @@ sim_airline sim_airline_deserialize_line_error(cstring s, int airline_id, int *e
 	return airline;
 }
 
+/**
+ * Serializes the airline
+ *
+ * @param air Airline to serialize
+ * @param hasId Serialize with it's id or not.
+ *
+ * @return Fully built airline.
+ */
 cstring sim_airline_serialize(sim_airline air, int hasId) {
 	cstring s = cstring_init(1);
 	if (hasId) {
@@ -162,13 +238,17 @@ cstring sim_airline_serialize(sim_airline air, int hasId) {
 	s = cstring_write(s,"\n\n");
 	foreach(sim_plane, p, air->planes) { 
 		s = cstring_write(s, (cstring) sim_plane_serialize(p));
-
 		s = cstring_write(s,"\n");
 	}
 	return s;
 }
 
 
+/**
+ * Sets the planes whose id is in the string to think
+ *
+ * @param splitted string.
+ */
 void set_planes_to_think(cstring splitted) {
 	list splits = cstring_split_list(splitted, ",");
 
@@ -192,6 +272,11 @@ void set_planes_to_think(cstring splitted) {
 	list_free_with_data(splits);
 }
 
+/**
+ * Receiver of the server query.
+ *
+ * @param resp petition.
+ */
 void sim_airline_query_receiver(sim_message resp) {
 	cstring data = sim_message_read(resp);
 
@@ -218,30 +303,9 @@ void sim_airline_query_receiver(sim_message resp) {
 			pthread_mutex_lock(airline->level_mutex);
 			airline->current_turn = turn;
 			set_planes_to_think(list_get(params,2));
-			//	cprintf("LEVEL TO AIRLINE: Setting airline UP %d\n", AZUL_CLARO, airline->id);
-
-
-//			do {
-//			pthread_cond_wait(airline->level_message,airl
-
-//			while (!airline->waiting_for_level) {
-				//cprintf("SENDING AIRLINE %d UP\n", ROJO, airline->id);
-			
-				if (pthread_cond_broadcast(airline->level_wait) != 0) 
-					perror("ERROR!");
-//			cprintf("SIGNAL TO: %d\n", ROJO, airline->id);
-//			}
-
+			if (pthread_cond_broadcast(airline->level_wait) != 0) 
+				perror("ERROR!");
 			pthread_mutex_unlock(airline->level_mutex);
-			//	
-//				airline->waiting_for_level--;
-//			} while(!airline->waiting_for_level);
- 
-			
-//			sem_down(airline->airline_sem, 1);
-
-
-			//	cprintf("AIRLINE: I UNLOCK\n", ROSA);
 		}
 
 		list_free_with_data(params);
@@ -249,23 +313,15 @@ void sim_airline_query_receiver(sim_message resp) {
 
 }
 
-void magic() {
-	
-}
-
+/**
+ * Game iteration.
+ */
 void sim_airline_game() {
-	
-	
 	while (!airline->end_order) {
-		
-
-		
-//		cprintf("WAITING PLANES TO BE READY: %d\n", ROJO, airline->id);
 		while (airline->planes_waiting < list_size(airline->planes)) {
 			pthread_cond_wait(airline->unlock_airline_waiting, airline->unlock_mutex);
 		}
 
-//		cprintf("TELLING PLANES TO MOVE: %d\n", ROJO, airline->id);
 		airline->planes_running = list_size(airline->planes);
 		pthread_cond_broadcast(airline->unlock_planes_moving);
 		airline->waiting_for_level = 0;
@@ -275,64 +331,59 @@ void sim_airline_game() {
 			pthread_cond_wait(airline->unlock_airline_waiting, airline->unlock_mutex);
 		}		
 
-
 		cprintf("SENDING LEVEL UP %d AIRLINE: %d\n", CELESTE, sem_value(airline->level_sem), airline->id);
 
-		//cprintf("WAITING FOR LEVEL AIRLINE: %d, VAL %d\n", ROJO, airline->id, sem_value(airline->level_sem));
 		sem_up(airline->level_sem, 1);					
 		pthread_cond_wait(airline->level_wait,airline->level_mutex);
 		airline->waiting_for_level = 1;
 	}
-
-
 }
 
-
+/**
+ * Airline main.
+ *
+ * @param connection_t	Connection type
+ * @param from_id		Id of it's owner.
+ * @param to_id			Id of the airline owner.
+ */
 void sim_airline_main(int connection_t, int from_id, int to_id) {
 
 	sim_client c = sim_client_init(connection_t, 0, from_id, to_id, sim_airline_query_receiver);
 
-
 	sim_airline air = sim_client_copy_single_airline(c, to_id);
+	
 	airline = air;
 	air->end_order = 0;
 
 	air->airline_sem = sem_create_typed("airline");
 	air->level_sem = sem_create_typed("level");
-	cstring _internal_sem = cstring_copy("internal");
-	_internal_sem = cstring_write(_internal_sem, cstring_fromInt(to_id));
-
-	air->internal_sem = sem_create_typed(_internal_sem);
 	air->level = sim_client_copy_level(c, to_id);
 	air->current_turn = 0;
 	air->planes_waiting = 0;
 	air->planes_running = 0;
 
 	air->waiting_for_level = 0;
-	
-	sem_set_value(air->internal_sem, 0);
 
-	air->level_mutex = (pthread_mutex_t *) calloc(sizeof(pthread_mutex_t), 1);
+	air->level_mutex =						(pthread_mutex_t *) calloc(sizeof(pthread_mutex_t), 1);
 
-	air->unlock_mutex = (pthread_mutex_t *) calloc(sizeof(pthread_mutex_t), 1);
-	air->unlock_planes_moving = (pthread_cond_t *) calloc(sizeof(pthread_cond_t), 1);
-	air->unlock_airline_waiting = (pthread_cond_t *) calloc(sizeof(pthread_cond_t), 1);
-	air->level_wait = (pthread_cond_t *) calloc(sizeof(pthread_cond_t), 1);
-	air->level_message = (pthread_cond_t *) calloc(sizeof(pthread_cond_t), 1);
-	air->p_threads = (pthread_t *) calloc(sizeof(pthread_t), list_size(air->planes) * 16);
+	air->unlock_mutex =						(pthread_mutex_t *) calloc(sizeof(pthread_mutex_t), 1);
+	air->unlock_planes_moving =				(pthread_cond_t *)	calloc(sizeof(pthread_cond_t), 1);
+	air->unlock_airline_waiting =			(pthread_cond_t *)	calloc(sizeof(pthread_cond_t), 1);
+	air->level_wait =						(pthread_cond_t *)	calloc(sizeof(pthread_cond_t), 1);
+	air->p_threads =						(pthread_t *)		calloc(sizeof(pthread_t), list_size(air->planes) * 16);
 	
 	
 	pthread_mutex_init(air->level_mutex, NULL);
 	pthread_mutex_init(air->unlock_mutex, NULL);
+	
 	pthread_cond_init(air->unlock_planes_moving, NULL);
 	pthread_cond_init(air->unlock_airline_waiting, NULL);
 	pthread_cond_init(air->level_wait, NULL);	
-	pthread_cond_init(air->level_message, NULL);
 	
 	airline->c = c;
 	
-	
 	int i = list_size(airline->planes);
+	
 	foreach(sim_plane, plane, airline->planes) {
 		struct sim_plane_data * dat = malloc(sizeof(struct sim_plane_data));		
 		dat->plane = plane;
@@ -357,19 +408,16 @@ void sim_airline_main(int connection_t, int from_id, int to_id) {
 	pthread_mutex_unlock(airline->level_mutex);
 	sem_down(air->level_sem, 1);
 
-	//	sem_free_typed(air->internal_sem, _internal_sem);
 	sem_down(air->airline_sem, 1);
-
-	//	cprintf("AIRLINE: LEAVING! id: %d\n", AZUL_CLARO, airline->id);
 
 
 
 	sim_client_free(c);
-	// Pide la información del airline y se deserializa checked!
-	// Airline inicializa sus threads para cada plane y los pone en accion.
 }
 
-
+/**
+ * Game iteration.
+ */
 void sim_airline_free(sim_airline s) {
-
+	// Talloc frees everything now
 }

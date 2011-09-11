@@ -16,8 +16,9 @@
 #include <pthread.h>
 
 
-// This is as AGLY as it lucs. 
+// This is as UGLY as it looks.
 // But it's the only way to override our vision of transporter over sockets.
+
 extern int					sck_override;
 extern queue				sck_override_queue;
 extern pthread_mutex_t		sck_override_mutex;
@@ -93,7 +94,7 @@ struct sim_server {
  Cleans the server and all it's resources.
  */
 static void sim_server_listener_cleanup(sim_server s) {
-	
+	// Not used since we started using talloc.
 }
 
 /**
@@ -156,7 +157,7 @@ static void sim_server_listener(sim_server s) {
 		
 		int fail = 1;		
 
-		//cprintf("CHECKING %s\n", AMARILLO, header);
+
 			foreach(cstring, key, s->responds_to_keys) {
 				cstring safe_key = cstring_copy(key);
 				if (cstring_matches(header, safe_key) == 1 || cstring_compare(safe_key,header) == 0) {
@@ -168,7 +169,7 @@ static void sim_server_listener(sim_server s) {
 					sim_transporter t = NULL ;
 					cstring _msg = cstring_copy("RES ");
 					_msg = cstring_write(_msg, list_get(params,0));
-//					cprintf("GOT DATA %s;%s\n", ROJO, header, cstring_copy(list_get(params,1)));					
+
 					do
 					{
 						t = (sim_transporter)map_get(s->clients_transporters,&id);
@@ -301,33 +302,13 @@ int sim_server_spawn_child(sim_server s) {
 												   TRUE);
 	int key = s->client_id_seed * s->client_id_multiplier;
 	map_set(s->clients_transporters, &key, child_t);	
-//	sem_down(s->spawn_sem, 1);
-
-	
-//	cprintf("I spawn my child %d\n", OK, key);
-	
-
 	
 	s->client_id_multiplier++;
-
 }
 
 /**
  Free's the server and it's thread.
  */
 int sim_server_free(sim_server s) {
-//	pthread_cond_t * freed = s->listener_freed;
-//	pthread_mutex_t * mutex = s->mutex;
-//	//sem_free_typed(s->spawn_sem, "spawn");
-//	
-//	struct timespec {
-//		long ts_sec; /* seconds */
-//		long ts_nsec; /* nanoseconds */
-//	} to;
-//	
-//	to.ts_sec = time(NULL) + 1;
-//	to.ts_nsec = 0;
-//	pthread_cond_timedwait(freed, mutex, (void_p) &to);
-//	pthread_cond_destroy(freed);
-//	pthread_mutex_destroy(mutex);
+	// Free's up the server.
 }

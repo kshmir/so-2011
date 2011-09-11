@@ -78,6 +78,9 @@ void sim_message_respond(sim_message r);
  */
 int sim_message_write(sim_message r, cstring data);
 
+/**
+ * Frees the message.
+ */
 int sim_message_free(sim_message r);
 
 #endif

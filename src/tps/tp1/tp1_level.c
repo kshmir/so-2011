@@ -1,12 +1,9 @@
 #include "sim_common_reqs.h"
 #include <signal.h>
 
-void handler(int sig) {
-	exit(0);
-}
-
 int main(int argc, char **params) {
-	signal(SIGSEGV, handler);   
+	signal(SIGBUS, segfault_handler);   
+	signal(SIGSEGV, segfault_handler);   
 	srand(time(NULL));
 	signal(SIGINT, &_catch_child);
 	if (argc == 4) {	
@@ -23,8 +20,6 @@ int main(int argc, char **params) {
 			sim_level_main(connection_t, from_id, to_id);
 		}
 	}
-	
 	clean_exit();
-	
 	exit(0);
 }

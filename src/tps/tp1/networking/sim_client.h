@@ -1,3 +1,17 @@
+/**
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------------------------------------------------------------
+ * sim_client is used as a way to communicate with it's owner, aka server.
+ * It has several handlers which lock until they receive a response from the server, which can be
+ * specific to the game, such as filling a city with medicine or sending a response at the end of a turn.
+ * It also allows an abstraction layer from the transporter.
+ * It stands over message and transporter.
+ */
+
 #include "../sim_common_reqs.h"
 
 #ifndef _SIM_CLIENT_H_
@@ -34,11 +48,19 @@ int sim_client_get_distance(sim_client c, int object_id, cstring from, cstring t
  */
 map sim_client_get_medicines(sim_client c, int object_id, cstring from);
 
-
+/**
+ * Copies all the airlines from a level.
+ */
 list sim_client_copy_airline(sim_client c, int object_id);
 
+/**
+ * Copies a whole level.
+ */
 void_p sim_client_copy_level(sim_client c, int object_id);
 
+/**
+ * Copies a single airline
+ */
 void_p sim_client_copy_single_airline(sim_client c, int object_id);
 
 // POST request of params.
