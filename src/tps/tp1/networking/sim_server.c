@@ -94,24 +94,6 @@ struct sim_server {
  */
 static void sim_server_listener_cleanup(sim_server s) {
 	
-	if (!is_mem_freed()) {
-//		pthread_cond_t * freed = s->listener_freed;
-//		map_free(s->responds_to);
-//		if (s->listen_transporter != NULL) {
-//			sim_transporter_free(s->listen_transporter);
-//		}
-//		
-//		
-//		list keys = map_keys(s->clients_transporters);
-//		int i = 0;
-//		for(; list_get(keys,i); i++) {
-//			sim_transporter_free(map_get(s->clients_transporters, list_get(keys,i)));
-//		}
-//		map_free(s->clients_transporters);
-//		list_free_with_data(keys);
-//		pthread_cond_signal(freed);	
-//		free(s);
-	}
 }
 
 /**

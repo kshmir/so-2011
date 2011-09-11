@@ -1,9 +1,10 @@
 /**
  * @file talloc.c
  *
- * @brief Provides structure aware allocations
+ * @brief Provides structure aware allocations, extended to be threadsafe.
  *
  * @author Dario Sneidermanis
+ * @author Cristian Pereyra
  */
 
 #include "talloc.h"
@@ -12,8 +13,6 @@
 
 pthread_mutex_t	*	mutex = NULL;
 void * root_mem_context = NULL;
-
-int mem_freed = 0;
 
 void init_mutex() {
 	mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
@@ -24,14 +23,9 @@ void init_root() {
 	root_mem_context = talloc(1, NULL);
 }
 
-int is_mem_freed() {
-	return mem_freed;
-}
-
 void free_root() {
 	tfree(root_mem_context);
 	free(mutex);
-	mem_freed = 1;
 }
 
 void * g_talloc(size_t size) {

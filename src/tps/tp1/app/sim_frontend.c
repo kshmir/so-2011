@@ -5,8 +5,6 @@
  *		PEREYRA
  *		VIDELA
  * -----------------------------------
- *
- *
  */
 
 #include "sim_frontend.h"

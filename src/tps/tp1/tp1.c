@@ -21,7 +21,6 @@ int main(int argc, char ** params) {
 	signal(SIGINT, &_catch);
 	list args = list_from_ptrarray_w_count(argc, sizeof(char**), params);
 	
-	nftw("./tmp",  (void_p) unlink_cb, 64, 0);
 	list_remove(args, 0);
 	setpgid(0, 0);
 	

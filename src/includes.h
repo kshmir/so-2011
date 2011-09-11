@@ -1,11 +1,18 @@
-/*
- *	This is the main definitions file.
+/**
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------
  *
- *  includes.h
- *  so-2011
+ * @file includes.h
  *
- *  Created by Cristian Pereyra on 05/08/11.
- *  Copyright 2011 My Own. All rights reserved.
+ * @brief Provides functions and definitions shared across all the programs.
+ *
+ * @author Agustin Marseillan
+ * @author Maximo Videla
+ * @author Cristian Pereyra
  *
  */
 #include "utils/colors.h"
@@ -15,8 +22,6 @@
 
 #ifndef _INCLUDE_H_
 #define _INCLUDE_H_
-
-#define NINJA_GROUP 0xfe0
 
 #define	SOCKET_DEBUG 0
 #define	SMEM_DEBUG 0
@@ -30,12 +35,6 @@
 #define FALSE 0
 #include <stdio.h>
 #include <stdlib.h>
-#define TIMEOUT 250 * 1000 * 1000
-
-
-// it'd be cool to have this as a variable
-#define USE_COLORS 1
-
 
 #define malloc(p)			g_talloc(p)
 #define calloc(p,k)			g_tcalloc(p,k)
@@ -43,6 +42,9 @@
 #define free(p)				tfree(p)
 
 
+/**
+ * Used to print coloured console
+ */
 typedef enum {
 	NEGRO        ,
 	ROJO         ,
@@ -63,6 +65,9 @@ typedef enum {
 	
 } color;
 
+/**
+ * Used to print coloured console
+ */
 typedef enum {
 	CLEAR        ,
 	NONE         ,
@@ -79,72 +84,147 @@ typedef enum {
 	
 } attr;
 
-// void pointer for all our solutions
+/**
+ * We didn't like the idea of having that little * everywhere.
+ */
 typedef void * void_p;
 
-// generic comparer for generics implementation
+/**
+ * Default comparer
+ */
 typedef int (*comparer)(void_p, void_p);
 
+/**
+ * Useful for debugging
+ */
 typedef void (*printer)(void_p);
 
+/**
+ * Generic function for cloning stuff.
+ */
 typedef void_p (*cloner)(void_p);
 
 #define Error( Str )        FatalError( Str )
 #define FatalError( Str )   fprintf( stderr, "%s\n", Str ), exit( 1 )
 
+
+/**
+ * Compares two pointers
+ *
+ * @param int1 first pointer
+ * @param int2 second pointer 
+ *
+ * @return Comparison
+ */
 int pointer_comparer(void_p int1, void_p int2);
 
+/**
+ * Compares two integers
+ *
+ * @param int1 first integer
+ * @param int2 second integer
+ *
+ * @return Comparison
+ */
 int int_comparer(void_p int1, void_p int2);
 
+/**
+ * Compares two doubles
+ *
+ * @param double1 first double
+ * @param double2 second double
+ *
+ * @return Comparison
+ */
 int double_comparer(void_p double1, void_p double2);
 
-int cstring_ds_comparer(void_p s1, void_p s2);
-
+/**
+ * Compares two strings
+ *
+ * @param s1 first char *
+ * @param s2 second char *
+ *
+ * @return Comparison
+ */
 int cstring_comparer(void_p s1, void_p s2);
 
+/**
+ * Prints an integer.
+ *
+ * @param int1 integer to print.
+ */
 void int_printer(void_p int1);
 
+/**
+ * Prints a double.
+ *
+ * @param double1 double to print.
+ */
 void double_printer(void_p double1);
 
+/**
+ * Prints a string.
+ *
+ * @param s1 string to print.
+ */
 void cstring_printer(void_p s1);
 
-void_p pointer_cloner(void_p);
-
+/**
+ * Clones an integer.
+ *
+ * @param int1 integer to clone.
+ *
+ * @return Cloned integer
+ */
 void_p int_cloner(void_p int1);
 
+/**
+ * Clones a double
+ *
+ * @param double1 double to clone.
+ *
+ * @return Cloned double.
+ */
 void_p double_cloner(void_p double1);
 
+/**
+ * Clones a cstring (char *)
+ *
+ * @param s1 cstring to clone.
+ *
+ * @return Cloned cstring.
+ */
 void_p cstring_cloner(void_p s1);
 
-#define OK		1
-#define DEBUG	2
-#define	ERROR	3
 
-#define _OKo "\033[0;32m"
-#define _OKc "\033[0m"
-#define _DEBUGo "\033[0;34m"
-#define _DEBUGc "\033[0m"
-#define _ERRORo "\033[0;31m"
-#define _ERRORc "\033[0m"
-
-#define	SMEM_DEBUG	0
-#define	SOCK_DEBUG	0
-#define	PIPE_DEBUG	0
-#define	MSGQ_DEBUG	0
-
-#define	READ	0x01
-#define	WRITE	0x02
-
+/**
+ * Prints with color, semaphorized.
+ *
+ * @param format	printf formatted string.
+ * @param color		color to print with.
+ */
 void cprintf(char * format, int color, ...);
 
+/**
+ * Prints the disclaimer of the TP1.
+ */
 void tp1_disclaimer();
 
-int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftwbuf);
-
+/**
+ * Catches SIGNINT
+ */
 void _catch(int sig);
 
+/**
+ * Catches SIGNINT for non-parent processes.
+ */
 void _catch_child(int sig);
 
+/**
+ * Makes a clean exit.
+ */
 void clean_exit();
+
+
 
 #endif

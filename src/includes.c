@@ -1,10 +1,19 @@
-/*
- *  includes.c
- *  so-2011
+/**
+ *  SISTEMAS OPERATIVOS - ITBA - 2011  
+ *	ALUMNOS:                         
+ *		MARSEILLAN 
+ *		PEREYRA
+ *		VIDELA
+ * -----------------------------------
  *
- *  Created by Cristian Pereyra on 05/08/11.
- *  Copyright 2011 My Own. All rights reserved.
- *1
+ * @file includes.c
+ *
+ * @brief Provides functions shared across all the programs.
+ *
+ * @author Agustin Marseillan
+ * @author Maximo Videla
+ * @author Cristian Pereyra
+ *
  */
 
 #include <sys/types.h>
@@ -29,13 +38,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-
-
-
 int msgq_id = 0;
 
-list declared_threads = NULL;
+static list declared_threads = NULL;
 
 void declare_thread(pthread_t * t) {
 	if (declared_threads == NULL) {
@@ -45,7 +50,10 @@ void declare_thread(pthread_t * t) {
 }
 
 
-void cancel_all_threads() {
+/**
+	Cancels all thread references from the program.
+ */
+static void cancel_all_threads() {
 	if (declared_threads != NULL) {
 		foreach(pthread_t *, t, declared_threads) {
 			if (t != NULL) {
@@ -53,12 +61,16 @@ void cancel_all_threads() {
 				pthread_cancel(* t);
 			}
 		}
-		usleep(50 * 1000);
+//		usleep(50 * 1000);
 	}
 }
-
-void clear_msgq() {
-	msgctl(msgq_id, IPC_RMID, NULL);	
+/**
+	Used to clear the message queue reference if used.
+ */
+static void clear_msgq() {
+	if (msgq_id != 0) {
+		msgctl(msgq_id, IPC_RMID, NULL);	
+	}
 }
 
 int pointer_comparer(void_p int1, void_p int2) {
@@ -105,10 +117,6 @@ void double_printer(void_p double1){
 
 void cstring_printer(void_p s1) {
 	printf("%s",(char*)s1);
-}
-
-void_p pointer_cloner(void_p p1) {
-	return int_cloner(p1); //x86 only!
 }
 
 void_p int_cloner(void_p int1) {
@@ -209,56 +217,10 @@ void tp1_usage() {
 }
 
 
-int printed = 0;
-int freed = 0;
-void _catch(int sig)
-{
-
-	if (!printed) {
-		cprintf("\nFRONTEND: Bye bye :)\n", ROJO);
-		printed = 1;
-	}
-	killpg(0, sig);  
-	
-	if (!freed) {
-		freed = 1;
-		cancel_all_threads();
-		nftw("./tmp", (void_p)  unlink_cb, 64, 0);
-		usleep(50 * 1000);
-		shm_delete();
-		clear_msgq();
-		
-		free_root();
-	}
-	
-	exit(0);
-}
-
-
-
-void _catch_child(int sig)
-{
-	killpg(0, sig);  
-	
-	if (!freed) {
-		freed = 1;
-		cancel_all_threads();
-		
-		nftw("./tmp", (void_p)  unlink_cb, 64, 0);
-		usleep(50 * 1000);
-		shm_delete();
-		clear_msgq();
-		
-		free_root();
-
-	}
-	
-	
-	exit(0);
-}
-
-
-int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftwbuf)
+/**
+ * Clears interatively all semaphores.
+ */
+int clean_semaphore(const char *fpath, const struct stat *sb, int typeflag, void_p ftwbuf)
 {
 	list values;
 	if (cstring_matches((cstring)fpath, "sem_typed_")) {
@@ -278,13 +240,61 @@ int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftw
     return 0;
 }
 
+int printed = 0;
+int freed = 0;
+void _catch(int sig)
+{
+
+	if (!printed) {
+		cprintf("\nFRONTEND: Bye bye :)\n", ROJO);
+		printed = 1;
+	}
+	killpg(0, sig);  
+	
+	if (!freed) {
+		freed = 1;
+		cancel_all_threads();
+		nftw("./tmp", (void_p) clean_semaphore, 64, 0);
+
+		shm_delete();
+		clear_msgq();
+		
+		free_root();
+	}
+	
+	exit(0);
+}
+
+
+
+void _catch_child(int sig)
+{
+	killpg(0, sig);  
+	
+	if (!freed) {
+		freed = 1;
+		cancel_all_threads();
+		
+		nftw("./tmp", (void_p)  clean_semaphore, 64, 0);
+		
+		shm_delete();
+		clear_msgq();
+		
+		free_root();
+
+	}
+	
+	
+	exit(0);
+}
+
 void clean_exit() {
 	cancel_all_threads();
 	free_prints_sem();
 	clear_msgq();
 	shm_delete();	
-    nftw("./tmp",  (void_p) unlink_cb, 64, 0);
-	usleep(50 * 1000);
+    nftw("./tmp",  (void_p) clean_semaphore, 64, 0);
+	
 	
 	
 	free_root();
