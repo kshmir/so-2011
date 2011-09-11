@@ -61,7 +61,6 @@ static void cancel_all_threads() {
 				pthread_cancel(* t);
 			}
 		}
-//		usleep(50 * 1000);
 	}
 }
 /**
@@ -138,6 +137,9 @@ void_p cstring_cloner(void_p s1) {
 	return nuevo;
 }
 
+/**
+	Used for showing a line...
+ */
 static void separator() {
 	printf("--------------------------------\n");
 }
@@ -168,31 +170,6 @@ void cprintf(char * format, int color, ...) {
 	sem_up(c_sem, 1);
 }
 
-int IPCS_sem = 0;
-
-void IPCSDebug(char * msg, int type, ...) {
-	return; ////////// TIRA BUS ERROR EN OSX
-	if(!(type&READ) && !(type&WRITE))
-		return;
-	if (IPCS_sem == 0){
-		IPCS_sem = sem_create_typed("IPCSDebug");
-		sem_set_value(IPCS_sem, 1);
-	}
-	
-	sem_down(IPCS_sem, 1);
-	va_list args;
-	va_start (args, type);
-	
-	vfprintf (stderr,msg, args);
-	
-	va_end (args);
-	sem_up(IPCS_sem, 1);
-}
-
-void free_prints_sem() {
-	sem_free_typed(IPCS_sem, "IPCSDebug");
-	sem_free_typed(c_sem, "cprintf");
-}
 
 void tp1_disclaimer() {
 	separator();
@@ -253,13 +230,8 @@ void _catch(int sig)
 	
 	if (!freed) {
 		freed = 1;
-		cancel_all_threads();
-		nftw("./tmp", (void_p) clean_semaphore, 64, 0);
 
-		shm_delete();
-		clear_msgq();
-		
-		free_root();
+		clean_exit();
 	}
 	
 	exit(0);
@@ -273,15 +245,8 @@ void _catch_child(int sig)
 	
 	if (!freed) {
 		freed = 1;
-		cancel_all_threads();
 		
-		nftw("./tmp", (void_p)  clean_semaphore, 64, 0);
-		
-		shm_delete();
-		clear_msgq();
-		
-		free_root();
-
+		clean_exit();
 	}
 	
 	
@@ -290,7 +255,6 @@ void _catch_child(int sig)
 
 void clean_exit() {
 	cancel_all_threads();
-	free_prints_sem();
 	clear_msgq();
 	shm_delete();	
     nftw("./tmp",  (void_p) clean_semaphore, 64, 0);
