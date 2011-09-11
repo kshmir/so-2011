@@ -37,6 +37,7 @@
 #define USE_COLORS 1
 
 
+
 typedef enum {
 	NEGRO        ,
 	ROJO         ,

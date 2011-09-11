@@ -272,5 +272,6 @@ void clean_exit() {
     nftw("./tmp",  (void_p) unlink_cb, 64, 0);
 	usleep(200 * 1000);
 	shm_delete();	
+	
 	clear_msgq();
 }
