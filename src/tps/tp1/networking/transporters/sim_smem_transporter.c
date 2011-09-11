@@ -261,7 +261,6 @@ void smem_init_space(sim_smem_transporter * s) {
 	
 	
 	
-	s->sem_alloc = sem_create_valued(54,1);
 	s->sem_header_r  = sem_create_valued(s->from_id, 0);	
 	s->sem_header_w  = sem_create_valued(s->to_id, 0);	
 
@@ -649,11 +648,9 @@ sim_smem_transporter * sim_smem_transporter_init(int server_id, int client_id, i
 */
 void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
 //	cprintf("SMEM_WRITE: %s\n", CELESTE, data);		
-	sem_down(t->sem_alloc, 1);
 	smem_space_write(t, data);
 //	cprintf("SMEM: I HAVE WRITTEN  %d TO SEM %d %d\n",ROJO, cstring_len(data), t->sem_header_w, t->to_id);
 	sem_up(t->sem_header_w, 1);
-	sem_up(t->sem_alloc, 1);
 
 }
 
@@ -681,7 +678,6 @@ cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) 
 	Free up everything.
  */
 void sim_smem_transporter_free(sim_smem_transporter * transp) {
-	sem_free(transp->sem_alloc, 54);
 	sem_free(transp->sem_header_r, transp->from_id);
 	sem_free(transp->sem_header_w, transp->to_id);
 	sem_free(transp->sem_available_blocks, 99);
