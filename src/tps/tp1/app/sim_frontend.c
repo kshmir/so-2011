@@ -126,7 +126,7 @@ int sim_frontend_main(list params) {
 				airlines = _airlines;
 
 				sim_frontend_start_processes(lev, airlines);
-
+				
 			}
 			else {
 				cstring aux=cstring_copy("Error on airline file named: ");
@@ -144,6 +144,15 @@ int sim_frontend_main(list params) {
 			aux=cstring_write(aux,cstring_fromInt(line_error));
 			sim_frontend_print(aux);
 		}
+		
+		if (lev != NULL) {
+			sim_level_free(lev);
+		}
+
+		foreach_(sim_airline, airline, _airlines) {
+			sim_airline_free(airline);
+		}
+		
 	}
 	else {
 		sim_frontend_print("PARAMS ERROR:");
@@ -151,7 +160,9 @@ int sim_frontend_main(list params) {
 	}
 
 
-	//	list_free_with_data(airline_files);
+	
+	
+	list_free_with_data(airline_files);
 
 	if (level_file != NULL) {
 		free(level_file);
@@ -161,7 +172,7 @@ int sim_frontend_main(list params) {
 		free(error_string);
 	}
 
-	//sem_free_typed(frontend_sem, "frontend");
+	sem_free_typed(frontend_sem, "frontend");
 
 	free(c_type);
 

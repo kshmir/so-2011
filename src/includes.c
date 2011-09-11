@@ -249,12 +249,14 @@ int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, void_p ftw
 		values = cstring_split_list((cstring)fpath, "sem_typed_");
 		int sem = sem_create_typed(list_get(values,1));
 		sem_free_typed(sem, list_get(values, 1));
+		list_free_with_data(values);
 	} else if (cstring_matches((cstring)fpath, "sem_")) {
 		values = cstring_split_list((cstring)fpath, "sem_");
 		int noerror = 0;
 		int sem = cstring_parseInt(list_get(values, 1), &noerror);
 		int id = sem_create(sem);
 		sem_free(id, 0);
+		list_free_with_data(values);
 	}
     int rv = unlink(fpath);
     return 0;

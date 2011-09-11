@@ -25,7 +25,7 @@ struct sim_pipe_transporter {
 	int					client_id;
 	int					server_id;
 
-	
+	cstring				read_data;
 	
 	transporter_mode	mode;				// Transporter mode.
 
@@ -156,8 +156,8 @@ void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data) {
 cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 
 	if (t->mode == MODE_READ || t->mode == MODE_READWRITE) {
-		cstring str = cstring_init(PIPE_READ_SIZE);
-		if(read(t->read_ptr, str, PIPE_READ_SIZE)==-1){
+		t->read_data = cstring_init(PIPE_READ_SIZE);
+		if(read(t->read_ptr, t->read_data, PIPE_READ_SIZE)==-1){
 			//IPCSDebug(PIPE_DEBUG&READ,"Error while reading with read_ptr: %d",t->read_ptr);
 		}else
 		//IPCSDebug(PIPE_DEBUG&READ,"PIPE rcvd: %s",str);
@@ -166,7 +166,7 @@ cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 //		sem_up(t->sem, 1);	
 
 
-		return str;
+		return t->read_data;
 	}
 	else{
 		return "";
@@ -187,6 +187,7 @@ void sim_pipe_transporter_free(sim_pipe_transporter t) {
 		unlink(t->write_fifo);
 		free(t->write_fifo);
 	}
+	free(t->read_data);
 
 	
 	free(t);

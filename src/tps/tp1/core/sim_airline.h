@@ -27,7 +27,7 @@ void sim_airline_main(int connection_t, int from_id, int to_id);
 
 
 
-
+void sim_airline_free(sim_airline s);
 
 
 

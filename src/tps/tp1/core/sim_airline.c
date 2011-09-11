@@ -368,3 +368,8 @@ void sim_airline_main(int connection_t, int from_id, int to_id) {
 	// Pide la información del airline y se deserializa checked!
 	// Airline inicializa sus threads para cada plane y los pone en accion.
 }
+
+
+void sim_airline_free(sim_airline s) {
+
+}

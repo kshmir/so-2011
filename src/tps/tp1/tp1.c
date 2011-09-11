@@ -24,7 +24,6 @@ void handler(int sig) {
 
 
 int main(int argc, char ** params) {
-	init_mutex();
 	signal(SIGBUS, handler);   
 	signal(SIGSEGV, handler);   
 	srand(time(NULL));
@@ -37,6 +36,7 @@ int main(int argc, char ** params) {
 	
 	sim_frontend_main(args);
 	
+	list_free(args);
 	clean_exit();
 	
 	exit(0);

@@ -176,19 +176,10 @@ void sim_level_free(sim_level lev) {
 		sim_server_free(lev->airlines_server);
 	}
 
-	list keys = graph_keys(lev->level);
-
-	foreach(cstring, key, keys) {
-		graph_node n = graph_get_node(lev->level,key);
-		if (graph_node_value(n) != NULL) {
-			map_free(graph_node_value(n));
-		}
-	}
-	list_free(keys);
 	//	sem_free_typed(lev->level_sem, "level");
 	//	sem_free_typed(lev->airline_sem, "airline");
 
-	free(lev->level);
+	graph_free(lev->level);
 }
 
 void sim_level_query_receiver(sim_message s) {
