@@ -222,6 +222,7 @@ void _catch(int sig)
 	shm_delete();
 	clear_msgq();
 	
+	free_root();
 	
 	exit(0);
 }
@@ -236,7 +237,7 @@ void _catch_child(int sig)
 	clear_msgq();
 	
 
-	
+	free_root();
 	
 	exit(0);
 }
