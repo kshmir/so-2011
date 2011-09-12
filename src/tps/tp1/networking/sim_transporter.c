@@ -352,7 +352,6 @@ sim_transporter sim_transporter_init(connection_type type,
 		t->client_id = from_id;
 		t->server_id = to_id;
 	}
-	int magic_sem = sem_create_valued(from_id, 0);
 	switch (type) {
 		case C_PIPE:
 			
@@ -363,18 +362,9 @@ sim_transporter sim_transporter_init(connection_type type,
 			}
 			
 			if (is_server) {
-				sem_up(magic_sem,1);
-								sem_up(magic_sem,1);
-								sem_up(magic_sem,1);
-								sem_up(magic_sem,1);
-								sem_up(magic_sem,1);
-								sem_up(magic_sem,1);
-								sem_up(magic_sem,1);
-								sem_up(magic_sem,1);
 				t->data = sim_pipe_transporter_init_server(from_id, to_id, mode);
 			}
 			else {
-				sem_down(magic_sem, 1);
 				t->data = sim_pipe_transporter_init_client(from_id, to_id);
 			}
 
