@@ -278,27 +278,28 @@ static sim_transporter sim_transporter_start() {
 static void exec_process(process_type proc, connection_type type, int from_id, int to_id) {
 	int id = 0;
 	int parent = getpid();
+	
+	cstring _type = cstring_fromInt(type);
+	cstring _from_id = cstring_fromInt(from_id);
+	cstring _to_id = cstring_fromInt(to_id);
 	switch (proc) {
 		case P_TESTER:
 			id = fork();
 			if (id == 0) {
-				execl("./tp1_test_child", "tp1_test_child", cstring_fromInt(type),
-					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
+				execl("./tp1_test_child", "tp1_test_child", _type,_from_id, _to_id, NULL);
 			}
 			break;
 		case P_TESTER_SERVER:
 			id = fork();
 			if (id == 0) {
-				execl("./tp1_test_server", "tp1_test_server", cstring_fromInt(type),
-					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
+				execl("./tp1_test_server", "tp1_test_server", _type,_from_id, _to_id, NULL);
 			}
 			break;
 		case P_LEVEL:
 			id = fork();
 			if (id == 0) {
 				setpgid(id, parent);
-				execl("./tp1_level", "tp1_level", cstring_fromInt(type),
-					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
+				execl("./tp1_level", "tp1_level", _type,_from_id, _to_id, NULL);
 			}
 			break;
 		case P_AIRLINE:
@@ -306,13 +307,15 @@ static void exec_process(process_type proc, connection_type type, int from_id, i
 			if (id == 0) {
 				parent = getpgid(parent);
 				setpgid(id, parent);
-				execl("./tp1_airline", "tp1_airline", cstring_fromInt(type),
-					  cstring_fromInt(from_id), cstring_fromInt(to_id), NULL);
+				execl("./tp1_airline", "tp1_airline", _type,_from_id, _to_id, NULL);
 			}
 			break;
 		default:
 			break;
 	}
+	free(_type);
+	free(_from_id);
+	free(_to_id);
 }
 
 
