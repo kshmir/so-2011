@@ -72,7 +72,7 @@ void file_write(int writer_id, cstring message) {
 	int writer;
 	if (map_get(file_map, &writer_id) == NULL) {
 		cstring _fname = cstring_write(cstring_copy("./log/"),cstring_fromInt(writer_id));
-		writer = open(_fname, O_WRONLY | O_TRUNC| O_CREAT);
+		writer = open(_fname, O_WRONLY | O_TRUNC| O_CREAT, 0666);
 		int * val = (int *) malloc(sizeof(int));
 		* val = writer;
 		map_set(file_map, &writer_id, val);
