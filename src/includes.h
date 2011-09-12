@@ -225,6 +225,6 @@ void _catch_child(int sig);
  */
 void clean_exit();
 
-
+void segfault_handler(int sig);
 
 #endif

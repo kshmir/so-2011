@@ -8,6 +8,9 @@
 #define FILLED				1
 #define MOVED				2
 
+#define POLICY_RANDOM			0
+#define	POLICY_FIRST_ON_LIST	1
+
 
 struct sim_plane {
 	int		id;
@@ -84,20 +87,22 @@ int	sim_plane_make_move(sim_airline airline, sim_plane plane, sim_level level, i
 	graph_node n = graph_get_node(sim_level_graph(level), plane->start_city);
 	list n_arcs = graph_node_arcs(n);
 	cstring selected = NULL;
-	 
-	 foreach(graph_arc, arc, n_arcs) {
-	 	graph_node to =		graph_arc_to(arc);
-	 	cstring city =		graph_node_key(to);
-	 	int		distance =	graph_arc_weight(arc);
-	 
-	 	if (list_indexOf(plane->visited_places, city, cstring_comparer) == -1) {
-	 		selected = city;
-	 		break;
-	 	}
+	 if (policy != POLICY_RANDOM) {
+		 foreach(graph_arc, arc, n_arcs) {
+			 graph_node to =		graph_arc_to(arc);
+			 cstring city =		graph_node_key(to);
+			 int		distance =	graph_arc_weight(arc);
+			 
+			 if (list_indexOf(plane->visited_places, city, cstring_comparer) == -1) {
+				 selected = city;
+				 break;
+			 }
+		 }
 	 }
+
 	 
 	 
-	 if (selected == NULL) {
+	 if (selected == NULL || POLICY_RANDOM == policy) {
 	 
 	 	if (list_size(n_arcs) == 0) {
 	 
@@ -116,6 +121,7 @@ int	sim_plane_make_move(sim_airline airline, sim_plane plane, sim_level level, i
 	int mov = sim_client_post_plane_move(sim_airline_client(airline), sim_airline_id(airline), plane->id, plane->start_city, selected);
 
 	if (mov != -1) {
+		cprintf("PLANE %d: I move from %s to %s\n", VERDE, plane->id, plane->start_city, selected);
 		plane->start_city = selected;
 		return MOVED;
 	} else {
@@ -149,6 +155,8 @@ int sim_plane_make_fill(sim_airline airline, sim_plane plane, sim_level level, i
 						if (fill_value != -1 && fill_value != *val) {
 							* val = fill_value;
 							fill_done = 1;
+							
+							cprintf("PLANE %d: I fill %s with %s, %d remaining\n", VERDE, plane->id, plane->start_city, plane_med, * val);
 						}
 					}
 				}
@@ -202,8 +210,6 @@ void sim_plane_main(struct sim_plane_data * d) {
 			
 			if (action_taken == NOTHING) {
 				action_taken = sim_plane_make_move(airline, plane, level, 0);
-			} else {
-
 			}
 
 		}

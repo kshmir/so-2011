@@ -136,8 +136,9 @@ sim_pipe_transporter sim_pipe_transporter_init_server(int server_id, int client_
 
 void sim_pipe_transporter_write(sim_pipe_transporter t, cstring data) {
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
-		if(write(t->write_ptr, data, cstring_len(data) + 1)==-1){
+		if(write(t->write_ptr, data, cstring_len(data) + 1)==-1) {
 			// Handle error.
+		}
 	}
 }
 
@@ -146,8 +147,9 @@ cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 	if (t->mode == MODE_READ || t->mode == MODE_READWRITE) {
 		t->read_data = cstring_init(PIPE_READ_SIZE);
 		
-		if(read(t->read_ptr, t->read_data, PIPE_READ_SIZE)==-1){
+		if(read(t->read_ptr, t->read_data, PIPE_READ_SIZE)==-1) {
 			// Handle error.
+		}
 			
 		* length = PIPE_READ_SIZE;
 
