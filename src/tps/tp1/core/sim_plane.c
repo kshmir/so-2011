@@ -122,6 +122,10 @@ int	sim_plane_make_move(sim_airline airline, sim_plane plane, sim_level level, i
 
 	if (mov != -1) {
 		cprintf("PLANE %d: I move from %s to %s\n", VERDE, plane->id, plane->start_city, selected);
+		cstring message = cstring_init(1024);
+		sprintf(message, "PLANE %d: I move from %s to %s\n", plane->id, plane->start_city, selected);
+		file_write(plane->id, message);
+		free(message);
 		plane->start_city = selected;
 		return MOVED;
 	} else {
@@ -157,6 +161,10 @@ int sim_plane_make_fill(sim_airline airline, sim_plane plane, sim_level level, i
 							fill_done = 1;
 							
 							cprintf("PLANE %d: I fill %s with %s, %d remaining\n", VERDE, plane->id, plane->start_city, plane_med, * val);
+							cstring message = cstring_init(1024);
+							sprintf(message, "PLANE %d: I fill %s with %s, %d remaining\n", plane->id, plane->start_city, plane_med, * val);
+							file_write(plane->id, message);
+							free(message);
 						}
 					}
 				}
@@ -191,6 +199,7 @@ void sim_plane_main(struct sim_plane_data * d) {
 	sim_airline airline = (sim_airline) d->airline;
 	sim_plane plane = (sim_plane) d->plane;
 	sim_level level = (sim_level) d->level;
+
 	
 	plane->visited_places = list_init();
 

@@ -162,14 +162,13 @@ cstring sim_pipe_transporter_listen(sim_pipe_transporter t, int * length) {
 
 void sim_pipe_transporter_free(sim_pipe_transporter t) {
 	if (t->mode == MODE_READ || t->mode == MODE_READWRITE) {
-		if(close(t->read_ptr)==-1)
-		
+		if(close(t->read_ptr)==-1) {}
 		unlink(t->read_fifo);
 		free(t->read_fifo);
 	}
 
 	if (t->mode == MODE_WRITE || t->mode == MODE_READWRITE) { 
-		if(close(t->write_ptr)==-1)
+		if(close(t->write_ptr)==-1) {}
 		
 		unlink(t->write_fifo);
 		free(t->write_fifo);

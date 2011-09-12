@@ -18,6 +18,7 @@
 
 #include <sys/types.h>
 #include "includes.h"
+#include "data_structures/map.h"
 #include "data_structures/queue.h"
 #include "utils/cstring.h"
 #include "utils/sem.h"
@@ -42,11 +43,44 @@ int msgq_id = 0;
 
 static list declared_threads = NULL;
 
+static map file_map = NULL;
+
 void declare_thread(pthread_t * t) {
 	if (declared_threads == NULL) {
 		declared_threads = list_init();
 	}
 	list_add(declared_threads, t);
+}
+
+
+static files_close() {
+	if (file_map != NULL) {
+		list keys = map_keys(file_map);
+		foreach(int *, k, keys) {
+			int * val = map_get(file_map, k);
+			close(*val);
+		}
+		list_free(keys);
+	}
+}
+
+void file_write(int writer_id, cstring message) {
+	if (file_map == NULL) {
+		file_map = map_init(int_comparer, int_cloner);
+	}
+	
+	int writer;
+	if (map_get(file_map, &writer_id) == NULL) {
+		cstring _fname = cstring_write(cstring_copy("./log/"),cstring_fromInt(writer_id));
+		writer = open(_fname, O_WRONLY | O_NONBLOCK | O_CREAT);
+		int * val = (int *) malloc(sizeof(int));
+		* val = writer;
+		map_set(file_map, &writer_id, val);
+	} else {
+		writer = * (int *) map_get(file_map, &writer_id);
+	}
+
+	write(writer, message, cstring_len(message) + 1);
 }
 
 
@@ -269,6 +303,7 @@ void clean_exit() {
 	cancel_all_threads();
 	clear_msgq();
 	shm_delete();	
+	files_close();
     nftw("./tmp",  (void_p) clean_semaphore, 64, 0);
 	
 	
