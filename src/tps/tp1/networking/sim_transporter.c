@@ -352,7 +352,7 @@ sim_transporter sim_transporter_init(connection_type type,
 		t->client_id = from_id;
 		t->server_id = to_id;
 	}
-	int magic_sem = sem_create_valued(to_id, 0);
+	int magic_sem = sem_create_valued(from_id, 0);
 	switch (type) {
 		case C_PIPE:
 			
