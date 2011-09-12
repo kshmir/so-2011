@@ -260,6 +260,7 @@ smem_header_define_block * smem_get_header_define(sim_smem_transporter * s) {
 void smem_init_space(sim_smem_transporter * s) {
 	s->sem_header_r  = sem_create_valued(s->from_id, 0);	
 	s->sem_header_w  = sem_create_valued(s->to_id, 0);	
+	s->sem_alloc  = sem_create_valued(99, 1);	
 
 	s->space = (smem_space *)shm_create(sizeof(smem_space));
 
@@ -584,8 +585,10 @@ sim_smem_transporter * sim_smem_transporter_init(int server_id, int client_id, i
 	Write to the shared memoery.
 */
 void sim_smem_transporter_write(sim_smem_transporter * t, cstring data) {
+
 	smem_space_write(t, data);
 	sem_up(t->sem_header_w, 1);
+
 }
 
 
@@ -598,7 +601,7 @@ cstring sim_smem_transporter_listen(sim_smem_transporter * t, int * extra_data) 
 	cstring data = smem_space_read(t);
 	*extra_data = strlen(data) + 1;
 
-
+	
 	return data;
 }
 

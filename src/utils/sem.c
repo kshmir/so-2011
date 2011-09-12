@@ -37,16 +37,16 @@ int sem_create_valued(int key, int val) {
 	sprintf(path,"./tmp/sem_%d",key);
 	
 	int op = open(path,O_CREAT, 0666);
-	close(op);	
+
 	
 	key_t k = ftok(path, (char) (key));	
-	int sem = semget(k, 1, (IPC_CREAT | 0666 | IPC_CREAT)); 
+	int sem = semget(k, 1, (IPC_CREAT | 0666 | IPC_EXCL)); 
 	if (sem == -1) {
 		sem = semget(k, 1, (IPC_CREAT | 0666)); 
-
 	} else {
 		sem_set_value(sem, val);
 	}
+
 
 	
 	if (sem < 0) {
