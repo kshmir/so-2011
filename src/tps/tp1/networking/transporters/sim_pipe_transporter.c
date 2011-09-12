@@ -15,6 +15,8 @@
 
 #define PIPE_READ_SIZE (1024 * 8)
 
+int _open;
+
 struct sim_pipe_transporter {
 	cstring				write_fifo;			// Fifo to which the transporter writes.
 	cstring				read_fifo;			// Fifo to which the transporter listens.
@@ -40,6 +42,8 @@ static cstring create_fifo_name(int target_id) {
 }
 
 static sim_pipe_transporter create_pipe_transporter(cstring write_fifo, cstring read_fifo, int client, transporter_mode mode) {
+	
+	
 	sim_pipe_transporter pipe = (sim_pipe_transporter) malloc(sizeof(struct sim_pipe_transporter));
 	pipe->write_fifo = write_fifo;
 	pipe->read_fifo = read_fifo;	
@@ -49,50 +53,60 @@ static sim_pipe_transporter create_pipe_transporter(cstring write_fifo, cstring 
 	// MacOSX doesn't seem to like going blocked, and it fails misserably.
 	// So this solves it, making the right call when not on a Mach Kernel system (Mac OS, MacOSX, NextSTEP, etc).
 	// We currently tested it only on Mac OSX 10.6.8, but in the worst case it'll only be porly performant.
-#ifdef __MACH__
-	if (client == 1) {
-		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
-			do {
-				pipe->write_ptr = open(write_fifo, O_WRONLY | O_NONBLOCK);
-			} while(pipe->write_ptr == -1);
-
-		}
-		if (mode == MODE_READ || mode == MODE_READWRITE) { 
-			do {
-				pipe->read_ptr  = open(read_fifo, O_RDONLY);
-			} while(pipe->read_ptr == -1);
-		}
-	}
-	else {
-		if (mode == MODE_READ || mode == MODE_READWRITE) {
-			do {
-				pipe->read_ptr  = open(read_fifo, O_RDONLY);
-			} while(pipe->read_ptr == -1);
-		}
-		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
-			do {
-				pipe->write_ptr = open(write_fifo, O_WRONLY | O_NONBLOCK);
-			} while(pipe->write_ptr == -1);
-		}
-	}
-#else
+//#ifdef __MACH__
+//	if (client == 1) {
+//		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
+//			do {
+//				pipe->write_ptr = open(write_fifo, O_WRONLY | O_NONBLOCK);
+//			} while(pipe->write_ptr == -1);
+//
+//		}
+//		if (mode == MODE_READ || mode == MODE_READWRITE) { 
+//			do {
+//				pipe->read_ptr  = open(read_fifo, O_RDONLY);
+//			} while(pipe->read_ptr == -1);
+//		}
+//	}
+//	else {
+//		if (mode == MODE_READ || mode == MODE_READWRITE) {
+//			do {
+//				pipe->read_ptr  = open(read_fifo, O_RDONLY);
+//			} while(pipe->read_ptr == -1);
+//		}
+//		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
+//			do {
+//				pipe->write_ptr = open(write_fifo, O_WRONLY | O_NONBLOCK);
+//			} while(pipe->write_ptr == -1);
+//		}
+//	}
+//#else
 	if (client == 1) {
 		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
 			pipe->write_ptr = open(write_fifo, O_WRONLY);
+			printf("I connect to %s cli\n",write_fifo);
 		}
-		if (mode == MODE_READ || mode == MODE_READWRITE) { 
-			pipe->read_ptr  = open(read_fifo, O_RDONLY);			
+		if (mode == MODE_READ || mode == MODE_READWRITE) {
+
+			printf("I wait connect to %s cli\n",read_fifo);			
+			pipe->read_ptr  = open(read_fifo, O_RDONLY);
+			printf("I connect to %s cli\n",read_fifo);			
+
 		}
 	}
 	else {
 		if (mode == MODE_READ || mode == MODE_READWRITE) {
 			pipe->read_ptr  = open(read_fifo, O_RDONLY);
+			printf("I connect to %s ser\n",read_fifo);
 		}
 		if (mode == MODE_WRITE || mode == MODE_READWRITE) {
+
+			printf("I wait to connect to %s ser\n",write_fifo);
 			pipe->write_ptr = open(write_fifo, O_WRONLY);
+
+			printf("I connect to %s ser\n",write_fifo);
 		}
 	}
-#endif
+//#endif
 
 
 	return pipe;
@@ -112,6 +126,8 @@ sim_pipe_transporter sim_pipe_transporter_init_client(int server_id, int client_
 sim_pipe_transporter sim_pipe_transporter_init_server(int server_id, int client_id, transporter_mode mode) {
 	cstring write_fifo = NULL;
 	cstring read_fifo = NULL;
+
+	
 
 	if (mode == MODE_WRITE || mode == MODE_READWRITE) {
 		write_fifo = create_fifo_name(client_id);
